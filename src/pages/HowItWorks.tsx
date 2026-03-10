@@ -145,14 +145,12 @@ const HowItWorks = () => {
             opportunities, or speak to one of our expert Portfolio Advisors.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="https://www.altowhisky.com"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/request-brochure"
               className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity"
             >
-              Download Brochure
-            </a>
+              Request Brochure
+            </Link>
             <a
               href="/contact"
               className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500"
