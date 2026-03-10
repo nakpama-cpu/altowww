@@ -59,7 +59,7 @@ const GrainSection = () => {
           The world of whisky is one which exudes class, quality, and heritage.
         </h2>
         <p
-          className={`font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6 transition-all duration-1000 delay-300 ${
+          className={`font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl mb-6 transition-all duration-1000 delay-300 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
