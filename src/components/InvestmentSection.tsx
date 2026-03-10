@@ -29,7 +29,7 @@ const InvestmentSection = () => {
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          Secure your future with the best performing collectible of the decade.
+          Top Performing Assets
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
