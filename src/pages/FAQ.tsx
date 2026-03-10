@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
-import BrochureButton from "@/components/BrochureButton";
+import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import heroImg from "@/assets/hero-mountain.jpg";
