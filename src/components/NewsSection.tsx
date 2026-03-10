@@ -89,7 +89,7 @@ const NewsSection = () => {
           <div
             className="flex transition-transform duration-700 ease-in-out gap-10"
             style={{
-              transform: `translateX(calc(-${startIndex} * (${100 / VISIBLE_COUNT}% + ${40 - (40 * VISIBLE_COUNT - 40) / VISIBLE_COUNT / VISIBLE_COUNT}px)))`,
+              transform: `translateX(calc(${-startIndex} * (${stepPercent}% + ${stepOffset}px)))`,
             }}
           >
             {articles.map((article, i) => (
@@ -100,8 +100,7 @@ const NewsSection = () => {
                   visible ? "opacity-100" : "opacity-0"
                 }`}
                 style={{
-                  width: `calc(${100 / VISIBLE_COUNT}% - ${((VISIBLE_COUNT - 1) * 40) / VISIBLE_COUNT}px)`,
-                  marginRight: i < articles.length - 1 ? "40px" : "0",
+                  width: `calc(${stepPercent}% - ${cardMarginShare}px)`,
                   transitionDelay: `${300 + i * 150}ms`,
                 }}
               >
