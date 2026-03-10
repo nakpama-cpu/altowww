@@ -7,6 +7,8 @@ import Index from "./pages/Index.tsx";
 import HowItWorks from "./pages/HowItWorks.tsx";
 import WhyWhisky from "./pages/WhyWhisky.tsx";
 import AboutWhisky from "./pages/AboutWhisky.tsx";
+import HowWhiskyIsMade from "./pages/HowWhiskyIsMade.tsx";
+import FAQ from "./pages/FAQ.tsx";
 import Contact from "./pages/Contact.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
