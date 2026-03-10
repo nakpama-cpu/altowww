@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import BrochureButton from "@/components/BrochureButton";
 
 const FooterSection = () => {
   return (
