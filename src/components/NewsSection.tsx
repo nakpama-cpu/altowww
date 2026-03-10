@@ -24,8 +24,12 @@ const NewsSection = () => {
   const maxStart = Math.max(0, articles.length - VISIBLE_COUNT);
   const canPrev = startIndex > 0;
   const canNext = startIndex < maxStart;
-
-  const visibleArticles = articles.slice(startIndex, startIndex + VISIBLE_COUNT);
+  
+  // Each card: calc(33.333% - 26.667px), gap: 40px, so step = calc(33.333% + 13.333px)
+  const stepPercent = 100 / VISIBLE_COUNT; // 33.333
+  const gap = 40;
+  const cardMarginShare = ((VISIBLE_COUNT - 1) * gap) / VISIBLE_COUNT; // 26.667
+  const stepOffset = gap - cardMarginShare; // 13.333
 
   return (
     <section ref={ref} className="section-light py-16 md:py-24">
@@ -81,43 +85,51 @@ const NewsSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-          {visibleArticles.map((article, i) => (
-            <Link
-              to={`/news/${article.slug}`}
-              key={article.slug}
-              className={`group block transition-all duration-700 ${
-                visible
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-12"
-              }`}
-              style={{ transitionDelay: `${300 + i * 150}ms` }}
-            >
-              <div className="aspect-[4/3] overflow-hidden mb-5">
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
-                  {article.category}
-                </span>
-                <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-                <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground/50">
-                  {article.date}
-                </span>
-              </div>
-              <h3 className="font-display text-lg font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
-                {article.title}
-              </h3>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                {article.excerpt}
-              </p>
-            </Link>
-          ))}
+        <div className="overflow-hidden">
+          <div
+            className="flex transition-transform duration-700 ease-in-out gap-10"
+            style={{
+              transform: `translateX(calc(${-startIndex} * (${stepPercent}% + ${stepOffset}px)))`,
+            }}
+          >
+            {articles.map((article, i) => (
+              <Link
+                to={`/news/${article.slug}`}
+                key={article.slug}
+                className={`group block flex-shrink-0 transition-opacity duration-700 ${
+                  visible ? "opacity-100" : "opacity-0"
+                }`}
+                style={{
+                  width: `calc(${stepPercent}% - ${cardMarginShare}px)`,
+                  transitionDelay: `${300 + i * 150}ms`,
+                }}
+              >
+                <div className="aspect-[4/3] overflow-hidden mb-5">
+                  <img
+                    src={article.image}
+                    alt={article.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
+                    {article.category}
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                  <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground/50">
+                    {article.date}
+                  </span>
+                </div>
+                <h3 className="font-display text-lg font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
+                  {article.title}
+                </h3>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                  {article.excerpt}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Mobile nav */}
