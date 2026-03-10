@@ -9,27 +9,27 @@ const regions = [
   {
     name: "Highland",
     description:
-      "The largest producing region in Scotland, Highland whisky offers a vast array of flavour and characteristics, owing to the expansive, world-famous territory of the Scottish Highlands. With a diverse landscape such as this to call home, Highland whisky can come in many forms, from sweet serves in the north to smoky, spicy counterparts in the south.",
+      "The largest producing region in Scotland, Highland whisky offers a vast array of flavour and characteristics, owing to the expansive, world-famous territory of the Scottish Highlands.\n\nWith a diverse landscape such as this to call home, Highland whisky can come in many forms, from sweet serves in the north to smoky, spicy counterparts in the south.",
   },
   {
     name: "Lowland",
     description:
-      "Lowland whiskies are often the drink of choice for social gatherings and pre-dinner tipples, owing to their soft, smooth profile. So smooth in fact, the Lowland distilleries have earned the title of 'The Lowland Ladies'. As the southernmost whisky region in Scotland, the Lowlands offer a unique experience for those who enjoy floral notes and a flavoursome palate of honeysuckle, ginger, and cinnamon.",
+      "Lowland whiskies are often the drink of choice for social gatherings and pre-dinner tipples, owing to their soft, smooth profile. So smooth in fact, the Lowland distilleries have earned the title of 'The Lowland Ladies'.\n\nAs the southernmost whisky region in Scotland, the Lowlands offer a unique experience for those who enjoy floral notes and a flavoursome palate of honeysuckle, ginger, and cinnamon – to name just a few.",
   },
   {
     name: "Speyside",
     description:
-      "Speyside is the world's most densely populated whisky region. With lush glens, fertile lands, and the iconic River Spey, it's easy to see why. The whiskies produced in Speyside are rich with peat and fruity flavours, with common palates featuring vanilla, pear, and apple. Speyside also utilises a unique twist on the maturation process, using Sherry casks to build an even deeper body of flavour.",
+      "Speyside is the world's most densely populated whisky region – yes, you read that correctly. With lush glens, fertile lands, and the iconic River Spey, it's easy to see why.\n\nThe whiskies produced in Speyside are rich with peat and fruity flavours, with common palates featuring vanilla, pear, and apple. Speyside also utilises a unique twist on the maturation process, using Sherry casks to build an even deeper body of flavour.",
   },
   {
     name: "Campbeltown",
     description:
-      "A much smaller producer in current day, Campbeltown was once a region filled with more than 30 expert distilleries. Today, just three remain. However, when you taste a Campbeltown whisky, you taste a flavour so rich you would assume the region is stacked with producers. You can expect full-bodied whiskies boasting notes of salt, smoke, fruit, and toffee.",
+      "A much smaller producer in current day, Campbeltown was once a region filled with more than 30 expert distilleries. Today, just three remain.\n\nHowever, when you taste a Campbeltown whisky, you taste a flavour so rich you would assume the region is stacked with producers fighting for a small slice of the pie.\n\nYou can expect full-bodied whiskies boasting notes of salt, smoke, fruit, and toffee, providing a world-class experience from one of Scotland's smallest whisky regions.",
   },
   {
     name: "Islay",
     description:
-      "One of Scotland's most easily identifiable whisky regions when it comes to flavour profile, Islay is a small Hebridean island almost solely dedicated to whisky production. The passion and care put into the whisky by the people of this region produces a fiery, heavily peated drink, not for the faint of heart.",
+      "One of Scotland's most easily identifiable whisky regions when it comes to flavour profile, Islay is a small Hebridean island almost solely dedicated to whisky production.\n\nThe passion and care put into the whisky by the people of this region produces a fiery, heavily peated drink, not for the faint of heart.",
   },
 ];
 
@@ -84,20 +84,28 @@ const AboutWhisky = () => {
             With hundreds of years spent distilling and producing this
             much-loved spirit, there are nuances to the art of whisky.
           </p>
-          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
+          <h4 className="font-display text-lg md:text-xl italic text-foreground/80 max-w-xl mb-6">
             Spelled without an 'e', the name 'whisky' refers to scotch distilled
             in Scotland and Ireland, whilst American producers prefer the
-            spelling 'whiskey'. Taken literally, the term 'whisky' is derived
-            from Gaelic to mean 'water of life', depicting the high esteem this
-            product has been held in, and for just how long.
+            spelling 'whiskey'.
+          </h4>
+          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
+            Taken literally, the term 'whisky' is derived from Gaelic to mean
+            'water of life', depicting the high esteem this product has been
+            held in, and for just how long.
+          </p>
+          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
+            Official records show whisky production dating back to the late
+            1400s in the Scottish Exchequer Rolls, as shared in Mr J Marshall
+            Robb's book 'Scottish Whisky'. However, many believe whisky has an
+            even deeper heritage, dating back as far as the 8th century. It is
+            believed that Christian missionary monks brought the knowledge of
+            distillery back to Celtic lands from their pilgrimages to
+            Mediterranean and Middle Eastern regions.
           </p>
           <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl">
-            Official records show whisky production dating back to the late
-            1400s in the Scottish Exchequer Rolls. However, many believe whisky
-            has an even deeper heritage, dating back as far as the 8th century.
-            It is believed that Christian missionary monks brought the knowledge
-            of distillery back to Celtic lands from their pilgrimages to
-            Mediterranean and Middle Eastern regions.
+            Whilst we will perhaps never know for sure, one thing we can be
+            certain of is that whisky is in Scotland's blood.
           </p>
         </div>
       </section>
@@ -106,7 +114,12 @@ const AboutWhisky = () => {
       <section className="section-dark py-24 md:py-32">
         <div className="max-w-3xl mx-auto px-6 md:px-12 mb-16">
           <p className="chapter-marker mb-8 text-secondary-foreground/50">
-            The Five Regions
+            Regions
+          </p>
+          <p className="font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl mb-8">
+            For the layman, it is forgivable to assume that all Scottish whisky
+            would taste the same, regardless of the region it comes from. For a
+            whisky enthusiast, this couldn't be further from the truth.
           </p>
           <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground">
             There are five key Scottish whisky regions, each of which provides a
@@ -129,9 +142,11 @@ const AboutWhisky = () => {
                 <h3 className="font-display text-2xl md:text-3xl text-secondary-foreground font-light italic mb-4">
                   {region.name}
                 </h3>
-                <p className="font-body text-sm text-secondary-foreground/60 leading-relaxed max-w-2xl">
-                  {region.description}
-                </p>
+                <div className="font-body text-sm text-secondary-foreground/60 leading-relaxed max-w-2xl space-y-4">
+                  {region.description.split('\n\n').map((paragraph, pi) => (
+                    <p key={pi}>{paragraph}</p>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
