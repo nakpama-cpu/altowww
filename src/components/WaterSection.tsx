@@ -27,14 +27,14 @@ const WaterSection = () => {
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          A tangible asset, ranked alongside gold for long-term security.
+          Whisky cask investment is now widely considered to be one of the most secure assets available for long or medium term holds – alongside none other than gold.
         </h2>
         <p
           className={`font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6 transition-all duration-1000 delay-300 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          Whisky cask investment is now widely considered to be one of the most secure assets available for long or medium term holds. Alto Whisky's team of expert Portfolio Advisors can help you start, manage, and sell your collection when the time is right.
+          If you're interested in investing in whisky but aren't sure where to start, or you're simply looking for the next addition to your asset portfolio, you're in the right place. Alto Whisky's team of expert Portfolio Advisors can help you start, manage, and sell your collection when the time is right.
         </p>
         <div
           className={`flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-500 ${
