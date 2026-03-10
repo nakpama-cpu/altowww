@@ -62,8 +62,6 @@ const FAQ = () => {
   return (
     <div className="relative">
       <Header />
-      <BuyButton />
-
       {/* Hero */}
       <section className="relative h-[50vh] w-full overflow-hidden">
         <img

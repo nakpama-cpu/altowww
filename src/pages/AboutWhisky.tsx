@@ -55,8 +55,6 @@ const AboutWhisky = () => {
   return (
     <div className="relative">
       <Header />
-      <BuyButton />
-
       {/* Hero */}
       <section className="relative h-[70vh] w-full overflow-hidden">
         <img
