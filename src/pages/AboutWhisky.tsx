@@ -114,7 +114,12 @@ const AboutWhisky = () => {
       <section className="section-dark py-24 md:py-32">
         <div className="max-w-3xl mx-auto px-6 md:px-12 mb-16">
           <p className="chapter-marker mb-8 text-secondary-foreground/50">
-            The Five Regions
+            Regions
+          </p>
+          <p className="font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl mb-8">
+            For the layman, it is forgivable to assume that all Scottish whisky
+            would taste the same, regardless of the region it comes from. For a
+            whisky enthusiast, this couldn't be further from the truth.
           </p>
           <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground">
             There are five key Scottish whisky regions, each of which provides a
