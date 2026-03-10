@@ -110,7 +110,7 @@ const FAQ = () => {
           </div>
         </section>
 
-        <FooterSection />
+        <FooterSection hideCta />
       </div>
     </div>
   );
