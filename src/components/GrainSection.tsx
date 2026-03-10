@@ -44,7 +44,7 @@ const GrainSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const logos = [...distilleries, ...distilleries];
+  const logos = [...distilleries, ...distilleries, ...distilleries];
 
   return (
     <section id="distilleries" className="section-dark">
