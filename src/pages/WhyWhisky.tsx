@@ -172,8 +172,26 @@ const WhyWhiskyPage = () => {
           </div>
         </section>
 
+        {/* Light CTA */}
+        <section className="section-light py-24 md:py-32">
+          <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
+            <h2 className="display-heading text-3xl md:text-5xl mb-8">
+              Ready to invest?
+            </h2>
+            <p className="font-body text-sm text-muted-foreground mb-10 max-w-md mx-auto leading-relaxed">
+              Download our free brochure or speak with one of our expert Portfolio
+              Advisors to start building your whisky cask collection.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
+              <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500">
+                Speak to an Advisor
+              </ContactButton>
+            </div>
+          </div>
+        </section>
 
-        <FooterSection />
+        <FooterSection hideCta />
       </div>
     </div>
   );
