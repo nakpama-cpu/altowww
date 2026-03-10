@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
-import BuyButton from "@/components/BuyButton";
+
 import { useEffect, useState } from "react";
 import heroImg from "@/assets/hero-mountain.jpg";
 
@@ -27,8 +27,6 @@ const Contact = () => {
   return (
     <div className="relative">
       <Header />
-      <BuyButton />
-
       {/* Hero */}
       <section className="relative h-[50vh] w-full overflow-hidden">
         <img

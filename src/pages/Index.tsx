@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import ChapterMarker from "@/components/ChapterMarker";
-import BuyButton from "@/components/BuyButton";
 import HeroSection from "@/components/HeroSection";
 import WaterSection from "@/components/WaterSection";
 import WhyWhiskySection from "@/components/WhyWhiskySection";
@@ -8,6 +7,7 @@ import InvestmentSection from "@/components/InvestmentSection";
 import GrainSection from "@/components/GrainSection";
 import ProcessSection from "@/components/ProcessSection";
 import GlassSection from "@/components/GlassSection";
+import NewsSection from "@/components/NewsSection";
 import FooterSection from "@/components/FooterSection";
 
 const chapters = [
@@ -24,7 +24,6 @@ const Index = () => {
     <div className="relative">
       <Header />
       <ChapterMarker chapters={chapters} />
-      <BuyButton />
       <HeroSection />
       <WaterSection />
       <WhyWhiskySection />
@@ -32,6 +31,7 @@ const Index = () => {
       <GrainSection />
       <ProcessSection />
       <GlassSection />
+      <NewsSection />
       <FooterSection />
     </div>
   );

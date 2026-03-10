@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
-import BuyButton from "@/components/BuyButton";
 import BrochureButton from "@/components/BrochureButton";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
@@ -63,8 +62,6 @@ const FAQ = () => {
   return (
     <div className="relative">
       <Header />
-      <BuyButton />
-
       {/* Hero */}
       <section className="relative h-[50vh] w-full overflow-hidden">
         <img
