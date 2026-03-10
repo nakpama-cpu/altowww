@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
+import BuyButton from "@/components/BuyButton";
 import { useEffect, useRef, useState } from "react";
 import scotlandImg from "@/assets/scotland-landscape.jpg";
 import caskImg from "@/assets/cask-closeup.jpg";
