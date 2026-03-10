@@ -1,34 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import whiskyTastingImg from "@/assets/whisky-tasting.jpg";
-import distilleryStillsImg from "@/assets/distillery-stills.jpg";
-import whiskyInvestmentImg from "@/assets/whisky-investment-news.jpg";
-
-const articles = [
-  {
-    image: whiskyInvestmentImg,
-    category: "Market Insight",
-    date: "February 2026",
-    title: "Whisky Casks Outperform Traditional Assets for Tenth Consecutive Year",
-    excerpt:
-      "The Knight Frank Luxury Investment Index reveals whisky casks have delivered 582% returns over the past decade, outpacing wine, art, and classic cars.",
-  },
-  {
-    image: distilleryStillsImg,
-    category: "Distillery News",
-    date: "January 2026",
-    title: "Inside Scotland's Most Sought-After Single Malt Distilleries",
-    excerpt:
-      "We explore the Highland and Speyside distilleries producing some of the most collectible casks available to private investors today.",
-  },
-  {
-    image: whiskyTastingImg,
-    category: "Investment Guide",
-    date: "December 2025",
-    title: "A Beginner's Guide to Whisky Cask Investment in 2026",
-    excerpt:
-      "Everything you need to know about purchasing, storing, and selling whisky casks — from tax benefits to exit strategies.",
-  },
-];
+import { Link } from "react-router-dom";
+import { articles } from "@/data/articles";
 
 const NewsSection = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -45,6 +17,8 @@ const NewsSection = () => {
     return () => observer.disconnect();
   }, []);
 
+  const featured = articles.slice(0, 3);
+
   return (
     <section ref={ref} className="section-light py-24 md:py-32">
       <div className="max-w-5xl mx-auto px-6 md:px-12">
@@ -55,19 +29,30 @@ const NewsSection = () => {
         >
           News & Insights
         </p>
-        <h2
-          className={`display-heading text-3xl md:text-4xl mb-16 transition-all duration-1000 delay-200 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          Latest from the world of whisky.
-        </h2>
+        <div className="flex items-end justify-between mb-16">
+          <h2
+            className={`display-heading text-3xl md:text-4xl transition-all duration-1000 delay-200 ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            Latest from the world of whisky.
+          </h2>
+          <Link
+            to="/news"
+            className={`hidden md:inline-block font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-all duration-1000 delay-300 ${
+              visible ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            View All Articles →
+          </Link>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-          {articles.map((article, i) => (
-            <article
-              key={article.title}
-              className={`group cursor-pointer transition-all duration-1000 ${
+          {featured.map((article, i) => (
+            <Link
+              to={`/news/${article.slug}`}
+              key={article.slug}
+              className={`group block transition-all duration-1000 ${
                 visible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"
@@ -97,8 +82,17 @@ const NewsSection = () => {
               <p className="font-body text-sm text-muted-foreground leading-relaxed">
                 {article.excerpt}
               </p>
-            </article>
+            </Link>
           ))}
+        </div>
+
+        <div className="mt-10 text-center md:hidden">
+          <Link
+            to="/news"
+            className="font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors"
+          >
+            View All Articles →
+          </Link>
         </div>
       </div>
     </section>

@@ -8,6 +8,10 @@ import lagavulinLogo from "@/assets/logos/lagavulin.png";
 import ardbegLogo from "@/assets/logos/ardbeg.png";
 import taliskerLogo from "@/assets/logos/talisker.png";
 import dalmoreLogo from "@/assets/logos/dalmore.png";
+import laphroaigLogo from "@/assets/logos/laphroaig.png";
+import obanLogo from "@/assets/logos/oban.png";
+import balvenieLogo from "@/assets/logos/balvenie.png";
+import springbankLogo from "@/assets/logos/springbank.png";
 
 const distilleries = [
   { name: "Macallan", logo: macallanLogo },
@@ -18,6 +22,10 @@ const distilleries = [
   { name: "Ardbeg", logo: ardbegLogo },
   { name: "Talisker", logo: taliskerLogo },
   { name: "The Dalmore", logo: dalmoreLogo },
+  { name: "Laphroaig", logo: laphroaigLogo },
+  { name: "Oban", logo: obanLogo },
+  { name: "The Balvenie", logo: balvenieLogo },
+  { name: "Springbank", logo: springbankLogo },
 ];
 
 const GrainSection = () => {
@@ -35,7 +43,6 @@ const GrainSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Double the logos for seamless infinite scroll
   const logos = [...distilleries, ...distilleries];
 
   return (
@@ -78,10 +85,9 @@ const GrainSection = () => {
         }`}
       >
         <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-muted-foreground/40 mb-10">
-          Distilleries We Work With
+          Whisky Casks We Have Access To
         </p>
         <div className="relative">
-          {/* Gradient fade edges */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
