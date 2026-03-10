@@ -1,4 +1,4 @@
-import heroImg from "@/assets/hero-warehouse.jpg";
+import heroImg from "@/assets/hero-mountain.jpg";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 const HeroSection = () => {
