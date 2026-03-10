@@ -84,7 +84,7 @@ const GrainSection = () => {
         >
           <Link
             to="/about-whisky"
-            className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500 inline-block"
+            className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500 inline-block"
           >
             Explore Regions →
           </Link>
