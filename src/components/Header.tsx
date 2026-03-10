@@ -125,12 +125,7 @@ const Header = () => {
               </Link>
             )
           )}
-          <Link
-            to="/request-brochure"
-            className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 transition-opacity"
-          >
-            Request Brochure
-          </Link>
+          <BrochureButton className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 transition-opacity" />
         </nav>
 
         {/* Mobile hamburger */}
