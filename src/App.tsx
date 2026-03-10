@@ -3,13 +3,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { BrochureModalProvider } from "@/components/BrochureModal";
 import Index from "./pages/Index.tsx";
 import HowItWorks from "./pages/HowItWorks.tsx";
 import WhyWhisky from "./pages/WhyWhisky.tsx";
 import AboutWhisky from "./pages/AboutWhisky.tsx";
 import HowWhiskyIsMade from "./pages/HowWhiskyIsMade.tsx";
 import FAQ from "./pages/FAQ.tsx";
-import RequestBrochure from "./pages/RequestBrochure.tsx";
 import Contact from "./pages/Contact.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -21,18 +21,19 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/how-it-works" element={<HowItWorks />} />
-          <Route path="/why-whisky" element={<WhyWhisky />} />
-          <Route path="/about-whisky" element={<AboutWhisky />} />
-          <Route path="/how-whisky-is-made" element={<HowWhiskyIsMade />} />
-          <Route path="/faqs" element={<FAQ />} />
-          <Route path="/request-brochure" element={<RequestBrochure />} />
-          <Route path="/contact" element={<Contact />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <BrochureModalProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
+            <Route path="/why-whisky" element={<WhyWhisky />} />
+            <Route path="/about-whisky" element={<AboutWhisky />} />
+            <Route path="/how-whisky-is-made" element={<HowWhiskyIsMade />} />
+            <Route path="/faqs" element={<FAQ />} />
+            <Route path="/contact" element={<Contact />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrochureModalProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

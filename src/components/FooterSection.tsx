@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import BrochureButton from "@/components/BrochureButton";
 
 const FooterSection = () => {
   return (
@@ -44,12 +45,9 @@ const FooterSection = () => {
               Ready to explore whisky cask investment? Request your free brochure
               or speak to a Portfolio Advisor.
             </p>
-            <Link
-              to="/request-brochure"
-              className="inline-block font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors"
-            >
+            <BrochureButton className="inline-block font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors">
               Request Brochure →
-            </Link>
+            </BrochureButton>
           </div>
         </div>
         <div className="pt-8 border-t border-secondary-foreground/10 text-center">

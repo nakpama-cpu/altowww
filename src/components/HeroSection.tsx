@@ -1,5 +1,6 @@
 import heroImg from "@/assets/hero-mountain.jpg";
 import { Link } from "react-router-dom";
+import BrochureButton from "@/components/BrochureButton";
 
 const HeroSection = () => {
   return (
@@ -32,12 +33,7 @@ const HeroSection = () => {
           className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in"
           style={{ animationDelay: "0.8s" }}
         >
-          <Link
-            to="/request-brochure"
-            className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity"
-          >
-            Request Brochure
-          </Link>
+          <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
           <Link
             to="/how-it-works"
             className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500"

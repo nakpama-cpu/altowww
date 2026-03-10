@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import BuyButton from "@/components/BuyButton";
+import BrochureButton from "@/components/BrochureButton";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import heroImg from "@/assets/hero-mountain.jpg";
@@ -112,12 +113,7 @@ const FAQ = () => {
             we'll be happy to answer any questions you have.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/request-brochure"
-              className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity"
-            >
-              Request Brochure
-            </Link>
+            <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
             <a
               href="/contact"
               className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500"
