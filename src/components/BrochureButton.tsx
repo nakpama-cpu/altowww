@@ -16,3 +16,14 @@ const BrochureButton = ({ className, children }: BrochureButtonProps) => {
 };
 
 export default BrochureButton;
+
+/** A secondary CTA that also opens the brochure/contact modal */
+export const ContactButton = ({ className, children }: BrochureButtonProps) => {
+  const { open } = useBrochureModal();
+
+  return (
+    <button onClick={open} className={className}>
+      {children ?? "Speak to an Advisor"}
+    </button>
+  );
+};
