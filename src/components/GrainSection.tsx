@@ -47,19 +47,19 @@ const GrainSection = () => {
   const logos = [...distilleries, ...distilleries];
 
   return (
-    <section id="distilleries" className="section-light">
+    <section id="distilleries" className="section-dark">
       <div className="py-16 md:py-24" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
-        <p className="chapter-marker mb-8">The Distilleries</p>
+        <p className="chapter-marker mb-8 text-secondary-foreground/50">The Distilleries</p>
         <h2
-          className={`display-heading text-3xl md:text-5xl mb-8 transition-all duration-1000 ${
+          className={`display-heading text-3xl md:text-5xl text-secondary-foreground mb-8 transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
           The world of whisky is one which exudes class, quality, and heritage.
         </h2>
         <p
-          className={`font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6 transition-all duration-1000 delay-300 ${
+          className={`font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl mb-6 transition-all duration-1000 delay-300 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -69,7 +69,7 @@ const GrainSection = () => {
           people from all walks of life.
         </p>
         <p
-          className={`font-body text-base leading-relaxed text-muted-foreground max-w-xl transition-all duration-1000 delay-500 ${
+          className={`font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl transition-all duration-1000 delay-500 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -84,7 +84,7 @@ const GrainSection = () => {
         >
           <Link
             to="/about-whisky"
-            className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500 inline-block"
+            className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500 inline-block"
           >
             Explore Regions →
           </Link>
@@ -97,12 +97,12 @@ const GrainSection = () => {
           visible ? "opacity-100" : "opacity-0"
         }`}
       >
-        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-muted-foreground/40 mb-10">
+        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground/30 mb-10">
           Whisky Casks We Have Access To
         </p>
         <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-secondary to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-secondary to-transparent z-10 pointer-events-none" />
 
           <div className="flex animate-logo-scroll">
             {logos.map((d, i) => (
@@ -113,7 +113,7 @@ const GrainSection = () => {
                 <img
                   src={d.logo}
                   alt={`${d.name} distillery logo`}
-                  className="max-h-20 max-w-[160px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 grayscale hover:grayscale-0"
+                  className="max-h-20 max-w-[160px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 invert grayscale hover:grayscale-0"
                   loading="lazy"
                 />
               </div>
