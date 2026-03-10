@@ -2,16 +2,20 @@ import ChapterMarker from "@/components/ChapterMarker";
 import BuyButton from "@/components/BuyButton";
 import HeroSection from "@/components/HeroSection";
 import WaterSection from "@/components/WaterSection";
-import GrainSection from "@/components/GrainSection";
+import WhyWhiskySection from "@/components/WhyWhiskySection";
 import InvestmentSection from "@/components/InvestmentSection";
+import GrainSection from "@/components/GrainSection";
+import ProcessSection from "@/components/ProcessSection";
 import GlassSection from "@/components/GlassSection";
 import FooterSection from "@/components/FooterSection";
 
 const chapters = [
-  { id: "mountain", label: "I. The Mountain" },
-  { id: "water", label: "II. The Water" },
-  { id: "grain", label: "III. The Grain" },
-  { id: "glass", label: "IV. The Glass" },
+  { id: "heritage", label: "I. Heritage" },
+  { id: "opportunity", label: "II. The Opportunity" },
+  { id: "why-whisky", label: "III. Why Whisky" },
+  { id: "distilleries", label: "IV. Distilleries" },
+  { id: "process", label: "V. The Process" },
+  { id: "cask", label: "VI. Your Cask" },
 ];
 
 const Index = () => {
@@ -21,8 +25,10 @@ const Index = () => {
       <BuyButton />
       <HeroSection />
       <WaterSection />
-      <GrainSection />
+      <WhyWhiskySection />
       <InvestmentSection />
+      <GrainSection />
+      <ProcessSection />
       <GlassSection />
       <FooterSection />
     </div>
