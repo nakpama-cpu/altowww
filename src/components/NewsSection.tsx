@@ -2,9 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { articles } from "@/data/articles";
 
+const VISIBLE_COUNT = 3;
+
 const NewsSection = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [startIndex, setStartIndex] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -17,7 +20,11 @@ const NewsSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const featured = articles.slice(0, 3);
+  const maxStart = Math.max(0, articles.length - VISIBLE_COUNT);
+  const canPrev = startIndex > 0;
+  const canNext = startIndex < maxStart;
+
+  const visibleArticles = articles.slice(startIndex, startIndex + VISIBLE_COUNT);
 
   return (
     <section ref={ref} className="section-light py-24 md:py-32">
@@ -37,22 +44,48 @@ const NewsSection = () => {
           >
             Latest from the world of whisky.
           </h2>
-          <Link
-            to="/news"
-            className={`hidden md:inline-block font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-all duration-1000 delay-300 ${
+          <div
+            className={`hidden md:flex items-center gap-4 transition-all duration-1000 delay-300 ${
               visible ? "opacity-100" : "opacity-0"
             }`}
           >
-            View All Articles →
-          </Link>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setStartIndex((i) => Math.max(0, i - 1))}
+                disabled={!canPrev}
+                className="w-10 h-10 flex items-center justify-center border border-border rounded-full hover:border-primary hover:text-primary transition-colors disabled:opacity-20 disabled:pointer-events-none"
+                aria-label="Previous articles"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={() => setStartIndex((i) => Math.min(maxStart, i + 1))}
+                disabled={!canNext}
+                className="w-10 h-10 flex items-center justify-center border border-border rounded-full hover:border-primary hover:text-primary transition-colors disabled:opacity-20 disabled:pointer-events-none"
+                aria-label="Next articles"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+            <Link
+              to="/news"
+              className="font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors"
+            >
+              View All →
+            </Link>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-          {featured.map((article, i) => (
+          {visibleArticles.map((article, i) => (
             <Link
               to={`/news/${article.slug}`}
               key={article.slug}
-              className={`group block transition-all duration-1000 ${
+              className={`group block transition-all duration-700 ${
                 visible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"
@@ -86,7 +119,33 @@ const NewsSection = () => {
           ))}
         </div>
 
-        <div className="mt-10 text-center md:hidden">
+        {/* Mobile nav */}
+        <div className="mt-10 flex flex-col items-center gap-4 md:hidden">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setStartIndex((i) => Math.max(0, i - 1))}
+              disabled={!canPrev}
+              className="w-10 h-10 flex items-center justify-center border border-border rounded-full hover:border-primary hover:text-primary transition-colors disabled:opacity-20 disabled:pointer-events-none"
+              aria-label="Previous articles"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <span className="font-body text-xs text-muted-foreground/50">
+              {startIndex + 1}–{Math.min(startIndex + VISIBLE_COUNT, articles.length)} of {articles.length}
+            </span>
+            <button
+              onClick={() => setStartIndex((i) => Math.min(maxStart, i + 1))}
+              disabled={!canNext}
+              className="w-10 h-10 flex items-center justify-center border border-border rounded-full hover:border-primary hover:text-primary transition-colors disabled:opacity-20 disabled:pointer-events-none"
+              aria-label="Next articles"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
           <Link
             to="/news"
             className="font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors"
