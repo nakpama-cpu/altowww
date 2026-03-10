@@ -1,5 +1,6 @@
 import heroImg from "@/assets/hero-mountain.jpg";
 import { Link } from "react-router-dom";
+import BrochureButton from "@/components/BrochureButton";
 
 const HeroSection = () => {
   return (
