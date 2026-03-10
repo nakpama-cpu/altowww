@@ -30,6 +30,11 @@ const Index = () => {
         <InvestmentSection />
         <GrainSection />
         <ProcessSection />
+        <div className="section-light">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
+            <div className="w-full h-px bg-border" />
+          </div>
+        </div>
         <NewsSection />
         <FooterSection />
       </div>
