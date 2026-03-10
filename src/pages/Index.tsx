@@ -23,13 +23,16 @@ const Index = () => {
       <Header />
       <ChapterMarker chapters={chapters} />
       <HeroSection />
-      <WaterSection />
-      <WhyWhiskySection />
-      <InvestmentSection />
-      <GrainSection />
-      <ProcessSection />
-      <NewsSection />
-      <FooterSection />
+      {/* Content sits above the fixed hero and scrolls over it */}
+      <div className="relative z-10">
+        <WaterSection />
+        <WhyWhiskySection />
+        <InvestmentSection />
+        <GrainSection />
+        <ProcessSection />
+        <NewsSection />
+        <FooterSection />
+      </div>
     </div>
   );
 };
