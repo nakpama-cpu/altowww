@@ -84,20 +84,28 @@ const AboutWhisky = () => {
             With hundreds of years spent distilling and producing this
             much-loved spirit, there are nuances to the art of whisky.
           </p>
-          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
+          <h4 className="font-display text-lg md:text-xl italic text-foreground/80 max-w-xl mb-6">
             Spelled without an 'e', the name 'whisky' refers to scotch distilled
             in Scotland and Ireland, whilst American producers prefer the
-            spelling 'whiskey'. Taken literally, the term 'whisky' is derived
-            from Gaelic to mean 'water of life', depicting the high esteem this
-            product has been held in, and for just how long.
+            spelling 'whiskey'.
+          </h4>
+          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
+            Taken literally, the term 'whisky' is derived from Gaelic to mean
+            'water of life', depicting the high esteem this product has been
+            held in, and for just how long.
+          </p>
+          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
+            Official records show whisky production dating back to the late
+            1400s in the Scottish Exchequer Rolls, as shared in Mr J Marshall
+            Robb's book 'Scottish Whisky'. However, many believe whisky has an
+            even deeper heritage, dating back as far as the 8th century. It is
+            believed that Christian missionary monks brought the knowledge of
+            distillery back to Celtic lands from their pilgrimages to
+            Mediterranean and Middle Eastern regions.
           </p>
           <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl">
-            Official records show whisky production dating back to the late
-            1400s in the Scottish Exchequer Rolls. However, many believe whisky
-            has an even deeper heritage, dating back as far as the 8th century.
-            It is believed that Christian missionary monks brought the knowledge
-            of distillery back to Celtic lands from their pilgrimages to
-            Mediterranean and Middle Eastern regions.
+            Whilst we will perhaps never know for sure, one thing we can be
+            certain of is that whisky is in Scotland's blood.
           </p>
         </div>
       </section>
