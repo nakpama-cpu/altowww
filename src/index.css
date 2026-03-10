@@ -113,24 +113,7 @@
   }
 
   .section-light {
-    @apply bg-background text-foreground relative;
-    background-image: url('@/assets/cask-watermark.png');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 320px;
-    background-blend-mode: multiply;
-  }
-
-  .section-light::before {
-    content: '';
-    @apply absolute inset-0 pointer-events-none;
-    background: hsl(var(--background) / 0.92);
-    z-index: 0;
-  }
-
-  .section-light > * {
-    position: relative;
-    z-index: 1;
+    @apply bg-background text-foreground;
   }
 
   .tasting-note {
