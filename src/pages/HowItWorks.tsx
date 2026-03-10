@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import BuyButton from "@/components/BuyButton";
+import BrochureButton from "@/components/BrochureButton";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import warehouseImg from "@/assets/warehouse-casks.jpg";
