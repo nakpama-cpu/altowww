@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { articles } from "@/data/articles";
-import BrochureButton, { ContactButton } from "@/components/BrochureButton";
-
-const VISIBLE_COUNT = 3;
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const NewsSection = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
+  const isMobile = useIsMobile();
+
+  const visibleCount = isMobile ? 1 : 3;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -21,14 +22,19 @@ const NewsSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const maxStart = Math.max(0, articles.length - VISIBLE_COUNT);
+  // Reset startIndex when switching between mobile/desktop
+  useEffect(() => {
+    setStartIndex(0);
+  }, [isMobile]);
+
+  const maxStart = Math.max(0, articles.length - visibleCount);
   const canPrev = startIndex > 0;
   const canNext = startIndex < maxStart;
-  
-  const stepPercent = 100 / VISIBLE_COUNT;
-  const gap = 40;
-  const cardMarginShare = ((VISIBLE_COUNT - 1) * gap) / VISIBLE_COUNT;
-  const stepOffset = gap - cardMarginShare;
+
+  const stepPercent = 100 / visibleCount;
+  const gap = isMobile ? 0 : 40;
+  const cardMarginShare = visibleCount > 1 ? ((visibleCount - 1) * gap) / visibleCount : 0;
+  const stepOffset = visibleCount > 1 ? gap - cardMarginShare : 0;
 
   return (
     <section ref={ref} className="section-light py-16 md:py-24">
@@ -40,9 +46,9 @@ const NewsSection = () => {
         >
           News & Insights
         </p>
-        <div className="flex items-end justify-between mb-12">
+        <div className="flex items-end justify-between mb-8 md:mb-12">
           <h2
-            className={`display-heading text-3xl md:text-4xl transition-all duration-1000 delay-200 ${
+            className={`display-heading text-2xl md:text-4xl transition-all duration-1000 delay-200 ${
               visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
@@ -86,7 +92,7 @@ const NewsSection = () => {
 
         <div className="overflow-hidden">
           <div
-            className="flex transition-transform duration-700 ease-in-out gap-10"
+            className={`flex transition-transform duration-700 ease-in-out ${isMobile ? "gap-0" : "gap-10"}`}
             style={{
               transform: `translateX(calc(${-startIndex} * (${stepPercent}% + ${stepOffset}px)))`,
             }}
@@ -99,11 +105,11 @@ const NewsSection = () => {
                   visible ? "opacity-100" : "opacity-0"
                 }`}
                 style={{
-                  width: `calc(${stepPercent}% - ${cardMarginShare}px)`,
+                  width: isMobile ? "100%" : `calc(${stepPercent}% - ${cardMarginShare}px)`,
                   transitionDelay: `${300 + i * 150}ms`,
                 }}
               >
-                <div className="aspect-[4/3] overflow-hidden mb-5">
+                <div className="aspect-[4/3] overflow-hidden mb-4 md:mb-5">
                   <img
                     src={article.image}
                     alt={article.title}
@@ -111,7 +117,7 @@ const NewsSection = () => {
                     loading="lazy"
                   />
                 </div>
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-3 mb-2 md:mb-3">
                   <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
                     {article.category}
                   </span>
@@ -120,7 +126,7 @@ const NewsSection = () => {
                     {article.date}
                   </span>
                 </div>
-                <h3 className="font-display text-lg font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
+                <h3 className="font-display text-base md:text-lg font-light leading-snug mb-2 md:mb-3 group-hover:text-primary transition-colors duration-300">
                   {article.title}
                 </h3>
                 <p className="font-body text-sm text-muted-foreground leading-relaxed">
@@ -132,7 +138,7 @@ const NewsSection = () => {
         </div>
 
         {/* Mobile nav */}
-        <div className="mt-10 flex flex-col items-center gap-4 md:hidden">
+        <div className="mt-8 flex flex-col items-center gap-4 md:hidden">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setStartIndex((i) => Math.max(0, i - 1))}
@@ -145,7 +151,7 @@ const NewsSection = () => {
               </svg>
             </button>
             <span className="font-body text-xs text-muted-foreground/50">
-              {startIndex + 1}–{Math.min(startIndex + VISIBLE_COUNT, articles.length)} of {articles.length}
+              {startIndex + 1} of {articles.length}
             </span>
             <button
               onClick={() => setStartIndex((i) => Math.min(maxStart, i + 1))}
