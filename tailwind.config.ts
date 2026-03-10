@@ -90,8 +90,8 @@ export default {
           "100%": { transform: "translateX(-50%)" },
         },
         "cloud-drift": {
-          "0%, 100%": { transform: "scale(1.15) translate3d(0px, 0px, 0px)" },
-          "50%": { transform: "scale(1.15) translate3d(-40px, -8px, 0px)" },
+          "0%, 100%": { transform: "scale(1.25) translate3d(0px, 0px, 0px)" },
+          "50%": { transform: "scale(1.25) translate3d(-20px, -5px, 0px)" },
         },
       },
       animation: {
