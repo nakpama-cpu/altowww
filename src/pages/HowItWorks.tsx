@@ -66,6 +66,7 @@ const HowItWorks = () => {
   return (
     <div className="relative">
       <Header />
+      <BuyButton />
 
       {/* Hero */}
       <section className="relative h-[70vh] w-full overflow-hidden">
