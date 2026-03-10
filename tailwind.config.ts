@@ -89,9 +89,10 @@ export default {
           "100%": { transform: "translateX(-50%)" },
         },
         "cloud-drift": {
-          "0%": { transform: "scale(1.1) translateX(0%) translateY(0%)" },
-          "50%": { transform: "scale(1.1) translateX(-1.5%) translateY(-0.5%)" },
-          "100%": { transform: "scale(1.1) translateX(0%) translateY(0%)" },
+          "0%": { transform: "scale(1.15) translateX(0%) translateY(0%)" },
+          "33%": { transform: "scale(1.15) translateX(-3%) translateY(-1%)" },
+          "66%": { transform: "scale(1.15) translateX(1.5%) translateY(-0.5%)" },
+          "100%": { transform: "scale(1.15) translateX(0%) translateY(0%)" },
         },
       },
       animation: {
