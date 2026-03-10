@@ -11,13 +11,13 @@ const FooterSection = () => {
           from all walks of life.
         </p>
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground/40">
-          <a href="https://www.altowhisky.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+          <a href="https://www.altowhisky.com/how-it-works" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
             How It Works
           </a>
           <a href="https://www.altowhisky.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
             About Us
           </a>
-          <a href="https://www.altowhisky.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+          <a href="https://www.altowhisky.com/contact" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
             Contact
           </a>
         </div>

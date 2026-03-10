@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 const stats = [
   { value: "582%", label: "Rare whisky appreciation over 10 years" },
   { value: "£4.2B", label: "Global whisky market value" },
-  { value: "12+", label: "Years of expert portfolio advisory" },
+  { value: "#1", label: "Top performing collectible of the decade" },
 ];
 
 const InvestmentSection = () => {
@@ -52,13 +52,11 @@ const InvestmentSection = () => {
         </div>
 
         <p
-          className={`mt-16 font-body text-base leading-relaxed text-muted-foreground max-w-xl transition-all duration-1000 delay-700 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          className={`mt-16 font-body text-xs uppercase tracking-[0.15em] text-muted-foreground/60 transition-all duration-1000 delay-700 ${
+            visible ? "opacity-100" : "opacity-0"
           }`}
         >
-          Whether you have a passion for whisky or you're looking to leverage a 
-          reliable long-term hold, our team of expert Portfolio Advisors can help you 
-          start, manage, and sell your collection when the time is right.
+          Source: Knight Frank Luxury Investment Index
         </p>
       </div>
       <div className="py-24" />
