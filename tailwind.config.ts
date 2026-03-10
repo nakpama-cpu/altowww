@@ -61,6 +61,7 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        copper: "hsl(var(--copper))",
       },
       borderRadius: {
         lg: "var(--radius)",
