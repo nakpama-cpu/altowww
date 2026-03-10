@@ -34,9 +34,7 @@ const HeroSection = () => {
             className="mt-6 font-body text-sm md:text-base text-secondary-foreground/80 max-w-lg tracking-wide leading-relaxed animate-fade-in-up"
             style={{ animationDelay: "0.4s" }}
           >
-            Secure your future with the best performing
-            <br />
-            collectible of the decade.
+            Secure your future with whisky cask investments.
           </p>
           <div
             className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in"
