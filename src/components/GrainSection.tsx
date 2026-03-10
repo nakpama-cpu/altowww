@@ -44,7 +44,7 @@ const GrainSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const logos = [...distilleries, ...distilleries, ...distilleries];
+  const logos = distilleries;
 
   return (
     <section id="distilleries" className="section-dark">
@@ -104,8 +104,8 @@ const GrainSection = () => {
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-secondary to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-secondary to-transparent z-10 pointer-events-none" />
 
-          <div className="flex animate-logo-scroll">
-            {logos.map((d, i) => (
+          <div className="flex w-max animate-logo-scroll">
+            {[...logos, ...logos].map((d, i) => (
               <div
                 key={`${d.name}-${i}`}
                 className="flex-shrink-0 w-[200px] md:w-[260px] mx-4 md:mx-6 flex items-center justify-center h-32"
