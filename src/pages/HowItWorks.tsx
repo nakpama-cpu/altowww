@@ -143,7 +143,7 @@ const HowItWorks = () => {
           </div>
         </section>
 
-        <FooterSection />
+        <FooterSection hideCta />
       </div>
     </div>
   );
