@@ -113,7 +113,7 @@ const GrainSection = () => {
                 <img
                   src={d.logo}
                   alt={`${d.name} distillery logo`}
-                  className="max-h-20 max-w-[160px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 grayscale hover:grayscale-0"
+                  className="max-h-20 max-w-[160px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 invert grayscale hover:grayscale-0"
                   loading="lazy"
                 />
               </div>
