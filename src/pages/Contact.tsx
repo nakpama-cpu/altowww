@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
-import BuyButton from "@/components/BuyButton";
+
 import { useEffect, useState } from "react";
 import heroImg from "@/assets/hero-mountain.jpg";
 
