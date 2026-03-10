@@ -88,6 +88,11 @@ export default {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        "cloud-drift": {
+          "0%": { transform: "scale(1.1) translateX(0%) translateY(0%)" },
+          "50%": { transform: "scale(1.1) translateX(-1.5%) translateY(-0.5%)" },
+          "100%": { transform: "scale(1.1) translateX(0%) translateY(0%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -95,6 +100,7 @@ export default {
         "fade-in-up": "fade-in-up 1s ease-out forwards",
         "fade-in": "fade-in 1.2s ease-out forwards",
         "logo-scroll": "logo-scroll 60s linear infinite",
+        "cloud-drift": "cloud-drift 30s ease-in-out infinite",
       },
     },
   },
