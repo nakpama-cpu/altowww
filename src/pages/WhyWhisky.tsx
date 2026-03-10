@@ -132,7 +132,7 @@ const WhyWhiskyPage = () => {
                 }`}
                 style={{ transitionDelay: `${200 + i * 100}ms` }}
               >
-                <div className="text-3xl mb-4">{benefit.icon}</div>
+                <img src={benefit.icon} alt={benefit.title} className="w-14 h-14 mb-4 object-contain" />
                 <div className="w-12 h-px bg-primary mb-6" />
                 <h3 className="font-display text-xl font-light mb-4">
                   {benefit.title}
