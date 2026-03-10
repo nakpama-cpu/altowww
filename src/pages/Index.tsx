@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import ChapterMarker from "@/components/ChapterMarker";
 import BuyButton from "@/components/BuyButton";
 import HeroSection from "@/components/HeroSection";
@@ -21,6 +22,7 @@ const chapters = [
 const Index = () => {
   return (
     <div className="relative">
+      <Header />
       <ChapterMarker chapters={chapters} />
       <BuyButton />
       <HeroSection />
