@@ -83,9 +83,9 @@ const NewsSection = () => {
 
         <div className="overflow-hidden">
           <div
-            className="flex transition-transform duration-700 ease-in-out"
+            className="flex transition-transform duration-700 ease-in-out gap-10"
             style={{
-              transform: `translateX(-${startIndex * (100 / VISIBLE_COUNT)}%)`,
+              transform: `translateX(calc(-${startIndex} * (${100 / VISIBLE_COUNT}% + ${40 - (40 * VISIBLE_COUNT - 40) / VISIBLE_COUNT / VISIBLE_COUNT}px)))`,
             }}
           >
             {articles.map((article, i) => (
