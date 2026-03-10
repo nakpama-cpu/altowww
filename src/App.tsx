@@ -11,6 +11,8 @@ import AboutWhisky from "./pages/AboutWhisky.tsx";
 import HowWhiskyIsMade from "./pages/HowWhiskyIsMade.tsx";
 import FAQ from "./pages/FAQ.tsx";
 import Contact from "./pages/Contact.tsx";
+import News from "./pages/News.tsx";
+import ArticlePage from "./pages/ArticlePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,8 @@ const App = () => (
             <Route path="/how-whisky-is-made" element={<HowWhiskyIsMade />} />
             <Route path="/faqs" element={<FAQ />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/news/:slug" element={<ArticlePage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
