@@ -5,43 +5,49 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import scotlandImg from "@/assets/scotland-landscape.jpg";
 import caskImg from "@/assets/cask-closeup.jpg";
+import tangibleAssetIcon from "@/assets/icons/tangible-asset.png";
+import taxFreeIcon from "@/assets/icons/tax-free.png";
+import unlinkedMarketsIcon from "@/assets/icons/unlinked-markets.png";
+import trackRecordIcon from "@/assets/icons/track-record.png";
+import globalDemandIcon from "@/assets/icons/global-demand.png";
+import expertManagementIcon from "@/assets/icons/expert-management.png";
 
 const benefits = [
   {
     title: "A Tangible Asset",
     description:
       "Unlike stocks, bonds, or crypto, a whisky cask is a physical asset you can see, touch, and even taste. Your cask is stored in an HMRC government-bonded warehouse in Scotland, fully insured and independently verified.",
-    icon: "🏴󐁧󐁢󐁳󐁣󐁴󐁿",
+    icon: tangibleAssetIcon,
   },
   {
     title: "Tax Free Returns",
     description:
       "Whisky casks are classified as a 'wasting asset' by HMRC, meaning they are entirely exempt from Capital Gains Tax. Unlike most investments, 100% of your returns are yours to keep.",
-    icon: "📋",
+    icon: taxFreeIcon,
   },
   {
     title: "Unlinked to Financial Markets",
     description:
       "The value of whisky casks is not correlated to stock markets, property, or any financial index. In times of economic uncertainty, whisky has historically proven to be a reliable store of value.",
-    icon: "📈",
+    icon: unlinkedMarketsIcon,
   },
   {
     title: "Proven Track Record",
     description:
       "Rare whisky has appreciated by 582% over the past decade according to the Knight Frank Luxury Investment Index, making it the best performing collectible asset class of the decade.",
-    icon: "🥇",
+    icon: trackRecordIcon,
   },
   {
     title: "Growing Global Demand",
     description:
       "Global whisky consumption continues to rise, with emerging markets in Asia and the Americas driving unprecedented demand. Supply of aged casks is inherently limited — as whisky ages, some is lost to evaporation (the 'angel's share').",
-    icon: "🌍",
+    icon: globalDemandIcon,
   },
   {
     title: "Expert Portfolio Management",
     description:
       "Our dedicated Portfolio Advisors bring years of industry expertise. From sourcing the right casks to managing your collection and advising on the optimal time to sell, we're with you every step of the way.",
-    icon: "🤝",
+    icon: expertManagementIcon,
   },
 ];
 
