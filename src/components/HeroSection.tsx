@@ -12,7 +12,12 @@ const HeroSection = () => {
         <img
           src={heroImg}
           alt="Dramatic mountain landscape at dawn with misty peaks"
-          className="absolute inset-0 w-full h-full object-cover scale-[1.15] animate-cloud-drift will-change-transform"
+          className="absolute inset-0 w-full h-full object-cover animate-cloud-drift"
+          style={{
+            transform: 'scale(1.15) translateZ(0)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+          }}
         />
         <div className="absolute inset-0 bg-secondary/50" />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
