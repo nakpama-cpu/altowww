@@ -9,7 +9,7 @@ const BrochureButton = ({ className, children }: BrochureButtonProps) => {
   const { open } = useBrochureModal();
 
   return (
-    <button onClick={open} className={className}>
+    <button onClick={() => open("brochure")} className={className}>
       {children ?? "Request Brochure"}
     </button>
   );
@@ -17,12 +17,12 @@ const BrochureButton = ({ className, children }: BrochureButtonProps) => {
 
 export default BrochureButton;
 
-/** A secondary CTA that also opens the brochure/contact modal */
+/** A secondary CTA that opens the advisor callback modal */
 export const ContactButton = ({ className, children }: BrochureButtonProps) => {
   const { open } = useBrochureModal();
 
   return (
-    <button onClick={open} className={className}>
+    <button onClick={() => open("advisor")} className={className}>
       {children ?? "Speak to an Advisor"}
     </button>
   );
