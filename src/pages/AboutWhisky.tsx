@@ -142,9 +142,11 @@ const AboutWhisky = () => {
                 <h3 className="font-display text-2xl md:text-3xl text-secondary-foreground font-light italic mb-4">
                   {region.name}
                 </h3>
-                <p className="font-body text-sm text-secondary-foreground/60 leading-relaxed max-w-2xl">
-                  {region.description}
-                </p>
+                <div className="font-body text-sm text-secondary-foreground/60 leading-relaxed max-w-2xl space-y-4">
+                  {region.description.split('\n\n').map((paragraph, pi) => (
+                    <p key={pi}>{paragraph}</p>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
