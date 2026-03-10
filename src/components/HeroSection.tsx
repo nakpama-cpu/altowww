@@ -1,6 +1,5 @@
 import heroImg from "@/assets/hero-mountain.jpg";
-import { Link } from "react-router-dom";
-import BrochureButton from "@/components/BrochureButton";
+import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 const HeroSection = () => {
   return (
@@ -34,12 +33,9 @@ const HeroSection = () => {
           style={{ animationDelay: "0.8s" }}
         >
           <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-          <Link
-            to="/how-it-works"
-            className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500"
-          >
-            How It Works
-          </Link>
+          <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500">
+            Speak to an Advisor
+          </ContactButton>
         </div>
         <div
           className="absolute bottom-12 animate-fade-in"

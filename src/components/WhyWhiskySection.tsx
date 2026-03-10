@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import BrochureButton from "@/components/BrochureButton";
+import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 const benefits = [
   {
@@ -75,12 +74,9 @@ const WhyWhiskySection = () => {
           }`}
         >
           <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-          <Link
-            to="/contact"
-            className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500 text-center"
-          >
+          <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500">
             Speak to an Advisor
-          </Link>
+          </ContactButton>
         </div>
       </div>
       <div className="py-16" />

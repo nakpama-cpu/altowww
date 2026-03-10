@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import warehouseImg from "@/assets/warehouse-casks.jpg";
-import { Link } from "react-router-dom";
-import BrochureButton from "@/components/BrochureButton";
+import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 const WaterSection = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -43,12 +42,9 @@ const WaterSection = () => {
           }`}
         >
           <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-          <Link
-            to="/why-whisky"
-            className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500 text-center"
-          >
-            Why Whisky →
-          </Link>
+          <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500">
+            Speak to an Advisor
+          </ContactButton>
         </div>
       </div>
       <div className="mt-16 md:mt-24">
