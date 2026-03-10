@@ -63,19 +63,14 @@ const GrainSection = () => {
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          These three things elevate this revered spirit above many of its peers,
-          providing a unique opportunity for discerning investors to protect and
-          build their wealth. Alto Whisky was born to bring this opportunity to
-          people from all walks of life.
+          Scotland is home to over 130 active distilleries, each producing whisky with its own distinct character shaped by local water sources, climate, and centuries of tradition. From the peated intensity of Islay's coastal malts to the honeyed elegance of Speyside's finest, every region offers something unique.
         </p>
         <p
           className={`font-body text-base leading-relaxed text-secondary-foreground/70 max-w-xl transition-all duration-1000 delay-500 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          Whether you have a passion for whisky and appreciate the unmatched
-          taste of an 18-year, single barrel scotch, or you are just looking to
-          leverage a reliable long-term hold, we want to help you.
+          Alto Whisky provides access to casks from a curated selection of Scotland's most sought-after distilleries — names that carry global recognition, collectability, and proven appreciation in value over time.
         </p>
         <div
           className={`mt-8 transition-all duration-1000 delay-600 ${

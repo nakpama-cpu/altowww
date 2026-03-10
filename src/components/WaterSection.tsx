@@ -36,6 +36,16 @@ const WaterSection = () => {
         >
           Whisky cask investment is now widely considered to be one of the most secure assets available for long or medium term holds. Alto Whisky's team of expert Portfolio Advisors can help you start, manage, and sell your collection when the time is right.
         </p>
+        <div
+          className={`flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-500 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
+          <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500">
+            Speak to an Advisor
+          </ContactButton>
+        </div>
       </div>
       <div className="mt-16 md:mt-24">
         <img
