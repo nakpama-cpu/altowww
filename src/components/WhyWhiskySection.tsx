@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 const benefits = [
   {
@@ -61,22 +60,11 @@ const WhyWhiskySection = () => {
               <h3 className="font-display text-xl md:text-2xl text-secondary-foreground font-light mb-4">
                 {benefit.title}
               </h3>
-              <p className="font-body text-sm text-secondary-foreground/60 leading-relaxed">
+              <p className="font-body text-sm text-secondary-foreground/70 leading-relaxed">
                 {benefit.description}
               </p>
             </div>
           ))}
-        </div>
-
-        <div
-          className={`mt-14 flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-700 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-          <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500">
-            Speak to an Advisor
-          </ContactButton>
         </div>
       </div>
       <div className="py-16" />

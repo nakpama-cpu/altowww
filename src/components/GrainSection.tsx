@@ -56,10 +56,10 @@ const GrainSection = () => {
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          The world of whisky is one which exudes class, quality, and heritage.
+          Access casks from Scotland's most prestigious distilleries.
         </h2>
         <p
-          className={`font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl mb-6 transition-all duration-1000 delay-300 ${
+          className={`font-body text-base leading-relaxed text-secondary-foreground/70 max-w-xl mb-6 transition-all duration-1000 delay-300 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -69,7 +69,7 @@ const GrainSection = () => {
           people from all walks of life.
         </p>
         <p
-          className={`font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl transition-all duration-1000 delay-500 ${
+          className={`font-body text-base leading-relaxed text-secondary-foreground/70 max-w-xl transition-all duration-1000 delay-500 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >

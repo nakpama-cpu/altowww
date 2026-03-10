@@ -25,11 +25,10 @@ const NewsSection = () => {
   const canPrev = startIndex > 0;
   const canNext = startIndex < maxStart;
   
-  // Each card: calc(33.333% - 26.667px), gap: 40px, so step = calc(33.333% + 13.333px)
-  const stepPercent = 100 / VISIBLE_COUNT; // 33.333
+  const stepPercent = 100 / VISIBLE_COUNT;
   const gap = 40;
-  const cardMarginShare = ((VISIBLE_COUNT - 1) * gap) / VISIBLE_COUNT; // 26.667
-  const stepOffset = gap - cardMarginShare; // 13.333
+  const cardMarginShare = ((VISIBLE_COUNT - 1) * gap) / VISIBLE_COUNT;
+  const stepOffset = gap - cardMarginShare;
 
   return (
     <section ref={ref} className="section-light py-16 md:py-24">
@@ -165,26 +164,6 @@ const NewsSection = () => {
           >
             View All Articles →
           </Link>
-        </div>
-
-        {/* CTA */}
-        <div
-          className={`mt-16 pt-16 border-t border-border text-center transition-all duration-1000 delay-500 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <h3 className="display-heading text-2xl md:text-3xl mb-4">
-            Ready to get started?
-          </h3>
-          <p className="font-body text-sm text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed">
-            Download our free brochure or speak with one of our expert Portfolio Advisors.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-            <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500">
-              Contact Us
-            </ContactButton>
-          </div>
         </div>
       </div>
     </section>

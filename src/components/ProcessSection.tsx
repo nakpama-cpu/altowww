@@ -24,7 +24,7 @@ const steps = [
   },
   {
     number: "05",
-    title: "Sit Back & Relax",
+    title: "Expert Ongoing Management",
     description: "Your expert Advisor will share regular updates on the whisky market and how this impacts your current investment.",
   },
   {
@@ -50,40 +50,48 @@ const ProcessSection = () => {
   return (
     <section id="process" className="section-light">
       <div className="py-16 md:py-24" />
-      <div ref={ref} className="max-w-4xl mx-auto px-6 md:px-12">
+      <div ref={ref} className="max-w-2xl mx-auto px-6 md:px-12">
         <p className="chapter-marker mb-8">How It Works</p>
         <h2
-          className={`display-heading text-3xl md:text-5xl mb-14 transition-all duration-1000 ${
+          className={`display-heading text-3xl md:text-5xl mb-16 transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
           A solid, dependable strategy — guided every step of the way.
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
-          {steps.map((step, i) => (
-            <div
-              key={step.number}
-              className={`transition-all duration-1000 ${
-                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-              style={{ transitionDelay: `${300 + i * 150}ms` }}
-            >
-              <p className="font-display text-5xl text-primary/20 font-light mb-4">
-                {step.number}
-              </p>
-              <h3 className="font-display text-xl font-light mb-3">
-                {step.title}
-              </h3>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                {step.description}
-              </p>
-            </div>
-          ))}
+        {/* Single-column timeline */}
+        <div className="relative">
+          {/* Timeline line */}
+          <div className="absolute left-[23px] top-0 bottom-0 w-px bg-border" />
+
+          <div className="flex flex-col gap-12">
+            {steps.map((step, i) => (
+              <div
+                key={step.number}
+                className={`relative pl-16 transition-all duration-1000 ${
+                  visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+                style={{ transitionDelay: `${300 + i * 150}ms` }}
+              >
+                {/* Timeline dot */}
+                <div className="absolute left-[16px] top-1 w-[15px] h-[15px] rounded-full border-2 border-primary bg-background" />
+                <p className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">
+                  Step {step.number}
+                </p>
+                <h3 className="font-display text-xl font-light mb-2">
+                  {step.title}
+                </h3>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                  {step.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div
-          className={`mt-14 flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-700 ${
+          className={`mt-16 flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-700 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
