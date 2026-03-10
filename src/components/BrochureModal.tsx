@@ -9,8 +9,10 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+type ModalMode = "brochure" | "advisor";
+
 type BrochureModalContextType = {
-  open: () => void;
+  open: (mode?: ModalMode) => void;
 };
 
 const BrochureModalContext = createContext<BrochureModalContextType>({
@@ -19,9 +21,18 @@ const BrochureModalContext = createContext<BrochureModalContextType>({
 
 export const useBrochureModal = () => useContext(BrochureModalContext);
 
+const callReasons = [
+  "I'd like to invest in whisky casks",
+  "I'd like more information",
+  "I have an existing portfolio to discuss",
+  "I'd like to sell or bottle my cask",
+  "General enquiry",
+];
+
 export const BrochureModalProvider = ({ children }: { children: ReactNode }) => {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
+  const [mode, setMode] = useState<ModalMode>("brochure");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
@@ -30,13 +41,15 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
     email: "",
     phone: "",
     message: "",
+    reason: "",
   });
 
-  const open = () => {
+  const open = (m: ModalMode = "brochure") => {
+    setMode(m);
     setIsOpen(true);
     if (submitted) {
       setSubmitted(false);
-      setFormData({ firstName: "", lastName: "", email: "", phone: "", message: "" });
+      setFormData({ firstName: "", lastName: "", email: "", phone: "", message: "", reason: "" });
     }
   };
 
@@ -44,13 +57,21 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
     e.preventDefault();
     setSubmitting(true);
 
+    const messageParts: string[] = [];
+    if (mode === "advisor" && formData.reason) {
+      messageParts.push(`Reason: ${formData.reason}`);
+    }
+    if (formData.message.trim()) {
+      messageParts.push(formData.message.trim());
+    }
+
     const { error } = await supabase.from("leads").insert({
       first_name: formData.firstName.trim(),
       last_name: formData.lastName.trim(),
       email: formData.email.trim(),
       phone: formData.phone.trim(),
-      message: formData.message.trim() || null,
-      source: "brochure_request",
+      message: messageParts.join(" — ") || null,
+      source: mode === "advisor" ? "advisor_callback" : "brochure_request",
     });
 
     setSubmitting(false);
@@ -66,6 +87,8 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
 
     setSubmitted(true);
   };
+
+  const isBrochure = mode === "brochure";
 
   return (
     <BrochureModalContext.Provider value={{ open }}>
@@ -88,8 +111,9 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
               <DialogHeader>
                 <DialogTitle className="display-heading text-2xl mb-4">Thank you.</DialogTitle>
                 <DialogDescription className="font-body text-sm text-muted-foreground leading-relaxed">
-                  Your brochure request has been received. One of our expert Portfolio
-                  Advisors will be in touch shortly.
+                  {isBrochure
+                    ? "Your brochure request has been received. One of our expert Portfolio Advisors will be in touch shortly."
+                    : "Your request has been received. One of our expert Portfolio Advisors will call you shortly."}
                 </DialogDescription>
               </DialogHeader>
             </div>
@@ -97,11 +121,12 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
             <div className="p-8">
               <DialogHeader className="mb-6">
                 <DialogTitle className="display-heading text-2xl">
-                  Request Your Free Brochure
+                  {isBrochure ? "Request Your Free Brochure" : "Speak to an Advisor"}
                 </DialogTitle>
                 <DialogDescription className="font-body text-sm text-muted-foreground leading-relaxed mt-2">
-                  Fill in your details and one of our expert Portfolio Advisors will
-                  send you the brochure and answer any questions.
+                  {isBrochure
+                    ? "Fill in your details and one of our expert Portfolio Advisors will send you the brochure and answer any questions."
+                    : "Fill in your details and one of our expert Portfolio Advisors will be in touch to discuss your requirements."}
                 </DialogDescription>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-5">
@@ -159,6 +184,31 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                     className="w-full bg-transparent border-b border-border py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
+
+                {/* Reason dropdown — only for advisor mode */}
+                {!isBrochure && (
+                  <div>
+                    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                      Reason for Call *
+                    </label>
+                    <select
+                      required
+                      value={formData.reason}
+                      onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                      className="w-full bg-transparent border-b border-border py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer"
+                    >
+                      <option value="" disabled>
+                        Select a reason...
+                      </option>
+                      {callReasons.map((reason) => (
+                        <option key={reason} value={reason}>
+                          {reason}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 <div>
                   <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
                     Message (optional)
@@ -169,7 +219,11 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="w-full bg-transparent border-b border-border py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors resize-none"
-                    placeholder="Any specific questions or investment goals?"
+                    placeholder={
+                      isBrochure
+                        ? "Any specific questions or investment goals?"
+                        : "Anything else you'd like us to know?"
+                    }
                   />
                 </div>
                 <button
@@ -177,7 +231,11 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                   disabled={submitting}
                   className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-10 py-4 hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
-                  {submitting ? "Sending..." : "Request Brochure"}
+                  {submitting
+                    ? "Sending..."
+                    : isBrochure
+                    ? "Request Brochure"
+                    : "Request Callback"}
                 </button>
                 <p className="font-body text-xs text-muted-foreground/50 text-center">
                   Your details are secure and will only be used to contact you.
