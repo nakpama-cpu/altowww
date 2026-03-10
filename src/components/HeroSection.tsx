@@ -34,13 +34,13 @@ const HeroSection = () => {
             className="mt-4 font-body text-lg md:text-2xl lg:text-3xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
             style={{ animationDelay: "0.4s" }}
           >
-            The best performing collectible of the decade.
+            Secure your future with whisky cask investments.
           </p>
           <p
-            className="mt-3 font-body text-sm md:text-base text-secondary-foreground/70 max-w-lg tracking-wide leading-relaxed animate-fade-in-up"
+            className="mt-3 font-body text-lg md:text-2xl lg:text-3xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
             style={{ animationDelay: "0.5s" }}
           >
-            Secure your future with whisky cask investments.
+            The best performing collectible of the decade.
           </p>
           <div
             className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in"
