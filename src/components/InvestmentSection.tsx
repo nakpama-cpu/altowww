@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import BrochureButton from "@/components/BrochureButton";
 
 const stats = [
   { value: "582%", label: "Rare whisky appreciation over 10 years" },
@@ -30,7 +29,7 @@ const InvestmentSection = () => {
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          Top Performing Assets
+          Outperforming Wine, Art & Classic Cars
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
@@ -59,14 +58,6 @@ const InvestmentSection = () => {
         >
           Source: Knight Frank Luxury Investment Index
         </p>
-
-        <div
-          className={`mt-10 transition-all duration-1000 delay-700 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-        </div>
       </div>
       <div className="py-16" />
     </section>
