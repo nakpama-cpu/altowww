@@ -99,7 +99,7 @@ export default {
         "fade-in-up": "fade-in-up 1s ease-out forwards",
         "fade-in": "fade-in 1.2s ease-out forwards",
         "logo-scroll": "logo-scroll 60s linear infinite",
-        "cloud-drift": "cloud-drift 30s ease-in-out infinite",
+        "cloud-drift": "cloud-drift 40s cubic-bezier(0.45, 0, 0.55, 1) infinite",
       },
     },
   },
