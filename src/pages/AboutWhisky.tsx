@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
-import { Link } from "react-router-dom";
+import PageHero from "@/components/PageHero";
 import { useEffect, useRef, useState } from "react";
 import scotlandImg from "@/assets/scotland-landscape.jpg";
 
@@ -55,124 +55,117 @@ const AboutWhisky = () => {
   return (
     <div className="relative">
       <Header />
-      {/* Hero */}
-      <section className="relative h-[70vh] w-full overflow-hidden">
-        <img
-          src={scotlandImg}
-          alt="Scottish Highland landscape with rolling green hills"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-secondary/60" />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-          <p className="chapter-marker mb-6 text-secondary-foreground/70 animate-fade-in">
-            About Whisky
-          </p>
-          <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up">
-            Whisky Regions & Distilleries
-          </h1>
-        </div>
-      </section>
+      <PageHero image={scotlandImg} imageAlt="Scottish Highland landscape with rolling green hills" height="70vh">
+        <p className="chapter-marker mb-6 text-secondary-foreground/70 animate-fade-in">
+          About Whisky
+        </p>
+        <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up">
+          Whisky Regions & Distilleries
+        </h1>
+      </PageHero>
 
-      {/* Intro */}
-      <section className="section-light py-24 md:py-32">
-        <div className="max-w-3xl mx-auto px-6 md:px-12">
-          <h2 className="display-heading text-3xl md:text-4xl mb-8">
-            When you step into the world of whisky, you're opening the door to
-            much more than just a drink.
-          </h2>
-          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
-            With hundreds of years spent distilling and producing this
-            much-loved spirit, there are nuances to the art of whisky.
-          </p>
-          <h4 className="font-display text-lg md:text-xl italic text-foreground/80 max-w-xl mb-6">
-            Spelled without an 'e', the name 'whisky' refers to scotch distilled
-            in Scotland and Ireland, whilst American producers prefer the
-            spelling 'whiskey'.
-          </h4>
-          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
-            Taken literally, the term 'whisky' is derived from Gaelic to mean
-            'water of life', depicting the high esteem this product has been
-            held in, and for just how long.
-          </p>
-          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
-            Official records show whisky production dating back to the late
-            1400s in the Scottish Exchequer Rolls, as shared in Mr J Marshall
-            Robb's book 'Scottish Whisky'. However, many believe whisky has an
-            even deeper heritage, dating back as far as the 8th century. It is
-            believed that Christian missionary monks brought the knowledge of
-            distillery back to Celtic lands from their pilgrimages to
-            Mediterranean and Middle Eastern regions.
-          </p>
-          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl">
-            Whilst we will perhaps never know for sure, one thing we can be
-            certain of is that whisky is in Scotland's blood.
-          </p>
-        </div>
-      </section>
+      <div className="relative z-10">
+        {/* Intro */}
+        <section className="section-light py-24 md:py-32">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
+            <h2 className="display-heading text-3xl md:text-4xl mb-8">
+              When you step into the world of whisky, you're opening the door to
+              much more than just a drink.
+            </h2>
+            <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
+              With hundreds of years spent distilling and producing this
+              much-loved spirit, there are nuances to the art of whisky.
+            </p>
+            <h4 className="font-display text-lg md:text-xl italic text-foreground/80 max-w-xl mb-6">
+              Spelled without an 'e', the name 'whisky' refers to scotch distilled
+              in Scotland and Ireland, whilst American producers prefer the
+              spelling 'whiskey'.
+            </h4>
+            <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
+              Taken literally, the term 'whisky' is derived from Gaelic to mean
+              'water of life', depicting the high esteem this product has been
+              held in, and for just how long.
+            </p>
+            <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
+              Official records show whisky production dating back to the late
+              1400s in the Scottish Exchequer Rolls, as shared in Mr J Marshall
+              Robb's book 'Scottish Whisky'. However, many believe whisky has an
+              even deeper heritage, dating back as far as the 8th century. It is
+              believed that Christian missionary monks brought the knowledge of
+              distillery back to Celtic lands from their pilgrimages to
+              Mediterranean and Middle Eastern regions.
+            </p>
+            <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl">
+              Whilst we will perhaps never know for sure, one thing we can be
+              certain of is that whisky is in Scotland's blood.
+            </p>
+          </div>
+        </section>
 
-      {/* Regions */}
-      <section className="section-dark py-24 md:py-32">
-        <div className="max-w-3xl mx-auto px-6 md:px-12 mb-16">
-          <p className="chapter-marker mb-8 text-secondary-foreground/50">
-            Regions
-          </p>
-          <p className="font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl mb-8">
-            For the layman, it is forgivable to assume that all Scottish whisky
-            would taste the same, regardless of the region it comes from. For a
-            whisky enthusiast, this couldn't be further from the truth.
-          </p>
-          <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground">
-            There are five key Scottish whisky regions, each of which provides a
-            unique flavour, heritage, and experience.
-          </h2>
-        </div>
-        <div ref={ref} className="max-w-4xl mx-auto px-6 md:px-12">
-          <div className="space-y-20">
-            {regions.map((region, i) => (
-              <div
-                key={region.name}
-                className={`transition-all duration-1000 ${
-                  visible
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
-                style={{ transitionDelay: `${200 + i * 150}ms` }}
-              >
-                <div className="w-12 h-px bg-primary mb-6" />
-                <h3 className="font-display text-2xl md:text-3xl text-secondary-foreground font-light italic mb-4">
-                  {region.name}
-                </h3>
-                <div className="font-body text-sm text-secondary-foreground/60 leading-relaxed max-w-2xl space-y-4">
-                  {region.description.split('\n\n').map((paragraph, pi) => (
-                    <p key={pi}>{paragraph}</p>
-                  ))}
+        {/* Regions */}
+        <section className="section-dark py-24 md:py-32">
+          <div className="max-w-3xl mx-auto px-6 md:px-12 mb-16">
+            <p className="chapter-marker mb-8 text-secondary-foreground/50">
+              Regions
+            </p>
+            <p className="font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl mb-8">
+              For the layman, it is forgivable to assume that all Scottish whisky
+              would taste the same, regardless of the region it comes from. For a
+              whisky enthusiast, this couldn't be further from the truth.
+            </p>
+            <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground">
+              There are five key Scottish whisky regions, each of which provides a
+              unique flavour, heritage, and experience.
+            </h2>
+          </div>
+          <div ref={ref} className="max-w-4xl mx-auto px-6 md:px-12">
+            <div className="space-y-20">
+              {regions.map((region, i) => (
+                <div
+                  key={region.name}
+                  className={`transition-all duration-1000 ${
+                    visible
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-8"
+                  }`}
+                  style={{ transitionDelay: `${200 + i * 150}ms` }}
+                >
+                  <div className="w-12 h-px bg-primary mb-6" />
+                  <h3 className="font-display text-2xl md:text-3xl text-secondary-foreground font-light italic mb-4">
+                    {region.name}
+                  </h3>
+                  <div className="font-body text-sm text-secondary-foreground/60 leading-relaxed max-w-2xl space-y-4">
+                    {region.description.split('\n\n').map((paragraph, pi) => (
+                      <p key={pi}>{paragraph}</p>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA */}
-      <section className="section-light py-24 md:py-32">
-        <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
-          <h2 className="display-heading text-3xl md:text-5xl mb-8">
-            Ready to explore?
-          </h2>
-          <p className="font-body text-sm text-muted-foreground mb-10 max-w-md mx-auto leading-relaxed">
-            Download our free brochure to discover which distilleries and
-            regions could form part of your whisky cask portfolio.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-            <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500">
-              Speak to an Advisor
-            </ContactButton>
+        {/* CTA */}
+        <section className="section-light py-24 md:py-32">
+          <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
+            <h2 className="display-heading text-3xl md:text-5xl mb-8">
+              Ready to explore?
+            </h2>
+            <p className="font-body text-sm text-muted-foreground mb-10 max-w-md mx-auto leading-relaxed">
+              Download our free brochure to discover which distilleries and
+              regions could form part of your whisky cask portfolio.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
+              <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500">
+                Speak to an Advisor
+              </ContactButton>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <FooterSection hideCta />
+        <FooterSection hideCta />
+      </div>
     </div>
   );
 };

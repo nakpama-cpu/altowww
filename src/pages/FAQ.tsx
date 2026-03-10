@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
-import { Link } from "react-router-dom";
+import PageHero from "@/components/PageHero";
 import { useEffect } from "react";
 import heroImg from "@/assets/hero-mountain.jpg";
 import {
@@ -30,7 +30,7 @@ const faqs = [
   {
     question: "What is a cask?",
     answer:
-      "A cask is a wooden barrel designed to store alcohol as it matures. Different forms of whisky will use different woods or sizes, but many will utilise previously used barrels, helping the whisky to develop a deeper, richer flavour profile.",
+      "A cask is a wooden barrel designed to store alcohol as it matures. Different forms of whisky will use different woods or sizes, but many will utilise previously used barrels, helping the new spirit to develop a deep, rich flavour profile.",
   },
   {
     question: "Why casks and not bottles?",
@@ -62,63 +62,56 @@ const FAQ = () => {
   return (
     <div className="relative">
       <Header />
-      {/* Hero */}
-      <section className="relative h-[50vh] w-full overflow-hidden">
-        <img
-          src={heroImg}
-          alt="Mountain landscape"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-secondary/60" />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-          <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up">
-            Frequently Asked Questions
-          </h1>
-        </div>
-      </section>
+      <PageHero image={heroImg} imageAlt="Mountain landscape" height="50vh">
+        <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up">
+          Frequently Asked Questions
+        </h1>
+      </PageHero>
 
-      {/* FAQ */}
-      <section className="section-light py-24 md:py-32">
-        <div className="max-w-3xl mx-auto px-6 md:px-12">
-          <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, i) => (
-              <AccordionItem
-                key={i}
-                value={`item-${i}`}
-                className="border-b border-border"
-              >
-                <AccordionTrigger className="font-display text-lg md:text-xl font-light text-left py-6 hover:no-underline hover:text-primary transition-colors">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="font-body text-sm text-muted-foreground leading-relaxed pb-6">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="section-dark py-24 md:py-32">
-        <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
-          <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground mb-8">
-            Still have questions?
-          </h2>
-          <p className="font-body text-sm text-secondary-foreground/60 mb-10 max-w-md mx-auto leading-relaxed">
-            Our expert Portfolio Advisors are here to help. Get in touch and
-            we'll be happy to answer any questions you have.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-            <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500">
-              Speak to an Advisor
-            </ContactButton>
+      <div className="relative z-10">
+        {/* FAQ */}
+        <section className="section-light py-24 md:py-32">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq, i) => (
+                <AccordionItem
+                  key={i}
+                  value={`item-${i}`}
+                  className="border-b border-border"
+                >
+                  <AccordionTrigger className="font-display text-lg md:text-xl font-light text-left py-6 hover:no-underline hover:text-primary transition-colors">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="font-body text-sm text-muted-foreground leading-relaxed pb-6">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <FooterSection />
+        {/* CTA */}
+        <section className="section-dark py-24 md:py-32">
+          <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
+            <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground mb-8">
+              Still have questions?
+            </h2>
+            <p className="font-body text-sm text-secondary-foreground/60 mb-10 max-w-md mx-auto leading-relaxed">
+              Our expert Portfolio Advisors are here to help. Get in touch and
+              we'll be happy to answer any questions you have.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
+              <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500">
+                Speak to an Advisor
+              </ContactButton>
+            </div>
+          </div>
+        </section>
+
+        <FooterSection />
+      </div>
     </div>
   );
 };

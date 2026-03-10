@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
-import { Link } from "react-router-dom";
+import PageHero from "@/components/PageHero";
 import { useEffect, useRef, useState } from "react";
 import warehouseImg from "@/assets/warehouse-casks.jpg";
 
@@ -66,101 +66,94 @@ const HowWhiskyIsMade = () => {
   return (
     <div className="relative">
       <Header />
-      {/* Hero */}
-      <section className="relative h-[70vh] w-full overflow-hidden">
-        <img
-          src={warehouseImg}
-          alt="Scottish whisky warehouse with oak casks"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-secondary/60" />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-          <p className="chapter-marker mb-6 text-secondary-foreground/70 animate-fade-in">
-            The Craft
-          </p>
-          <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up">
-            How Whisky is Made
-          </h1>
-        </div>
-      </section>
+      <PageHero image={warehouseImg} imageAlt="Scottish whisky warehouse with oak casks" height="70vh">
+        <p className="chapter-marker mb-6 text-secondary-foreground/70 animate-fade-in">
+          The Craft
+        </p>
+        <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up">
+          How Whisky is Made
+        </h1>
+      </PageHero>
 
-      {/* Intro */}
-      <section className="section-light py-24 md:py-32">
-        <div className="max-w-3xl mx-auto px-6 md:px-12">
-          <h2 className="display-heading text-3xl md:text-4xl mb-8">
-            Scotch whisky is as much about the process as it is about the
-            product.
-          </h2>
-          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
-            The drink is a source of great national pride for the Scottish
-            people, and so it must meet a set of strict criteria to earn the
-            prestigious title of 'Scotch Whisky'.
-          </p>
-          <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl">
-            Whilst each distillery may have slight differences in their process,
-            the making of malt whisky goes a little like this.
-          </p>
-        </div>
-      </section>
-
-      {/* Steps */}
-      <section className="section-dark py-24 md:py-32">
-        <div className="max-w-3xl mx-auto px-6 md:px-12 mb-16">
-          <p className="chapter-marker mb-8 text-secondary-foreground/50">
-            The Process
-          </p>
-          <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground">
-            From barley to barrel — six steps to creating Scotland's liquid
-            gold.
-          </h2>
-        </div>
-        <div ref={ref} className="max-w-4xl mx-auto px-6 md:px-12">
-          <div className="space-y-20">
-            {steps.map((step, i) => (
-              <div
-                key={step.number}
-                className={`transition-all duration-1000 ${
-                  visible
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
-                style={{ transitionDelay: `${200 + i * 150}ms` }}
-              >
-                <p className="font-display text-6xl text-primary/20 font-light mb-4">
-                  {step.number}
-                </p>
-                <h3 className="font-display text-xl md:text-2xl text-secondary-foreground font-light mb-4">
-                  {step.title}
-                </h3>
-                <p className="font-body text-sm text-secondary-foreground/60 leading-relaxed max-w-2xl">
-                  {step.description}
-                </p>
-              </div>
-            ))}
+      <div className="relative z-10">
+        {/* Intro */}
+        <section className="section-light py-24 md:py-32">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
+            <h2 className="display-heading text-3xl md:text-4xl mb-8">
+              Scotch whisky is as much about the process as it is about the
+              product.
+            </h2>
+            <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
+              The drink is a source of great national pride for the Scottish
+              people, and so it must meet a set of strict criteria to earn the
+              prestigious title of 'Scotch Whisky'.
+            </p>
+            <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl">
+              Whilst each distillery may have slight differences in their process,
+              the making of malt whisky goes a little like this.
+            </p>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA */}
-      <section className="section-light py-24 md:py-32">
-        <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
-          <h2 className="display-heading text-3xl md:text-5xl mb-8">
-            Ready to own a cask?
-          </h2>
-          <p className="font-body text-sm text-muted-foreground mb-10 max-w-md mx-auto leading-relaxed">
-            Now you know the craft behind the spirit, discover how you can invest
-            in your own whisky cask.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-            <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500">
-              Speak to an Advisor
-            </ContactButton>
+        {/* Steps */}
+        <section className="section-dark py-24 md:py-32">
+          <div className="max-w-3xl mx-auto px-6 md:px-12 mb-16">
+            <p className="chapter-marker mb-8 text-secondary-foreground/50">
+              The Process
+            </p>
+            <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground">
+              From barley to barrel — six steps to creating Scotland's liquid
+              gold.
+            </h2>
           </div>
-        </div>
-      </section>
+          <div ref={ref} className="max-w-4xl mx-auto px-6 md:px-12">
+            <div className="space-y-20">
+              {steps.map((step, i) => (
+                <div
+                  key={step.number}
+                  className={`transition-all duration-1000 ${
+                    visible
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-8"
+                  }`}
+                  style={{ transitionDelay: `${200 + i * 150}ms` }}
+                >
+                  <p className="font-display text-6xl text-primary/20 font-light mb-4">
+                    {step.number}
+                  </p>
+                  <h3 className="font-display text-xl md:text-2xl text-secondary-foreground font-light mb-4">
+                    {step.title}
+                  </h3>
+                  <p className="font-body text-sm text-secondary-foreground/60 leading-relaxed max-w-2xl">
+                    {step.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-      <FooterSection />
+        {/* CTA */}
+        <section className="section-light py-24 md:py-32">
+          <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
+            <h2 className="display-heading text-3xl md:text-5xl mb-8">
+              Ready to own a cask?
+            </h2>
+            <p className="font-body text-sm text-muted-foreground mb-10 max-w-md mx-auto leading-relaxed">
+              Now you know the craft behind the spirit, discover how you can invest
+              in your own whisky cask.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
+              <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500">
+                Speak to an Advisor
+              </ContactButton>
+            </div>
+          </div>
+        </section>
+
+        <FooterSection />
+      </div>
     </div>
   );
 };
