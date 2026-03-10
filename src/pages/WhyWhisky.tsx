@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
+import BuyButton from "@/components/BuyButton";
 import { useEffect, useRef, useState } from "react";
 import scotlandImg from "@/assets/scotland-landscape.jpg";
 import caskImg from "@/assets/cask-closeup.jpg";
@@ -65,6 +66,7 @@ const WhyWhiskyPage = () => {
   return (
     <div className="relative">
       <Header />
+      <BuyButton />
 
       {/* Hero */}
       <section className="relative h-[70vh] w-full overflow-hidden">
