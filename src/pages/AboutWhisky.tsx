@@ -172,7 +172,7 @@ const AboutWhisky = () => {
         </div>
       </section>
 
-      <FooterSection />
+      <FooterSection hideCta />
     </div>
   );
 };
