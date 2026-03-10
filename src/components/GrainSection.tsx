@@ -108,7 +108,7 @@ const GrainSection = () => {
             {logos.map((d, i) => (
               <div
                 key={`${d.name}-${i}`}
-                className="flex-shrink-0 w-[220px] md:w-[280px] mx-8 md:mx-12 flex items-center justify-center h-32"
+                className="flex-shrink-0 w-[200px] md:w-[260px] mx-4 md:mx-6 flex items-center justify-center h-32"
               >
                 <img
                   src={d.logo}
