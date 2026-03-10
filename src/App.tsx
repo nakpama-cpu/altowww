@@ -7,6 +7,8 @@ import Index from "./pages/Index.tsx";
 import HowItWorks from "./pages/HowItWorks.tsx";
 import WhyWhisky from "./pages/WhyWhisky.tsx";
 import AboutWhisky from "./pages/AboutWhisky.tsx";
+import HowWhiskyIsMade from "./pages/HowWhiskyIsMade.tsx";
+import FAQ from "./pages/FAQ.tsx";
 import Contact from "./pages/Contact.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -23,6 +25,8 @@ const App = () => (
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/why-whisky" element={<WhyWhisky />} />
           <Route path="/about-whisky" element={<AboutWhisky />} />
+          <Route path="/how-whisky-is-made" element={<HowWhiskyIsMade />} />
+          <Route path="/faqs" element={<FAQ />} />
           <Route path="/contact" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
