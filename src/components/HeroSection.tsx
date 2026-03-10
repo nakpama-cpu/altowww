@@ -31,8 +31,14 @@ const HeroSection = () => {
             Alto Whisky
           </h1>
           <p
-            className="mt-6 font-body text-sm md:text-base text-secondary-foreground/80 max-w-lg tracking-wide leading-relaxed animate-fade-in-up"
+            className="mt-4 font-body text-lg md:text-2xl lg:text-3xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
             style={{ animationDelay: "0.4s" }}
+          >
+            The best performing collectible of the decade.
+          </p>
+          <p
+            className="mt-3 font-body text-sm md:text-base text-secondary-foreground/70 max-w-lg tracking-wide leading-relaxed animate-fade-in-up"
+            style={{ animationDelay: "0.5s" }}
           >
             Secure your future with whisky cask investments.
           </p>
