@@ -1,27 +1,70 @@
+import { Link } from "react-router-dom";
+
 const FooterSection = () => {
   return (
     <footer className="section-dark py-24 px-6">
-      <div className="max-w-3xl mx-auto text-center">
-        <h3 className="display-heading text-2xl md:text-3xl text-secondary-foreground mb-8">
-          Alto Whisky
-        </h3>
-        <p className="font-body text-sm text-secondary-foreground/50 mb-12 max-w-md mx-auto leading-relaxed">
-          Whisky cask investment is now widely considered one of the most secure 
-          assets available. Alto Whisky brings this opportunity to discerning investors 
-          from all walks of life.
-        </p>
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8 font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground/40">
-          <a href="https://www.altowhisky.com/how-it-works" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-            How It Works
-          </a>
-          <a href="https://www.altowhisky.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-            About Us
-          </a>
-          <a href="https://www.altowhisky.com/contact" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-            Contact
-          </a>
+      <div className="max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+          <div>
+            <h3 className="display-heading text-2xl text-secondary-foreground mb-4">
+              Alto Whisky
+            </h3>
+            <p className="font-body text-sm text-secondary-foreground/50 leading-relaxed">
+              Whisky cask investment is now widely considered one of the most
+              secure assets available. Alto Whisky brings this opportunity to
+              discerning investors from all walks of life.
+            </p>
+          </div>
+          <div>
+            <p className="font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground/40 mb-4">
+              Navigate
+            </p>
+            <div className="flex flex-col gap-3">
+              <Link
+                to="/"
+                className="font-body text-sm text-secondary-foreground/60 hover:text-primary transition-colors"
+              >
+                Home
+              </Link>
+              <Link
+                to="/how-it-works"
+                className="font-body text-sm text-secondary-foreground/60 hover:text-primary transition-colors"
+              >
+                How It Works
+              </Link>
+              <Link
+                to="/why-whisky"
+                className="font-body text-sm text-secondary-foreground/60 hover:text-primary transition-colors"
+              >
+                Why Whisky
+              </Link>
+              <Link
+                to="/contact"
+                className="font-body text-sm text-secondary-foreground/60 hover:text-primary transition-colors"
+              >
+                Contact
+              </Link>
+            </div>
+          </div>
+          <div>
+            <p className="font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground/40 mb-4">
+              Get Started
+            </p>
+            <p className="font-body text-sm text-secondary-foreground/60 leading-relaxed mb-4">
+              Ready to explore whisky cask investment? Download our free brochure
+              or speak to a Portfolio Advisor.
+            </p>
+            <a
+              href="https://www.altowhisky.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors"
+            >
+              Download Brochure →
+            </a>
+          </div>
         </div>
-        <div className="mt-16 pt-8 border-t border-secondary-foreground/10">
+        <div className="pt-8 border-t border-secondary-foreground/10 text-center">
           <p className="font-body text-xs text-secondary-foreground/30">
             © 2026 Alto Whisky. All rights reserved.
           </p>
