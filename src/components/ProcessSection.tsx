@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import BrochureButton from "@/components/BrochureButton";
 
 const steps = [
   {
@@ -48,18 +50,18 @@ const ProcessSection = () => {
 
   return (
     <section id="process" className="section-light">
-      <div className="py-32 md:py-48" />
+      <div className="py-16 md:py-24" />
       <div ref={ref} className="max-w-4xl mx-auto px-6 md:px-12">
         <p className="chapter-marker mb-8">How It Works</p>
         <h2
-          className={`display-heading text-3xl md:text-5xl mb-20 transition-all duration-1000 ${
+          className={`display-heading text-3xl md:text-5xl mb-14 transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
           A solid, dependable strategy — guided every step of the way.
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
           {steps.map((step, i) => (
             <div
               key={step.number}
@@ -80,8 +82,22 @@ const ProcessSection = () => {
             </div>
           ))}
         </div>
+
+        <div
+          className={`mt-14 flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-700 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
+          <Link
+            to="/contact"
+            className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500 text-center"
+          >
+            Speak to an Advisor
+          </Link>
+        </div>
       </div>
-      <div className="py-24" />
+      <div className="py-16" />
     </section>
   );
 };

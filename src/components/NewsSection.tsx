@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { articles } from "@/data/articles";
+import BrochureButton from "@/components/BrochureButton";
 
 const VISIBLE_COUNT = 3;
 
@@ -27,7 +28,7 @@ const NewsSection = () => {
   const visibleArticles = articles.slice(startIndex, startIndex + VISIBLE_COUNT);
 
   return (
-    <section ref={ref} className="section-light py-24 md:py-32">
+    <section ref={ref} className="section-light py-16 md:py-24">
       <div className="max-w-5xl mx-auto px-6 md:px-12">
         <p
           className={`chapter-marker mb-6 text-muted-foreground/50 transition-all duration-1000 ${
@@ -36,7 +37,7 @@ const NewsSection = () => {
         >
           News & Insights
         </p>
-        <div className="flex items-end justify-between mb-16">
+        <div className="flex items-end justify-between mb-12">
           <h2
             className={`display-heading text-3xl md:text-4xl transition-all duration-1000 delay-200 ${
               visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
@@ -152,6 +153,29 @@ const NewsSection = () => {
           >
             View All Articles →
           </Link>
+        </div>
+
+        {/* CTA */}
+        <div
+          className={`mt-16 pt-16 border-t border-border text-center transition-all duration-1000 delay-500 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <h3 className="display-heading text-2xl md:text-3xl mb-4">
+            Ready to get started?
+          </h3>
+          <p className="font-body text-sm text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed">
+            Download our free brochure or speak with one of our expert Portfolio Advisors.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
+            <Link
+              to="/contact"
+              className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500"
+            >
+              Contact Us
+            </Link>
+          </div>
         </div>
       </div>
     </section>

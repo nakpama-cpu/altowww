@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import BrochureButton from "@/components/BrochureButton";
 
 const stats = [
   { value: "582%", label: "Rare whisky appreciation over 10 years" },
@@ -21,11 +22,11 @@ const InvestmentSection = () => {
 
   return (
     <section className="section-light">
-      <div className="py-32 md:py-48" />
+      <div className="py-16 md:py-24" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
         <p className="chapter-marker mb-8">The Investment</p>
         <h2
-          className={`display-heading text-3xl md:text-5xl mb-16 transition-all duration-1000 ${
+          className={`display-heading text-3xl md:text-5xl mb-12 transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -52,14 +53,22 @@ const InvestmentSection = () => {
         </div>
 
         <p
-          className={`mt-16 font-body text-xs uppercase tracking-[0.15em] text-muted-foreground/60 transition-all duration-1000 delay-700 ${
+          className={`mt-12 font-body text-xs uppercase tracking-[0.15em] text-muted-foreground/60 transition-all duration-1000 delay-700 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         >
           Source: Knight Frank Luxury Investment Index
         </p>
+
+        <div
+          className={`mt-10 transition-all duration-1000 delay-700 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
+        </div>
       </div>
-      <div className="py-24" />
+      <div className="py-16" />
     </section>
   );
 };

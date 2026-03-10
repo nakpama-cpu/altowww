@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import scotlandImg from "@/assets/scotland-landscape.jpg";
+import { Link } from "react-router-dom";
 import macallanLogo from "@/assets/logos/macallan.png";
 import glenfiddichLogo from "@/assets/logos/glenfiddich.png";
 import glenlivetLogo from "@/assets/logos/glenlivet.png";
@@ -47,11 +48,11 @@ const GrainSection = () => {
 
   return (
     <section id="distilleries" className="section-light">
-      <div className="py-32 md:py-48" />
+      <div className="py-16 md:py-24" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
         <p className="chapter-marker mb-8">The Distilleries</p>
         <h2
-          className={`display-heading text-3xl md:text-5xl mb-12 transition-all duration-1000 ${
+          className={`display-heading text-3xl md:text-5xl mb-8 transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -76,11 +77,23 @@ const GrainSection = () => {
           taste of an 18-year, single barrel scotch, or you are just looking to
           leverage a reliable long-term hold, we want to help you.
         </p>
+        <div
+          className={`mt-8 transition-all duration-1000 delay-600 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <Link
+            to="/about-whisky"
+            className="font-body text-xs uppercase tracking-[0.25em] text-foreground border border-border px-8 py-3.5 hover:bg-muted transition-all duration-500 inline-block"
+          >
+            Explore Regions →
+          </Link>
+        </div>
       </div>
 
       {/* Distillery Logo Carousel */}
       <div
-        className={`mt-20 md:mt-28 overflow-hidden transition-all duration-1000 delay-700 ${
+        className={`mt-16 md:mt-20 overflow-hidden transition-all duration-1000 delay-700 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -109,11 +122,11 @@ const GrainSection = () => {
         </div>
       </div>
 
-      <div className="mt-20 md:mt-32">
+      <div className="mt-16 md:mt-24">
         <img
           src={scotlandImg}
           alt="Aerial view of Scottish Highland distillery surrounded by green rolling hills and a winding river"
-          className={`w-full h-[60vh] md:h-[80vh] object-cover transition-all duration-1000 delay-500 ${
+          className={`w-full h-[50vh] md:h-[70vh] object-cover transition-all duration-1000 delay-500 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         />
