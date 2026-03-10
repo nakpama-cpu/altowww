@@ -33,11 +33,12 @@ const Header = () => {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        <Link
-          to="/"
-          className="font-display text-xl md:text-2xl font-light tracking-wide text-secondary-foreground"
-        >
-          Alto Whisky
+        <Link to="/">
+          <img
+            src={altoLogo}
+            alt="Alto Whisky"
+            className="h-10 md:h-12 w-auto"
+          />
         </Link>
 
         {/* Desktop Nav */}
