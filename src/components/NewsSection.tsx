@@ -81,43 +81,52 @@ const NewsSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-          {visibleArticles.map((article, i) => (
-            <Link
-              to={`/news/${article.slug}`}
-              key={article.slug}
-              className={`group block transition-all duration-700 ${
-                visible
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-12"
-              }`}
-              style={{ transitionDelay: `${300 + i * 150}ms` }}
-            >
-              <div className="aspect-[4/3] overflow-hidden mb-5">
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
-                  {article.category}
-                </span>
-                <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-                <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground/50">
-                  {article.date}
-                </span>
-              </div>
-              <h3 className="font-display text-lg font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
-                {article.title}
-              </h3>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                {article.excerpt}
-              </p>
-            </Link>
-          ))}
+        <div className="overflow-hidden">
+          <div
+            className="flex transition-transform duration-700 ease-in-out"
+            style={{
+              transform: `translateX(-${startIndex * (100 / VISIBLE_COUNT)}%)`,
+            }}
+          >
+            {articles.map((article, i) => (
+              <Link
+                to={`/news/${article.slug}`}
+                key={article.slug}
+                className={`group block flex-shrink-0 transition-opacity duration-700 ${
+                  visible ? "opacity-100" : "opacity-0"
+                }`}
+                style={{
+                  width: `calc(${100 / VISIBLE_COUNT}% - ${((VISIBLE_COUNT - 1) * 40) / VISIBLE_COUNT}px)`,
+                  marginRight: i < articles.length - 1 ? "40px" : "0",
+                  transitionDelay: `${300 + i * 150}ms`,
+                }}
+              >
+                <div className="aspect-[4/3] overflow-hidden mb-5">
+                  <img
+                    src={article.image}
+                    alt={article.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
+                    {article.category}
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                  <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground/50">
+                    {article.date}
+                  </span>
+                </div>
+                <h3 className="font-display text-lg font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
+                  {article.title}
+                </h3>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                  {article.excerpt}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Mobile nav */}
