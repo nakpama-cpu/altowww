@@ -5,6 +5,7 @@ import altoLogo from "@/assets/alto-logo.png";
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/how-it-works", label: "How It Works" },
+  { to: "/about-whisky", label: "About Whisky" },
   { to: "/why-whisky", label: "Why Whisky" },
   { to: "/contact", label: "Contact" },
 ];
