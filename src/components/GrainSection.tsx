@@ -69,7 +69,7 @@ const GrainSection = () => {
           people from all walks of life.
         </p>
         <p
-          className={`font-body text-base leading-relaxed text-muted-foreground max-w-xl transition-all duration-1000 delay-500 ${
+          className={`font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl transition-all duration-1000 delay-500 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
