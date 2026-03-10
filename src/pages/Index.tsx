@@ -6,7 +6,6 @@ import WhyWhiskySection from "@/components/WhyWhiskySection";
 import InvestmentSection from "@/components/InvestmentSection";
 import GrainSection from "@/components/GrainSection";
 import ProcessSection from "@/components/ProcessSection";
-import GlassSection from "@/components/GlassSection";
 import NewsSection from "@/components/NewsSection";
 import FooterSection from "@/components/FooterSection";
 
@@ -16,7 +15,6 @@ const chapters = [
   { id: "why-whisky", label: "III. Why Whisky" },
   { id: "distilleries", label: "IV. Distilleries" },
   { id: "process", label: "V. The Process" },
-  { id: "cask", label: "VI. Your Cask" },
 ];
 
 const Index = () => {
@@ -30,7 +28,6 @@ const Index = () => {
       <InvestmentSection />
       <GrainSection />
       <ProcessSection />
-      <GlassSection />
       <NewsSection />
       <FooterSection />
     </div>
