@@ -63,12 +63,7 @@ const GlassSection = () => {
               updates from your dedicated Portfolio Advisor. When the time is right, 
               we'll help you sell or bottle your whisky.
             </p>
-            <Link
-              to="/request-brochure"
-              className="inline-block mt-4 font-body text-xs uppercase tracking-[0.25em] text-primary border border-primary/30 px-8 py-3 hover:bg-primary/10 transition-all duration-500"
-            >
-              Request Brochure
-            </Link>
+            <BrochureButton className="inline-block mt-4 font-body text-xs uppercase tracking-[0.25em] text-primary border border-primary/30 px-8 py-3 hover:bg-primary/10 transition-all duration-500" />
           </div>
         </div>
       </div>

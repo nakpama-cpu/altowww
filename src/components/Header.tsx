@@ -193,12 +193,7 @@ const Header = () => {
               </Link>
             )
           )}
-          <Link
-            to="/request-brochure"
-            className="font-body text-sm uppercase tracking-[0.15em] bg-primary text-primary-foreground px-5 py-3 text-center mt-2 hover:opacity-90 transition-opacity"
-          >
-            Request Brochure
-          </Link>
+          <BrochureButton className="font-body text-sm uppercase tracking-[0.15em] bg-primary text-primary-foreground px-5 py-3 text-center mt-2 hover:opacity-90 transition-opacity w-full" />
         </nav>
       </div>
     </header>
