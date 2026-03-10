@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
-const FooterSection = ({ hideCta = false }: { hideCta?: boolean }) => {
+const FooterSection = ({ hideCta = false, lightCta = false }: { hideCta?: boolean; lightCta?: boolean }) => {
   return (
     <footer className="section-dark">
       {/* Final CTA — single consolidated one for entire page */}
-      {!hideCta && (
+      {!hideCta && !lightCta && (
         <div className="py-20 px-6 text-center border-b border-secondary-foreground/10">
           <div className="max-w-lg mx-auto">
             <h3 className="display-heading text-2xl md:text-3xl text-secondary-foreground mb-4">
