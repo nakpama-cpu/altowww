@@ -18,13 +18,15 @@ const HeroSection = () => {
           Whisky Cask Investment
         </p>
         <h1 className="display-heading text-5xl md:text-7xl lg:text-8xl text-secondary-foreground animate-fade-in-up">
-          Secure your future with whisky cask investments.
+          Alto Whisky
         </h1>
         <p
           className="mt-6 font-body text-sm md:text-base text-secondary-foreground/80 max-w-lg tracking-wide leading-relaxed animate-fade-in-up"
           style={{ animationDelay: "0.4s" }}
         >
-          The best performing collectible of the decade.
+          Secure your future with the best performing
+          <br />
+          collectible of the decade.
         </p>
         <div
           className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in"
