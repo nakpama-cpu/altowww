@@ -14,7 +14,7 @@ const HeroSection = () => {
           alt="Dramatic mountain landscape at dawn with misty peaks"
           className="absolute inset-0 w-full h-full object-cover animate-cloud-drift"
           style={{
-            transform: 'scale(1.15) translateZ(0)',
+            transform: 'scale(1.25) translateZ(0)',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
           }}
