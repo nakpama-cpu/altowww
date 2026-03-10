@@ -24,18 +24,21 @@ const GrainSection = () => {
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          Casks sourced from Scotland's most prestigious distilleries and beyond.
+          The world of whisky is one which exudes class, quality, and heritage.
         </h2>
         <p
-          className={`font-body text-base leading-relaxed text-muted-foreground max-w-xl transition-all duration-1000 delay-300 ${
+          className={`font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6 transition-all duration-1000 delay-300 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          Whether you have a passion for whisky and appreciate the unmatched taste of 
-          an 18-year, single barrel scotch, or you are simply looking to leverage a 
-          reliable long-term hold, our team of expert Portfolio Advisors will identify 
-          the right casks from distilleries throughout Scotland and the wider world to 
-          match your investment goals.
+          These three things elevate this revered spirit above many of its peers, providing a unique opportunity for discerning investors to protect and build their wealth. Alto Whisky was born to bring this opportunity to people from all walks of life.
+        </p>
+        <p
+          className={`font-body text-base leading-relaxed text-muted-foreground max-w-xl transition-all duration-1000 delay-500 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          Whether you have a passion for whisky and appreciate the unmatched taste of an 18-year, single barrel scotch, or you are just looking to leverage a reliable long-term hold, we want to help you.
         </p>
       </div>
       <div className="mt-20 md:mt-32">
