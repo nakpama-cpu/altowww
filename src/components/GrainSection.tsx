@@ -50,7 +50,7 @@ const GrainSection = () => {
     <section id="distilleries" className="section-dark">
       <div className="py-16 md:py-24" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
-        <p className="chapter-marker mb-8">The Distilleries</p>
+        <p className="chapter-marker mb-8 text-secondary-foreground/50">The Distilleries</p>
         <h2
           className={`display-heading text-3xl md:text-5xl mb-8 transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
