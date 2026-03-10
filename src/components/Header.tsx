@@ -6,7 +6,9 @@ const navLinks = [
   { to: "/", label: "Home" },
   { to: "/how-it-works", label: "How It Works" },
   { to: "/about-whisky", label: "About Whisky" },
+  { to: "/how-whisky-is-made", label: "How Whisky is Made" },
   { to: "/why-whisky", label: "Why Whisky" },
+  { to: "/faqs", label: "FAQs" },
   { to: "/contact", label: "Contact" },
 ];
 
