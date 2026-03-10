@@ -1,26 +1,28 @@
 import { Link } from "react-router-dom";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
-const FooterSection = () => {
+const FooterSection = ({ hideCta = false }: { hideCta?: boolean }) => {
   return (
     <footer className="section-dark">
       {/* Final CTA — single consolidated one for entire page */}
-      <div className="py-20 px-6 text-center border-b border-secondary-foreground/10">
-        <div className="max-w-lg mx-auto">
-          <h3 className="display-heading text-2xl md:text-3xl text-secondary-foreground mb-4">
-            Ready to invest?
-          </h3>
-          <p className="font-body text-sm text-secondary-foreground/60 mb-8 leading-relaxed">
-            Download our free brochure or speak with one of our expert Portfolio Advisors to get started.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-            <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500">
-              Speak to an Advisor
-            </ContactButton>
+      {!hideCta && (
+        <div className="py-20 px-6 text-center border-b border-secondary-foreground/10">
+          <div className="max-w-lg mx-auto">
+            <h3 className="display-heading text-2xl md:text-3xl text-secondary-foreground mb-4">
+              Ready to invest?
+            </h3>
+            <p className="font-body text-sm text-secondary-foreground/60 mb-8 leading-relaxed">
+              Download our free brochure or speak with one of our expert Portfolio Advisors to get started.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
+              <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500">
+                Speak to an Advisor
+              </ContactButton>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Footer links */}
       <div className="py-16 px-6">
