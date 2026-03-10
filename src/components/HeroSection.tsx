@@ -27,17 +27,17 @@ const HeroSection = () => {
           >
             Whisky Cask Investment
           </p>
-          <h1 className="display-heading text-5xl md:text-7xl lg:text-8xl text-secondary-foreground animate-fade-in-up">
+          <h1 className="display-heading text-6xl md:text-8xl lg:text-9xl text-secondary-foreground animate-fade-in-up">
             Alto Whisky
           </h1>
           <p
-            className="mt-4 font-body text-lg md:text-2xl lg:text-3xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
+            className="mt-4 font-body text-base md:text-xl lg:text-2xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
             style={{ animationDelay: "0.4s" }}
           >
             Secure your future with whisky cask investments.
           </p>
           <p
-            className="mt-3 font-body text-lg md:text-2xl lg:text-3xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
+            className="mt-3 font-body text-base md:text-xl lg:text-2xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
             style={{ animationDelay: "0.5s" }}
           >
             The best performing collectible of the decade.
