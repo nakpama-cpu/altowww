@@ -24,8 +24,12 @@ const NewsSection = () => {
   const maxStart = Math.max(0, articles.length - VISIBLE_COUNT);
   const canPrev = startIndex > 0;
   const canNext = startIndex < maxStart;
-
-  const visibleArticles = articles.slice(startIndex, startIndex + VISIBLE_COUNT);
+  
+  // Each card: calc(33.333% - 26.667px), gap: 40px, so step = calc(33.333% + 13.333px)
+  const stepPercent = 100 / VISIBLE_COUNT; // 33.333
+  const gap = 40;
+  const cardMarginShare = ((VISIBLE_COUNT - 1) * gap) / VISIBLE_COUNT; // 26.667
+  const stepOffset = gap - cardMarginShare; // 13.333
 
   return (
     <section ref={ref} className="section-light py-16 md:py-24">
