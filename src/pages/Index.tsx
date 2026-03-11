@@ -30,8 +30,8 @@ const Index = () => {
         <WaterSection />
         <WhyWhiskySection />
         <InvestmentSection />
-        <ProcessSection />
         <GlassSection />
+        <ProcessSection />
         <GrainSection />
         <div className="section-light">
           <div className="max-w-3xl mx-auto px-6 md:px-12">
