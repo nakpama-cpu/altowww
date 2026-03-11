@@ -30,7 +30,12 @@ const WhyWhiskySection = () => {
   }, []);
 
   return (
-    <section id="why-whisky" className="section-dark">
+    <section id="why-whisky" className="section-dark relative overflow-hidden">
+      {/* Subtle texture overlay */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{
+        backgroundImage: `radial-gradient(circle at 20% 50%, hsl(var(--primary)) 0%, transparent 50%), radial-gradient(circle at 80% 20%, hsl(var(--primary)) 0%, transparent 40%)`,
+      }} />
+      <div className="relative z-10">
       <div className="py-10 md:py-16" />
       <div ref={ref} className="max-w-4xl mx-auto px-6 md:px-12">
         <p
@@ -80,6 +85,7 @@ const WhyWhiskySection = () => {
         </div>
       </div>
       <div className="py-10" />
+      </div>
     </section>
   );
 };
