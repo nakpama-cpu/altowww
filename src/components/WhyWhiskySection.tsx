@@ -3,16 +3,16 @@ import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 const benefits = [
   {
+    title: "Capital Appreciation",
+    description: "Whisky increases in value as it matures — the longer it ages, the rarer and more desirable it becomes. With rare whisky appreciating 582% over the past decade, cask investment offers exceptional long-term growth potential.",
+  },
+  {
     title: "Tangible Asset",
-    description: "Unlike stocks or crypto, you own a physical cask of whisky stored in an HMRC government-bonded warehouse, covered by insurance.",
+    description: "Unlike stocks or crypto, you own a physical cask of whisky stored in an HMRC government-bonded warehouse in Scotland, fully insured and independently verified.",
   },
   {
     title: "Tax Free",
-    description: "Whisky casks are classified as a 'wasting asset' by HMRC, meaning they are exempt from Capital Gains Tax — your returns are entirely yours.",
-  },
-  {
-    title: "Unlinked to Markets",
-    description: "Whisky cask values are not correlated to stock markets or financial indices. Your investment is protected from market volatility.",
+    description: "Whisky casks are classified as a 'wasting asset' by HMRC, meaning they are exempt from Capital Gains Tax — 100% of your returns are yours to keep.",
   },
 ];
 
