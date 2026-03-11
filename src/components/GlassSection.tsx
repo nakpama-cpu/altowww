@@ -19,7 +19,7 @@ const GlassSection = () => {
     <section
       id="cask"
       ref={ref}
-      className="section-dark min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
+      className="section-dark min-h-[80vh] flex flex-col items-center justify-center relative overflow-hidden"
     >
       <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
         <div

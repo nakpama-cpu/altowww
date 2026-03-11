@@ -19,7 +19,7 @@ const WaterSection = () => {
 
   return (
     <section id="opportunity" className="section-light">
-      <div className="py-16 md:py-24" />
+      <div className="py-10 md:py-16" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
         <p className="chapter-marker mb-8">The Opportunity</p>
         <h2
@@ -47,11 +47,11 @@ const WaterSection = () => {
           </ContactButton>
         </div>
       </div>
-      <div className="mt-16 md:mt-24">
+      <div className="mt-12 md:mt-16">
         <img
           src={warehouseImg}
           alt="Oak whisky cask on the shore of a Scottish loch with mountains in the background"
-          className={`w-full h-[50vh] md:h-[70vh] object-cover transition-all duration-1000 delay-500 ${
+          className={`w-full h-[40vh] md:h-[60vh] object-cover transition-all duration-1000 delay-500 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         />

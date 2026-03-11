@@ -31,7 +31,7 @@ const WhyWhiskySection = () => {
 
   return (
     <section id="why-whisky" className="section-dark">
-      <div className="py-16 md:py-24" />
+      <div className="py-10 md:py-16" />
       <div ref={ref} className="max-w-4xl mx-auto px-6 md:px-12">
         <p
           className={`chapter-marker mb-8 text-secondary-foreground/50 transition-all duration-1000 ${
@@ -69,7 +69,7 @@ const WhyWhiskySection = () => {
         </div>
 
         <div
-          className={`mt-16 flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-700 ${
+          className={`mt-12 flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-700 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -79,7 +79,7 @@ const WhyWhiskySection = () => {
           </ContactButton>
         </div>
       </div>
-      <div className="py-16" />
+      <div className="py-10" />
     </section>
   );
 };
