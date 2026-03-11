@@ -4,7 +4,7 @@ import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 const benefits = [
   {
     title: "Capital Appreciation",
-    description: "Whisky increases in value as it matures — the longer it ages, the rarer and more desirable it becomes. With rare whisky appreciating 582% over the past decade, cask investment offers exceptional long-term growth potential.",
+    description: "Whisky increases in value as it matures, with rare whisky appreciating 582% over the past decade. Uncorrelated to stock markets or financial indices, it acts as a powerful hedge in volatile times.",
   },
   {
     title: "Tangible Asset",
