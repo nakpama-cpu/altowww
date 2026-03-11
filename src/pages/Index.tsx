@@ -4,6 +4,7 @@ import HeroSection from "@/components/HeroSection";
 import WaterSection from "@/components/WaterSection";
 import WhyWhiskySection from "@/components/WhyWhiskySection";
 import InvestmentSection from "@/components/InvestmentSection";
+import GlassSection from "@/components/GlassSection";
 import GrainSection from "@/components/GrainSection";
 import ProcessSection from "@/components/ProcessSection";
 import NewsSection from "@/components/NewsSection";
@@ -13,8 +14,9 @@ const chapters = [
   { id: "heritage", label: "I. Heritage" },
   { id: "opportunity", label: "II. The Opportunity" },
   { id: "why-whisky", label: "III. Why Whisky" },
-  { id: "distilleries", label: "IV. Distilleries" },
-  { id: "process", label: "V. The Process" },
+  { id: "cask", label: "IV. Your Cask" },
+  { id: "distilleries", label: "V. Distilleries" },
+  { id: "process", label: "VI. The Process" },
 ];
 
 const Index = () => {
@@ -28,6 +30,7 @@ const Index = () => {
         <WaterSection />
         <WhyWhiskySection />
         <InvestmentSection />
+        <GlassSection />
         <GrainSection />
         <ProcessSection />
         <div className="section-light">
