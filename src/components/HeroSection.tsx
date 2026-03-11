@@ -34,13 +34,7 @@ const HeroSection = () => {
             className="mt-4 font-body text-base md:text-xl lg:text-2xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
             style={{ animationDelay: "0.4s" }}
           >
-            Secure your future with whisky cask investments.
-          </p>
-          <p
-            className="mt-3 font-body text-base md:text-xl lg:text-2xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
-            style={{ animationDelay: "0.5s" }}
-          >
-            The best performing collectible of the decade.
+            Secure your financial future with the best performing collectible asset of the decade.
           </p>
           <div
             className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in"
