@@ -15,8 +15,8 @@ const chapters = [
   { id: "opportunity", label: "II. The Opportunity" },
   { id: "why-whisky", label: "III. Why Whisky" },
   { id: "cask", label: "IV. Your Cask" },
-  { id: "distilleries", label: "V. Distilleries" },
-  { id: "process", label: "VI. The Process" },
+  { id: "process", label: "V. The Process" },
+  { id: "distilleries", label: "VI. Distilleries" },
 ];
 
 const Index = () => {
