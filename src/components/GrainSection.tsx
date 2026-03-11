@@ -48,6 +48,13 @@ const GrainSection = () => {
 
   return (
     <section id="distilleries" className="section-dark">
+      <div>
+        <img
+          src={scotlandImg}
+          alt="Aerial view of Scottish Highland distillery surrounded by green rolling hills and a winding river"
+          className="w-full h-[40vh] md:h-[60vh] object-cover"
+        />
+      </div>
       <div className="py-10 md:py-16" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
         <p className="chapter-marker mb-8 text-secondary-foreground/50">The Distilleries</p>
@@ -115,16 +122,6 @@ const GrainSection = () => {
             ))}
           </div>
         </div>
-      </div>
-
-      <div className="mt-12 md:mt-16">
-        <img
-          src={scotlandImg}
-          alt="Aerial view of Scottish Highland distillery surrounded by green rolling hills and a winding river"
-          className={`w-full h-[40vh] md:h-[60vh] object-cover transition-all duration-1000 delay-500 ${
-            visible ? "opacity-100" : "opacity-0"
-          }`}
-        />
       </div>
     </section>
   );
