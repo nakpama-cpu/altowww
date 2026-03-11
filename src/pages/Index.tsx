@@ -30,6 +30,7 @@ const Index = () => {
         <WaterSection />
         <WhyWhiskySection />
         <InvestmentSection />
+        <GlassSection />
         <GrainSection />
         <ProcessSection />
         <div className="section-light">
