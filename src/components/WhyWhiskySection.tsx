@@ -79,7 +79,7 @@ const WhyWhiskySection = () => {
           </ContactButton>
         </div>
       </div>
-      <div className="py-16" />
+      <div className="py-10" />
     </section>
   );
 };

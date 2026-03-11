@@ -51,7 +51,7 @@ const WaterSection = () => {
         <img
           src={warehouseImg}
           alt="Oak whisky cask on the shore of a Scottish loch with mountains in the background"
-          className={`w-full h-[50vh] md:h-[70vh] object-cover transition-all duration-1000 delay-500 ${
+          className={`w-full h-[40vh] md:h-[60vh] object-cover transition-all duration-1000 delay-500 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         />

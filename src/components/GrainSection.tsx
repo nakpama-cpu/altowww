@@ -121,7 +121,7 @@ const GrainSection = () => {
         <img
           src={scotlandImg}
           alt="Aerial view of Scottish Highland distillery surrounded by green rolling hills and a winding river"
-          className={`w-full h-[50vh] md:h-[70vh] object-cover transition-all duration-1000 delay-500 ${
+          className={`w-full h-[40vh] md:h-[60vh] object-cover transition-all duration-1000 delay-500 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         />

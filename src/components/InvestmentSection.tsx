@@ -59,7 +59,7 @@ const InvestmentSection = () => {
           Source: Knight Frank Luxury Investment Index
         </p>
       </div>
-      <div className="py-16" />
+      <div className="py-10" />
     </section>
   );
 };
