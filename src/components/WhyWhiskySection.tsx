@@ -69,7 +69,7 @@ const WhyWhiskySection = () => {
         </div>
 
         <div
-          className={`mt-16 flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-700 ${
+          className={`mt-12 flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-700 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
