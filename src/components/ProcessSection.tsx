@@ -49,7 +49,7 @@ const ProcessSection = () => {
 
   return (
     <section id="process" className="section-light">
-      <div className="py-16 md:py-24" />
+      <div className="py-10 md:py-16" />
       <div ref={ref} className="max-w-2xl mx-auto px-6 md:px-12">
         <p className="chapter-marker mb-8">How It Works</p>
         <h2
