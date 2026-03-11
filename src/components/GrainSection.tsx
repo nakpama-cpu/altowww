@@ -117,7 +117,7 @@ const GrainSection = () => {
         </div>
       </div>
 
-      <div className="mt-16 md:mt-24">
+      <div className="mt-12 md:mt-16">
         <img
           src={scotlandImg}
           alt="Aerial view of Scottish Highland distillery surrounded by green rolling hills and a winding river"
