@@ -46,6 +46,7 @@ const Index = () => {
         <NewsSection />
         <FooterSection />
       </div>
+      <StickyMobileCTA />
     </div>
   );
 };
