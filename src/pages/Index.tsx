@@ -30,9 +30,11 @@ const Index = () => {
       <HeroSection />
       {/* Content sits above the fixed hero and scrolls over it */}
       <div className="relative z-10">
+        <TrustStrip />
         <WaterSection />
         <WhyWhiskySection />
         <InvestmentSection />
+        <CaseStudySection />
         <GlassSection />
         <ProcessSection />
         <GrainSection />

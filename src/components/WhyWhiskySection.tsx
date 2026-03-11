@@ -85,6 +85,7 @@ const WhyWhiskySection = () => {
         </div>
       </div>
       <div className="py-10" />
+      </div>
     </section>
   );
 };
