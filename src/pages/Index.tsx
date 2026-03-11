@@ -1,14 +1,17 @@
 import Header from "@/components/Header";
 import ChapterMarker from "@/components/ChapterMarker";
 import HeroSection from "@/components/HeroSection";
+import TrustStrip from "@/components/TrustStrip";
 import WaterSection from "@/components/WaterSection";
 import WhyWhiskySection from "@/components/WhyWhiskySection";
 import InvestmentSection from "@/components/InvestmentSection";
+import CaseStudySection from "@/components/CaseStudySection";
 import GlassSection from "@/components/GlassSection";
 import GrainSection from "@/components/GrainSection";
 import ProcessSection from "@/components/ProcessSection";
 import NewsSection from "@/components/NewsSection";
 import FooterSection from "@/components/FooterSection";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 
 const chapters = [
   { id: "heritage", label: "I. Heritage" },
