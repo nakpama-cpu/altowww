@@ -47,7 +47,7 @@ const WaterSection = () => {
           </ContactButton>
         </div>
       </div>
-      <div className="mt-16 md:mt-24">
+      <div className="mt-12 md:mt-16">
         <img
           src={warehouseImg}
           alt="Oak whisky cask on the shore of a Scottish loch with mountains in the background"
