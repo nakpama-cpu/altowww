@@ -3,8 +3,11 @@ import FooterSection from "@/components/FooterSection";
 import PageHero from "@/components/PageHero";
 import { useEffect, useState } from "react";
 import heroImg from "@/assets/hero-mountain.jpg";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Contact = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -12,14 +15,37 @@ const Contact = () => {
     phone: "",
     message: "",
   });
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+
+    const { error } = await supabase.from("leads").insert({
+      first_name: formData.firstName.trim(),
+      last_name: formData.lastName.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      message: formData.message.trim() || null,
+      source: "contact_form",
+    });
+
+    setSubmitting(false);
+
+    if (error) {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again or contact us directly.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSubmitted(true);
   };
 
@@ -70,6 +96,7 @@ const Contact = () => {
                       <input
                         type="text"
                         required
+                        maxLength={100}
                         value={formData.firstName}
                         onChange={(e) =>
                           setFormData({ ...formData, firstName: e.target.value })
@@ -84,6 +111,7 @@ const Contact = () => {
                       <input
                         type="text"
                         required
+                        maxLength={100}
                         value={formData.lastName}
                         onChange={(e) =>
                           setFormData({ ...formData, lastName: e.target.value })
@@ -99,6 +127,7 @@ const Contact = () => {
                     <input
                       type="email"
                       required
+                      maxLength={255}
                       value={formData.email}
                       onChange={(e) =>
                         setFormData({ ...formData, email: e.target.value })
@@ -113,6 +142,7 @@ const Contact = () => {
                     <input
                       type="tel"
                       required
+                      maxLength={30}
                       value={formData.phone}
                       onChange={(e) =>
                         setFormData({ ...formData, phone: e.target.value })
@@ -122,11 +152,11 @@ const Contact = () => {
                   </div>
                   <div>
                     <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
-                      Message *
+                      Message
                     </label>
                     <textarea
-                      required
                       rows={4}
+                      maxLength={1000}
                       value={formData.message}
                       onChange={(e) =>
                         setFormData({ ...formData, message: e.target.value })
@@ -136,9 +166,10 @@ const Contact = () => {
                   </div>
                   <button
                     type="submit"
-                    className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-10 py-3.5 hover:opacity-90 transition-opacity mt-4"
+                    disabled={submitting}
+                    className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-10 py-3.5 hover:opacity-90 transition-opacity mt-4 disabled:opacity-50"
                   >
-                    Send Message
+                    {submitting ? "Sending..." : "Send Message"}
                   </button>
                 </form>
               </>
