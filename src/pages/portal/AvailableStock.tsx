@@ -50,10 +50,6 @@ export default function AvailableStock() {
     })();
   }, [toast]);
 
-  const distilleries = useMemo(
-    () => Array.from(new Set(casks.map((c) => c.distilleries?.name).filter(Boolean))),
-    [casks]
-  );
 
   const priceFor = (list: number | null) => {
     if (!list) return null;
