@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Download, Search } from "lucide-react";
+import { Download, Search, X, FileText, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 
@@ -30,6 +30,8 @@ export default function MyCasks() {
   const [search, setSearch] = useState("");
   const [filterDistillery, setFilterDistillery] = useState("All");
   const [filterType, setFilterType] = useState("All");
+  const [certViewer, setCertViewer] = useState<{ url: string; title: string; filename: string } | null>(null);
+  const [loadingCert, setLoadingCert] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -69,22 +71,36 @@ export default function MyCasks() {
     });
   }, [rows, search, filterDistillery, filterType]);
 
-  const downloadCert = async (path: string) => {
+  const openCert = async (path: string, title: string) => {
+    setLoadingCert(true);
     const filename = path.split("/").pop() || "certificate.pdf";
     const { data, error } = await supabase.storage
       .from("cask-certificates")
-      .createSignedUrl(path, 60, { download: filename });
+      .createSignedUrl(path, 300);
+    setLoadingCert(false);
     if (error || !data) {
-      toast({ title: "Could not generate download link", variant: "destructive" });
+      toast({ title: "Could not load certificate", variant: "destructive" });
       return;
     }
-    const a = document.createElement("a");
-    a.href = data.signedUrl;
-    a.target = "_blank";
-    a.rel = "noopener";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    setCertViewer({ url: data.signedUrl, title, filename });
+  };
+
+  const downloadFromViewer = async () => {
+    if (!certViewer) return;
+    try {
+      const res = await fetch(certViewer.url);
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = certViewer.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      toast({ title: "Download failed", variant: "destructive" });
+    }
   };
 
   return (
@@ -144,9 +160,10 @@ export default function MyCasks() {
                   <h3 className="display-heading text-2xl">{r.casks.distilleries?.name ?? "Distillery"}</h3>
                 </div>
                 {r.certificate_path && (
-                  <button onClick={() => downloadCert(r.certificate_path!)}
-                    className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-4 py-2 hover:bg-muted">
-                    <Download className="w-3 h-3" /> Certificate
+                  <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number}`)}
+                    disabled={loadingCert}
+                    className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-4 py-2 hover:bg-muted disabled:opacity-50">
+                    <FileText className="w-3 h-3" /> View Certificate
                   </button>
                 )}
               </div>
@@ -164,6 +181,36 @@ export default function MyCasks() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {certViewer && (
+        <div className="fixed inset-0 z-50 bg-secondary/95 backdrop-blur-sm flex flex-col p-4 md:p-8">
+          <div className="flex items-center justify-between mb-4 text-secondary-foreground">
+            <div>
+              <div className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mb-1">Cask Certificate</div>
+              <h2 className="display-heading text-2xl">{certViewer.title}</h2>
+            </div>
+            <div className="flex items-center gap-3">
+              <button onClick={downloadFromViewer}
+                className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-2 hover:opacity-90">
+                <Download className="w-3 h-3" /> Download
+              </button>
+              <button onClick={() => setCertViewer(null)}
+                className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-secondary-foreground/30 text-secondary-foreground px-4 py-2 hover:bg-secondary-foreground/10">
+                <X className="w-3 h-3" /> Close
+              </button>
+            </div>
+          </div>
+          <div className="flex-1 bg-card border border-border overflow-hidden">
+            <iframe src={certViewer.url} title="Cask certificate" className="w-full h-full" />
+          </div>
+        </div>
+      )}
+
+      {loadingCert && !certViewer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-secondary/60 backdrop-blur-sm">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
       )}
     </div>
