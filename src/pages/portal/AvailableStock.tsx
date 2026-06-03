@@ -54,10 +54,6 @@ export default function AvailableStock() {
     () => Array.from(new Set(casks.map((c) => c.distilleries?.name).filter(Boolean))),
     [casks]
   );
-  const caskTypes = useMemo(
-    () => Array.from(new Set(casks.map((c) => c.cask_type).filter(Boolean))),
-    [casks]
-  );
 
   const priceFor = (list: number | null) => {
     if (!list) return null;
