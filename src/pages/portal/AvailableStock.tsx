@@ -65,7 +65,7 @@ export default function AvailableStock() {
     const q = search.toLowerCase().trim();
     const min = filterMinPrice ? Number(filterMinPrice) : null;
     const max = filterMaxPrice ? Number(filterMaxPrice) : null;
-    return casks.filter((c) => {
+    const result = casks.filter((c) => {
       const d = c.distilleries?.name ?? "";
       const effectivePrice = priceFor(c.list_price);
       const matchesSearch =
@@ -81,7 +81,27 @@ export default function AvailableStock() {
       const matchesMax = max === null || (effectivePrice !== null && effectivePrice <= max);
       return matchesSearch && matchesDistillery && matchesType && matchesMin && matchesMax;
     });
-  }, [casks, search, filterDistillery, filterType, filterMinPrice, filterMaxPrice]);
+
+    const sorted = [...result];
+    switch (sortBy) {
+      case "newest":
+        sorted.sort((a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime());
+        break;
+      case "oldest":
+        sorted.sort((a, b) => new Date(a.created_at ?? 0).getTime() - new Date(b.created_at ?? 0).getTime());
+        break;
+      case "price_high":
+        sorted.sort((a, b) => Number(priceFor(b.list_price) ?? 0) - Number(priceFor(a.list_price) ?? 0));
+        break;
+      case "price_low":
+        sorted.sort((a, b) => Number(priceFor(a.list_price) ?? 0) - Number(priceFor(b.list_price) ?? 0));
+        break;
+      case "distillery":
+        sorted.sort((a, b) => (a.distilleries?.name ?? "").localeCompare(b.distilleries?.name ?? ""));
+        break;
+    }
+    return sorted;
+  }, [casks, search, filterDistillery, filterType, filterMinPrice, filterMaxPrice, sortBy]);
 
   return (
     <div className="max-w-7xl">
