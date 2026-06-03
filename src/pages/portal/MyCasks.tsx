@@ -160,9 +160,10 @@ export default function MyCasks() {
                   <h3 className="display-heading text-2xl">{r.casks.distilleries?.name ?? "Distillery"}</h3>
                 </div>
                 {r.certificate_path && (
-                  <button onClick={() => downloadCert(r.certificate_path!)}
-                    className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-4 py-2 hover:bg-muted">
-                    <Download className="w-3 h-3" /> Certificate
+                  <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number}`)}
+                    disabled={loadingCert}
+                    className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-4 py-2 hover:bg-muted disabled:opacity-50">
+                    <FileText className="w-3 h-3" /> View Certificate
                   </button>
                 )}
               </div>
