@@ -135,6 +135,17 @@ export default function AvailableStock() {
           ))}
         </select>
         <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="price_high">Price: High to Low</option>
+          <option value="price_low">Price: Low to High</option>
+          <option value="distillery">Distillery A–Z</option>
+        </select>
+        <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
           className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
