@@ -40,7 +40,7 @@ export default function AvailableStock() {
     (async () => {
       const { data, error } = await supabase
         .from("casks")
-        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region)")
+        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region)")
         .eq("status", "available")
         .order("created_at", { ascending: false });
       if (error) toast({ title: "Could not load stock", description: error.message, variant: "destructive" });
