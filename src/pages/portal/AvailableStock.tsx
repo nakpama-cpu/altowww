@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, RotateCcw } from "lucide-react";
 
 type Cask = {
   id: string;
@@ -171,6 +171,13 @@ export default function AvailableStock() {
             className="w-28 rounded-none border-border bg-card font-body text-sm"
           />
         </div>
+        <button
+          onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy("newest"); }}
+          className="flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground flex-shrink-0"
+          title="Clear all filters"
+        >
+          <RotateCcw className="w-3.5 h-3.5" /> Clear
+        </button>
       </div>
 
       {loading ? (

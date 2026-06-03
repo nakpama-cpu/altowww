@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2 } from "lucide-react";
+import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 
@@ -190,6 +190,13 @@ export default function MyCasks() {
               <Table2 className="w-4 h-4" />
             </button>
           </div>
+          <button
+            onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setSortBy("newest"); }}
+            className="flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground flex-shrink-0"
+            title="Clear all filters"
+          >
+            <RotateCcw className="w-3.5 h-3.5" /> Clear
+          </button>
         </div>
       </div>
 
