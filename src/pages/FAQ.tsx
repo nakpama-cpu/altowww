@@ -66,6 +66,15 @@ const FAQ = () => {
         title="FAQs | Whisky Cask Investment Questions Answered"
         description="Common questions about whisky cask investment — costs, returns, storage, insurance, tax, and how Alto Whisky supports investors at every stage."
         path="/faqs"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.question,
+            acceptedAnswer: { "@type": "Answer", text: f.answer },
+          })),
+        }}
       />
       <Header />
       <PageHero image={heroImg} imageAlt="Mountain landscape" height="50vh">
