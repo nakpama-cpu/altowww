@@ -142,11 +142,21 @@ export default function AvailableStock() {
           onChange={(e) => setSortBy(e.target.value)}
           className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         >
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="price_high">Price: High to Low</option>
-          <option value="price_low">Price: Low to High</option>
-          <option value="distillery">Distillery A–Z</option>
+          <option value="newest">Sort: Date Added (Newest)</option>
+          <option value="oldest">Sort: Date Added (Oldest)</option>
+          <option value="price_high">Sort: Price (High–Low)</option>
+          <option value="price_low">Sort: Price (Low–High)</option>
+          <option value="age_high">Sort: Age (High–Low)</option>
+          <option value="age_low">Sort: Age (Low–High)</option>
+          <option value="abv_high">Sort: ABV (High–Low)</option>
+          <option value="abv_low">Sort: ABV (Low–High)</option>
+          <option value="rla_high">Sort: RLA (High–Low)</option>
+          <option value="rla_low">Sort: RLA (Low–High)</option>
+          <option value="fill_new">Sort: Fill Date (Newest)</option>
+          <option value="fill_old">Sort: Fill Date (Oldest)</option>
+          <option value="distillery">Sort: Distillery (A–Z)</option>
+          <option value="spirit">Sort: Spirit (A–Z)</option>
+          <option value="cask_type">Sort: Cask Type (A–Z)</option>
         </select>
         <select
           value={filterType}
