@@ -110,12 +110,12 @@ export default function MyCasks() {
       <p className="font-body text-sm text-muted-foreground mb-6">Your full holdings with cask specifications and certificates.</p>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 mb-6 w-full">
-        <div className="relative flex-1 basis-full md:basis-auto md:min-w-[260px]">
+      <div className="flex flex-wrap items-center gap-2 mb-6 w-full">
+        <div className="relative flex-1 min-w-[180px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Search by cask number, distillery, spirit or type…"
+            placeholder="Search casks…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9 rounded-none border-border bg-card font-body text-sm w-full"
@@ -124,7 +124,7 @@ export default function MyCasks() {
         <select
           value={filterDistillery}
           onChange={(e) => setFilterDistillery(e.target.value)}
-          className="flex-1 md:flex-none md:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         >
           <option value="All">All Distilleries</option>
           {distilleries.map((d) => (
@@ -134,7 +134,7 @@ export default function MyCasks() {
         <select
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="flex-1 md:flex-none md:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         >
           <option value="All">All Cask Types</option>
           {caskTypes.map((t) => (
