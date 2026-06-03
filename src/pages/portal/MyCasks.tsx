@@ -183,6 +183,36 @@ export default function MyCasks() {
           ))}
         </div>
       )}
+
+      {certViewer && (
+        <div className="fixed inset-0 z-50 bg-secondary/95 backdrop-blur-sm flex flex-col p-4 md:p-8">
+          <div className="flex items-center justify-between mb-4 text-secondary-foreground">
+            <div>
+              <div className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mb-1">Cask Certificate</div>
+              <h2 className="display-heading text-2xl">{certViewer.title}</h2>
+            </div>
+            <div className="flex items-center gap-3">
+              <button onClick={downloadFromViewer}
+                className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-2 hover:opacity-90">
+                <Download className="w-3 h-3" /> Download
+              </button>
+              <button onClick={() => setCertViewer(null)}
+                className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-secondary-foreground/30 text-secondary-foreground px-4 py-2 hover:bg-secondary-foreground/10">
+                <X className="w-3 h-3" /> Close
+              </button>
+            </div>
+          </div>
+          <div className="flex-1 bg-card border border-border overflow-hidden">
+            <iframe src={certViewer.url} title="Cask certificate" className="w-full h-full" />
+          </div>
+        </div>
+      )}
+
+      {loadingCert && !certViewer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-secondary/60 backdrop-blur-sm">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      )}
     </div>
   );
 }
