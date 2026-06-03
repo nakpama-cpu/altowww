@@ -51,6 +51,11 @@ const Contact = () => {
 
   return (
     <div className="relative">
+      <Seo
+        title="Contact Alto Whisky | Speak to a Portfolio Advisor"
+        description="Get in touch with Alto Whisky's Portfolio Advisors to discuss whisky cask investment opportunities tailored to your goals."
+        path="/contact"
+      />
       <Header />
       <PageHero image={heroImg} imageAlt="Mountain landscape" height="50vh">
         <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up">

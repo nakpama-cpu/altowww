@@ -65,6 +65,11 @@ const HowWhiskyIsMade = () => {
 
   return (
     <div className="relative">
+      <Seo
+        title="How Whisky Is Made | From Barley to Cask"
+        description="From malting and mashing to maturation in oak casks — a step-by-step guide to how Scotland's iconic single malt whisky is crafted."
+        path="/how-whisky-is-made"
+      />
       <Header />
       <PageHero image={warehouseImg} imageAlt="Scottish whisky warehouse with oak casks" height="70vh">
         <p className="chapter-marker mb-6 text-secondary-foreground/70 animate-fade-in">

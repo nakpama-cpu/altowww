@@ -26,6 +26,12 @@ const ArticlePage = () => {
 
   return (
     <div className="relative">
+      <Seo
+        title={`${article.title.slice(0, 55)} | Alto Whisky`}
+        description={article.excerpt.slice(0, 158)}
+        path={`/news/${article.slug}`}
+        type="article"
+      />
       <Header />
 
       {/* Hero Image */}

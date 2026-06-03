@@ -65,6 +65,11 @@ const HowItWorks = () => {
 
   return (
     <div className="relative">
+      <Seo
+        title="How It Works | Whisky Cask Investment Process"
+        description="Discover the five-step Alto Whisky process — from brochure to portfolio. Learn how to invest in single malt Scotch casks with expert guidance."
+        path="/how-it-works"
+      />
       <Header />
       <PageHero image={warehouseImg} imageAlt="Scottish whisky warehouse with oak casks" height="70vh">
         <p className="chapter-marker mb-6 text-secondary-foreground/70 animate-fade-in">
