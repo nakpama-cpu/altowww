@@ -15,7 +15,7 @@ export default function PortalLayout() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-background">
-      <aside className="w-full md:w-72 md:min-h-screen flex md:flex-col bg-secondary text-secondary-foreground border-b md:border-b-0 md:border-r border-secondary-foreground/10">
+      <aside className="w-full md:w-72 md:h-screen md:sticky md:top-0 flex md:flex-col bg-secondary text-secondary-foreground border-b md:border-b-0 md:border-r border-secondary-foreground/10">
         <div className="p-8 border-b border-secondary-foreground/10 flex-shrink-0">
           <Link to="/" className="display-heading text-3xl tracking-wide">Alto Whisky</Link>
           <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mt-2">Client Portal</p>
