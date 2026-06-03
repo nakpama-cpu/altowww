@@ -126,13 +126,13 @@ export default function MyCasks() {
             placeholder="Search casks…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full text-center"
+            className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full"
           />
         </div>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 text-center"
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
         >
           <option value="">Sort</option>
           <option value="newest">Purchase Date (Newest)</option>

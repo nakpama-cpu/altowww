@@ -120,13 +120,13 @@ export default function AvailableStock() {
             placeholder="Search casks…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full text-center"
+            className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full"
           />
         </div>
         <select
           value={filterDistillery}
           onChange={(e) => setFilterDistillery(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2 text-center"
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2"
         >
           <option value="All">Distilleries</option>
           {distilleries.map((d) => (
@@ -136,7 +136,7 @@ export default function AvailableStock() {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2 text-center"
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2"
         >
           <option value="">Sort</option>
           <option value="newest">Date Added (Newest)</option>
@@ -160,14 +160,14 @@ export default function AvailableStock() {
           placeholder="Min £"
           value={filterMinPrice}
           onChange={(e) => setFilterMinPrice(e.target.value)}
-          className="w-full h-10 rounded-none border-border bg-card font-body text-sm md:col-span-2 lg:col-span-2 text-center"
+          className="w-full h-10 rounded-none border-border bg-card font-body text-sm md:col-span-2 lg:col-span-2"
         />
         <Input
           type="number"
           placeholder="Max £"
           value={filterMaxPrice}
           onChange={(e) => setFilterMaxPrice(e.target.value)}
-          className="w-full h-10 rounded-none border-border bg-card font-body text-sm md:col-span-2 lg:col-span-2 text-center"
+          className="w-full h-10 rounded-none border-border bg-card font-body text-sm md:col-span-2 lg:col-span-2"
         />
         <button
           onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
