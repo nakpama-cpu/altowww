@@ -31,7 +31,6 @@ export default function AvailableStock() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterDistillery, setFilterDistillery] = useState("All");
-  const [filterType, setFilterType] = useState("All");
   const [filterMinPrice, setFilterMinPrice] = useState("");
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
   const [sortBy, setSortBy] = useState<string>("");
