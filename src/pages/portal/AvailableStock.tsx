@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 type Cask = {
   id: string;
@@ -24,6 +26,11 @@ export default function AvailableStock() {
   const { toast } = useToast();
   const [casks, setCasks] = useState<Cask[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [filterDistillery, setFilterDistillery] = useState("All");
+  const [filterType, setFilterType] = useState("All");
+  const [filterMinPrice, setFilterMinPrice] = useState("");
+  const [filterMaxPrice, setFilterMaxPrice] = useState("");
   const discount = Number(profile?.client_discount_pct ?? 0);
 
   useEffect(() => {
@@ -39,28 +46,111 @@ export default function AvailableStock() {
     })();
   }, [toast]);
 
+  const distilleries = useMemo(
+    () => Array.from(new Set(casks.map((c) => c.distilleries?.name).filter(Boolean))),
+    [casks]
+  );
+  const caskTypes = useMemo(
+    () => Array.from(new Set(casks.map((c) => c.cask_type).filter(Boolean))),
+    [casks]
+  );
+
   const priceFor = (list: number | null) => {
     if (!list) return null;
     return discount > 0 ? list * (1 - discount / 100) : list;
   };
 
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    const min = filterMinPrice ? Number(filterMinPrice) : null;
+    const max = filterMaxPrice ? Number(filterMaxPrice) : null;
+    return casks.filter((c) => {
+      const d = c.distilleries?.name ?? "";
+      const effectivePrice = priceFor(c.list_price);
+      const matchesSearch =
+        !q ||
+        c.cask_number.toLowerCase().includes(q) ||
+        d.toLowerCase().includes(q) ||
+        c.spirit.toLowerCase().includes(q) ||
+        (c.cask_type ?? "").toLowerCase().includes(q) ||
+        (c.distilleries?.region ?? "").toLowerCase().includes(q);
+      const matchesDistillery = filterDistillery === "All" || d === filterDistillery;
+      const matchesType = filterType === "All" || c.cask_type === filterType;
+      const matchesMin = min === null || (effectivePrice !== null && effectivePrice >= min);
+      const matchesMax = max === null || (effectivePrice !== null && effectivePrice <= max);
+      return matchesSearch && matchesDistillery && matchesType && matchesMin && matchesMax;
+    });
+  }, [casks, search, filterDistillery, filterType, filterMinPrice, filterMaxPrice]);
+
   return (
     <div className="max-w-7xl">
       <h1 className="display-heading text-4xl mb-2">Available Stock</h1>
-      <p className="font-body text-sm text-muted-foreground mb-8">
+      <p className="font-body text-sm text-muted-foreground mb-6">
         Curated casks ready for purchase.
         {discount > 0 && <span className="text-primary"> Your {discount}% client discount is applied.</span>}
       </p>
 
+      {/* Filters */}
+      <div className="flex flex-col md:flex-row gap-4 mb-8 flex-wrap">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search by cask number, distillery, spirit or type…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 rounded-none border-border bg-card font-body text-sm"
+          />
+        </div>
+        <select
+          value={filterDistillery}
+          onChange={(e) => setFilterDistillery(e.target.value)}
+          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          <option value="All">All Distilleries</option>
+          {distilleries.map((d) => (
+            <option key={d} value={d}>{d}</option>
+          ))}
+        </select>
+        <select
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          <option value="All">All Cask Types</option>
+          {caskTypes.map((t) => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+        <div className="flex gap-2">
+          <Input
+            type="number"
+            placeholder="Min £"
+            value={filterMinPrice}
+            onChange={(e) => setFilterMinPrice(e.target.value)}
+            className="w-28 rounded-none border-border bg-card font-body text-sm"
+          />
+          <Input
+            type="number"
+            placeholder="Max £"
+            value={filterMaxPrice}
+            onChange={(e) => setFilterMaxPrice(e.target.value)}
+            className="w-28 rounded-none border-border bg-card font-body text-sm"
+          />
+        </div>
+      </div>
+
       {loading ? (
         <p className="font-body text-sm text-muted-foreground">Loading…</p>
-      ) : casks.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <div className="bg-card border border-border p-12 text-center">
-          <p className="font-body text-sm text-muted-foreground">No casks currently available. Check back soon.</p>
+          <p className="font-body text-sm text-muted-foreground">
+            {casks.length === 0 ? "No casks currently available. Check back soon." : "No casks match your search."}
+          </p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {casks.map((c) => {
+          {filtered.map((c) => {
             const price = priceFor(c.list_price);
             return (
               <div key={c.id} className="bg-card border border-border overflow-hidden flex flex-col">

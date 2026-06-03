@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Download } from "lucide-react";
+import { Download, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
 
 type Row = {
   id: string;
@@ -26,6 +27,9 @@ export default function MyCasks() {
   const { toast } = useToast();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [filterDistillery, setFilterDistillery] = useState("All");
+  const [filterType, setFilterType] = useState("All");
 
   useEffect(() => {
     (async () => {
@@ -39,6 +43,32 @@ export default function MyCasks() {
     })();
   }, [toast]);
 
+  const distilleries = useMemo(
+    () => Array.from(new Set(rows.map((r) => r.casks.distilleries?.name).filter(Boolean))),
+    [rows]
+  );
+  const caskTypes = useMemo(
+    () => Array.from(new Set(rows.map((r) => r.casks.cask_type).filter(Boolean))),
+    [rows]
+  );
+
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    return rows.filter((r) => {
+      const c = r.casks;
+      const d = c.distilleries?.name ?? "";
+      const matchesSearch =
+        !q ||
+        c.cask_number.toLowerCase().includes(q) ||
+        d.toLowerCase().includes(q) ||
+        c.spirit.toLowerCase().includes(q) ||
+        (c.cask_type ?? "").toLowerCase().includes(q);
+      const matchesDistillery = filterDistillery === "All" || d === filterDistillery;
+      const matchesType = filterType === "All" || c.cask_type === filterType;
+      return matchesSearch && matchesDistillery && matchesType;
+    });
+  }, [rows, search, filterDistillery, filterType]);
+
   const downloadCert = async (path: string) => {
     const { data, error } = await supabase.storage.from("cask-certificates").createSignedUrl(path, 60);
     if (error || !data) {
@@ -51,17 +81,53 @@ export default function MyCasks() {
   return (
     <div className="max-w-7xl">
       <h1 className="display-heading text-4xl mb-2">My Casks</h1>
-      <p className="font-body text-sm text-muted-foreground mb-8">Your full holdings with cask specifications and certificates.</p>
+      <p className="font-body text-sm text-muted-foreground mb-6">Your full holdings with cask specifications and certificates.</p>
+
+      {/* Filters */}
+      <div className="flex flex-col md:flex-row gap-4 mb-8">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search by cask number, distillery, spirit or type…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 rounded-none border-border bg-card font-body text-sm"
+          />
+        </div>
+        <select
+          value={filterDistillery}
+          onChange={(e) => setFilterDistillery(e.target.value)}
+          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          <option value="All">All Distilleries</option>
+          {distilleries.map((d) => (
+            <option key={d} value={d}>{d}</option>
+          ))}
+        </select>
+        <select
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          <option value="All">All Cask Types</option>
+          {caskTypes.map((t) => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+      </div>
 
       {loading ? (
         <p className="font-body text-sm text-muted-foreground">Loading…</p>
-      ) : rows.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <div className="bg-card border border-border p-12 text-center">
-          <p className="font-body text-sm text-muted-foreground">You don't have any holdings yet.</p>
+          <p className="font-body text-sm text-muted-foreground">
+            {rows.length === 0 ? "You don't have any holdings yet." : "No casks match your search."}
+          </p>
         </div>
       ) : (
         <div className="space-y-4">
-          {rows.map((r) => (
+          {filtered.map((r) => (
             <div key={r.id} className="bg-card border border-border p-6 md:p-8">
               <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                 <div>
