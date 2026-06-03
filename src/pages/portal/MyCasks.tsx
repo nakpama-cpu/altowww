@@ -163,6 +163,17 @@ export default function MyCasks() {
               <option key={t} value={t}>{t}</option>
             ))}
           </select>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="distillery">Distillery A–Z</option>
+          </select>
           <div className="flex border border-border flex-shrink-0">
             <button
               onClick={() => setViewMode("cards")}
