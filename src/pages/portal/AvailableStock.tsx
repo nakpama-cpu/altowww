@@ -170,7 +170,7 @@ export default function AvailableStock() {
         <select
           value={filterDistillery}
           onChange={(e) => setFilterDistillery(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2 md:order-2 lg:order-none"
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2 md:order-2 lg:order-none"
         >
           <option value="All">Distilleries</option>
           {distilleries.map((d) => (
@@ -180,7 +180,7 @@ export default function AvailableStock() {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2 md:order-5 lg:order-none"
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2 md:order-5 lg:order-none"
         >
           <option value="">Sort</option>
           <option value="newest">Date Added (Newest)</option>
