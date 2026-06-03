@@ -33,7 +33,7 @@ export default function MyCasks() {
   const [certViewer, setCertViewer] = useState<{ url: string; title: string; filename: string } | null>(null);
   const [loadingCert, setLoadingCert] = useState(false);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
-  const [sortBy, setSortBy] = useState<string>("newest");
+  const [sortBy, setSortBy] = useState<string>("");
 
   useEffect(() => {
     (async () => {
