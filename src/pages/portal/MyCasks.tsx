@@ -71,22 +71,36 @@ export default function MyCasks() {
     });
   }, [rows, search, filterDistillery, filterType]);
 
-  const downloadCert = async (path: string) => {
+  const openCert = async (path: string, title: string) => {
+    setLoadingCert(true);
     const filename = path.split("/").pop() || "certificate.pdf";
     const { data, error } = await supabase.storage
       .from("cask-certificates")
-      .createSignedUrl(path, 60, { download: filename });
+      .createSignedUrl(path, 300);
+    setLoadingCert(false);
     if (error || !data) {
-      toast({ title: "Could not generate download link", variant: "destructive" });
+      toast({ title: "Could not load certificate", variant: "destructive" });
       return;
     }
-    const a = document.createElement("a");
-    a.href = data.signedUrl;
-    a.target = "_blank";
-    a.rel = "noopener";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    setCertViewer({ url: data.signedUrl, title, filename });
+  };
+
+  const downloadFromViewer = async () => {
+    if (!certViewer) return;
+    try {
+      const res = await fetch(certViewer.url);
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = certViewer.filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch {
+      toast({ title: "Download failed", variant: "destructive" });
+    }
   };
 
   return (
