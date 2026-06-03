@@ -28,10 +28,35 @@ export default function MyCasks() {
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [certViewer, setCertViewer] = useState<{ url: string; title: string; filename: string } | null>(null);
   const [loadingCert, setLoadingCert] = useState(false);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
   const [sortBy, setSortBy] = useState<string>("");
+
+  const suggestions = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    if (!q) return [] as { label: string; field: string; value: string }[];
+    const seen = new Set<string>();
+    const out: { label: string; field: string; value: string }[] = [];
+    const add = (field: string, value: string | null | undefined) => {
+      if (!value) return;
+      const v = String(value);
+      if (!v.toLowerCase().includes(q)) return;
+      const key = `${field}::${v.toLowerCase()}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      out.push({ label: field, field, value: v });
+    };
+    for (const r of rows) {
+      add("Distillery", r.casks.distilleries?.name);
+      add("Cask #", r.casks.cask_number);
+      add("Spirit", r.casks.spirit);
+      add("Cask Type", r.casks.cask_type);
+      if (out.length > 30) break;
+    }
+    return out.slice(0, 8);
+  }, [rows, search]);
 
   useEffect(() => {
     (async () => {
