@@ -110,7 +110,7 @@ export default function MyCasks() {
       <p className="font-body text-sm text-muted-foreground mb-6">Your full holdings with cask specifications and certificates.</p>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-6 w-full">
+      <div className="flex flex-col lg:flex-row lg:items-center gap-2 mb-6 w-full">
         <div className="relative flex-1 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
