@@ -30,7 +30,7 @@ export default function AvailableStock() {
   const [casks, setCasks] = useState<Cask[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  
+  const [filterDistillery, setFilterDistillery] = useState("All");
   const [filterMinPrice, setFilterMinPrice] = useState("");
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
   const [sortBy, setSortBy] = useState<string>("");
@@ -50,6 +50,10 @@ export default function AvailableStock() {
     })();
   }, [toast]);
 
+  const distilleries = useMemo(
+    () => Array.from(new Set(casks.map((c) => c.distilleries?.name).filter(Boolean))),
+    [casks]
+  );
 
   const priceFor = (list: number | null) => {
     if (!list) return null;
@@ -70,9 +74,10 @@ export default function AvailableStock() {
         c.spirit.toLowerCase().includes(q) ||
         (c.cask_type ?? "").toLowerCase().includes(q) ||
         (c.distilleries?.region ?? "").toLowerCase().includes(q);
+      const matchesDistillery = filterDistillery === "All" || d === filterDistillery;
       const matchesMin = min === null || (effectivePrice !== null && effectivePrice >= min);
       const matchesMax = max === null || (effectivePrice !== null && effectivePrice <= max);
-      return matchesSearch && matchesMin && matchesMax;
+      return matchesSearch && matchesDistillery && matchesMin && matchesMax;
     });
 
     const sorted = [...result];
@@ -96,7 +101,7 @@ export default function AvailableStock() {
       case "cask_type": sorted.sort((a, b) => (a.cask_type ?? "").localeCompare(b.cask_type ?? "")); break;
     }
     return sorted;
-  }, [casks, search, filterMinPrice, filterMaxPrice, sortBy]);
+  }, [casks, search, filterDistillery, filterMinPrice, filterMaxPrice, sortBy]);
 
   return (
     <div className="max-w-7xl">
@@ -107,7 +112,7 @@ export default function AvailableStock() {
       </p>
 
       {/* Filters */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-6 w-full">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2 mb-6 w-full">
         <div className="relative col-span-2 md:col-span-3 lg:col-span-2 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
@@ -118,6 +123,16 @@ export default function AvailableStock() {
             className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full"
           />
         </div>
+        <select
+          value={filterDistillery}
+          onChange={(e) => setFilterDistillery(e.target.value)}
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+        >
+          <option value="All">All Distilleries</option>
+          {distilleries.map((d) => (
+            <option key={d} value={d}>{d}</option>
+          ))}
+        </select>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
@@ -171,7 +186,7 @@ export default function AvailableStock() {
           </button>
         </div>
         <button
-          onClick={() => { setSearch(""); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
+          onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
           className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
           title="Clear all filters"
         >
