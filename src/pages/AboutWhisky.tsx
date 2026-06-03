@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";

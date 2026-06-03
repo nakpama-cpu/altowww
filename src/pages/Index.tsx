@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import ChapterMarker from "@/components/ChapterMarker";
 import HeroSection from "@/components/HeroSection";
