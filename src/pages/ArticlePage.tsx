@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import BrochureButton from "@/components/BrochureButton";
@@ -26,6 +27,12 @@ const ArticlePage = () => {
 
   return (
     <div className="relative">
+      <Seo
+        title={`${article.title.slice(0, 55)} | Alto Whisky`}
+        description={article.excerpt.slice(0, 158)}
+        path={`/news/${article.slug}`}
+        type="article"
+      />
       <Header />
 
       {/* Hero Image */}

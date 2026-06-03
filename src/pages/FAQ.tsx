@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
@@ -61,6 +62,11 @@ const FAQ = () => {
 
   return (
     <div className="relative">
+      <Seo
+        title="FAQs | Whisky Cask Investment Questions Answered"
+        description="Common questions about whisky cask investment — costs, returns, storage, insurance, tax, and how Alto Whisky supports investors at every stage."
+        path="/faqs"
+      />
       <Header />
       <PageHero image={heroImg} imageAlt="Mountain landscape" height="50vh">
         <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up">

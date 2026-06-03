@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import PageHero from "@/components/PageHero";
@@ -13,6 +14,11 @@ const News = () => {
 
   return (
     <div className="relative">
+      <Seo
+        title="News & Insights | Alto Whisky"
+        description="The latest news, market analysis, and expert insights on whisky cask investment, Scotch industry trends, and global demand."
+        path="/news"
+      />
       <Header />
       <PageHero image={heroImg} imageAlt="Whisky investment news" height="50vh">
         <p className="chapter-marker mb-6 text-secondary-foreground/70 animate-fade-in">

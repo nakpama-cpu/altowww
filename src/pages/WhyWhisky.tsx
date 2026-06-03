@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
@@ -71,6 +72,11 @@ const WhyWhiskyPage = () => {
 
   return (
     <div className="relative">
+      <Seo
+        title="Why Whisky | Benefits of Cask Investment"
+        description="Tangible, tax-efficient, and globally in demand — explore why Scotch whisky casks have become one of the most resilient alternative investments."
+        path="/why-whisky"
+      />
       <Header />
       <PageHero image={scotlandImg} imageAlt="Aerial view of Scottish Highland distillery landscape" height="70vh">
         <p className="chapter-marker mb-6 text-secondary-foreground/70 animate-fade-in">

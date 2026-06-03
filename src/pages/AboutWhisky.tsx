@@ -1,3 +1,4 @@
+import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
@@ -54,6 +55,11 @@ const AboutWhisky = () => {
 
   return (
     <div className="relative">
+      <Seo
+        title="About Whisky | Scotland's Single Malt Regions"
+        description="Explore Scotland's whisky regions — Highland, Lowland, Speyside, Islay, and Campbeltown — and the distinct character each brings to single malt Scotch."
+        path="/about-whisky"
+      />
       <Header />
       <PageHero image={scotlandImg} imageAlt="Scottish Highland landscape with rolling green hills" height="70vh">
         <p className="chapter-marker mb-6 text-secondary-foreground/70 animate-fade-in">
