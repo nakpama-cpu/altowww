@@ -70,10 +70,9 @@ export default function AvailableStock() {
         c.spirit.toLowerCase().includes(q) ||
         (c.cask_type ?? "").toLowerCase().includes(q) ||
         (c.distilleries?.region ?? "").toLowerCase().includes(q);
-      const matchesDistillery = filterDistillery === "All" || d === filterDistillery;
       const matchesMin = min === null || (effectivePrice !== null && effectivePrice >= min);
       const matchesMax = max === null || (effectivePrice !== null && effectivePrice <= max);
-      return matchesSearch && matchesDistillery && matchesMin && matchesMax;
+      return matchesSearch && matchesMin && matchesMax;
     });
 
     const sorted = [...result];
