@@ -73,22 +73,22 @@ export default function MyCasks() {
     });
 
     const sorted = [...result];
+    const num = (v: any) => (v === null || v === undefined ? -Infinity : Number(v));
+    const date = (v: any) => (v ? new Date(v).getTime() : 0);
     switch (sortBy) {
-      case "newest":
-        sorted.sort((a, b) => new Date(b.purchase_date).getTime() - new Date(a.purchase_date).getTime());
-        break;
-      case "oldest":
-        sorted.sort((a, b) => new Date(a.purchase_date).getTime() - new Date(b.purchase_date).getTime());
-        break;
-      case "price_high":
-        sorted.sort((a, b) => Number(b.purchase_price) - Number(a.purchase_price));
-        break;
-      case "price_low":
-        sorted.sort((a, b) => Number(a.purchase_price) - Number(b.purchase_price));
-        break;
-      case "distillery":
-        sorted.sort((a, b) => (a.casks.distilleries?.name ?? "").localeCompare(b.casks.distilleries?.name ?? ""));
-        break;
+      case "newest": sorted.sort((a, b) => date(b.purchase_date) - date(a.purchase_date)); break;
+      case "oldest": sorted.sort((a, b) => date(a.purchase_date) - date(b.purchase_date)); break;
+      case "price_high": sorted.sort((a, b) => num(b.purchase_price) - num(a.purchase_price)); break;
+      case "price_low": sorted.sort((a, b) => num(a.purchase_price) - num(b.purchase_price)); break;
+      case "age_high": sorted.sort((a, b) => num(b.casks.age_years) - num(a.casks.age_years)); break;
+      case "age_low": sorted.sort((a, b) => num(a.casks.age_years) - num(b.casks.age_years)); break;
+      case "abv_high": sorted.sort((a, b) => num(b.casks.abv) - num(a.casks.abv)); break;
+      case "abv_low": sorted.sort((a, b) => num(a.casks.abv) - num(b.casks.abv)); break;
+      case "rla_high": sorted.sort((a, b) => num(b.casks.rla_litres) - num(a.casks.rla_litres)); break;
+      case "rla_low": sorted.sort((a, b) => num(a.casks.rla_litres) - num(b.casks.rla_litres)); break;
+      case "distillery": sorted.sort((a, b) => (a.casks.distilleries?.name ?? "").localeCompare(b.casks.distilleries?.name ?? "")); break;
+      case "spirit": sorted.sort((a, b) => (a.casks.spirit ?? "").localeCompare(b.casks.spirit ?? "")); break;
+      case "cask_type": sorted.sort((a, b) => (a.casks.cask_type ?? "").localeCompare(b.casks.cask_type ?? "")); break;
     }
     return sorted;
   }, [rows, search, filterDistillery, filterType, sortBy]);
