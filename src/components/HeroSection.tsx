@@ -30,8 +30,8 @@ const HeroSection = () => {
           >
             Whisky Cask Investment
           </p>
-          <h1 className="display-heading text-6xl md:text-8xl lg:text-9xl text-secondary-foreground animate-fade-in-up">
-            Alto Whisky
+          <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up">
+            Alto Whisky — Secure Whisky Cask Investment
           </h1>
           <p
             className="mt-4 font-body text-base md:text-xl lg:text-2xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"

@@ -118,9 +118,9 @@ const HowItWorks = () => {
                   <p className="font-display text-6xl text-primary/20 font-light mb-4">
                     {step.number}
                   </p>
-                  <h3 className="font-display text-xl md:text-2xl font-light mb-4">
+                  <h2 className="font-display text-xl md:text-2xl font-light mb-4">
                     {step.title}
-                  </h3>
+                  </h2>
                   <p className="font-body text-sm text-muted-foreground leading-relaxed">
                     {step.description}
                   </p>
