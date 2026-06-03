@@ -220,7 +220,7 @@ export default function AvailableStock() {
         >
           <RotateCcw className="w-3.5 h-3.5" /> Clear
         </button>
-        <div className="flex border border-border w-full h-10 md:col-span-2 lg:col-span-2 md:order-5 lg:order-none">
+        <div className="flex border border-border w-full h-10 md:col-span-2 lg:col-span-2 md:order-7 lg:order-none">
           <button
             onClick={() => setViewMode("cards")}
             className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
