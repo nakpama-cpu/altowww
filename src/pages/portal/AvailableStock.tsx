@@ -13,6 +13,7 @@ type Cask = {
   fill_date: string | null;
   abv: number | null;
   ola_litres: number | null;
+  rla_litres: number | null;
   age_years: number | null;
   list_price: number | null;
   currency: string;
@@ -39,7 +40,7 @@ export default function AvailableStock() {
     (async () => {
       const { data, error } = await supabase
         .from("casks")
-        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region)")
+        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region)")
         .eq("status", "available")
         .order("created_at", { ascending: false });
       if (error) toast({ title: "Could not load stock", description: error.message, variant: "destructive" });
@@ -84,22 +85,24 @@ export default function AvailableStock() {
     });
 
     const sorted = [...result];
+    const num = (v: any) => (v === null || v === undefined ? -Infinity : Number(v));
+    const date = (v: any) => (v ? new Date(v).getTime() : 0);
     switch (sortBy) {
-      case "newest":
-        sorted.sort((a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime());
-        break;
-      case "oldest":
-        sorted.sort((a, b) => new Date(a.created_at ?? 0).getTime() - new Date(b.created_at ?? 0).getTime());
-        break;
-      case "price_high":
-        sorted.sort((a, b) => Number(priceFor(b.list_price) ?? 0) - Number(priceFor(a.list_price) ?? 0));
-        break;
-      case "price_low":
-        sorted.sort((a, b) => Number(priceFor(a.list_price) ?? 0) - Number(priceFor(b.list_price) ?? 0));
-        break;
-      case "distillery":
-        sorted.sort((a, b) => (a.distilleries?.name ?? "").localeCompare(b.distilleries?.name ?? ""));
-        break;
+      case "newest": sorted.sort((a, b) => date(b.created_at) - date(a.created_at)); break;
+      case "oldest": sorted.sort((a, b) => date(a.created_at) - date(b.created_at)); break;
+      case "price_high": sorted.sort((a, b) => num(priceFor(b.list_price)) - num(priceFor(a.list_price))); break;
+      case "price_low": sorted.sort((a, b) => num(priceFor(a.list_price)) - num(priceFor(b.list_price))); break;
+      case "age_high": sorted.sort((a, b) => num(b.age_years) - num(a.age_years)); break;
+      case "age_low": sorted.sort((a, b) => num(a.age_years) - num(b.age_years)); break;
+      case "abv_high": sorted.sort((a, b) => num(b.abv) - num(a.abv)); break;
+      case "abv_low": sorted.sort((a, b) => num(a.abv) - num(b.abv)); break;
+      case "rla_high": sorted.sort((a, b) => num(b.rla_litres) - num(a.rla_litres)); break;
+      case "rla_low": sorted.sort((a, b) => num(a.rla_litres) - num(b.rla_litres)); break;
+      case "fill_new": sorted.sort((a, b) => date(b.fill_date) - date(a.fill_date)); break;
+      case "fill_old": sorted.sort((a, b) => date(a.fill_date) - date(b.fill_date)); break;
+      case "distillery": sorted.sort((a, b) => (a.distilleries?.name ?? "").localeCompare(b.distilleries?.name ?? "")); break;
+      case "spirit": sorted.sort((a, b) => (a.spirit ?? "").localeCompare(b.spirit ?? "")); break;
+      case "cask_type": sorted.sort((a, b) => (a.cask_type ?? "").localeCompare(b.cask_type ?? "")); break;
     }
     return sorted;
   }, [casks, search, filterDistillery, filterType, filterMinPrice, filterMaxPrice, sortBy]);
@@ -139,11 +142,21 @@ export default function AvailableStock() {
           onChange={(e) => setSortBy(e.target.value)}
           className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         >
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="price_high">Price: High to Low</option>
-          <option value="price_low">Price: Low to High</option>
-          <option value="distillery">Distillery A–Z</option>
+          <option value="newest">Sort: Date Added (Newest)</option>
+          <option value="oldest">Sort: Date Added (Oldest)</option>
+          <option value="price_high">Sort: Price (High–Low)</option>
+          <option value="price_low">Sort: Price (Low–High)</option>
+          <option value="age_high">Sort: Age (High–Low)</option>
+          <option value="age_low">Sort: Age (Low–High)</option>
+          <option value="abv_high">Sort: ABV (High–Low)</option>
+          <option value="abv_low">Sort: ABV (Low–High)</option>
+          <option value="rla_high">Sort: RLA (High–Low)</option>
+          <option value="rla_low">Sort: RLA (Low–High)</option>
+          <option value="fill_new">Sort: Fill Date (Newest)</option>
+          <option value="fill_old">Sort: Fill Date (Oldest)</option>
+          <option value="distillery">Sort: Distillery (A–Z)</option>
+          <option value="spirit">Sort: Spirit (A–Z)</option>
+          <option value="cask_type">Sort: Cask Type (A–Z)</option>
         </select>
         <select
           value={filterType}

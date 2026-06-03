@@ -73,22 +73,22 @@ export default function MyCasks() {
     });
 
     const sorted = [...result];
+    const num = (v: any) => (v === null || v === undefined ? -Infinity : Number(v));
+    const date = (v: any) => (v ? new Date(v).getTime() : 0);
     switch (sortBy) {
-      case "newest":
-        sorted.sort((a, b) => new Date(b.purchase_date).getTime() - new Date(a.purchase_date).getTime());
-        break;
-      case "oldest":
-        sorted.sort((a, b) => new Date(a.purchase_date).getTime() - new Date(b.purchase_date).getTime());
-        break;
-      case "price_high":
-        sorted.sort((a, b) => Number(b.purchase_price) - Number(a.purchase_price));
-        break;
-      case "price_low":
-        sorted.sort((a, b) => Number(a.purchase_price) - Number(b.purchase_price));
-        break;
-      case "distillery":
-        sorted.sort((a, b) => (a.casks.distilleries?.name ?? "").localeCompare(b.casks.distilleries?.name ?? ""));
-        break;
+      case "newest": sorted.sort((a, b) => date(b.purchase_date) - date(a.purchase_date)); break;
+      case "oldest": sorted.sort((a, b) => date(a.purchase_date) - date(b.purchase_date)); break;
+      case "price_high": sorted.sort((a, b) => num(b.purchase_price) - num(a.purchase_price)); break;
+      case "price_low": sorted.sort((a, b) => num(a.purchase_price) - num(b.purchase_price)); break;
+      case "age_high": sorted.sort((a, b) => num(b.casks.age_years) - num(a.casks.age_years)); break;
+      case "age_low": sorted.sort((a, b) => num(a.casks.age_years) - num(b.casks.age_years)); break;
+      case "abv_high": sorted.sort((a, b) => num(b.casks.abv) - num(a.casks.abv)); break;
+      case "abv_low": sorted.sort((a, b) => num(a.casks.abv) - num(b.casks.abv)); break;
+      case "rla_high": sorted.sort((a, b) => num(b.casks.rla_litres) - num(a.casks.rla_litres)); break;
+      case "rla_low": sorted.sort((a, b) => num(a.casks.rla_litres) - num(b.casks.rla_litres)); break;
+      case "distillery": sorted.sort((a, b) => (a.casks.distilleries?.name ?? "").localeCompare(b.casks.distilleries?.name ?? "")); break;
+      case "spirit": sorted.sort((a, b) => (a.casks.spirit ?? "").localeCompare(b.casks.spirit ?? "")); break;
+      case "cask_type": sorted.sort((a, b) => (a.casks.cask_type ?? "").localeCompare(b.casks.cask_type ?? "")); break;
     }
     return sorted;
   }, [rows, search, filterDistillery, filterType, sortBy]);
@@ -166,13 +166,21 @@ export default function MyCasks() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+            className="flex-1 lg:flex-none lg:w-56 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
           >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="price_high">Price: High to Low</option>
-            <option value="price_low">Price: Low to High</option>
-            <option value="distillery">Distillery A–Z</option>
+            <option value="newest">Sort: Purchase Date (Newest)</option>
+            <option value="oldest">Sort: Purchase Date (Oldest)</option>
+            <option value="price_high">Sort: Purchase Price (High–Low)</option>
+            <option value="price_low">Sort: Purchase Price (Low–High)</option>
+            <option value="age_high">Sort: Age (High–Low)</option>
+            <option value="age_low">Sort: Age (Low–High)</option>
+            <option value="abv_high">Sort: ABV (High–Low)</option>
+            <option value="abv_low">Sort: ABV (Low–High)</option>
+            <option value="rla_high">Sort: RLA (High–Low)</option>
+            <option value="rla_low">Sort: RLA (Low–High)</option>
+            <option value="distillery">Sort: Distillery (A–Z)</option>
+            <option value="spirit">Sort: Spirit (A–Z)</option>
+            <option value="cask_type">Sort: Cask Type (A–Z)</option>
           </select>
           <div className="flex border border-border flex-shrink-0">
             <button
