@@ -216,7 +216,7 @@ export default function MyCasks() {
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">RLA</th>
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Price</th>
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Purchased</th>
-                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Certificate</th>
+                  <th className="pl-4 pr-6 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Certificate</th>
                 </tr>
               </thead>
               <tbody>
@@ -233,7 +233,7 @@ export default function MyCasks() {
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.rla_litres ? `${r.casks.rla_litres} L` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">£{Number(r.purchase_price).toLocaleString()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.purchase_date}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="pl-4 pr-6 py-3 whitespace-nowrap">
                       {r.certificate_path ? (
                         <button
                           onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number}`)}
