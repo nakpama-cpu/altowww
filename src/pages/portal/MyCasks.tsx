@@ -30,6 +30,8 @@ export default function MyCasks() {
   const [search, setSearch] = useState("");
   const [filterDistillery, setFilterDistillery] = useState("All");
   const [filterType, setFilterType] = useState("All");
+  const [certViewer, setCertViewer] = useState<{ url: string; title: string; filename: string } | null>(null);
+  const [loadingCert, setLoadingCert] = useState(false);
 
   useEffect(() => {
     (async () => {
