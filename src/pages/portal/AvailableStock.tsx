@@ -220,7 +220,7 @@ export default function AvailableStock() {
             {casks.length === 0 ? "No casks currently available. Check back soon." : "No casks match your search."}
           </p>
         </div>
-      ) : (
+      ) : viewMode === "cards" ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((c) => {
             const price = priceFor(c.list_price);
@@ -275,7 +275,58 @@ export default function AvailableStock() {
             );
           })}
         </div>
+      ) : (
+        <div className="border border-border bg-card overflow-auto">
+          <table className="w-full text-left font-body text-sm">
+            <thead>
+              <tr className="border-b border-border bg-muted/30">
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Cask #</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Distillery</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Spirit</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Type</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Fill Date</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Age</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">ABV</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">OLA</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">RLA</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Price</th>
+                <th className="pl-4 pr-6 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((c) => {
+                const price = priceFor(c.list_price);
+                return (
+                  <tr key={c.id} className="border-b border-border hover:bg-muted/20 transition-colors">
+                    <td className="px-4 py-3 whitespace-nowrap">{c.cask_number}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.distilleries?.name ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.spirit}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.cask_type ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.fill_date ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.age_years ? `${c.age_years} yrs` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.abv ? `${c.abv}%` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.ola_litres ? `${c.ola_litres} L` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.rla_litres ? `${c.rla_litres} L` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-primary">
+                      {price ? `£${Math.round(price).toLocaleString()}` : "—"}
+                    </td>
+                    <td className="pl-4 pr-6 py-3 whitespace-nowrap">
+                      <button
+                        disabled
+                        className="font-body text-[10px] uppercase tracking-[0.15em] bg-primary/40 text-primary-foreground px-3 py-1 cursor-not-allowed"
+                        title="Checkout activates once payments are enabled"
+                      >
+                        Buy
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
+
     </div>
   );
 }
