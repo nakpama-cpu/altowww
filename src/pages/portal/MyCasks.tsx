@@ -200,7 +200,7 @@ export default function MyCasks() {
             </button>
           </div>
           <button
-            onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setSortBy("newest"); }}
+            onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setSortBy(""); }}
             className="flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground flex-shrink-0"
             title="Clear all filters"
           >
