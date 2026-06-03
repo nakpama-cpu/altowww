@@ -58,7 +58,7 @@ export default function MyCasks() {
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
-    return rows.filter((r) => {
+    const result = rows.filter((r) => {
       const c = r.casks;
       const d = c.distilleries?.name ?? "";
       const matchesSearch =
@@ -71,7 +71,27 @@ export default function MyCasks() {
       const matchesType = filterType === "All" || c.cask_type === filterType;
       return matchesSearch && matchesDistillery && matchesType;
     });
-  }, [rows, search, filterDistillery, filterType]);
+
+    const sorted = [...result];
+    switch (sortBy) {
+      case "newest":
+        sorted.sort((a, b) => new Date(b.purchase_date).getTime() - new Date(a.purchase_date).getTime());
+        break;
+      case "oldest":
+        sorted.sort((a, b) => new Date(a.purchase_date).getTime() - new Date(b.purchase_date).getTime());
+        break;
+      case "price_high":
+        sorted.sort((a, b) => Number(b.purchase_price) - Number(a.purchase_price));
+        break;
+      case "price_low":
+        sorted.sort((a, b) => Number(a.purchase_price) - Number(b.purchase_price));
+        break;
+      case "distillery":
+        sorted.sort((a, b) => (a.casks.distilleries?.name ?? "").localeCompare(b.casks.distilleries?.name ?? ""));
+        break;
+    }
+    return sorted;
+  }, [rows, search, filterDistillery, filterType, sortBy]);
 
   const openCert = async (path: string, title: string) => {
     setLoadingCert(true);
