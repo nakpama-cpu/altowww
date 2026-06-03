@@ -18,6 +18,7 @@ type Cask = {
   currency: string;
   description: string | null;
   hero_image_url: string | null;
+  created_at: string;
   distilleries: { name: string; region: string | null } | null;
 };
 
@@ -31,13 +32,14 @@ export default function AvailableStock() {
   const [filterType, setFilterType] = useState("All");
   const [filterMinPrice, setFilterMinPrice] = useState("");
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
+  const [sortBy, setSortBy] = useState<string>("newest");
   const discount = Number(profile?.client_discount_pct ?? 0);
 
   useEffect(() => {
     (async () => {
       const { data, error } = await supabase
         .from("casks")
-        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, age_years, list_price, currency, description, hero_image_url, distilleries(name, region)")
+        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region)")
         .eq("status", "available")
         .order("created_at", { ascending: false });
       if (error) toast({ title: "Could not load stock", description: error.message, variant: "destructive" });
@@ -64,7 +66,7 @@ export default function AvailableStock() {
     const q = search.toLowerCase().trim();
     const min = filterMinPrice ? Number(filterMinPrice) : null;
     const max = filterMaxPrice ? Number(filterMaxPrice) : null;
-    return casks.filter((c) => {
+    const result = casks.filter((c) => {
       const d = c.distilleries?.name ?? "";
       const effectivePrice = priceFor(c.list_price);
       const matchesSearch =
@@ -80,7 +82,27 @@ export default function AvailableStock() {
       const matchesMax = max === null || (effectivePrice !== null && effectivePrice <= max);
       return matchesSearch && matchesDistillery && matchesType && matchesMin && matchesMax;
     });
-  }, [casks, search, filterDistillery, filterType, filterMinPrice, filterMaxPrice]);
+
+    const sorted = [...result];
+    switch (sortBy) {
+      case "newest":
+        sorted.sort((a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime());
+        break;
+      case "oldest":
+        sorted.sort((a, b) => new Date(a.created_at ?? 0).getTime() - new Date(b.created_at ?? 0).getTime());
+        break;
+      case "price_high":
+        sorted.sort((a, b) => Number(priceFor(b.list_price) ?? 0) - Number(priceFor(a.list_price) ?? 0));
+        break;
+      case "price_low":
+        sorted.sort((a, b) => Number(priceFor(a.list_price) ?? 0) - Number(priceFor(b.list_price) ?? 0));
+        break;
+      case "distillery":
+        sorted.sort((a, b) => (a.distilleries?.name ?? "").localeCompare(b.distilleries?.name ?? ""));
+        break;
+    }
+    return sorted;
+  }, [casks, search, filterDistillery, filterType, filterMinPrice, filterMaxPrice, sortBy]);
 
   return (
     <div className="max-w-7xl">
@@ -111,6 +133,17 @@ export default function AvailableStock() {
           {distilleries.map((d) => (
             <option key={d} value={d}>{d}</option>
           ))}
+        </select>
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="price_high">Price: High to Low</option>
+          <option value="price_low">Price: Low to High</option>
+          <option value="distillery">Distillery A–Z</option>
         </select>
         <select
           value={filterType}
