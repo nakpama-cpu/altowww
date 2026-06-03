@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Download, Search, X, FileText, Loader2 } from "lucide-react";
+import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 
@@ -32,6 +32,7 @@ export default function MyCasks() {
   const [filterType, setFilterType] = useState("All");
   const [certViewer, setCertViewer] = useState<{ url: string; title: string; filename: string } | null>(null);
   const [loadingCert, setLoadingCert] = useState(false);
+  const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
 
   useEffect(() => {
     (async () => {
@@ -109,7 +110,7 @@ export default function MyCasks() {
       <p className="font-body text-sm text-muted-foreground mb-6">Your full holdings with cask specifications and certificates.</p>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
@@ -140,6 +141,22 @@ export default function MyCasks() {
             <option key={t} value={t}>{t}</option>
           ))}
         </select>
+        <div className="flex border border-border">
+          <button
+            onClick={() => setViewMode("cards")}
+            className={`flex items-center justify-center w-10 h-10 ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+            title="Card view"
+          >
+            <LayoutGrid className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setViewMode("table")}
+            className={`flex items-center justify-center w-10 h-10 ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+            title="Table view"
+          >
+            <Table2 className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {loading ? (
@@ -151,37 +168,90 @@ export default function MyCasks() {
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {filtered.map((r) => (
-            <div key={r.id} className="bg-card border border-border p-6 md:p-8">
-              <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
-                <div>
-                  <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">Cask #{r.casks.cask_number}</div>
-                  <h3 className="display-heading text-2xl">{r.casks.distilleries?.name ?? "Distillery"}</h3>
+        viewMode === "cards" ? (
+          <div className="space-y-4">
+            {filtered.map((r) => (
+              <div key={r.id} className="bg-card border border-border p-6 md:p-8">
+                <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+                  <div>
+                    <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">Cask #{r.casks.cask_number}</div>
+                    <h3 className="display-heading text-2xl">{r.casks.distilleries?.name ?? "Distillery"}</h3>
+                  </div>
+                  {r.certificate_path && (
+                    <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number}`)}
+                      disabled={loadingCert}
+                      className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-4 py-2 hover:bg-muted disabled:opacity-50">
+                      <FileText className="w-3 h-3" /> View Certificate
+                    </button>
+                  )}
                 </div>
-                {r.certificate_path && (
-                  <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number}`)}
-                    disabled={loadingCert}
-                    className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-4 py-2 hover:bg-muted disabled:opacity-50">
-                    <FileText className="w-3 h-3" /> View Certificate
-                  </button>
-                )}
-              </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
-                <Spec label="Spirit" value={r.casks.spirit} />
-                <Spec label="Cask Type" value={r.casks.cask_type} />
-                <Spec label="Fill Date" value={r.casks.fill_date} />
-                <Spec label="Age" value={r.casks.age_years ? `${r.casks.age_years} yrs` : null} />
-                <Spec label="ABV" value={r.casks.abv ? `${r.casks.abv}%` : null} />
-                <Spec label="OLA" value={r.casks.ola_litres ? `${r.casks.ola_litres} L` : null} />
-                <Spec label="RLA" value={r.casks.rla_litres ? `${r.casks.rla_litres} L` : null} />
-                <Spec label="Purchase Price" value={`£${Number(r.purchase_price).toLocaleString()}`} />
-                <Spec label="Purchase Date" value={r.purchase_date} />
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
+                  <Spec label="Spirit" value={r.casks.spirit} />
+                  <Spec label="Cask Type" value={r.casks.cask_type} />
+                  <Spec label="Fill Date" value={r.casks.fill_date} />
+                  <Spec label="Age" value={r.casks.age_years ? `${r.casks.age_years} yrs` : null} />
+                  <Spec label="ABV" value={r.casks.abv ? `${r.casks.abv}%` : null} />
+                  <Spec label="OLA" value={r.casks.ola_litres ? `${r.casks.ola_litres} L` : null} />
+                  <Spec label="RLA" value={r.casks.rla_litres ? `${r.casks.rla_litres} L` : null} />
+                  <Spec label="Purchase Price" value={`£${Number(r.purchase_price).toLocaleString()}`} />
+                  <Spec label="Purchase Date" value={r.purchase_date} />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="border border-border bg-card overflow-auto">
+            <table className="w-full text-left font-body text-sm">
+              <thead>
+                <tr className="border-b border-border bg-muted/30">
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Cask #</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Distillery</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Spirit</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Type</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Fill Date</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Age</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">ABV</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">OLA</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">RLA</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Price</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Purchased</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Certificate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((r) => (
+                  <tr key={r.id} className="border-b border-border hover:bg-muted/20 transition-colors">
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_number}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.distilleries?.name ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.spirit}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_type ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.fill_date ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.age_years ? `${r.casks.age_years} yrs` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.abv ? `${r.casks.abv}%` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.ola_litres ? `${r.casks.ola_litres} L` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.rla_litres ? `${r.casks.rla_litres} L` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">£{Number(r.purchase_price).toLocaleString()}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.purchase_date}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {r.certificate_path ? (
+                        <button
+                          onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number}`)}
+                          disabled={loadingCert}
+                          className="flex items-center gap-1 font-body text-[10px] uppercase tracking-[0.15em] border border-border px-2 py-1 hover:bg-muted disabled:opacity-50"
+                        >
+                          <FileText className="w-3 h-3" /> View
+                        </button>
+                      ) : (
+                        <span className="text-muted-foreground">—</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
       )}
 
       {certViewer && (
