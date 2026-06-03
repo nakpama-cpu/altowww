@@ -33,7 +33,7 @@ export default function AvailableStock() {
   const [filterType, setFilterType] = useState("All");
   const [filterMinPrice, setFilterMinPrice] = useState("");
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
-  const [sortBy, setSortBy] = useState<string>("newest");
+  const [sortBy, setSortBy] = useState<string>("");
   const discount = Number(profile?.client_discount_pct ?? 0);
 
   useEffect(() => {
@@ -153,21 +153,22 @@ export default function AvailableStock() {
             onChange={(e) => setSortBy(e.target.value)}
             className="flex-1 lg:flex-none lg:w-56 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
           >
-            <option value="newest">Sort: Date Added (Newest)</option>
-            <option value="oldest">Sort: Date Added (Oldest)</option>
-            <option value="price_high">Sort: Price (High–Low)</option>
-            <option value="price_low">Sort: Price (Low–High)</option>
-            <option value="age_high">Sort: Age (High–Low)</option>
-            <option value="age_low">Sort: Age (Low–High)</option>
-            <option value="abv_high">Sort: ABV (High–Low)</option>
-            <option value="abv_low">Sort: ABV (Low–High)</option>
-            <option value="rla_high">Sort: RLA (High–Low)</option>
-            <option value="rla_low">Sort: RLA (Low–High)</option>
-            <option value="fill_new">Sort: Fill Date (Newest)</option>
-            <option value="fill_old">Sort: Fill Date (Oldest)</option>
-            <option value="distillery">Sort: Distillery (A–Z)</option>
-            <option value="spirit">Sort: Spirit (A–Z)</option>
-            <option value="cask_type">Sort: Cask Type (A–Z)</option>
+            <option value="">Sort</option>
+            <option value="newest">Date Added (Newest)</option>
+            <option value="oldest">Date Added (Oldest)</option>
+            <option value="price_high">Price (High–Low)</option>
+            <option value="price_low">Price (Low–High)</option>
+            <option value="age_high">Age (High–Low)</option>
+            <option value="age_low">Age (Low–High)</option>
+            <option value="abv_high">ABV (High–Low)</option>
+            <option value="abv_low">ABV (Low–High)</option>
+            <option value="rla_high">RLA (High–Low)</option>
+            <option value="rla_low">RLA (Low–High)</option>
+            <option value="fill_new">Fill Date (Newest)</option>
+            <option value="fill_old">Fill Date (Oldest)</option>
+            <option value="distillery">Distillery (A–Z)</option>
+            <option value="spirit">Spirit (A–Z)</option>
+            <option value="cask_type">Cask Type (A–Z)</option>
           </select>
           <Input
             type="number"
@@ -184,7 +185,7 @@ export default function AvailableStock() {
             className="w-24 h-10 rounded-none border-border bg-card font-body text-sm flex-shrink-0"
           />
           <button
-            onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy("newest"); }}
+            onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
             className="flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground flex-shrink-0"
             title="Clear all filters"
           >
