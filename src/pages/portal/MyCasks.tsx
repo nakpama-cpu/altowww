@@ -149,6 +149,13 @@ export default function MyCasks() {
           <option value="spirit">Spirit (A–Z)</option>
           <option value="cask_type">Cask Type (A–Z)</option>
         </select>
+        <button
+          onClick={() => { setSearch(""); setSortBy(""); }}
+          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
+          title="Clear all filters"
+        >
+          <RotateCcw className="w-3.5 h-3.5" /> Clear
+        </button>
         <div className="flex border border-border w-full h-10">
           <button
             onClick={() => setViewMode("cards")}
@@ -165,13 +172,6 @@ export default function MyCasks() {
             <Table2 className="w-4 h-4" />
           </button>
         </div>
-        <button
-          onClick={() => { setSearch(""); setSortBy(""); }}
-          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
-          title="Clear all filters"
-        >
-          <RotateCcw className="w-3.5 h-3.5" /> Clear
-        </button>
       </div>
 
       {loading ? (
