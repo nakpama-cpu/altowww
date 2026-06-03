@@ -13,6 +13,7 @@ type Cask = {
   fill_date: string | null;
   abv: number | null;
   ola_litres: number | null;
+  rla_litres: number | null;
   age_years: number | null;
   list_price: number | null;
   currency: string;
