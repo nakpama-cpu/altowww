@@ -28,8 +28,6 @@ export default function MyCasks() {
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [filterDistillery, setFilterDistillery] = useState("All");
-  const [filterType, setFilterType] = useState("All");
   const [certViewer, setCertViewer] = useState<{ url: string; title: string; filename: string } | null>(null);
   const [loadingCert, setLoadingCert] = useState(false);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
@@ -47,15 +45,6 @@ export default function MyCasks() {
     })();
   }, [toast]);
 
-  const distilleries = useMemo(
-    () => Array.from(new Set(rows.map((r) => r.casks.distilleries?.name).filter(Boolean))),
-    [rows]
-  );
-  const caskTypes = useMemo(
-    () => Array.from(new Set(rows.map((r) => r.casks.cask_type).filter(Boolean))),
-    [rows]
-  );
-
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
     const result = rows.filter((r) => {
@@ -67,9 +56,7 @@ export default function MyCasks() {
         d.toLowerCase().includes(q) ||
         c.spirit.toLowerCase().includes(q) ||
         (c.cask_type ?? "").toLowerCase().includes(q);
-      const matchesDistillery = filterDistillery === "All" || d === filterDistillery;
-      const matchesType = filterType === "All" || c.cask_type === filterType;
-      return matchesSearch && matchesDistillery && matchesType;
+      return matchesSearch;
     });
 
     const sorted = [...result];
@@ -91,7 +78,7 @@ export default function MyCasks() {
       case "cask_type": sorted.sort((a, b) => (a.casks.cask_type ?? "").localeCompare(b.casks.cask_type ?? "")); break;
     }
     return sorted;
-  }, [rows, search, filterDistillery, filterType, sortBy]);
+  }, [rows, search, sortBy]);
 
   const openCert = async (path: string, title: string) => {
     setLoadingCert(true);
@@ -131,8 +118,8 @@ export default function MyCasks() {
       <p className="font-body text-sm text-muted-foreground mb-6">Your full holdings with cask specifications and certificates.</p>
 
       {/* Filters */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-6 w-full">
-        <div className="relative col-span-2 md:col-span-3 lg:col-span-1 min-w-0">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6 w-full">
+        <div className="relative col-span-2 md:col-span-1 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"
@@ -142,26 +129,6 @@ export default function MyCasks() {
             className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full"
           />
         </div>
-        <select
-          value={filterDistillery}
-          onChange={(e) => setFilterDistillery(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
-        >
-          <option value="All">All Distilleries</option>
-          {distilleries.map((d) => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
-        <select
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
-        >
-          <option value="All">All Cask Types</option>
-          {caskTypes.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
@@ -199,7 +166,7 @@ export default function MyCasks() {
           </button>
         </div>
         <button
-          onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setSortBy(""); }}
+          onClick={() => { setSearch(""); setSortBy(""); }}
           className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
           title="Clear all filters"
         >
