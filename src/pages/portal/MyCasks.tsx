@@ -70,12 +70,21 @@ export default function MyCasks() {
   }, [rows, search, filterDistillery, filterType]);
 
   const downloadCert = async (path: string) => {
-    const { data, error } = await supabase.storage.from("cask-certificates").createSignedUrl(path, 60);
+    const filename = path.split("/").pop() || "certificate.pdf";
+    const { data, error } = await supabase.storage
+      .from("cask-certificates")
+      .createSignedUrl(path, 60, { download: filename });
     if (error || !data) {
       toast({ title: "Could not generate download link", variant: "destructive" });
       return;
     }
-    window.open(data.signedUrl, "_blank");
+    const a = document.createElement("a");
+    a.href = data.signedUrl;
+    a.target = "_blank";
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   };
 
   return (
