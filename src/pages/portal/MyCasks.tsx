@@ -28,8 +28,6 @@ export default function MyCasks() {
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [filterDistillery, setFilterDistillery] = useState("All");
-  const [filterType, setFilterType] = useState("All");
   const [certViewer, setCertViewer] = useState<{ url: string; title: string; filename: string } | null>(null);
   const [loadingCert, setLoadingCert] = useState(false);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
@@ -47,15 +45,6 @@ export default function MyCasks() {
     })();
   }, [toast]);
 
-  const distilleries = useMemo(
-    () => Array.from(new Set(rows.map((r) => r.casks.distilleries?.name).filter(Boolean))),
-    [rows]
-  );
-  const caskTypes = useMemo(
-    () => Array.from(new Set(rows.map((r) => r.casks.cask_type).filter(Boolean))),
-    [rows]
-  );
-
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
     const result = rows.filter((r) => {
@@ -67,9 +56,7 @@ export default function MyCasks() {
         d.toLowerCase().includes(q) ||
         c.spirit.toLowerCase().includes(q) ||
         (c.cask_type ?? "").toLowerCase().includes(q);
-      const matchesDistillery = filterDistillery === "All" || d === filterDistillery;
-      const matchesType = filterType === "All" || c.cask_type === filterType;
-      return matchesSearch && matchesDistillery && matchesType;
+      return matchesSearch;
     });
 
     const sorted = [...result];
@@ -91,7 +78,7 @@ export default function MyCasks() {
       case "cask_type": sorted.sort((a, b) => (a.casks.cask_type ?? "").localeCompare(b.casks.cask_type ?? "")); break;
     }
     return sorted;
-  }, [rows, search, filterDistillery, filterType, sortBy]);
+  }, [rows, search, sortBy]);
 
   const openCert = async (path: string, title: string) => {
     setLoadingCert(true);
