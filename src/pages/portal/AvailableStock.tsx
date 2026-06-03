@@ -31,6 +31,7 @@ export default function AvailableStock() {
   const [filterType, setFilterType] = useState("All");
   const [filterMinPrice, setFilterMinPrice] = useState("");
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
+  const [sortBy, setSortBy] = useState<string>("newest");
   const discount = Number(profile?.client_discount_pct ?? 0);
 
   useEffect(() => {
