@@ -139,7 +139,7 @@ export default function AvailableStock() {
 
       {/* Filters */}
       <div className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-12 gap-2 lg:gap-6 mb-6 w-full">
-        <div className="relative col-span-2 md:col-span-6 lg:col-span-4 min-w-0 md:order-1 lg:order-none">
+        <div className="relative col-span-2 md:col-span-6 lg:col-span-12 min-w-0 md:order-1 lg:order-none">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
           <Input
             type="text"
