@@ -7,10 +7,18 @@ interface SeoProps {
   description: string;
   path: string;
   type?: "website" | "article";
+  image?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const Seo = ({ title, description, path, type = "website" }: SeoProps) => {
+const Seo = ({ title, description, path, type = "website", image, jsonLd }: SeoProps) => {
   const url = `${SITE_URL}${path}`;
+  const absoluteImage = image
+    ? image.startsWith("http")
+      ? image
+      : `${SITE_URL}${image.startsWith("/") ? image : `/${image}`}`
+    : undefined;
+
   return (
     <Helmet>
       <title>{title}</title>
@@ -22,6 +30,11 @@ const Seo = ({ title, description, path, type = "website" }: SeoProps) => {
       <meta property="og:type" content={type} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
+      {absoluteImage && <meta property="og:image" content={absoluteImage} />}
+      {absoluteImage && <meta name="twitter:image" content={absoluteImage} />}
+      {jsonLd && (
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      )}
     </Helmet>
   );
 };

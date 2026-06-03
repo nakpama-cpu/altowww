@@ -32,6 +32,20 @@ const ArticlePage = () => {
         description={article.excerpt.slice(0, 158)}
         path={`/news/${article.slug}`}
         type="article"
+        image={article.image}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: article.title,
+          description: article.excerpt,
+          image: article.image.startsWith("http")
+            ? article.image
+            : `https://altowww.lovable.app${article.image}`,
+          datePublished: article.date,
+          author: { "@type": "Organization", name: "Alto Whisky" },
+          publisher: { "@type": "Organization", name: "Alto Whisky" },
+          mainEntityOfPage: `https://altowww.lovable.app/news/${article.slug}`,
+        }}
       />
       <Header />
 
