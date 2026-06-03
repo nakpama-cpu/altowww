@@ -121,7 +121,7 @@ export default function MyCasks() {
             className="pl-9 rounded-none border-border bg-card font-body text-sm w-full"
           />
         </div>
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex items-center gap-2 w-full lg:w-auto">
           <select
             value={filterDistillery}
             onChange={(e) => setFilterDistillery(e.target.value)}
