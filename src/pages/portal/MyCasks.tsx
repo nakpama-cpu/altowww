@@ -118,8 +118,8 @@ export default function MyCasks() {
       <p className="font-body text-sm text-muted-foreground mb-6">Your full holdings with cask specifications and certificates.</p>
 
       {/* Filters */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-6 w-full">
-        <div className="relative col-span-2 md:col-span-3 lg:col-span-1 min-w-0">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6 w-full">
+        <div className="relative col-span-2 md:col-span-1 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"
@@ -129,26 +129,6 @@ export default function MyCasks() {
             className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full"
           />
         </div>
-        <select
-          value={filterDistillery}
-          onChange={(e) => setFilterDistillery(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
-        >
-          <option value="All">All Distilleries</option>
-          {distilleries.map((d) => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
-        <select
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
-        >
-          <option value="All">All Cask Types</option>
-          {caskTypes.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
@@ -186,7 +166,7 @@ export default function MyCasks() {
           </button>
         </div>
         <button
-          onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setSortBy(""); }}
+          onClick={() => { setSearch(""); setSortBy(""); }}
           className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
           title="Clear all filters"
         >
