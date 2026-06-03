@@ -125,7 +125,7 @@ export default function MyCasks() {
           <select
             value={filterDistillery}
             onChange={(e) => setFilterDistillery(e.target.value)}
-            className="flex-1 sm:flex-none sm:w-36 lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
           >
             <option value="All">All Distilleries</option>
             {distilleries.map((d) => (
@@ -135,7 +135,7 @@ export default function MyCasks() {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="flex-1 sm:flex-none sm:w-36 lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
           >
             <option value="All">All Cask Types</option>
             {caskTypes.map((t) => (
