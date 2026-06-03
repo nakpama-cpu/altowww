@@ -30,12 +30,38 @@ export default function AvailableStock() {
   const [casks, setCasks] = useState<Cask[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [filterDistillery, setFilterDistillery] = useState("All");
   const [filterMinPrice, setFilterMinPrice] = useState("");
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
   const [sortBy, setSortBy] = useState<string>("");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
   const discount = Number(profile?.client_discount_pct ?? 0);
+
+  const suggestions = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    if (!q) return [] as { label: string; field: string; value: string }[];
+    const seen = new Set<string>();
+    const out: { label: string; field: string; value: string }[] = [];
+    const add = (field: string, value: string | null | undefined) => {
+      if (!value) return;
+      const v = String(value);
+      if (!v.toLowerCase().includes(q)) return;
+      const key = `${field}::${v.toLowerCase()}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      out.push({ label: field, field, value: v });
+    };
+    for (const c of casks) {
+      add("Distillery", c.distilleries?.name);
+      add("Cask #", c.cask_number);
+      add("Spirit", c.spirit);
+      add("Cask Type", c.cask_type);
+      add("Region", c.distilleries?.region);
+      if (out.length > 30) break;
+    }
+    return out.slice(0, 8);
+  }, [casks, search]);
 
   useEffect(() => {
     (async () => {
