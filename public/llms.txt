@@ -1,0 +1,20 @@
+# Alto Whisky
+
+> Premium whisky cask investment consultancy connecting high-net-worth investors with Scottish single malt Scotch casks stored in HMRC government-bonded warehouses.
+
+Alto Whisky is a UK-based whisky investment firm specialising in sourcing, brokering, and managing whisky cask portfolios for private clients and investors. The company offers tangible, tax-free whisky cask investments with a proven track record — rare whisky has appreciated by 582% over the past decade according to the Knight Frank Luxury Investment Index.
+
+Services include cask sourcing and brokerage, private cask ownership programs, portfolio management, and advisory on bottling or resale. All casks are stored in HMRC government-bonded warehouses in Scotland, fully insured and exempt from Capital Gains Tax.
+
+## Pages
+
+- [/](/): Homepage introducing Alto Whisky's heritage, investment case, and six-step cask investment journey.
+- [/how-it-works](/how-it-works): The complete six-step investment process from brochure download to cask ownership certificates.
+- [/why-whisky](/why-whisky): The investment case for whisky casks — tangible assets, tax-free returns, market independence, and proven track record.
+- [/about-whisky](/about-whisky): Educational guide to Scotch whisky regions, styles, and what makes a cask valuable.
+- [/how-whisky-is-made](/how-whisky-is-made): The whisky production process from malting and mashing to distillation and maturation.
+- [/faqs](/faqs): Frequently asked questions about whisky cask investment, storage, insurance, taxation, and exit strategies.
+- [/contact](/contact): Contact form to reach Alto Whisky's team of Portfolio Advisors.
+- [/news](/news): News and insights on the whisky market, investment trends, and industry updates.
+- [/news/what-to-look-for-in-a-whisky-cask](/news/what-to-look-for-in-a-whisky-cask): What to look for when selecting a whisky cask for investment.
+- [/news/how-to-store-whisky-casks](/news/how-to-store-whisky-casks): Guide to proper whisky cask storage and warehouse conditions.
