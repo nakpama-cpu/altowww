@@ -110,8 +110,8 @@ export default function MyCasks() {
       <p className="font-body text-sm text-muted-foreground mb-6">Your full holdings with cask specifications and certificates.</p>
 
       {/* Filters */}
-      <div className="flex items-center gap-2 mb-6 w-full">
-        <div className="relative flex-1 min-w-[160px]">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-6 w-full">
+        <div className="relative flex-1 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"
@@ -121,41 +121,43 @@ export default function MyCasks() {
             className="pl-9 rounded-none border-border bg-card font-body text-sm w-full"
           />
         </div>
-        <select
-          value={filterDistillery}
-          onChange={(e) => setFilterDistillery(e.target.value)}
-          className="w-36 lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 flex-shrink-0"
-        >
-          <option value="All">All Distilleries</option>
-          {distilleries.map((d) => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
-        <select
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-          className="w-36 lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 flex-shrink-0"
-        >
-          <option value="All">All Cask Types</option>
-          {caskTypes.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
-        <div className="flex border border-border flex-shrink-0">
-          <button
-            onClick={() => setViewMode("cards")}
-            className={`flex items-center justify-center w-10 h-10 ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
-            title="Card view"
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <select
+            value={filterDistillery}
+            onChange={(e) => setFilterDistillery(e.target.value)}
+            className="flex-1 sm:flex-none sm:w-36 lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
           >
-            <LayoutGrid className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setViewMode("table")}
-            className={`flex items-center justify-center w-10 h-10 ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
-            title="Table view"
+            <option value="All">All Distilleries</option>
+            {distilleries.map((d) => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            className="flex-1 sm:flex-none sm:w-36 lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
           >
-            <Table2 className="w-4 h-4" />
-          </button>
+            <option value="All">All Cask Types</option>
+            {caskTypes.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+          <div className="flex border border-border flex-shrink-0">
+            <button
+              onClick={() => setViewMode("cards")}
+              className={`flex items-center justify-center w-10 h-10 ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+              title="Card view"
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setViewMode("table")}
+              className={`flex items-center justify-center w-10 h-10 ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+              title="Table view"
+            >
+              <Table2 className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 
