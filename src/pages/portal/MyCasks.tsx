@@ -233,7 +233,7 @@ export default function MyCasks() {
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.rla_litres ? `${r.casks.rla_litres} L` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">£{Number(r.purchase_price).toLocaleString()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.purchase_date}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="pl-4 pr-6 py-3 whitespace-nowrap">
                       {r.certificate_path ? (
                         <button
                           onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number}`)}
