@@ -112,8 +112,8 @@ export default function AvailableStock() {
       </p>
 
       {/* Filters */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2 mb-6 w-full">
-        <div className="relative col-span-2 md:col-span-3 lg:col-span-2 min-w-0">
+      <div className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-12 gap-2 lg:gap-6 mb-6 w-full">
+        <div className="relative col-span-2 md:col-span-6 lg:col-span-4 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"
@@ -126,7 +126,7 @@ export default function AvailableStock() {
         <select
           value={filterDistillery}
           onChange={(e) => setFilterDistillery(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2"
         >
           <option value="All">All Distilleries</option>
           {distilleries.map((d) => (
@@ -136,7 +136,7 @@ export default function AvailableStock() {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2"
         >
           <option value="">Sort</option>
           <option value="newest">Date Added (Newest)</option>
@@ -160,16 +160,23 @@ export default function AvailableStock() {
           placeholder="Min £"
           value={filterMinPrice}
           onChange={(e) => setFilterMinPrice(e.target.value)}
-          className="w-full h-10 rounded-none border-border bg-card font-body text-sm"
+          className="w-full h-10 rounded-none border-border bg-card font-body text-sm md:col-span-2 lg:col-span-2"
         />
         <Input
           type="number"
           placeholder="Max £"
           value={filterMaxPrice}
           onChange={(e) => setFilterMaxPrice(e.target.value)}
-          className="w-full h-10 rounded-none border-border bg-card font-body text-sm"
+          className="w-full h-10 rounded-none border-border bg-card font-body text-sm md:col-span-2 lg:col-span-2"
         />
-        <div className="flex border border-border w-full h-10">
+        <button
+          onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
+          className="md:col-span-2 lg:col-span-2 w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
+          title="Clear all filters"
+        >
+          <RotateCcw className="w-3.5 h-3.5" /> Clear
+        </button>
+        <div className="flex border border-border w-full h-10 md:col-span-2 lg:col-span-2">
           <button
             onClick={() => setViewMode("cards")}
             className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
@@ -185,13 +192,6 @@ export default function AvailableStock() {
             <Table2 className="w-4 h-4" />
           </button>
         </div>
-        <button
-          onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
-          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
-          title="Clear all filters"
-        >
-          <RotateCcw className="w-3.5 h-3.5" /> Clear
-        </button>
       </div>
 
 
