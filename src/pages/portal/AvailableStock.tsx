@@ -128,7 +128,7 @@ export default function AvailableStock() {
           onChange={(e) => setFilterDistillery(e.target.value)}
           className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2"
         >
-          <option value="All">All Distilleries</option>
+          <option value="All">Distilleries</option>
           {distilleries.map((d) => (
             <option key={d} value={d}>{d}</option>
           ))}
