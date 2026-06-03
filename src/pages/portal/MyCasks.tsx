@@ -131,8 +131,8 @@ export default function MyCasks() {
       <p className="font-body text-sm text-muted-foreground mb-6">Your full holdings with cask specifications and certificates.</p>
 
       {/* Filters */}
-      <div className="flex flex-col lg:flex-row lg:items-center gap-2 mb-6 w-full">
-        <div className="relative flex-1 min-w-0">
+      <div className="flex flex-col gap-2 mb-6 w-full lg:flex-row lg:items-center lg:flex-wrap">
+        <div className="relative w-full lg:flex-1 lg:min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"
@@ -142,11 +142,11 @@ export default function MyCasks() {
             className="pl-9 rounded-none border-border bg-card font-body text-sm w-full"
           />
         </div>
-        <div className="flex items-center gap-2 w-full lg:w-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 w-full lg:contents">
           <select
             value={filterDistillery}
             onChange={(e) => setFilterDistillery(e.target.value)}
-            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+            className="w-full min-w-0 lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="All">All Distilleries</option>
             {distilleries.map((d) => (
@@ -156,7 +156,7 @@ export default function MyCasks() {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+            className="w-full min-w-0 lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="All">All Cask Types</option>
             {caskTypes.map((t) => (
@@ -166,7 +166,7 @@ export default function MyCasks() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="flex-1 lg:flex-none lg:w-56 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+            className="w-full min-w-0 col-span-2 sm:col-span-1 lg:w-56 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="">Sort</option>
             <option value="newest">Purchase Date (Newest)</option>
@@ -183,6 +183,8 @@ export default function MyCasks() {
             <option value="spirit">Spirit (A–Z)</option>
             <option value="cask_type">Cask Type (A–Z)</option>
           </select>
+        </div>
+        <div className="flex items-center gap-2 w-full lg:w-auto lg:contents">
           <div className="flex border border-border flex-shrink-0">
             <button
               onClick={() => setViewMode("cards")}
@@ -201,7 +203,7 @@ export default function MyCasks() {
           </div>
           <button
             onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setSortBy(""); }}
-            className="flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground flex-shrink-0"
+            className="flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground flex-shrink-0 ml-auto lg:ml-0"
             title="Clear all filters"
           >
             <RotateCcw className="w-3.5 h-3.5" /> Clear
