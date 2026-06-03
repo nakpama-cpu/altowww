@@ -145,14 +145,32 @@ export default function MyCasks() {
       {/* Filters */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6 w-full">
         <div className="relative col-span-2 md:col-span-1 min-w-0">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
           <Input
             type="text"
             placeholder="Search casks…"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setShowSuggestions(true); }}
+            onFocus={() => setShowSuggestions(true)}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
             className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full"
           />
+          {showSuggestions && suggestions.length > 0 && (
+            <ul className="absolute z-20 left-0 right-0 top-full mt-1 bg-card border border-border max-h-72 overflow-auto shadow-lg">
+              {suggestions.map((s, i) => (
+                <li key={i}>
+                  <button
+                    type="button"
+                    onMouseDown={(e) => { e.preventDefault(); setSearch(s.value); setShowSuggestions(false); }}
+                    className="w-full text-left px-3 py-2 font-body text-sm hover:bg-muted flex items-center justify-between gap-3"
+                  >
+                    <span>{s.value}</span>
+                    <span className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground">{s.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <select
           value={sortBy}
