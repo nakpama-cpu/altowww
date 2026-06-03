@@ -3,7 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import { Search, RotateCcw } from "lucide-react";
+import { Search, RotateCcw, LayoutGrid, Table2 } from "lucide-react";
+
 
 type Cask = {
   id: string;
