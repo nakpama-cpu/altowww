@@ -33,6 +33,7 @@ export default function MyCasks() {
   const [certViewer, setCertViewer] = useState<{ url: string; title: string; filename: string } | null>(null);
   const [loadingCert, setLoadingCert] = useState(false);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+  const [sortBy, setSortBy] = useState<string>("newest");
 
   useEffect(() => {
     (async () => {
@@ -57,7 +58,7 @@ export default function MyCasks() {
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
-    return rows.filter((r) => {
+    const result = rows.filter((r) => {
       const c = r.casks;
       const d = c.distilleries?.name ?? "";
       const matchesSearch =
@@ -70,7 +71,27 @@ export default function MyCasks() {
       const matchesType = filterType === "All" || c.cask_type === filterType;
       return matchesSearch && matchesDistillery && matchesType;
     });
-  }, [rows, search, filterDistillery, filterType]);
+
+    const sorted = [...result];
+    switch (sortBy) {
+      case "newest":
+        sorted.sort((a, b) => new Date(b.purchase_date).getTime() - new Date(a.purchase_date).getTime());
+        break;
+      case "oldest":
+        sorted.sort((a, b) => new Date(a.purchase_date).getTime() - new Date(b.purchase_date).getTime());
+        break;
+      case "price_high":
+        sorted.sort((a, b) => Number(b.purchase_price) - Number(a.purchase_price));
+        break;
+      case "price_low":
+        sorted.sort((a, b) => Number(a.purchase_price) - Number(b.purchase_price));
+        break;
+      case "distillery":
+        sorted.sort((a, b) => (a.casks.distilleries?.name ?? "").localeCompare(b.casks.distilleries?.name ?? ""));
+        break;
+    }
+    return sorted;
+  }, [rows, search, filterDistillery, filterType, sortBy]);
 
   const openCert = async (path: string, title: string) => {
     setLoadingCert(true);
@@ -141,6 +162,17 @@ export default function MyCasks() {
             {caskTypes.map((t) => (
               <option key={t} value={t}>{t}</option>
             ))}
+          </select>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="distillery">Distillery A–Z</option>
           </select>
           <div className="flex border border-border flex-shrink-0">
             <button
