@@ -166,13 +166,21 @@ export default function MyCasks() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+            className="flex-1 lg:flex-none lg:w-56 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
           >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="price_high">Price: High to Low</option>
-            <option value="price_low">Price: Low to High</option>
-            <option value="distillery">Distillery A–Z</option>
+            <option value="newest">Sort: Purchase Date (Newest)</option>
+            <option value="oldest">Sort: Purchase Date (Oldest)</option>
+            <option value="price_high">Sort: Purchase Price (High–Low)</option>
+            <option value="price_low">Sort: Purchase Price (Low–High)</option>
+            <option value="age_high">Sort: Age (High–Low)</option>
+            <option value="age_low">Sort: Age (Low–High)</option>
+            <option value="abv_high">Sort: ABV (High–Low)</option>
+            <option value="abv_low">Sort: ABV (Low–High)</option>
+            <option value="rla_high">Sort: RLA (High–Low)</option>
+            <option value="rla_low">Sort: RLA (Low–High)</option>
+            <option value="distillery">Sort: Distillery (A–Z)</option>
+            <option value="spirit">Sort: Spirit (A–Z)</option>
+            <option value="cask_type">Sort: Cask Type (A–Z)</option>
           </select>
           <div className="flex border border-border flex-shrink-0">
             <button
