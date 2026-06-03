@@ -96,10 +96,11 @@ const Contact = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                      <label htmlFor="contact-first-name" className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
                         First Name *
                       </label>
                       <input
+                        id="contact-first-name"
                         type="text"
                         required
                         maxLength={100}
@@ -111,10 +112,11 @@ const Contact = () => {
                       />
                     </div>
                     <div>
-                      <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                      <label htmlFor="contact-last-name" className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
                         Last Name *
                       </label>
                       <input
+                        id="contact-last-name"
                         type="text"
                         required
                         maxLength={100}
@@ -127,10 +129,11 @@ const Contact = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                    <label htmlFor="contact-email" className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
                       Email *
                     </label>
                     <input
+                      id="contact-email"
                       type="email"
                       required
                       maxLength={255}
@@ -142,10 +145,11 @@ const Contact = () => {
                     />
                   </div>
                   <div>
-                    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                    <label htmlFor="contact-phone" className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
                       Phone Number *
                     </label>
                     <input
+                      id="contact-phone"
                       type="tel"
                       required
                       maxLength={30}
@@ -157,10 +161,11 @@ const Contact = () => {
                     />
                   </div>
                   <div>
-                    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                    <label htmlFor="contact-message" className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
                       Message
                     </label>
                     <textarea
+                      id="contact-message"
                       rows={4}
                       maxLength={1000}
                       value={formData.message}

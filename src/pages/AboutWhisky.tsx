@@ -82,11 +82,11 @@ const AboutWhisky = () => {
               With hundreds of years spent distilling and producing this
               much-loved spirit, there are nuances to the art of whisky.
             </p>
-            <h4 className="font-display text-lg md:text-xl italic text-foreground/80 max-w-xl mb-6">
+            <h3 className="font-display text-lg md:text-xl italic text-foreground/80 max-w-xl mb-6">
               Spelled without an 'e', the name 'whisky' refers to scotch distilled
               in Scotland and Ireland, whilst American producers prefer the
               spelling 'whiskey'.
-            </h4>
+            </h3>
             <p className="font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6">
               Taken literally, the term 'whisky' is derived from Gaelic to mean
               'water of life', depicting the high esteem this product has been
