@@ -116,82 +116,83 @@ export default function AvailableStock() {
       </p>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8 flex-wrap">
-        <div className="relative flex-1 min-w-[200px]">
+      <div className="flex flex-col lg:flex-row lg:items-center gap-2 mb-6 w-full">
+        <div className="relative flex-1 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Search by cask number, distillery, spirit or type…"
+            placeholder="Search casks…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 rounded-none border-border bg-card font-body text-sm"
+            className="pl-9 rounded-none border-border bg-card font-body text-sm w-full"
           />
         </div>
-        <select
-          value={filterDistillery}
-          onChange={(e) => setFilterDistillery(e.target.value)}
-          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-        >
-          <option value="All">All Distilleries</option>
-          {distilleries.map((d) => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-        >
-          <option value="newest">Sort: Date Added (Newest)</option>
-          <option value="oldest">Sort: Date Added (Oldest)</option>
-          <option value="price_high">Sort: Price (High–Low)</option>
-          <option value="price_low">Sort: Price (Low–High)</option>
-          <option value="age_high">Sort: Age (High–Low)</option>
-          <option value="age_low">Sort: Age (Low–High)</option>
-          <option value="abv_high">Sort: ABV (High–Low)</option>
-          <option value="abv_low">Sort: ABV (Low–High)</option>
-          <option value="rla_high">Sort: RLA (High–Low)</option>
-          <option value="rla_low">Sort: RLA (Low–High)</option>
-          <option value="fill_new">Sort: Fill Date (Newest)</option>
-          <option value="fill_old">Sort: Fill Date (Oldest)</option>
-          <option value="distillery">Sort: Distillery (A–Z)</option>
-          <option value="spirit">Sort: Spirit (A–Z)</option>
-          <option value="cask_type">Sort: Cask Type (A–Z)</option>
-        </select>
-        <select
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-          className="h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-        >
-          <option value="All">All Cask Types</option>
-          {caskTypes.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+          <select
+            value={filterDistillery}
+            onChange={(e) => setFilterDistillery(e.target.value)}
+            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+          >
+            <option value="All">All Distilleries</option>
+            {distilleries.map((d) => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+          >
+            <option value="All">All Cask Types</option>
+            {caskTypes.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="flex-1 lg:flex-none lg:w-56 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+          >
+            <option value="newest">Sort: Date Added (Newest)</option>
+            <option value="oldest">Sort: Date Added (Oldest)</option>
+            <option value="price_high">Sort: Price (High–Low)</option>
+            <option value="price_low">Sort: Price (Low–High)</option>
+            <option value="age_high">Sort: Age (High–Low)</option>
+            <option value="age_low">Sort: Age (Low–High)</option>
+            <option value="abv_high">Sort: ABV (High–Low)</option>
+            <option value="abv_low">Sort: ABV (Low–High)</option>
+            <option value="rla_high">Sort: RLA (High–Low)</option>
+            <option value="rla_low">Sort: RLA (Low–High)</option>
+            <option value="fill_new">Sort: Fill Date (Newest)</option>
+            <option value="fill_old">Sort: Fill Date (Oldest)</option>
+            <option value="distillery">Sort: Distillery (A–Z)</option>
+            <option value="spirit">Sort: Spirit (A–Z)</option>
+            <option value="cask_type">Sort: Cask Type (A–Z)</option>
+          </select>
           <Input
             type="number"
             placeholder="Min £"
             value={filterMinPrice}
             onChange={(e) => setFilterMinPrice(e.target.value)}
-            className="w-28 rounded-none border-border bg-card font-body text-sm"
+            className="w-24 h-10 rounded-none border-border bg-card font-body text-sm flex-shrink-0"
           />
           <Input
             type="number"
             placeholder="Max £"
             value={filterMaxPrice}
             onChange={(e) => setFilterMaxPrice(e.target.value)}
-            className="w-28 rounded-none border-border bg-card font-body text-sm"
+            className="w-24 h-10 rounded-none border-border bg-card font-body text-sm flex-shrink-0"
           />
+          <button
+            onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy("newest"); }}
+            className="flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground flex-shrink-0"
+            title="Clear all filters"
+          >
+            <RotateCcw className="w-3.5 h-3.5" /> Clear
+          </button>
         </div>
-        <button
-          onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy("newest"); }}
-          className="flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground flex-shrink-0"
-          title="Clear all filters"
-        >
-          <RotateCcw className="w-3.5 h-3.5" /> Clear
-        </button>
       </div>
+
 
       {loading ? (
         <p className="font-body text-sm text-muted-foreground">Loading…</p>
