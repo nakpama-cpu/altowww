@@ -12,6 +12,9 @@ const HeroSection = () => {
         <img
           src={heroImg}
           alt="Dramatic mountain landscape at dawn with misty peaks"
+          width={1920}
+          height={1080}
+          fetchPriority="high"
           className="absolute inset-0 w-full h-full object-cover animate-cloud-drift"
           style={{
             transform: 'scale(1.25) translateZ(0)',
