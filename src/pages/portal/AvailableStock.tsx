@@ -3,7 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import { Search, RotateCcw } from "lucide-react";
+import { Search, RotateCcw, LayoutGrid, Table2 } from "lucide-react";
+
 
 type Cask = {
   id: string;
@@ -34,6 +35,7 @@ export default function AvailableStock() {
   const [filterMinPrice, setFilterMinPrice] = useState("");
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
   const [sortBy, setSortBy] = useState<string>("");
+  const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
   const discount = Number(profile?.client_discount_pct ?? 0);
 
   useEffect(() => {
@@ -116,83 +118,98 @@ export default function AvailableStock() {
       </p>
 
       {/* Filters */}
-      <div className="flex flex-col lg:flex-row lg:items-center gap-2 mb-6 w-full">
-        <div className="relative flex-1 min-w-0">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-2 mb-6 w-full">
+        <div className="relative col-span-2 md:col-span-3 lg:col-span-2 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"
             placeholder="Search casks…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 rounded-none border-border bg-card font-body text-sm w-full"
+            className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full"
           />
         </div>
-        <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-          <select
-            value={filterDistillery}
-            onChange={(e) => setFilterDistillery(e.target.value)}
-            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
-          >
-            <option value="All">All Distilleries</option>
-            {distilleries.map((d) => (
-              <option key={d} value={d}>{d}</option>
-            ))}
-          </select>
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className="flex-1 lg:flex-none lg:w-44 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
-          >
-            <option value="All">All Cask Types</option>
-            {caskTypes.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="flex-1 lg:flex-none lg:w-56 h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
-          >
-            <option value="">Sort</option>
-            <option value="newest">Date Added (Newest)</option>
-            <option value="oldest">Date Added (Oldest)</option>
-            <option value="price_high">Price (High–Low)</option>
-            <option value="price_low">Price (Low–High)</option>
-            <option value="age_high">Age (High–Low)</option>
-            <option value="age_low">Age (Low–High)</option>
-            <option value="abv_high">ABV (High–Low)</option>
-            <option value="abv_low">ABV (Low–High)</option>
-            <option value="rla_high">RLA (High–Low)</option>
-            <option value="rla_low">RLA (Low–High)</option>
-            <option value="fill_new">Fill Date (Newest)</option>
-            <option value="fill_old">Fill Date (Oldest)</option>
-            <option value="distillery">Distillery (A–Z)</option>
-            <option value="spirit">Spirit (A–Z)</option>
-            <option value="cask_type">Cask Type (A–Z)</option>
-          </select>
-          <Input
-            type="number"
-            placeholder="Min £"
-            value={filterMinPrice}
-            onChange={(e) => setFilterMinPrice(e.target.value)}
-            className="w-24 h-10 rounded-none border-border bg-card font-body text-sm flex-shrink-0"
-          />
-          <Input
-            type="number"
-            placeholder="Max £"
-            value={filterMaxPrice}
-            onChange={(e) => setFilterMaxPrice(e.target.value)}
-            className="w-24 h-10 rounded-none border-border bg-card font-body text-sm flex-shrink-0"
-          />
+        <select
+          value={filterDistillery}
+          onChange={(e) => setFilterDistillery(e.target.value)}
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+        >
+          <option value="All">All Distilleries</option>
+          {distilleries.map((d) => (
+            <option key={d} value={d}>{d}</option>
+          ))}
+        </select>
+        <select
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+        >
+          <option value="All">All Cask Types</option>
+          {caskTypes.map((t) => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+        >
+          <option value="">Sort</option>
+          <option value="newest">Date Added (Newest)</option>
+          <option value="oldest">Date Added (Oldest)</option>
+          <option value="price_high">Price (High–Low)</option>
+          <option value="price_low">Price (Low–High)</option>
+          <option value="age_high">Age (High–Low)</option>
+          <option value="age_low">Age (Low–High)</option>
+          <option value="abv_high">ABV (High–Low)</option>
+          <option value="abv_low">ABV (Low–High)</option>
+          <option value="rla_high">RLA (High–Low)</option>
+          <option value="rla_low">RLA (Low–High)</option>
+          <option value="fill_new">Fill Date (Newest)</option>
+          <option value="fill_old">Fill Date (Oldest)</option>
+          <option value="distillery">Distillery (A–Z)</option>
+          <option value="spirit">Spirit (A–Z)</option>
+          <option value="cask_type">Cask Type (A–Z)</option>
+        </select>
+        <Input
+          type="number"
+          placeholder="Min £"
+          value={filterMinPrice}
+          onChange={(e) => setFilterMinPrice(e.target.value)}
+          className="w-full h-10 rounded-none border-border bg-card font-body text-sm"
+        />
+        <Input
+          type="number"
+          placeholder="Max £"
+          value={filterMaxPrice}
+          onChange={(e) => setFilterMaxPrice(e.target.value)}
+          className="w-full h-10 rounded-none border-border bg-card font-body text-sm"
+        />
+        <div className="flex border border-border w-full h-10">
           <button
-            onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
-            className="flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground flex-shrink-0"
-            title="Clear all filters"
+            onClick={() => setViewMode("cards")}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+            title="Card view"
           >
-            <RotateCcw className="w-3.5 h-3.5" /> Clear
+            <LayoutGrid className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setViewMode("table")}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+            title="Table view"
+          >
+            <Table2 className="w-4 h-4" />
           </button>
         </div>
+        <button
+          onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
+          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
+          title="Clear all filters"
+        >
+          <RotateCcw className="w-3.5 h-3.5" /> Clear
+        </button>
       </div>
+
 
 
       {loading ? (
@@ -203,7 +220,7 @@ export default function AvailableStock() {
             {casks.length === 0 ? "No casks currently available. Check back soon." : "No casks match your search."}
           </p>
         </div>
-      ) : (
+      ) : viewMode === "cards" ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((c) => {
             const price = priceFor(c.list_price);
@@ -258,7 +275,58 @@ export default function AvailableStock() {
             );
           })}
         </div>
+      ) : (
+        <div className="border border-border bg-card overflow-auto">
+          <table className="w-full text-left font-body text-sm">
+            <thead>
+              <tr className="border-b border-border bg-muted/30">
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Cask #</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Distillery</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Spirit</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Type</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Fill Date</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Age</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">ABV</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">OLA</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">RLA</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Price</th>
+                <th className="pl-4 pr-6 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((c) => {
+                const price = priceFor(c.list_price);
+                return (
+                  <tr key={c.id} className="border-b border-border hover:bg-muted/20 transition-colors">
+                    <td className="px-4 py-3 whitespace-nowrap">{c.cask_number}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.distilleries?.name ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.spirit}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.cask_type ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.fill_date ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.age_years ? `${c.age_years} yrs` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.abv ? `${c.abv}%` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.ola_litres ? `${c.ola_litres} L` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.rla_litres ? `${c.rla_litres} L` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-primary">
+                      {price ? `£${Math.round(price).toLocaleString()}` : "—"}
+                    </td>
+                    <td className="pl-4 pr-6 py-3 whitespace-nowrap">
+                      <button
+                        disabled
+                        className="font-body text-[10px] uppercase tracking-[0.15em] bg-primary/40 text-primary-foreground px-3 py-1 cursor-not-allowed"
+                        title="Checkout activates once payments are enabled"
+                      >
+                        Buy
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
+
     </div>
   );
 }
