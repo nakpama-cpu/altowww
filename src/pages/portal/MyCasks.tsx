@@ -110,7 +110,7 @@ export default function MyCasks() {
       <p className="font-body text-sm text-muted-foreground mb-6">Your full holdings with cask specifications and certificates.</p>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
@@ -141,6 +141,22 @@ export default function MyCasks() {
             <option key={t} value={t}>{t}</option>
           ))}
         </select>
+        <div className="flex border border-border">
+          <button
+            onClick={() => setViewMode("cards")}
+            className={`flex items-center justify-center w-10 h-10 ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+            title="Card view"
+          >
+            <LayoutGrid className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setViewMode("table")}
+            className={`flex items-center justify-center w-10 h-10 ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+            title="Table view"
+          >
+            <Table2 className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {loading ? (
