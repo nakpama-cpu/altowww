@@ -75,10 +75,9 @@ export default function AvailableStock() {
         (c.cask_type ?? "").toLowerCase().includes(q) ||
         (c.distilleries?.region ?? "").toLowerCase().includes(q);
       const matchesDistillery = filterDistillery === "All" || d === filterDistillery;
-      const matchesType = filterType === "All" || c.cask_type === filterType;
       const matchesMin = min === null || (effectivePrice !== null && effectivePrice >= min);
       const matchesMax = max === null || (effectivePrice !== null && effectivePrice <= max);
-      return matchesSearch && matchesDistillery && matchesType && matchesMin && matchesMax;
+      return matchesSearch && matchesDistillery && matchesMin && matchesMax;
     });
 
     const sorted = [...result];
@@ -102,7 +101,7 @@ export default function AvailableStock() {
       case "cask_type": sorted.sort((a, b) => (a.cask_type ?? "").localeCompare(b.cask_type ?? "")); break;
     }
     return sorted;
-  }, [casks, search, filterDistillery, filterType, filterMinPrice, filterMaxPrice, sortBy]);
+  }, [casks, search, filterDistillery, filterMinPrice, filterMaxPrice, sortBy]);
 
   return (
     <div className="max-w-7xl">
@@ -113,7 +112,7 @@ export default function AvailableStock() {
       </p>
 
       {/* Filters */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-8 gap-2 mb-6 w-full">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2 mb-6 w-full">
         <div className="relative col-span-2 md:col-span-3 lg:col-span-2 min-w-0">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
@@ -132,16 +131,6 @@ export default function AvailableStock() {
           <option value="All">All Distilleries</option>
           {distilleries.map((d) => (
             <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
-        <select
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
-        >
-          <option value="All">All Cask Types</option>
-          {caskTypes.map((t) => (
-            <option key={t} value={t}>{t}</option>
           ))}
         </select>
         <select
@@ -197,7 +186,7 @@ export default function AvailableStock() {
           </button>
         </div>
         <button
-          onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterType("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
+          onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
           className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
           title="Clear all filters"
         >
