@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Search, RotateCcw, LayoutGrid, Table2 } from "lucide-react";
+import { computeCaskAge } from "@/lib/caskAge";
 
 
 type Cask = {
