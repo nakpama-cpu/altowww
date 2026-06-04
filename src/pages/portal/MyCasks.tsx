@@ -93,8 +93,8 @@ export default function MyCasks() {
       case "oldest": sorted.sort((a, b) => date(a.purchase_date) - date(b.purchase_date)); break;
       case "price_high": sorted.sort((a, b) => num(b.purchase_price) - num(a.purchase_price)); break;
       case "price_low": sorted.sort((a, b) => num(a.purchase_price) - num(b.purchase_price)); break;
-      case "age_high": sorted.sort((a, b) => num(b.casks.age_years) - num(a.casks.age_years)); break;
-      case "age_low": sorted.sort((a, b) => num(a.casks.age_years) - num(b.casks.age_years)); break;
+      case "age_high": sorted.sort((a, b) => num(computeCaskAge(b.casks.fill_date, b.casks.age_years)) - num(computeCaskAge(a.casks.fill_date, a.casks.age_years))); break;
+      case "age_low": sorted.sort((a, b) => num(computeCaskAge(a.casks.fill_date, a.casks.age_years)) - num(computeCaskAge(b.casks.fill_date, b.casks.age_years))); break;
       case "abv_high": sorted.sort((a, b) => num(b.casks.abv) - num(a.casks.abv)); break;
       case "abv_low": sorted.sort((a, b) => num(a.casks.abv) - num(b.casks.abv)); break;
       case "rla_high": sorted.sort((a, b) => num(b.casks.rla_litres) - num(a.casks.rla_litres)); break;
