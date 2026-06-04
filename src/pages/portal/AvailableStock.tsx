@@ -229,6 +229,7 @@ export default function AvailableStock() {
         </div>
         <Input
           type="number"
+          step="500"
           placeholder="Min £"
           value={filterMinPrice}
           onChange={(e) => setFilterMinPrice(e.target.value)}
@@ -236,6 +237,7 @@ export default function AvailableStock() {
         />
         <Input
           type="number"
+          step="500"
           placeholder="Max £"
           value={filterMaxPrice}
           onChange={(e) => setFilterMaxPrice(e.target.value)}
