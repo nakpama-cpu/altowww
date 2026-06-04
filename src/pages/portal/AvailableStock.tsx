@@ -3,9 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown } from "lucide-react";
+import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink } from "lucide-react";
 import { computeCaskAge } from "@/lib/caskAge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+
+type LinkItem = { title?: string; name?: string; url?: string };
 
 
 type Cask = {
@@ -23,7 +25,24 @@ type Cask = {
   description: string | null;
   hero_image_url: string | null;
   created_at: string;
-  distilleries: { name: string; region: string | null; country: string | null; about: string | null; awards: string | null } | null;
+  distilleries: {
+    name: string;
+    region: string | null;
+    country: string | null;
+    about: string | null;
+    image_url: string | null;
+    founded_by: string | null;
+    founded_year: number | null;
+    famous_for: string | null;
+    region_character: string | null;
+    annual_production: string | null;
+    export_markets: string | null;
+    owner: string | null;
+    website_url: string | null;
+    visitor_centre: string | null;
+    news: LinkItem[] | null;
+    awards: LinkItem[] | null;
+  } | null;
 };
 
 export default function AvailableStock() {
@@ -70,7 +89,7 @@ export default function AvailableStock() {
     (async () => {
       const { data, error } = await supabase
         .from("casks")
-        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region, country, about, awards)")
+        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region, country, about, image_url, founded_by, founded_year, famous_for, region_character, annual_production, export_markets, owner, website_url, visitor_centre, news, awards)")
         .eq("status", "available")
         .order("created_at", { ascending: false });
       if (error) toast({ title: "Could not load stock", description: error.message, variant: "destructive" });
@@ -369,43 +388,112 @@ export default function AvailableStock() {
       )}
 
       <Dialog open={!!infoCask} onOpenChange={(o) => !o && setInfoCask(null)}>
-        <DialogContent className="max-w-xl bg-card border-border">
-          <DialogHeader>
-            <DialogTitle className="display-heading text-3xl text-foreground">
-              {infoCask?.distilleries?.name ?? "Distillery"}
-            </DialogTitle>
-            <DialogDescription className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              {[infoCask?.distilleries?.region, infoCask?.distilleries?.country].filter(Boolean).join(" · ") || "—"}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="w-12 h-px bg-primary/60 my-1" />
-          <div className="space-y-5 max-h-[60vh] overflow-y-auto pr-1">
-            <section>
-              <h4 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">About</h4>
-              {infoCask?.distilleries?.about ? (
-                <p className="font-body text-sm text-foreground/90 whitespace-pre-line leading-relaxed">
-                  {infoCask.distilleries.about}
-                </p>
-              ) : (
-                <p className="font-body text-sm text-muted-foreground italic">No background information available yet.</p>
+        <DialogContent className="max-w-2xl bg-card border-border p-0 overflow-hidden">
+          {infoCask?.distilleries?.image_url && (
+            <div className="aspect-[16/9] bg-muted overflow-hidden">
+              <img
+                src={infoCask.distilleries.image_url}
+                alt={infoCask.distilleries.name}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          )}
+          <div className="px-6 pt-5 pb-6">
+            <DialogHeader>
+              <DialogTitle className="display-heading text-3xl text-foreground text-left">
+                {infoCask?.distilleries?.name ?? "Distillery"}
+              </DialogTitle>
+              <DialogDescription className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground text-left">
+                {[infoCask?.distilleries?.region, infoCask?.distilleries?.country].filter(Boolean).join(" · ") || "—"}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="w-12 h-px bg-primary/60 my-3" />
+            <div className="space-y-5 max-h-[55vh] overflow-y-auto pr-1">
+              {infoCask?.description && (
+                <InfoSection title="Cask Description">
+                  <p className="font-body text-sm text-foreground/90 whitespace-pre-line leading-relaxed">
+                    {infoCask.description}
+                  </p>
+                </InfoSection>
               )}
-            </section>
-            <section>
-              <h4 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">Awards</h4>
-              {infoCask?.distilleries?.awards ? (
-                <ul className="font-body text-sm text-foreground/90 space-y-1.5 list-disc pl-5">
-                  {infoCask.distilleries.awards
-                    .split("\n")
-                    .map((line) => line.trim())
-                    .filter(Boolean)
-                    .map((line, i) => (
-                      <li key={i}>{line}</li>
+
+              {infoCask?.distilleries && (() => {
+                const d = infoCask.distilleries;
+                const operatingYears = d.founded_year ? new Date().getFullYear() - d.founded_year : null;
+                const facts: [string, React.ReactNode][] = [];
+                if (d.founded_by) facts.push(["Founded by", d.founded_by]);
+                if (d.founded_year) facts.push(["Founded", `${d.founded_year}${operatingYears ? ` · ${operatingYears} years` : ""}`]);
+                if (d.famous_for) facts.push(["Famous for", d.famous_for]);
+                if (d.region_character) facts.push(["Region character", d.region_character]);
+                if (d.annual_production) facts.push(["Annual production", d.annual_production]);
+                if (d.export_markets) facts.push(["Key export markets", d.export_markets]);
+                if (d.owner) facts.push(["Owner", d.owner]);
+                if (d.visitor_centre) facts.push(["Visitor centre", d.visitor_centre]);
+                if (d.website_url) facts.push(["Website", (
+                  <a href={d.website_url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1">
+                    Visit site <ExternalLink className="w-3 h-3" />
+                  </a>
+                )]);
+                if (facts.length === 0) return null;
+                return (
+                  <InfoSection title="Distillery">
+                    <dl className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
+                      {facts.map(([label, value], i) => (
+                        <div key={i}>
+                          <dt className="font-body text-[10px] uppercase tracking-[0.18em] text-muted-foreground mb-0.5">{label}</dt>
+                          <dd className="font-body text-sm text-foreground/90">{value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </InfoSection>
+                );
+              })()}
+
+              {infoCask?.distilleries?.about && (
+                <InfoSection title="About">
+                  <p className="font-body text-sm text-foreground/90 whitespace-pre-line leading-relaxed">
+                    {infoCask.distilleries.about}
+                  </p>
+                </InfoSection>
+              )}
+
+              {infoCask?.distilleries?.news && infoCask.distilleries.news.length > 0 && (
+                <InfoSection title="In the news">
+                  <ul className="font-body text-sm space-y-1.5 list-disc pl-5">
+                    {infoCask.distilleries.news.map((n, i) => (
+                      <li key={i}>
+                        {n.url ? (
+                          <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1">
+                            {n.title || n.url} <ExternalLink className="w-3 h-3 shrink-0" />
+                          </a>
+                        ) : (
+                          <span className="text-foreground/90">{n.title}</span>
+                        )}
+                      </li>
                     ))}
-                </ul>
-              ) : (
-                <p className="font-body text-sm text-muted-foreground italic">No awards listed yet.</p>
+                  </ul>
+                </InfoSection>
               )}
-            </section>
+
+              {infoCask?.distilleries?.awards && infoCask.distilleries.awards.length > 0 && (
+                <InfoSection title="Awards">
+                  <ul className="font-body text-sm space-y-1.5 list-disc pl-5">
+                    {infoCask.distilleries.awards.map((a, i) => (
+                      <li key={i}>
+                        {a.url ? (
+                          <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1">
+                            {a.name || a.url} <ExternalLink className="w-3 h-3 shrink-0" />
+                          </a>
+                        ) : (
+                          <span className="text-foreground/90">{a.name}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </InfoSection>
+              )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
@@ -418,4 +506,11 @@ const Mini = ({ label, v }: { label: string; v: string }) => (
     <div className="font-body text-[8px] uppercase tracking-normal text-muted-foreground">{label}</div>
     <div className="font-body text-[11px] leading-tight mt-0.5 whitespace-nowrap">{v}</div>
   </div>
+);
+
+const InfoSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <section>
+    <h4 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">{title}</h4>
+    {children}
+  </section>
 );
