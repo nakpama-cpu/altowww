@@ -133,6 +133,7 @@ export default function PortalNews() {
           </Link>
         ))}
       </div>
+    )}
     </div>
   );
 }
