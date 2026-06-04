@@ -5,6 +5,10 @@ import taxBenefitsImg from "@/assets/tax-benefits.jpg";
 import bondedWarehouseImg from "@/assets/bonded-warehouse.jpg";
 import whiskyRegionsImg from "@/assets/whisky-regions.jpg";
 import chinaTradeImg from "@/assets/china-trade.jpg";
+import auctionCaskImg from "@/assets/auction-cask.jpg";
+import whiskyTourismImg from "@/assets/whisky-tourism.jpg";
+import sustainableWhiskyImg from "@/assets/sustainable-whisky.jpg";
+import heroDistilleryImg from "@/assets/hero-distillery.jpg";
 
 export interface Article {
   slug: string;
