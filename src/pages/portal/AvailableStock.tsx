@@ -409,7 +409,7 @@ export default function AvailableStock() {
               </DialogDescription>
             </DialogHeader>
             <div className="w-12 h-px bg-primary/60 my-3" />
-            <div className="space-y-5 max-h-[50vh] overflow-y-auto pr-1">
+            <div className="space-y-5">
               {infoCask?.description && (
                 <InfoSection title="Cask Description">
                   <p className="font-body text-sm text-foreground/90 whitespace-pre-line leading-relaxed">
