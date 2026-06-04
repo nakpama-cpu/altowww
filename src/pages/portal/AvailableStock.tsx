@@ -266,7 +266,7 @@ export default function AvailableStock() {
                   </div>
                   <h3 className="display-heading text-xl mb-1">{c.distilleries?.name ?? c.spirit}</h3>
                   <p className="font-body text-xs text-muted-foreground mb-4">
-                    {[c.distilleries?.region, c.cask_type, c.age_years ? `${c.age_years} yrs` : null].filter(Boolean).join(" · ")}
+                    {(() => { const a = computeCaskAge(c.fill_date, c.age_years); return [c.distilleries?.region, c.cask_type, a != null ? `${a} yrs` : null].filter(Boolean).join(" · "); })()}
                   </p>
                   <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
                     {c.abv && <Mini label="ABV" v={`${c.abv}%`} />}
