@@ -25,7 +25,24 @@ type Cask = {
   description: string | null;
   hero_image_url: string | null;
   created_at: string;
-  distilleries: { name: string; region: string | null; country: string | null; about: string | null; awards: string | null } | null;
+  distilleries: {
+    name: string;
+    region: string | null;
+    country: string | null;
+    about: string | null;
+    image_url: string | null;
+    founded_by: string | null;
+    founded_year: number | null;
+    famous_for: string | null;
+    region_character: string | null;
+    annual_production: string | null;
+    export_markets: string | null;
+    owner: string | null;
+    website_url: string | null;
+    visitor_centre: string | null;
+    news: LinkItem[] | null;
+    awards: LinkItem[] | null;
+  } | null;
 };
 
 export default function AvailableStock() {
