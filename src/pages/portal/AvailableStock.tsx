@@ -38,6 +38,7 @@ export default function AvailableStock() {
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
   const [sortBy, setSortBy] = useState<string>("");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+  const [infoCask, setInfoCask] = useState<Cask | null>(null);
   const discount = Number(profile?.client_discount_pct ?? 0);
 
   const suggestions = useMemo(() => {
