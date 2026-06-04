@@ -123,33 +123,66 @@ export type Database = {
       distilleries: {
         Row: {
           about: string | null
-          awards: string | null
+          annual_production: string | null
+          awards: Json
           country: string | null
           created_at: string
+          export_markets: string | null
+          famous_for: string | null
+          founded_by: string | null
+          founded_year: number | null
           id: string
+          image_url: string | null
           logo_url: string | null
           name: string
+          news: Json
+          owner: string | null
           region: string | null
+          region_character: string | null
+          visitor_centre: string | null
+          website_url: string | null
         }
         Insert: {
           about?: string | null
-          awards?: string | null
+          annual_production?: string | null
+          awards?: Json
           country?: string | null
           created_at?: string
+          export_markets?: string | null
+          famous_for?: string | null
+          founded_by?: string | null
+          founded_year?: number | null
           id?: string
+          image_url?: string | null
           logo_url?: string | null
           name: string
+          news?: Json
+          owner?: string | null
           region?: string | null
+          region_character?: string | null
+          visitor_centre?: string | null
+          website_url?: string | null
         }
         Update: {
           about?: string | null
-          awards?: string | null
+          annual_production?: string | null
+          awards?: Json
           country?: string | null
           created_at?: string
+          export_markets?: string | null
+          famous_for?: string | null
+          founded_by?: string | null
+          founded_year?: number | null
           id?: string
+          image_url?: string | null
           logo_url?: string | null
           name?: string
+          news?: Json
+          owner?: string | null
           region?: string | null
+          region_character?: string | null
+          visitor_centre?: string | null
+          website_url?: string | null
         }
         Relationships: []
       }
