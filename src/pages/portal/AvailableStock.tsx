@@ -23,7 +23,7 @@ type Cask = {
   description: string | null;
   hero_image_url: string | null;
   created_at: string;
-  distilleries: { name: string; region: string | null } | null;
+  distilleries: { name: string; region: string | null; country: string | null; about: string | null; awards: string | null } | null;
 };
 
 export default function AvailableStock() {
