@@ -249,7 +249,7 @@ export default function MyCasks() {
                   <Spec label="Spirit" value={r.casks.spirit} />
                   <Spec label="Cask Type" value={r.casks.cask_type} />
                   <Spec label="Fill Date" value={r.casks.fill_date} />
-                  <Spec label="Age" value={r.casks.age_years ? `${r.casks.age_years} yrs` : null} />
+                  {(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return <Spec label="Age" value={a != null ? `${a} yrs` : null} />; })()}
                   <Spec label="ABV" value={r.casks.abv ? `${r.casks.abv}%` : null} />
                   <Spec label="OLA" value={r.casks.ola_litres ? `${r.casks.ola_litres} L` : null} />
                   <Spec label="RLA" value={r.casks.rla_litres ? `${r.casks.rla_litres} L` : null} />
