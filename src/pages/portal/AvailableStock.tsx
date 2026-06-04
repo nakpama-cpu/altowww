@@ -361,8 +361,8 @@ export default function AvailableStock() {
 }
 
 const Mini = ({ label, v }: { label: string; v: string }) => (
-  <div className="border border-border p-1.5 text-center min-w-0">
-    <div className="font-body text-[9px] uppercase tracking-[0.15em] text-muted-foreground truncate">{label}</div>
-    <div className="font-body text-xs mt-0.5 truncate">{v}</div>
+  <div className="border border-border px-1 py-1.5 text-center min-w-0">
+    <div className="font-body text-[8px] uppercase tracking-normal text-muted-foreground">{label}</div>
+    <div className="font-body text-[11px] leading-tight mt-0.5 whitespace-nowrap">{v}</div>
   </div>
 );
