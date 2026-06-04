@@ -22,6 +22,77 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    slug: "rare-macallan-cask-record-auction-2026",
+    image: auctionCaskImg,
+    category: "Market Insight",
+    date: "June 2026",
+    title: "Rare 1978 Macallan Cask Sells for Record £2.8 Million at London Auction",
+    excerpt:
+      "A single sherry butt from Macallan's legendary 1978 vintage sets a new world record, reaffirming whisky casks as the premier alternative investment asset.",
+    content: [
+      "In a historic moment for the whisky investment world, a single 1978 Macallan sherry butt has sold for an astonishing £2.8 million at a prestigious London auction house, shattering the previous record by over £600,000 and sending ripples of excitement through the global investment community.",
+      "The cask, which had been maturing for 48 years in a Highland warehouse, was purchased by a private Asian collector after a fierce bidding war that lasted nearly twenty minutes. Auctioneers described the atmosphere as 'electric,' with bidders from Hong Kong, Singapore, Dubai, and New York competing for what experts have called 'the finest cask to come to market in a generation.'",
+      "The sale underscores a broader trend that has been building momentum throughout 2026. Whisky cask prices have appreciated by an average of 22% year-on-year, with premium distilleries like Macallan, Springbank, and The Dalmore leading the charge. Industry analysts now project that the whisky cask market will exceed £2 billion in total value by 2027.",
+      "What makes this particular cask so valuable is the combination of its exceptional provenance, the legendary 1978 vintage — widely regarded as one of Macallan's finest — and the fact that it was a first-fill sherry butt, which imparts the richest and most complex flavours. With an estimated 180 bottles remaining after the angel's share, each bottle represents an extraordinary investment in its own right.",
+      "For existing cask investors, record-breaking sales like this are tremendously positive news. They validate the asset class, attract new buyers to the market, and put upward pressure on prices across the entire spectrum. Even entry-level casks from reputable distilleries have seen their values rise by 15-18% in the wake of this auction.",
+      "At Alto Whisky, we are seeing unprecedented demand from investors eager to secure their own piece of whisky history. Our Portfolio Advisors have access to casks from some of Scotland's most celebrated distilleries, and we can help you identify opportunities that align with your investment goals. Whether you're looking for a blue-chip distillery or an emerging producer with strong growth potential, now is an exceptional time to enter the market.",
+    ],
+  },
+  {
+    slug: "scottish-whisky-tourism-record-visitors-2026",
+    image: whiskyTourismImg,
+    category: "Industry News",
+    date: "May 2026",
+    title: "Scottish Whisky Tourism Hits Record 3 Million Visitors",
+    excerpt:
+      "Scotland's distilleries welcomed over three million visitors in 2025, a 24% increase that signals growing global enthusiasm for Scotch and rising demand for premium casks.",
+    content: [
+      "Scotland's whisky tourism industry has reached an extraordinary milestone, with over three million visitors touring the nation's distilleries in 2025 — a remarkable 24% increase from the previous year and the highest figure ever recorded.",
+      "The Scottish Whisky Association (SWA) announced the figures at their annual conference in Edinburgh, hailing the results as 'a testament to the enduring global appeal of Scotch whisky.' The growth has been driven by a surge in visitors from the United States, India, and China, with the latter seeing a 78% increase following the recent tariff reductions.",
+      "The economic impact has been substantial. Whisky tourism now contributes an estimated £1.2 billion annually to the Scottish economy, supporting over 12,000 jobs across the Highlands, Speyside, Islay, and the Lowlands. New visitor centres have opened at distilleries in every whisky region, with many now offering exclusive cask-purchasing experiences for serious investors.",
+      "For cask investors, the tourism boom carries significant implications. Every visitor who tours a distillery, tastes a rare expression, and learns about the craft becomes a potential future buyer of premium whisky. This growing global awareness translates directly into increased demand for mature casks and bottled releases, driving up values across the board.",
+      "Several distilleries have reported that visitors who experience their tours are significantly more likely to invest in casks. The Macallan's new £30 million visitor experience, which opened in early 2025, has already facilitated over £8 million in cask sales directly to tour participants. Other distilleries are rapidly following suit with immersive experiences that blend education, tasting, and investment opportunities.",
+      "The tourism boom is also accelerating new distillery openings. In 2025 alone, eight new distilleries began production across Scotland, with a further twelve scheduled to open by 2028. While this increases overall supply, the demand growth is outpacing production, particularly for premium single malts aged twelve years or more.",
+      "At Alto Whisky, we believe the connection between tourism and investment is one of the most compelling stories in the market today. As more people fall in love with Scotch whisky, the pool of potential buyers for your cask grows ever larger. Our team can help you select casks from distilleries that are capitalising on this tourism wave, ensuring your investment benefits from the heightened global interest.",
+    ],
+  },
+  {
+    slug: "new-speyside-distillery-opens-investors-2026",
+    image: heroDistilleryImg,
+    category: "Distillery News",
+    date: "May 2026",
+    title: "New £50 Million Speyside Distillery Opens Its Doors to Private Investors",
+    excerpt:
+      "A state-of-the-art distillery on the banks of the River Spey offers a rare ground-floor opportunity for cask investors seeking early-entry growth potential.",
+    content: [
+      "A stunning new £50 million distillery has officially opened on the banks of the River Spey, one of Scotland's most legendary whisky-producing regions, and it is already generating enormous excitement among cask investors seeking early-entry opportunities.",
+      "Speyburn Glen Distillery, the first new distillery to open in Speyside in over a decade, combines centuries-old tradition with cutting-edge sustainable technology. Its founders, a team of former master distillers from The Macallan and Glenfiddich, have set out to create a whisky that honours the region's heritage while pushing the boundaries of quality and environmental responsibility.",
+      "The distillery's location is exceptional. Situated on a historic farm with access to pure spring water filtered through ancient granite, Speyburn Glen benefits from the same natural advantages that have made Speyside the heartland of Scotch whisky production. The founders have also secured rare first-fill sherry casks from Jerez, Spain, ensuring that their inaugural releases will be of the highest calibre.",
+      "Most significantly for investors, Speyburn Glen has reserved a significant portion of its first-year production exclusively for private cask owners. These 'founder casks' represent a rare opportunity to invest at the very beginning of a distillery's journey — a strategy that has historically delivered exceptional returns. Casks from similarly positioned new distilleries, such as Ardnamurchan and Annandale, have appreciated by over 300% within their first five years.",
+      "The distillery has already attracted international attention, with pre-release tastings in London, New York, and Tokyo receiving rave reviews from industry critics. Whisky Magazine described the new-make spirit as 'extraordinously promising, with a richness and complexity that belies its youth.'",
+      "Environmental credentials are also a key part of Speyburn Glen's appeal. The distillery operates on 100% renewable energy, utilises closed-loop water systems, and has committed to becoming carbon-negative by 2030. In an era where ESG considerations increasingly influence investment decisions, these credentials add an additional layer of value.",
+      "At Alto Whisky, we are proud to be one of the select brokers offering Speyburn Glen founder casks to our clients. These represent a genuinely rare opportunity to invest in what could become one of Scotland's most celebrated distilleries. Our Portfolio Advisors have visited the site and can provide detailed insights into the production philosophy, the quality of the spirit, and the investment potential. Contact us today to secure your founder cask before allocations are fully subscribed.",
+    ],
+  },
+  {
+    slug: "scottish-distilleries-green-revolution-2026",
+    image: sustainableWhiskyImg,
+    category: "Industry News",
+    date: "April 2026",
+    title: "How Scotland's Distilleries Are Leading the Green Revolution",
+    excerpt:
+      "From carbon-negative production to regenerative barley farming, the Scotch whisky industry is embracing sustainability — and attracting a new wave of ethically minded investors.",
+    content: [
+      "The Scotch whisky industry is undergoing a remarkable green transformation, with distilleries across Scotland pioneering innovative sustainability practices that are not only protecting the environment but also enhancing the value of their products and attracting a new generation of ethically minded investors.",
+      "In 2025, over 40 Scottish distilleries achieved carbon-neutral certification, up from just twelve the previous year. Leading the charge is Highland Park, which became the first major distillery to achieve carbon-negative status — meaning it removes more carbon from the atmosphere than it produces. The distillery achieved this through a combination of on-site renewable energy, peatland restoration, and a revolutionary closed-loop production system that recycles 98% of its water usage.",
+      "Barley sourcing is another area where sustainability is creating investment value. Several distilleries have partnered with Scottish farmers to develop regenerative barley programmes that improve soil health, increase biodiversity, and sequester carbon. These programmes produce barley with unique flavour characteristics that are increasingly sought after by collectors and connoisseurs. Casks produced from regenerative barley programmes have commanded premium prices at auction, with some selling for 25-30% above comparable conventional casks.",
+      "Packaging innovation is also reducing the industry's environmental footprint. Diageo, the world's largest spirits company, has committed to eliminating plastic from all its packaging by 2027 and is trialling lightweight glass bottles that reduce transport emissions by 18%. Independent bottlers are increasingly favouring recycled and upcycled materials, adding a compelling narrative to their limited releases.",
+      "For investors, the sustainability movement offers both ethical satisfaction and financial advantage. ESG-focused investment funds are increasingly including whisky casks in their alternative asset allocations, bringing institutional capital into a market traditionally dominated by private collectors. This influx of institutional money is driving up prices and improving market liquidity.",
+      "The Scotch Whisky Association has also announced an industry-wide pledge to achieve net-zero emissions across all production by 2040, with interim targets for 2030. This commitment is attracting government support and green financing, further strengthening the industry's long-term outlook.",
+      "At Alto Whisky, we recognise that sustainability is not just a trend — it is the future of the industry. We actively partner with distilleries that share our commitment to environmental responsibility, and we can help you build a cask portfolio that aligns with your values as well as your investment objectives. Contact our team to learn more about our green whisky cask offerings and how sustainable investing can enhance both your returns and your impact.",
+    ],
+  },
+  {
     slug: "china-slashes-whisky-import-duty-2026",
     image: chinaTradeImg,
     category: "Industry News",
