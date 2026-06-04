@@ -143,7 +143,7 @@ export default function AdminDistilleries() {
       <Input label="Founded by" value={state.founded_by} onChange={(v) => setState({ ...state, founded_by: v })} />
       <Input label="Founded year" value={state.founded_year} onChange={(v) => setState({ ...state, founded_year: v })} type="number" />
       <Input label="Logo URL (carousel)" value={state.logo_url} onChange={(v) => setState({ ...state, logo_url: v })} />
-      <Input label="Banner image URL (modal)" value={state.image_url} onChange={(v) => setState({ ...state, image_url: v })} />
+      <ImageUploader label="Banner image (modal)" value={state.image_url} onChange={(v) => setState({ ...state, image_url: v })} className="md:col-span-2" />
       <Input label="Website URL" value={state.website_url} onChange={(v) => setState({ ...state, website_url: v })} />
       <Input label="Visitor centre" value={state.visitor_centre} onChange={(v) => setState({ ...state, visitor_centre: v })} />
       <Input label="Famous for" value={state.famous_for} onChange={(v) => setState({ ...state, famous_for: v })} className="md:col-span-2" />
