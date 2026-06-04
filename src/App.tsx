@@ -29,6 +29,7 @@ import MyCasks from "./pages/portal/MyCasks";
 import AvailableStock from "./pages/portal/AvailableStock";
 import RequestCallback from "./pages/portal/RequestCallback";
 import Account from "./pages/portal/Account";
+import PortalNews from "./pages/portal/PortalNews";
 
 // Admin
 import AdminLayout from "./pages/admin/AdminLayout";
