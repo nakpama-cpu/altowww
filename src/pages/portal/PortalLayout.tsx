@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Menu } from "lucide-react";
+import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Menu, Newspaper } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect } from "react";
 
@@ -9,6 +9,7 @@ const navItems = [
   { to: "/portal", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/portal/my-casks", label: "My Casks", icon: Wine },
   { to: "/portal/available", label: "Available Stock", icon: Store },
+  { to: "/portal/news", label: "News", icon: Newspaper },
   { to: "/portal/callback", label: "Request Callback", icon: PhoneCall },
   { to: "/portal/account", label: "Account", icon: UserCog },
 ];
