@@ -507,3 +507,10 @@ const Mini = ({ label, v }: { label: string; v: string }) => (
     <div className="font-body text-[11px] leading-tight mt-0.5 whitespace-nowrap">{v}</div>
   </div>
 );
+
+const InfoSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <section>
+    <h4 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">{title}</h4>
+    {children}
+  </section>
+);
