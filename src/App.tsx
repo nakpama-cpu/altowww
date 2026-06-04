@@ -29,6 +29,7 @@ import MyCasks from "./pages/portal/MyCasks";
 import AvailableStock from "./pages/portal/AvailableStock";
 import RequestCallback from "./pages/portal/RequestCallback";
 import Account from "./pages/portal/Account";
+import PortalNews from "./pages/portal/PortalNews";
 
 // Admin
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -74,6 +75,7 @@ const App = () => (
                 <Route index element={<Dashboard />} />
                 <Route path="my-casks" element={<MyCasks />} />
                 <Route path="available" element={<AvailableStock />} />
+                <Route path="news" element={<PortalNews />} />
                 <Route path="callback" element={<RequestCallback />} />
                 <Route path="account" element={<Account />} />
               </Route>
