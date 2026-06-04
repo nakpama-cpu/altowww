@@ -388,7 +388,7 @@ export default function AvailableStock() {
       )}
 
       <Dialog open={!!infoCask} onOpenChange={(o) => !o && setInfoCask(null)}>
-        <DialogContent className="max-w-2xl bg-card border-border p-0 overflow-hidden">
+        <DialogContent className="max-w-2xl w-[calc(100%-2rem)] max-h-[85vh] bg-card border-border p-0 overflow-hidden">
           {infoCask?.distilleries?.image_url && (
             <div className="aspect-[16/9] bg-muted overflow-hidden">
               <img
@@ -409,7 +409,7 @@ export default function AvailableStock() {
               </DialogDescription>
             </DialogHeader>
             <div className="w-12 h-px bg-primary/60 my-3" />
-            <div className="space-y-5 max-h-[55vh] overflow-y-auto pr-1">
+            <div className="space-y-5 max-h-[50vh] overflow-y-auto pr-1">
               {infoCask?.description && (
                 <InfoSection title="Cask Description">
                   <p className="font-body text-sm text-foreground/90 whitespace-pre-line leading-relaxed">
