@@ -368,6 +368,47 @@ export default function AvailableStock() {
         </div>
       )}
 
+      <Dialog open={!!infoCask} onOpenChange={(o) => !o && setInfoCask(null)}>
+        <DialogContent className="max-w-xl bg-card border-border">
+          <DialogHeader>
+            <DialogTitle className="display-heading text-3xl text-foreground">
+              {infoCask?.distilleries?.name ?? "Distillery"}
+            </DialogTitle>
+            <DialogDescription className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              {[infoCask?.distilleries?.region, infoCask?.distilleries?.country].filter(Boolean).join(" · ") || "—"}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="w-12 h-px bg-primary/60 my-1" />
+          <div className="space-y-5 max-h-[60vh] overflow-y-auto pr-1">
+            <section>
+              <h4 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">About</h4>
+              {infoCask?.distilleries?.about ? (
+                <p className="font-body text-sm text-foreground/90 whitespace-pre-line leading-relaxed">
+                  {infoCask.distilleries.about}
+                </p>
+              ) : (
+                <p className="font-body text-sm text-muted-foreground italic">No background information available yet.</p>
+              )}
+            </section>
+            <section>
+              <h4 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">Awards</h4>
+              {infoCask?.distilleries?.awards ? (
+                <ul className="font-body text-sm text-foreground/90 space-y-1.5 list-disc pl-5">
+                  {infoCask.distilleries.awards
+                    .split("\n")
+                    .map((line) => line.trim())
+                    .filter(Boolean)
+                    .map((line, i) => (
+                      <li key={i}>{line}</li>
+                    ))}
+                </ul>
+              ) : (
+                <p className="font-body text-sm text-muted-foreground italic">No awards listed yet.</p>
+              )}
+            </section>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
