@@ -122,6 +122,8 @@ export type Database = {
       }
       distilleries: {
         Row: {
+          about: string | null
+          awards: string | null
           country: string | null
           created_at: string
           id: string
@@ -130,6 +132,8 @@ export type Database = {
           region: string | null
         }
         Insert: {
+          about?: string | null
+          awards?: string | null
           country?: string | null
           created_at?: string
           id?: string
@@ -138,6 +142,8 @@ export type Database = {
           region?: string | null
         }
         Update: {
+          about?: string | null
+          awards?: string | null
           country?: string | null
           created_at?: string
           id?: string

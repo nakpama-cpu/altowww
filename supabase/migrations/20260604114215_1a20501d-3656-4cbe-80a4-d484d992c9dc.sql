@@ -1,0 +1,1 @@
+ALTER TABLE public.distilleries ADD COLUMN IF NOT EXISTS about text, ADD COLUMN IF NOT EXISTS awards text;

@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown } from "lucide-react";
 import { computeCaskAge } from "@/lib/caskAge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 
 type Cask = {
@@ -22,7 +23,7 @@ type Cask = {
   description: string | null;
   hero_image_url: string | null;
   created_at: string;
-  distilleries: { name: string; region: string | null } | null;
+  distilleries: { name: string; region: string | null; country: string | null; about: string | null; awards: string | null } | null;
 };
 
 export default function AvailableStock() {
@@ -37,6 +38,7 @@ export default function AvailableStock() {
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
   const [sortBy, setSortBy] = useState<string>("");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+  const [infoCask, setInfoCask] = useState<Cask | null>(null);
   const discount = Number(profile?.client_discount_pct ?? 0);
 
   const suggestions = useMemo(() => {
@@ -68,7 +70,7 @@ export default function AvailableStock() {
     (async () => {
       const { data, error } = await supabase
         .from("casks")
-        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region)")
+        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region, country, about, awards)")
         .eq("status", "available")
         .order("created_at", { ascending: false });
       if (error) toast({ title: "Could not load stock", description: error.message, variant: "destructive" });
@@ -277,8 +279,15 @@ export default function AvailableStock() {
                     <Mini label="Filled" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
                   </div>
                   {c.description && (
-                    <p className="font-body text-sm text-muted-foreground mb-4 line-clamp-3">{c.description}</p>
+                    <p className="font-body text-sm text-muted-foreground mb-3 line-clamp-3">{c.description}</p>
                   )}
+                  <button
+                    type="button"
+                    onClick={() => setInfoCask(c)}
+                    className="self-start mb-4 font-body text-[10px] uppercase tracking-[0.2em] text-primary border border-primary/40 hover:bg-primary hover:text-primary-foreground transition-colors px-3 py-1.5"
+                  >
+                    More Info
+                  </button>
                   <div className="mt-auto pt-4 border-t border-border flex items-end justify-between">
                     <div>
                       {price && (
@@ -359,6 +368,47 @@ export default function AvailableStock() {
         </div>
       )}
 
+      <Dialog open={!!infoCask} onOpenChange={(o) => !o && setInfoCask(null)}>
+        <DialogContent className="max-w-xl bg-card border-border">
+          <DialogHeader>
+            <DialogTitle className="display-heading text-3xl text-foreground">
+              {infoCask?.distilleries?.name ?? "Distillery"}
+            </DialogTitle>
+            <DialogDescription className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              {[infoCask?.distilleries?.region, infoCask?.distilleries?.country].filter(Boolean).join(" · ") || "—"}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="w-12 h-px bg-primary/60 my-1" />
+          <div className="space-y-5 max-h-[60vh] overflow-y-auto pr-1">
+            <section>
+              <h4 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">About</h4>
+              {infoCask?.distilleries?.about ? (
+                <p className="font-body text-sm text-foreground/90 whitespace-pre-line leading-relaxed">
+                  {infoCask.distilleries.about}
+                </p>
+              ) : (
+                <p className="font-body text-sm text-muted-foreground italic">No background information available yet.</p>
+              )}
+            </section>
+            <section>
+              <h4 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">Awards</h4>
+              {infoCask?.distilleries?.awards ? (
+                <ul className="font-body text-sm text-foreground/90 space-y-1.5 list-disc pl-5">
+                  {infoCask.distilleries.awards
+                    .split("\n")
+                    .map((line) => line.trim())
+                    .filter(Boolean)
+                    .map((line, i) => (
+                      <li key={i}>{line}</li>
+                    ))}
+                </ul>
+              ) : (
+                <p className="font-body text-sm text-muted-foreground italic">No awards listed yet.</p>
+              )}
+            </section>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
