@@ -388,9 +388,9 @@ export default function AvailableStock() {
       )}
 
       <Dialog open={!!infoCask} onOpenChange={(o) => !o && setInfoCask(null)}>
-        <DialogContent className="max-w-2xl w-[calc(100%-2rem)] max-h-[85vh] bg-card border-border p-0 overflow-hidden">
+        <DialogContent className="max-w-2xl w-[calc(100%-2rem)] h-[85vh] bg-card border-border p-0 overflow-hidden flex flex-col">
           {infoCask?.distilleries?.image_url && (
-            <div className="aspect-[16/9] bg-muted overflow-hidden">
+            <div className="basis-1/3 shrink-0 bg-muted overflow-hidden">
               <img
                 src={infoCask.distilleries.image_url}
                 alt={infoCask.distilleries.name}
@@ -399,7 +399,7 @@ export default function AvailableStock() {
               />
             </div>
           )}
-          <div className="px-6 pt-5 pb-6">
+          <div className="px-6 pt-5 pb-6 flex-1 overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="display-heading text-3xl text-foreground text-left">
                 {infoCask?.distilleries?.name ?? "Distillery"}
