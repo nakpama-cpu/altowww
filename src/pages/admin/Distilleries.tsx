@@ -275,3 +275,66 @@ const LinkListEditor = ({
     </div>
   );
 };
+
+const ImageUploader = ({
+  label, value, onChange, className,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  className?: string;
+}) => {
+  const { toast } = useToast();
+  const [uploading, setUploading] = useState(false);
+
+  const handleFile = async (file: File) => {
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("distillery-images")
+        .upload(path, file, { contentType: file.type, upsert: false });
+      if (error) throw error;
+      const { data } = supabase.storage.from("distillery-images").getPublicUrl(path);
+      onChange(data.publicUrl);
+    } catch (e: any) {
+      toast({ title: "Upload failed", description: e.message, variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className={className}>
+      <label className="block text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{label}</label>
+      <div className="flex gap-3 items-start">
+        {value && (
+          <img src={value} alt="" className="w-32 h-20 object-cover border border-border shrink-0" />
+        )}
+        <div className="flex-1 space-y-2">
+          <input
+            type="file"
+            accept="image/*"
+            disabled={uploading}
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }}
+            className="block w-full text-xs"
+          />
+          <input
+            type="text"
+            placeholder="Or paste image URL"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full bg-transparent border border-border px-2 py-1 text-sm"
+          />
+          {uploading && <div className="text-xs text-muted-foreground">Uploading…</div>}
+          {value && (
+            <button type="button" onClick={() => onChange("")} className="text-xs text-destructive underline">
+              Remove image
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
