@@ -286,7 +286,7 @@ export default function MyCasks() {
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.spirit}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_type ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.fill_date ?? "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.age_years ? `${r.casks.age_years} yrs` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return a != null ? `${a} yrs` : "—"; })()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.abv ? `${r.casks.abv}%` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.ola_litres ? `${r.casks.ola_litres} L` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.rla_litres ? `${r.casks.rla_litres} L` : "—"}</td>
