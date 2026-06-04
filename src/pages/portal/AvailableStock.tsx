@@ -168,38 +168,44 @@ export default function AvailableStock() {
             </ul>
           )}
         </div>
-        <select
-          value={filterDistillery}
-          onChange={(e) => setFilterDistillery(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2 md:order-2 lg:order-none"
-        >
-          <option value="All">Distilleries</option>
-          {distilleries.map((d) => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0 md:col-span-2 lg:col-span-2 md:order-5 lg:order-none"
-        >
-          <option value="">Sort</option>
-          <option value="newest">Date Added (Newest)</option>
-          <option value="oldest">Date Added (Oldest)</option>
-          <option value="price_high">Price (High–Low)</option>
-          <option value="price_low">Price (Low–High)</option>
-          <option value="age_high">Age (High–Low)</option>
-          <option value="age_low">Age (Low–High)</option>
-          <option value="abv_high">ABV (High–Low)</option>
-          <option value="abv_low">ABV (Low–High)</option>
-          <option value="rla_high">RLA (High–Low)</option>
-          <option value="rla_low">RLA (Low–High)</option>
-          <option value="fill_new">Fill Date (Newest)</option>
-          <option value="fill_old">Fill Date (Oldest)</option>
-          <option value="distillery">Distillery (A–Z)</option>
-          <option value="spirit">Spirit (A–Z)</option>
-          <option value="cask_type">Cask Type (A–Z)</option>
-        </select>
+        <div className="relative min-w-0 md:col-span-2 lg:col-span-2 md:order-2 lg:order-none">
+          <select
+            value={filterDistillery}
+            onChange={(e) => setFilterDistillery(e.target.value)}
+            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
+            <option value="All">Distilleries</option>
+            {distilleries.map((d) => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        </div>
+        <div className="relative min-w-0 md:col-span-2 lg:col-span-2 md:order-5 lg:order-none">
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
+            <option value="">Sort</option>
+            <option value="newest">Date Added (Newest)</option>
+            <option value="oldest">Date Added (Oldest)</option>
+            <option value="price_high">Price (High–Low)</option>
+            <option value="price_low">Price (Low–High)</option>
+            <option value="age_high">Age (High–Low)</option>
+            <option value="age_low">Age (Low–High)</option>
+            <option value="abv_high">ABV (High–Low)</option>
+            <option value="abv_low">ABV (Low–High)</option>
+            <option value="rla_high">RLA (High–Low)</option>
+            <option value="rla_low">RLA (Low–High)</option>
+            <option value="fill_new">Fill Date (Newest)</option>
+            <option value="fill_old">Fill Date (Oldest)</option>
+            <option value="distillery">Distillery (A–Z)</option>
+            <option value="spirit">Spirit (A–Z)</option>
+            <option value="cask_type">Cask Type (A–Z)</option>
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        </div>
         <Input
           type="number"
           placeholder="Min £"
