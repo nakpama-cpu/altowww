@@ -173,26 +173,29 @@ export default function MyCasks() {
             </ul>
           )}
         </div>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
-        >
-          <option value="">Sort</option>
-          <option value="newest">Purchase Date (Newest)</option>
-          <option value="oldest">Purchase Date (Oldest)</option>
-          <option value="price_high">Purchase Price (High–Low)</option>
-          <option value="price_low">Purchase Price (Low–High)</option>
-          <option value="age_high">Age (High–Low)</option>
-          <option value="age_low">Age (Low–High)</option>
-          <option value="abv_high">ABV (High–Low)</option>
-          <option value="abv_low">ABV (Low–High)</option>
-          <option value="rla_high">RLA (High–Low)</option>
-          <option value="rla_low">RLA (Low–High)</option>
-          <option value="distillery">Distillery (A–Z)</option>
-          <option value="spirit">Spirit (A–Z)</option>
-          <option value="cask_type">Cask Type (A–Z)</option>
-        </select>
+        <div className="relative min-w-0 w-full">
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          >
+            <option value="">Sort</option>
+            <option value="newest">Purchase Date (Newest)</option>
+            <option value="oldest">Purchase Date (Oldest)</option>
+            <option value="price_high">Purchase Price (High–Low)</option>
+            <option value="price_low">Purchase Price (Low–High)</option>
+            <option value="age_high">Age (High–Low)</option>
+            <option value="age_low">Age (Low–High)</option>
+            <option value="abv_high">ABV (High–Low)</option>
+            <option value="abv_low">ABV (Low–High)</option>
+            <option value="rla_high">RLA (High–Low)</option>
+            <option value="rla_low">RLA (Low–High)</option>
+            <option value="distillery">Distillery (A–Z)</option>
+            <option value="spirit">Spirit (A–Z)</option>
+            <option value="cask_type">Cask Type (A–Z)</option>
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        </div>
         <button
           onClick={() => { setSearch(""); setSortBy(""); }}
           className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
