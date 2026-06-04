@@ -279,8 +279,15 @@ export default function AvailableStock() {
                     <Mini label="Filled" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
                   </div>
                   {c.description && (
-                    <p className="font-body text-sm text-muted-foreground mb-4 line-clamp-3">{c.description}</p>
+                    <p className="font-body text-sm text-muted-foreground mb-3 line-clamp-3">{c.description}</p>
                   )}
+                  <button
+                    type="button"
+                    onClick={() => setInfoCask(c)}
+                    className="self-start mb-4 font-body text-[10px] uppercase tracking-[0.2em] text-primary border border-primary/40 hover:bg-primary hover:text-primary-foreground transition-colors px-3 py-1.5"
+                  >
+                    More Info
+                  </button>
                   <div className="mt-auto pt-4 border-t border-border flex items-end justify-between">
                     <div>
                       {price && (
