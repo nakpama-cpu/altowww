@@ -75,6 +75,7 @@ const App = () => (
                 <Route index element={<Dashboard />} />
                 <Route path="my-casks" element={<MyCasks />} />
                 <Route path="available" element={<AvailableStock />} />
+                <Route path="news" element={<PortalNews />} />
                 <Route path="callback" element={<RequestCallback />} />
                 <Route path="account" element={<Account />} />
               </Route>
