@@ -175,7 +175,7 @@ export default function MyCasks() {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="w-full h-10 px-3 border border-border bg-card font-body text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
+          className="w-full h-10 px-3 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 min-w-0"
         >
           <option value="">Sort</option>
           <option value="newest">Purchase Date (Newest)</option>
