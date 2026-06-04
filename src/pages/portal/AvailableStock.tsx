@@ -332,7 +332,7 @@ export default function AvailableStock() {
                     <td className="px-4 py-3 whitespace-nowrap">{c.spirit}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.cask_type ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.fill_date ?? "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{c.age_years ? `${c.age_years} yrs` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{(() => { const a = computeCaskAge(c.fill_date, c.age_years); return a != null ? `${a} yrs` : "—"; })()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.abv ? `${c.abv}%` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.ola_litres ? `${c.ola_litres} L` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.rla_litres ? `${c.rla_litres} L` : "—"}</td>
