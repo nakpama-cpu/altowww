@@ -115,8 +115,8 @@ export default function AvailableStock() {
       case "oldest": sorted.sort((a, b) => date(a.created_at) - date(b.created_at)); break;
       case "price_high": sorted.sort((a, b) => num(priceFor(b.list_price)) - num(priceFor(a.list_price))); break;
       case "price_low": sorted.sort((a, b) => num(priceFor(a.list_price)) - num(priceFor(b.list_price))); break;
-      case "age_high": sorted.sort((a, b) => num(b.age_years) - num(a.age_years)); break;
-      case "age_low": sorted.sort((a, b) => num(a.age_years) - num(b.age_years)); break;
+      case "age_high": sorted.sort((a, b) => num(computeCaskAge(b.fill_date, b.age_years)) - num(computeCaskAge(a.fill_date, a.age_years))); break;
+      case "age_low": sorted.sort((a, b) => num(computeCaskAge(a.fill_date, a.age_years)) - num(computeCaskAge(b.fill_date, b.age_years))); break;
       case "abv_high": sorted.sort((a, b) => num(b.abv) - num(a.abv)); break;
       case "abv_low": sorted.sort((a, b) => num(a.abv) - num(b.abv)); break;
       case "rla_high": sorted.sort((a, b) => num(b.rla_litres) - num(a.rla_litres)); break;
