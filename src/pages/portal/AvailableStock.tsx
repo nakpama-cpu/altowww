@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Search, RotateCcw, LayoutGrid, Table2 } from "lucide-react";
+import { computeCaskAge } from "@/lib/caskAge";
 
 
 type Cask = {
@@ -114,8 +115,8 @@ export default function AvailableStock() {
       case "oldest": sorted.sort((a, b) => date(a.created_at) - date(b.created_at)); break;
       case "price_high": sorted.sort((a, b) => num(priceFor(b.list_price)) - num(priceFor(a.list_price))); break;
       case "price_low": sorted.sort((a, b) => num(priceFor(a.list_price)) - num(priceFor(b.list_price))); break;
-      case "age_high": sorted.sort((a, b) => num(b.age_years) - num(a.age_years)); break;
-      case "age_low": sorted.sort((a, b) => num(a.age_years) - num(b.age_years)); break;
+      case "age_high": sorted.sort((a, b) => num(computeCaskAge(b.fill_date, b.age_years)) - num(computeCaskAge(a.fill_date, a.age_years))); break;
+      case "age_low": sorted.sort((a, b) => num(computeCaskAge(a.fill_date, a.age_years)) - num(computeCaskAge(b.fill_date, b.age_years))); break;
       case "abv_high": sorted.sort((a, b) => num(b.abv) - num(a.abv)); break;
       case "abv_low": sorted.sort((a, b) => num(a.abv) - num(b.abv)); break;
       case "rla_high": sorted.sort((a, b) => num(b.rla_litres) - num(a.rla_litres)); break;
@@ -265,7 +266,7 @@ export default function AvailableStock() {
                   </div>
                   <h3 className="display-heading text-xl mb-1">{c.distilleries?.name ?? c.spirit}</h3>
                   <p className="font-body text-xs text-muted-foreground mb-4">
-                    {[c.distilleries?.region, c.cask_type, c.age_years ? `${c.age_years} yrs` : null].filter(Boolean).join(" · ")}
+                    {(() => { const a = computeCaskAge(c.fill_date, c.age_years); return [c.distilleries?.region, c.cask_type, a != null ? `${a} yrs` : null].filter(Boolean).join(" · "); })()}
                   </p>
                   <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
                     {c.abv && <Mini label="ABV" v={`${c.abv}%`} />}
@@ -331,7 +332,7 @@ export default function AvailableStock() {
                     <td className="px-4 py-3 whitespace-nowrap">{c.spirit}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.cask_type ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.fill_date ?? "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{c.age_years ? `${c.age_years} yrs` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{(() => { const a = computeCaskAge(c.fill_date, c.age_years); return a != null ? `${a} yrs` : "—"; })()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.abv ? `${c.abv}%` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.ola_litres ? `${c.ola_litres} L` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.rla_litres ? `${c.rla_litres} L` : "—"}</td>

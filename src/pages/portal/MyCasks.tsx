@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
+import { computeCaskAge } from "@/lib/caskAge";
 
 type Row = {
   id: string;
@@ -92,8 +93,8 @@ export default function MyCasks() {
       case "oldest": sorted.sort((a, b) => date(a.purchase_date) - date(b.purchase_date)); break;
       case "price_high": sorted.sort((a, b) => num(b.purchase_price) - num(a.purchase_price)); break;
       case "price_low": sorted.sort((a, b) => num(a.purchase_price) - num(b.purchase_price)); break;
-      case "age_high": sorted.sort((a, b) => num(b.casks.age_years) - num(a.casks.age_years)); break;
-      case "age_low": sorted.sort((a, b) => num(a.casks.age_years) - num(b.casks.age_years)); break;
+      case "age_high": sorted.sort((a, b) => num(computeCaskAge(b.casks.fill_date, b.casks.age_years)) - num(computeCaskAge(a.casks.fill_date, a.casks.age_years))); break;
+      case "age_low": sorted.sort((a, b) => num(computeCaskAge(a.casks.fill_date, a.casks.age_years)) - num(computeCaskAge(b.casks.fill_date, b.casks.age_years))); break;
       case "abv_high": sorted.sort((a, b) => num(b.casks.abv) - num(a.casks.abv)); break;
       case "abv_low": sorted.sort((a, b) => num(a.casks.abv) - num(b.casks.abv)); break;
       case "rla_high": sorted.sort((a, b) => num(b.casks.rla_litres) - num(a.casks.rla_litres)); break;
@@ -248,7 +249,7 @@ export default function MyCasks() {
                   <Spec label="Spirit" value={r.casks.spirit} />
                   <Spec label="Cask Type" value={r.casks.cask_type} />
                   <Spec label="Fill Date" value={r.casks.fill_date} />
-                  <Spec label="Age" value={r.casks.age_years ? `${r.casks.age_years} yrs` : null} />
+                  {(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return <Spec label="Age" value={a != null ? `${a} yrs` : null} />; })()}
                   <Spec label="ABV" value={r.casks.abv ? `${r.casks.abv}%` : null} />
                   <Spec label="OLA" value={r.casks.ola_litres ? `${r.casks.ola_litres} L` : null} />
                   <Spec label="RLA" value={r.casks.rla_litres ? `${r.casks.rla_litres} L` : null} />
@@ -285,7 +286,7 @@ export default function MyCasks() {
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.spirit}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_type ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.fill_date ?? "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.age_years ? `${r.casks.age_years} yrs` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return a != null ? `${a} yrs` : "—"; })()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.abv ? `${r.casks.abv}%` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.ola_litres ? `${r.casks.ola_litres} L` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.rla_litres ? `${r.casks.rla_litres} L` : "—"}</td>
