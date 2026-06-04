@@ -264,14 +264,14 @@ export default function AvailableStock() {
                   <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">
                     Cask #{c.cask_number}
                   </div>
-                  <h3 className="display-heading text-xl mb-1">{c.distilleries?.name ?? c.spirit}</h3>
-                  <p className="font-body text-xs text-muted-foreground mb-4">
+                  <h3 className="display-heading text-xl mb-1 min-h-[1.75rem]">{c.distilleries?.name ?? c.spirit}</h3>
+                  <p className="font-body text-xs text-muted-foreground mb-4 min-h-[2rem]">
                     {(() => { const a = computeCaskAge(c.fill_date, c.age_years); return [c.distilleries?.region, c.cask_type, a != null ? `${a} yrs` : null].filter(Boolean).join(" · "); })()}
                   </p>
                   <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
-                    {c.abv && <Mini label="ABV" v={`${c.abv}%`} />}
-                    {c.ola_litres && <Mini label="OLA" v={`${c.ola_litres} L`} />}
-                    {c.fill_date && <Mini label="Filled" v={c.fill_date.slice(0, 4)} />}
+                    <Mini label="ABV" v={c.abv ? `${c.abv}%` : "—"} />
+                    <Mini label="OLA" v={c.ola_litres ? `${c.ola_litres} L` : "—"} />
+                    <Mini label="Filled" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
                   </div>
                   {c.description && (
                     <p className="font-body text-sm text-muted-foreground mb-4 line-clamp-3">{c.description}</p>
