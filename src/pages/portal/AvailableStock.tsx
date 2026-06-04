@@ -227,22 +227,40 @@ export default function AvailableStock() {
           </select>
           <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         </div>
-        <Input
-          type="number"
-          step="500"
-          placeholder="Min £"
-          value={filterMinPrice}
-          onChange={(e) => setFilterMinPrice(e.target.value)}
-          className="w-full h-10 rounded-none border-border bg-card font-body text-sm md:col-span-2 lg:col-span-2 md:order-3 lg:order-none"
-        />
-        <Input
-          type="number"
-          step="500"
-          placeholder="Max £"
-          value={filterMaxPrice}
-          onChange={(e) => setFilterMaxPrice(e.target.value)}
-          className="w-full h-10 rounded-none border-border bg-card font-body text-sm md:col-span-2 lg:col-span-2 md:order-4 lg:order-none"
-        />
+        <div className="relative md:col-span-2 lg:col-span-2 md:order-3 lg:order-none">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground pointer-events-none z-10">£</span>
+          <Input
+            type="number"
+            min="0"
+            step="500"
+            placeholder="Min"
+            value={filterMinPrice}
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === "") setFilterMinPrice("");
+              else if (!v.startsWith("-") && Number(v) >= 0) setFilterMinPrice(v);
+            }}
+            onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
+            className="w-full h-10 rounded-none border-border bg-card font-body text-sm pl-7"
+          />
+        </div>
+        <div className="relative md:col-span-2 lg:col-span-2 md:order-4 lg:order-none">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground pointer-events-none z-10">£</span>
+          <Input
+            type="number"
+            min="0"
+            step="500"
+            placeholder="Max"
+            value={filterMaxPrice}
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === "") setFilterMaxPrice("");
+              else if (!v.startsWith("-") && Number(v) >= 0) setFilterMaxPrice(v);
+            }}
+            onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
+            className="w-full h-10 rounded-none border-border bg-card font-body text-sm pl-7"
+          />
+        </div>
         <button
           onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
           className="md:col-span-2 lg:col-span-2 w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground md:order-6 lg:order-none"
