@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2, RotateCcw } from "lucide-react";
+import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2, RotateCcw, ChevronDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { computeCaskAge } from "@/lib/caskAge";
