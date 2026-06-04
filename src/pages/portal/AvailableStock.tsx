@@ -3,9 +3,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown } from "lucide-react";
+import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink } from "lucide-react";
 import { computeCaskAge } from "@/lib/caskAge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+
+type LinkItem = { title?: string; name?: string; url?: string };
 
 
 type Cask = {
