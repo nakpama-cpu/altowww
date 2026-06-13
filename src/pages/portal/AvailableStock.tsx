@@ -50,25 +50,9 @@ export default function AvailableStock() {
   const { profile } = useAuth();
   const cart = useCart();
   const { toast } = useToast();
+  const [buyCask, setBuyCask] = useState<Cask | null>(null);
+  const [buyQty, setBuyQty] = useState<string>("1");
 
-  const addToCart = (c: Cask) => {
-    const unit = priceFor(c.list_price);
-    if (!c.list_price || unit == null) {
-      toast({ title: "No price set", description: "This cask is not yet priced.", variant: "destructive" });
-      return;
-    }
-    cart.add({
-      cask_id: c.id,
-      cask_number: c.cask_number,
-      distillery: c.distilleries?.name ?? "",
-      spirit: c.spirit,
-      list_price: Number(c.list_price),
-      unit_price: Number(unit),
-      currency: c.currency,
-      hero_image_url: c.hero_image_url,
-    });
-    toast({ title: "Added to cart", description: `Cask #${c.cask_number}` });
-  };
   const [casks, setCasks] = useState<Cask[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
