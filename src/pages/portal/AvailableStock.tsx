@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink } from "lucide-react";
+import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink, Check } from "lucide-react";
 import { computeCaskAge } from "@/lib/caskAge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
@@ -47,7 +48,27 @@ type Cask = {
 
 export default function AvailableStock() {
   const { profile } = useAuth();
+  const cart = useCart();
   const { toast } = useToast();
+
+  const addToCart = (c: Cask) => {
+    const unit = priceFor(c.list_price);
+    if (!c.list_price || unit == null) {
+      toast({ title: "No price set", description: "This cask is not yet priced.", variant: "destructive" });
+      return;
+    }
+    cart.add({
+      cask_id: c.id,
+      cask_number: c.cask_number,
+      distillery: c.distilleries?.name ?? "",
+      spirit: c.spirit,
+      list_price: Number(c.list_price),
+      unit_price: Number(unit),
+      currency: c.currency,
+      hero_image_url: c.hero_image_url,
+    });
+    toast({ title: "Added to cart", description: `Cask #${c.cask_number}` });
+  };
   const [casks, setCasks] = useState<Cask[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -343,11 +364,15 @@ export default function AvailableStock() {
                       )}
                     </div>
                     <button
-                      disabled
-                      className="font-body text-xs uppercase tracking-[0.2em] bg-primary/40 text-primary-foreground px-5 py-2 cursor-not-allowed"
-                      title="Checkout activates once payments are enabled"
+                      onClick={() => addToCart(c)}
+                      disabled={cart.has(c.id)}
+                      className={`font-body text-xs uppercase tracking-[0.2em] px-5 py-2 transition-opacity flex items-center gap-1.5 ${
+                        cart.has(c.id)
+                          ? "bg-muted text-muted-foreground cursor-default"
+                          : "bg-primary text-primary-foreground hover:opacity-90"
+                      }`}
                     >
-                      Buy
+                      {cart.has(c.id) ? (<><Check className="w-3.5 h-3.5" /> In Cart</>) : "Add to Cart"}
                     </button>
                   </div>
                 </div>
@@ -392,11 +417,15 @@ export default function AvailableStock() {
                     </td>
                     <td className="pl-4 pr-6 py-3 whitespace-nowrap">
                       <button
-                        disabled
-                        className="font-body text-[10px] uppercase tracking-[0.15em] bg-primary/40 text-primary-foreground px-3 py-1 cursor-not-allowed"
-                        title="Checkout activates once payments are enabled"
+                        onClick={() => addToCart(c)}
+                        disabled={cart.has(c.id)}
+                        className={`font-body text-[10px] uppercase tracking-[0.15em] px-3 py-1 transition-opacity ${
+                          cart.has(c.id)
+                            ? "bg-muted text-muted-foreground cursor-default"
+                            : "bg-primary text-primary-foreground hover:opacity-90"
+                        }`}
                       >
-                        Buy
+                        {cart.has(c.id) ? "In Cart" : "Add"}
                       </button>
                     </td>
                   </tr>
