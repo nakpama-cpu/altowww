@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink, Check } from "lucide-react";
+import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink } from "lucide-react";
 import { computeCaskAge } from "@/lib/caskAge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
@@ -50,25 +50,9 @@ export default function AvailableStock() {
   const { profile } = useAuth();
   const cart = useCart();
   const { toast } = useToast();
+  const [buyCask, setBuyCask] = useState<Cask | null>(null);
+  const [buyQty, setBuyQty] = useState<string>("1");
 
-  const addToCart = (c: Cask) => {
-    const unit = priceFor(c.list_price);
-    if (!c.list_price || unit == null) {
-      toast({ title: "No price set", description: "This cask is not yet priced.", variant: "destructive" });
-      return;
-    }
-    cart.add({
-      cask_id: c.id,
-      cask_number: c.cask_number,
-      distillery: c.distilleries?.name ?? "",
-      spirit: c.spirit,
-      list_price: Number(c.list_price),
-      unit_price: Number(unit),
-      currency: c.currency,
-      hero_image_url: c.hero_image_url,
-    });
-    toast({ title: "Added to cart", description: `Cask #${c.cask_number}` });
-  };
   const [casks, setCasks] = useState<Cask[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -128,6 +112,36 @@ export default function AvailableStock() {
     if (!list) return null;
     return discount > 0 ? list * (1 - discount / 100) : list;
   };
+
+  const openBuy = (c: Cask) => {
+    if (!c.list_price) {
+      toast({ title: "No price set", description: "This cask is not yet priced.", variant: "destructive" });
+      return;
+    }
+    setBuyCask(c);
+    setBuyQty("1");
+  };
+
+  const confirmAddToCart = () => {
+    if (!buyCask) return;
+    const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
+    const unit = priceFor(buyCask.list_price);
+    if (unit == null) return;
+    cart.add({
+      cask_id: buyCask.id,
+      cask_number: buyCask.cask_number,
+      distillery: buyCask.distilleries?.name ?? "",
+      spirit: buyCask.spirit,
+      list_price: Number(buyCask.list_price),
+      unit_price: Number(unit),
+      currency: buyCask.currency,
+      hero_image_url: buyCask.hero_image_url,
+      quantity: qty,
+    });
+    toast({ title: "Added to cart", description: `${qty} × Cask #${buyCask.cask_number}` });
+    setBuyCask(null);
+  };
+
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
@@ -364,15 +378,10 @@ export default function AvailableStock() {
                       )}
                     </div>
                     <button
-                      onClick={() => addToCart(c)}
-                      disabled={cart.has(c.id)}
-                      className={`font-body text-xs uppercase tracking-[0.2em] px-5 py-2 transition-opacity flex items-center gap-1.5 ${
-                        cart.has(c.id)
-                          ? "bg-muted text-muted-foreground cursor-default"
-                          : "bg-primary text-primary-foreground hover:opacity-90"
-                      }`}
+                      onClick={() => openBuy(c)}
+                      className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 transition-opacity"
                     >
-                      {cart.has(c.id) ? (<><Check className="w-3.5 h-3.5" /> In Cart</>) : "Add to Cart"}
+                      Buy
                     </button>
                   </div>
                 </div>
@@ -417,15 +426,10 @@ export default function AvailableStock() {
                     </td>
                     <td className="pl-4 pr-6 py-3 whitespace-nowrap">
                       <button
-                        onClick={() => addToCart(c)}
-                        disabled={cart.has(c.id)}
-                        className={`font-body text-[10px] uppercase tracking-[0.15em] px-3 py-1 transition-opacity ${
-                          cart.has(c.id)
-                            ? "bg-muted text-muted-foreground cursor-default"
-                            : "bg-primary text-primary-foreground hover:opacity-90"
-                        }`}
+                        onClick={() => openBuy(c)}
+                        className="font-body text-[10px] uppercase tracking-[0.15em] bg-primary text-primary-foreground px-3 py-1 hover:opacity-90 transition-opacity"
                       >
-                        {cart.has(c.id) ? "In Cart" : "Add"}
+                        Buy
                       </button>
                     </td>
                   </tr>
@@ -544,6 +548,76 @@ export default function AvailableStock() {
               )}
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!buyCask} onOpenChange={(o) => !o && setBuyCask(null)}>
+        <DialogContent className="max-w-md w-[calc(100%-2rem)] bg-card border-border">
+          <DialogHeader>
+            <DialogTitle className="display-heading text-2xl text-foreground text-left">
+              {buyCask?.distilleries?.name ?? buyCask?.spirit}
+            </DialogTitle>
+            <DialogDescription className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground text-left">
+              Cask #{buyCask?.cask_number}
+            </DialogDescription>
+          </DialogHeader>
+          {buyCask && (() => {
+            const unit = priceFor(buyCask.list_price) ?? 0;
+            const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
+            const total = unit * qty;
+            return (
+              <div className="space-y-5 mt-2">
+                <div className="flex items-center justify-between font-body text-sm">
+                  <span className="text-muted-foreground">Price per cask</span>
+                  <span className="text-primary display-heading text-xl">£{Math.round(unit).toLocaleString()}</span>
+                </div>
+                <div>
+                  <label className="block font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">
+                    Number of casks
+                  </label>
+                  <div className="flex items-stretch border border-border">
+                    <button
+                      type="button"
+                      onClick={() => setBuyQty(String(Math.max(1, qty - 1)))}
+                      className="px-4 bg-muted hover:bg-muted/70 font-body text-lg"
+                    >
+                      −
+                    </button>
+                    <Input
+                      type="number"
+                      min="1"
+                      step="1"
+                      value={buyQty}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        if (v === "") setBuyQty("");
+                        else if (!v.startsWith("-") && Number(v) >= 0) setBuyQty(v);
+                      }}
+                      onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
+                      className="flex-1 h-12 rounded-none border-0 text-center font-body text-base"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setBuyQty(String(qty + 1))}
+                      className="px-4 bg-muted hover:bg-muted/70 font-body text-lg"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div className="border-t border-border pt-4 flex items-end justify-between">
+                  <span className="font-body text-sm text-muted-foreground">Total</span>
+                  <span className="display-heading text-3xl text-primary">£{Math.round(total).toLocaleString()}</span>
+                </div>
+                <button
+                  onClick={confirmAddToCart}
+                  className="w-full font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            );
+          })()}
         </DialogContent>
       </Dialog>
     </div>
