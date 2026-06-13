@@ -5,6 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Menu, Newspaper, ShoppingBag } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect } from "react";
+import CheckoutFab from "@/components/CheckoutFab";
 
 const navItems = [
   { to: "/portal", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -108,6 +109,7 @@ export default function PortalLayout() {
       <main className="flex-1 p-4 md:p-6 lg:p-12 overflow-x-hidden">
         <Outlet />
       </main>
+      <CheckoutFab />
     </div>
   );
 }
