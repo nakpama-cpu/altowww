@@ -30,6 +30,8 @@ import AvailableStock from "./pages/portal/AvailableStock";
 import RequestCallback from "./pages/portal/RequestCallback";
 import Account from "./pages/portal/Account";
 import PortalNews from "./pages/portal/PortalNews";
+import Checkout from "./pages/portal/Checkout";
+import { CartProvider } from "./contexts/CartContext";
 
 // Admin
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -49,6 +51,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          <CartProvider>
           <BrochureModalProvider>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -76,6 +79,7 @@ const App = () => (
                 <Route path="my-casks" element={<MyCasks />} />
                 <Route path="available" element={<AvailableStock />} />
                 <Route path="news" element={<PortalNews />} />
+                <Route path="checkout" element={<Checkout />} />
                 <Route path="callback" element={<RequestCallback />} />
                 <Route path="account" element={<Account />} />
               </Route>
@@ -93,6 +97,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrochureModalProvider>
+          </CartProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
