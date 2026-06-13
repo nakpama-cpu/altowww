@@ -559,11 +559,10 @@ export default function AvailableStock() {
             </DialogTitle>
           </DialogHeader>
           {buyCask && (
-            <div className="grid grid-cols-5 gap-2 mt-1">
+            <div className="grid grid-cols-4 gap-3 mt-1">
               <Mini label="Cask Type" v={buyCask.cask_type ?? "—"} />
               <Mini label="ABV" v={buyCask.abv ? `${buyCask.abv}%` : "—"} />
               <Mini label="Age" v={(() => { const a = computeCaskAge(buyCask.fill_date, buyCask.age_years); return a != null ? `${a} yrs` : "—"; })()} />
-              <Mini label="Filled" v={buyCask.fill_date ?? "—"} />
               <Mini label="OLA" v={buyCask.ola_litres ? `${buyCask.ola_litres} L` : "—"} />
             </div>
           )}
