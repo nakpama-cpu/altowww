@@ -550,6 +550,76 @@ export default function AvailableStock() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={!!buyCask} onOpenChange={(o) => !o && setBuyCask(null)}>
+        <DialogContent className="max-w-md w-[calc(100%-2rem)] bg-card border-border">
+          <DialogHeader>
+            <DialogTitle className="display-heading text-2xl text-foreground text-left">
+              {buyCask?.distilleries?.name ?? buyCask?.spirit}
+            </DialogTitle>
+            <DialogDescription className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground text-left">
+              Cask #{buyCask?.cask_number}
+            </DialogDescription>
+          </DialogHeader>
+          {buyCask && (() => {
+            const unit = priceFor(buyCask.list_price) ?? 0;
+            const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
+            const total = unit * qty;
+            return (
+              <div className="space-y-5 mt-2">
+                <div className="flex items-center justify-between font-body text-sm">
+                  <span className="text-muted-foreground">Price per cask</span>
+                  <span className="text-primary display-heading text-xl">£{Math.round(unit).toLocaleString()}</span>
+                </div>
+                <div>
+                  <label className="block font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">
+                    Number of casks
+                  </label>
+                  <div className="flex items-stretch border border-border">
+                    <button
+                      type="button"
+                      onClick={() => setBuyQty(String(Math.max(1, qty - 1)))}
+                      className="px-4 bg-muted hover:bg-muted/70 font-body text-lg"
+                    >
+                      −
+                    </button>
+                    <Input
+                      type="number"
+                      min="1"
+                      step="1"
+                      value={buyQty}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        if (v === "") setBuyQty("");
+                        else if (!v.startsWith("-") && Number(v) >= 0) setBuyQty(v);
+                      }}
+                      onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
+                      className="flex-1 h-12 rounded-none border-0 text-center font-body text-base"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setBuyQty(String(qty + 1))}
+                      className="px-4 bg-muted hover:bg-muted/70 font-body text-lg"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div className="border-t border-border pt-4 flex items-end justify-between">
+                  <span className="font-body text-sm text-muted-foreground">Total</span>
+                  <span className="display-heading text-3xl text-primary">£{Math.round(total).toLocaleString()}</span>
+                </div>
+                <button
+                  onClick={confirmAddToCart}
+                  className="w-full font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
