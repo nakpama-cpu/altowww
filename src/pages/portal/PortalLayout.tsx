@@ -75,6 +75,7 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { 
 
 export default function PortalLayout() {
   const { profile, isAdmin, signOut } = useAuth();
+  const { count: cartCount } = useCart();
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
@@ -94,14 +95,14 @@ export default function PortalLayout() {
             </button>
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-72 max-w-[85vw] bg-secondary border-secondary-foreground/10">
-            <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} onNavigate={() => setOpen(false)} />
+            <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} onNavigate={() => setOpen(false)} cartCount={cartCount} />
           </SheetContent>
         </Sheet>
       </header>
 
       {/* Desktop sidebar */}
       <aside className="hidden md:flex md:flex-col md:w-72 md:h-screen md:sticky md:top-0 border-r border-secondary-foreground/10">
-        <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} />
+        <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} cartCount={cartCount} />
       </aside>
 
       <main className="flex-1 p-4 md:p-6 lg:p-12 overflow-x-hidden">
