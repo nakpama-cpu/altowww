@@ -378,15 +378,10 @@ export default function AvailableStock() {
                       )}
                     </div>
                     <button
-                      onClick={() => addToCart(c)}
-                      disabled={cart.has(c.id)}
-                      className={`font-body text-xs uppercase tracking-[0.2em] px-5 py-2 transition-opacity flex items-center gap-1.5 ${
-                        cart.has(c.id)
-                          ? "bg-muted text-muted-foreground cursor-default"
-                          : "bg-primary text-primary-foreground hover:opacity-90"
-                      }`}
+                      onClick={() => openBuy(c)}
+                      className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 transition-opacity"
                     >
-                      {cart.has(c.id) ? (<><Check className="w-3.5 h-3.5" /> In Cart</>) : "Add to Cart"}
+                      Buy
                     </button>
                   </div>
                 </div>
@@ -431,15 +426,10 @@ export default function AvailableStock() {
                     </td>
                     <td className="pl-4 pr-6 py-3 whitespace-nowrap">
                       <button
-                        onClick={() => addToCart(c)}
-                        disabled={cart.has(c.id)}
-                        className={`font-body text-[10px] uppercase tracking-[0.15em] px-3 py-1 transition-opacity ${
-                          cart.has(c.id)
-                            ? "bg-muted text-muted-foreground cursor-default"
-                            : "bg-primary text-primary-foreground hover:opacity-90"
-                        }`}
+                        onClick={() => openBuy(c)}
+                        className="font-body text-[10px] uppercase tracking-[0.15em] bg-primary text-primary-foreground px-3 py-1 hover:opacity-90 transition-opacity"
                       >
-                        {cart.has(c.id) ? "In Cart" : "Add"}
+                        Buy
                       </button>
                     </td>
                   </tr>
