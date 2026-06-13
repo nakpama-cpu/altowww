@@ -557,10 +557,16 @@ export default function AvailableStock() {
             <DialogTitle className="display-heading text-2xl text-foreground text-left">
               {buyCask?.distilleries?.name ?? buyCask?.spirit}
             </DialogTitle>
-            <DialogDescription className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground text-left">
-              Cask #{buyCask?.cask_number}
-            </DialogDescription>
           </DialogHeader>
+          {buyCask && (
+            <div className="grid grid-cols-5 gap-2 mt-1">
+              <Mini label="Cask Type" v={buyCask.cask_type ?? "—"} />
+              <Mini label="ABV" v={buyCask.abv ? `${buyCask.abv}%` : "—"} />
+              <Mini label="Age" v={(() => { const a = computeCaskAge(buyCask.fill_date, buyCask.age_years); return a != null ? `${a} yrs` : "—"; })()} />
+              <Mini label="Filled" v={buyCask.fill_date ?? "—"} />
+              <Mini label="OLA" v={buyCask.ola_litres ? `${buyCask.ola_litres} L` : "—"} />
+            </div>
+          )}
           {buyCask && (() => {
             const unit = priceFor(buyCask.list_price) ?? 0;
             const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
