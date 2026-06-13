@@ -113,6 +113,36 @@ export default function AvailableStock() {
     return discount > 0 ? list * (1 - discount / 100) : list;
   };
 
+  const openBuy = (c: Cask) => {
+    if (!c.list_price) {
+      toast({ title: "No price set", description: "This cask is not yet priced.", variant: "destructive" });
+      return;
+    }
+    setBuyCask(c);
+    setBuyQty("1");
+  };
+
+  const confirmAddToCart = () => {
+    if (!buyCask) return;
+    const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
+    const unit = priceFor(buyCask.list_price);
+    if (unit == null) return;
+    cart.add({
+      cask_id: buyCask.id,
+      cask_number: buyCask.cask_number,
+      distillery: buyCask.distilleries?.name ?? "",
+      spirit: buyCask.spirit,
+      list_price: Number(buyCask.list_price),
+      unit_price: Number(unit),
+      currency: buyCask.currency,
+      hero_image_url: buyCask.hero_image_url,
+      quantity: qty,
+    });
+    toast({ title: "Added to cart", description: `${qty} × Cask #${buyCask.cask_number}` });
+    setBuyCask(null);
+  };
+
+
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim();
     const min = filterMinPrice ? Number(filterMinPrice) : null;
