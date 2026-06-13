@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function Checkout() {
-  const { items, remove, clear, subtotal } = useCart();
+  const { items, remove, setQuantity, clear, subtotal, count } = useCart();
   const { user, profile } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -18,13 +18,16 @@ export default function Checkout() {
   const placeOrder = async () => {
     if (!user || items.length === 0) return;
     setPlacing(true);
-    const rows = items.map((i) => ({
-      buyer_id: user.id,
-      cask_id: i.cask_id,
-      amount: Number(i.unit_price.toFixed(2)),
-      currency: i.currency,
-      status: "pending" as const,
-    }));
+    // Expand by quantity — one order row per cask unit
+    const rows = items.flatMap((i) =>
+      Array.from({ length: i.quantity }, () => ({
+        buyer_id: user.id,
+        cask_id: i.cask_id,
+        amount: Number(i.unit_price.toFixed(2)),
+        currency: i.currency,
+        status: "pending" as const,
+      })),
+    );
     const { error } = await supabase.from("orders").insert(rows);
     setPlacing(false);
     if (error) {
@@ -70,45 +73,61 @@ export default function Checkout() {
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-3">
-          {items.map((i) => (
-            <div key={i.cask_id} className="bg-card border border-border p-4 flex items-center gap-4">
-              <div className="w-20 h-20 bg-muted flex-shrink-0 overflow-hidden">
-                {i.hero_image_url ? (
-                  <img src={i.hero_image_url} alt={i.cask_number} className="w-full h-full object-cover" />
-                ) : null}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="display-heading text-lg truncate">{i.distillery || i.spirit}</div>
-                <div className="font-body text-xs text-muted-foreground">
-                  Cask #{i.cask_number} · {i.spirit}
+          {items.map((i) => {
+            const lineTotal = i.unit_price * i.quantity;
+            return (
+              <div key={i.cask_id} className="bg-card border border-border p-4 flex items-center gap-4">
+                <div className="w-20 h-20 bg-muted flex-shrink-0 overflow-hidden">
+                  {i.hero_image_url ? (
+                    <img src={i.hero_image_url} alt={i.cask_number} className="w-full h-full object-cover" />
+                  ) : null}
                 </div>
-              </div>
-              <div className="text-right">
-                {discount > 0 && i.list_price !== i.unit_price && (
-                  <div className="font-body text-xs text-muted-foreground line-through">
-                    £{Number(i.list_price).toLocaleString()}
+                <div className="flex-1 min-w-0">
+                  <div className="display-heading text-lg truncate">{i.distillery || i.spirit}</div>
+                  <div className="font-body text-xs text-muted-foreground">
+                    Cask #{i.cask_number} · {i.spirit}
                   </div>
-                )}
-                <div className="display-heading text-lg text-primary">
-                  £{Math.round(i.unit_price).toLocaleString()}
+                  <div className="font-body text-xs text-muted-foreground mt-1">
+                    £{Math.round(i.unit_price).toLocaleString()} each
+                  </div>
                 </div>
+                <div className="flex items-stretch border border-border h-9">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(i.cask_id, i.quantity - 1)}
+                    className="px-3 bg-muted hover:bg-muted/70 font-body"
+                    aria-label="Decrease quantity"
+                  >−</button>
+                  <span className="px-3 min-w-[2.5rem] flex items-center justify-center font-body text-sm">{i.quantity}</span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(i.cask_id, i.quantity + 1)}
+                    className="px-3 bg-muted hover:bg-muted/70 font-body"
+                    aria-label="Increase quantity"
+                  >+</button>
+                </div>
+                <div className="text-right min-w-[5rem]">
+                  <div className="display-heading text-lg text-primary">
+                    £{Math.round(lineTotal).toLocaleString()}
+                  </div>
+                </div>
+                <button
+                  onClick={() => remove(i.cask_id)}
+                  className="p-2 text-muted-foreground hover:text-destructive transition-colors"
+                  aria-label="Remove from cart"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
               </div>
-              <button
-                onClick={() => remove(i.cask_id)}
-                className="p-2 text-muted-foreground hover:text-destructive transition-colors"
-                aria-label="Remove from cart"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <aside className="bg-card border border-border p-6 h-fit">
           <h2 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-4">Order Summary</h2>
           <div className="flex justify-between font-body text-sm py-2">
-            <span className="text-muted-foreground">Items</span>
-            <span>{items.length}</span>
+            <span className="text-muted-foreground">Casks</span>
+            <span>{count}</span>
           </div>
           <div className="flex justify-between font-body text-sm py-2 border-t border-border">
             <span className="text-muted-foreground">Subtotal</span>
