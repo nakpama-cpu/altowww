@@ -58,63 +58,63 @@ export default function LoginModal({ open, onClose }: Props) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md bg-card border border-border p-8 md:p-10 relative max-h-[90vh] overflow-y-auto"
+        className="w-full max-w-md bg-secondary text-secondary-foreground border border-primary/30 p-8 md:p-10 relative max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+          className="absolute top-4 right-4 text-secondary-foreground/60 hover:text-primary transition-colors"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
-        <h2 className="display-heading text-2xl mb-2">Client Portal</h2>
-        <p className="font-body text-sm text-muted-foreground mb-8">Sign in to view your portfolio.</p>
+        <h2 className="display-heading text-2xl mb-2 text-secondary-foreground">Client Portal</h2>
+        <p className="font-body text-sm text-secondary-foreground/60 mb-8">Sign in to view your portfolio.</p>
 
         <div className="space-y-3 mb-6">
           <button
             onClick={() => handleOAuth("google")}
             type="button"
-            className="w-full font-body text-xs uppercase tracking-[0.25em] border border-border py-3 hover:bg-muted transition-colors"
+            className="w-full font-body text-xs uppercase tracking-[0.25em] border border-secondary-foreground/20 text-secondary-foreground py-3 hover:border-primary hover:text-primary transition-colors"
           >
             Continue with Google
           </button>
           <button
             onClick={() => handleOAuth("apple")}
             type="button"
-            className="w-full font-body text-xs uppercase tracking-[0.25em] border border-border py-3 hover:bg-muted transition-colors"
+            className="w-full font-body text-xs uppercase tracking-[0.25em] border border-secondary-foreground/20 text-secondary-foreground py-3 hover:border-primary hover:text-primary transition-colors"
           >
             Continue with Apple
           </button>
         </div>
 
         <div className="relative my-6 text-center">
-          <span className="bg-card px-3 text-[10px] uppercase tracking-[0.25em] text-muted-foreground relative z-10">or</span>
-          <div className="absolute inset-x-0 top-1/2 h-px bg-border" />
+          <span className="bg-secondary px-3 text-[10px] uppercase tracking-[0.25em] text-secondary-foreground/50 relative z-10">or</span>
+          <div className="absolute inset-x-0 top-1/2 h-px bg-secondary-foreground/15" />
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Email</label>
+            <label className="block font-body text-xs uppercase tracking-[0.15em] text-secondary-foreground/60 mb-2">Email</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+              className="w-full bg-transparent border-b border-secondary-foreground/20 py-2 font-body text-sm text-secondary-foreground focus:outline-none focus:border-primary"
             />
           </div>
           <div>
-            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Password</label>
+            <label className="block font-body text-xs uppercase tracking-[0.15em] text-secondary-foreground/60 mb-2">Password</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+              className="w-full bg-transparent border-b border-secondary-foreground/20 py-2 font-body text-sm text-secondary-foreground focus:outline-none focus:border-primary"
             />
           </div>
           <button
@@ -127,13 +127,14 @@ export default function LoginModal({ open, onClose }: Props) {
         </form>
 
         <div className="mt-6 flex justify-between font-body text-xs">
-          <Link to="/portal/forgot-password" onClick={onClose} className="text-muted-foreground hover:text-primary">
+          <Link to="/portal/forgot-password" onClick={onClose} className="text-secondary-foreground/60 hover:text-primary">
             Forgot password?
           </Link>
-          <Link to="/portal/signup" onClick={onClose} className="text-muted-foreground hover:text-primary">
+          <Link to="/portal/signup" onClick={onClose} className="text-secondary-foreground/60 hover:text-primary">
             Create account
           </Link>
         </div>
+
       </div>
     </div>
   );
