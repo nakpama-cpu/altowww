@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import altoLogo from "@/assets/alto-logo.png";
 import BrochureButton from "@/components/BrochureButton";
+import LoginModal from "@/components/LoginModal";
 
 const mainLinks = [
   { to: "/", label: "Home" },
@@ -22,6 +23,7 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
@@ -125,7 +127,7 @@ const Header = () => {
               </Link>
             )
           )}
-          <Link to="/portal" className="font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground/60 hover:text-secondary-foreground">Client Login</Link>
+          <button onClick={() => setLoginOpen(true)} className="font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground/60 hover:text-secondary-foreground">Client Login</button>
           <BrochureButton className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 transition-opacity" />
         </nav>
 
@@ -194,9 +196,16 @@ const Header = () => {
               </Link>
             )
           )}
+          <button
+            onClick={() => { setMenuOpen(false); setLoginOpen(true); }}
+            className="font-body text-sm uppercase tracking-[0.15em] py-2 text-left text-secondary-foreground/60"
+          >
+            Client Login
+          </button>
           <BrochureButton className="font-body text-sm uppercase tracking-[0.15em] bg-primary text-primary-foreground px-5 py-3 text-center mt-2 hover:opacity-90 transition-opacity w-full" />
         </nav>
       </div>
+      <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
     </header>
   );
 };
