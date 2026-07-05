@@ -30,6 +30,13 @@ export default function PortalLogin() {
     }
   };
 
+  const handleApple = async () => {
+    const result = await lovable.auth.signInWithOAuth("apple", { redirect_uri: `${window.location.origin}/portal` });
+    if (result.error) {
+      toast({ title: "Apple sign in failed", description: String(result.error), variant: "destructive" });
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
       <div className="w-full max-w-md">
