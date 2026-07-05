@@ -127,7 +127,7 @@ const Header = () => {
               </Link>
             )
           )}
-          <Link to="/portal" className="font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground/60 hover:text-secondary-foreground">Client Login</Link>
+          <button onClick={() => setLoginOpen(true)} className="font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground/60 hover:text-secondary-foreground">Client Login</button>
           <BrochureButton className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 transition-opacity" />
         </nav>
 
