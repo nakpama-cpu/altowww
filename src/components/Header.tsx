@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import altoLogo from "@/assets/alto-logo.png";
 import BrochureButton from "@/components/BrochureButton";
+import LoginModal from "@/components/LoginModal";
 
 const mainLinks = [
   { to: "/", label: "Home" },
