@@ -30,6 +30,13 @@ export default function PortalLogin() {
     }
   };
 
+  const handleApple = async () => {
+    const result = await lovable.auth.signInWithOAuth("apple", { redirect_uri: `${window.location.origin}/portal` });
+    if (result.error) {
+      toast({ title: "Apple sign in failed", description: String(result.error), variant: "destructive" });
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
       <div className="w-full max-w-md">
@@ -38,13 +45,22 @@ export default function PortalLogin() {
           <h1 className="display-heading text-2xl mb-2">Client Portal</h1>
           <p className="font-body text-sm text-muted-foreground mb-8">Sign in to view your portfolio.</p>
 
-          <button
-            onClick={handleGoogle}
-            type="button"
-            className="w-full font-body text-xs uppercase tracking-[0.25em] border border-border py-3 mb-6 hover:bg-muted transition-colors"
-          >
-            Continue with Google
-          </button>
+          <div className="space-y-3 mb-6">
+            <button
+              onClick={handleGoogle}
+              type="button"
+              className="w-full font-body text-xs uppercase tracking-[0.25em] border border-border py-3 hover:bg-muted transition-colors"
+            >
+              Continue with Google
+            </button>
+            <button
+              onClick={handleApple}
+              type="button"
+              className="w-full font-body text-xs uppercase tracking-[0.25em] border border-border py-3 hover:bg-muted transition-colors"
+            >
+              Continue with Apple
+            </button>
+          </div>
 
           <div className="relative my-6 text-center">
             <span className="bg-card px-3 text-[10px] uppercase tracking-[0.25em] text-muted-foreground relative z-10">or</span>
