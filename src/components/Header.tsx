@@ -196,9 +196,16 @@ const Header = () => {
               </Link>
             )
           )}
+          <button
+            onClick={() => { setMenuOpen(false); setLoginOpen(true); }}
+            className="font-body text-sm uppercase tracking-[0.15em] py-2 text-left text-secondary-foreground/60"
+          >
+            Client Login
+          </button>
           <BrochureButton className="font-body text-sm uppercase tracking-[0.15em] bg-primary text-primary-foreground px-5 py-3 text-center mt-2 hover:opacity-90 transition-opacity w-full" />
         </nav>
       </div>
+      <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
     </header>
   );
 };
