@@ -49,7 +49,6 @@ export default function PortalLogin() {
             </button>
           </div>
 
-          </div>
 
           <div className="relative my-6 text-center">
             <span className="bg-card px-3 text-[10px] uppercase tracking-[0.25em] text-muted-foreground relative z-10">or</span>
