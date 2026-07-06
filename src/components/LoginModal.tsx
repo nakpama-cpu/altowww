@@ -40,13 +40,13 @@ export default function LoginModal({ open, onClose }: Props) {
     navigate("/portal");
   };
 
-  const handleOAuth = async (provider: "google" | "apple") => {
+  const handleOAuth = async (provider: "google") => {
     const result = await lovable.auth.signInWithOAuth(provider, {
       redirect_uri: `${window.location.origin}/portal`,
     });
     if (result.error) {
       toast({
-        title: `${provider === "google" ? "Google" : "Apple"} sign in failed`,
+        title: "Google sign in failed",
         description: String(result.error),
         variant: "destructive",
       });
@@ -82,13 +82,6 @@ export default function LoginModal({ open, onClose }: Props) {
             className="w-full font-body text-xs uppercase tracking-[0.25em] border border-border py-3 hover:bg-muted transition-colors"
           >
             Continue with Google
-          </button>
-          <button
-            onClick={() => handleOAuth("apple")}
-            type="button"
-            className="w-full font-body text-xs uppercase tracking-[0.25em] border border-border py-3 hover:bg-muted transition-colors"
-          >
-            Continue with Apple
           </button>
         </div>
 
