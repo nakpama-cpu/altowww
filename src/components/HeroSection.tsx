@@ -58,7 +58,7 @@ const HeroSection = () => {
         </div>
       </section>
       {/* Spacer to push content below the fixed hero */}
-      <div className="h-screen" />
+      <div className="h-screen md:h-[650px]" />
     </>
   );
 };
