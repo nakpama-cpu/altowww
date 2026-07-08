@@ -1,5 +1,6 @@
 import heroImg from "@/assets/hero-mountain.jpg";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
+import ScrollNavigation from "@/components/ScrollNavigation";
 
 const HeroSection = () => {
   return (
@@ -7,7 +8,7 @@ const HeroSection = () => {
       {/* Fixed hero that stays in place while content scrolls over it */}
       <section
         id="heritage"
-        className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-screen md:h-[650px]"
+        className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-screen md:h-[340px]"
       >
         <img
           src={heroImg}
@@ -48,17 +49,11 @@ const HeroSection = () => {
               Speak to an Advisor
             </ContactButton>
           </div>
-          <div
-            className="absolute bottom-12 animate-fade-in"
-            style={{ animationDelay: "1.2s" }}
-          >
-            <div className="w-px h-16 bg-secondary-foreground/30 mx-auto mb-2" />
-            <p className="chapter-marker text-secondary-foreground/50">Scroll</p>
-          </div>
         </div>
       </section>
+      <ScrollNavigation />
       {/* Spacer to push content below the fixed hero */}
-      <div className="h-screen md:h-[650px]" />
+      <div className="h-screen md:h-[340px]" />
     </>
   );
 };
