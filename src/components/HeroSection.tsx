@@ -7,7 +7,7 @@ const HeroSection = () => {
       {/* Fixed hero that stays in place while content scrolls over it */}
       <section
         id="heritage"
-        className="fixed inset-0 h-screen w-full overflow-hidden z-0"
+        className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-screen md:h-[650px]"
       >
         <img
           src={heroImg}
@@ -15,7 +15,7 @@ const HeroSection = () => {
           width={1920}
           height={1080}
           fetchPriority="high"
-          className="absolute inset-0 w-full h-full object-cover animate-cloud-drift"
+          className="absolute inset-0 w-full h-full object-fill animate-cloud-drift"
           style={{
             transform: 'scale(1.25) translateZ(0)',
             backfaceVisibility: 'hidden',
@@ -58,7 +58,7 @@ const HeroSection = () => {
         </div>
       </section>
       {/* Spacer to push content below the fixed hero */}
-      <div className="h-screen" />
+      <div className="h-screen md:h-[650px]" />
     </>
   );
 };
