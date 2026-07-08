@@ -8,7 +8,7 @@ const HeroSection = () => {
       {/* Fixed hero that stays in place while content scrolls over it */}
       <section
         id="heritage"
-        className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-screen md:h-[650px]"
+        className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-screen md:h-[340px]"
       >
         <img
           src={heroImg}
