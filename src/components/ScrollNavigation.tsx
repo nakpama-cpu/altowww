@@ -5,6 +5,16 @@ const BUTTON_SIZE = 48;
 const BUTTON_RADIUS = BUTTON_SIZE / 2;
 const SCROLL_OFFSET = 80;
 
+const getAbsoluteOffsetTop = (el: HTMLElement | null): number => {
+  let top = 0;
+  let node: HTMLElement | null = el;
+  while (node) {
+    top += node.offsetTop;
+    node = node.offsetParent as HTMLElement | null;
+  }
+  return top;
+};
+
 const ScrollNavigation = () => {
   const [top, setTop] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
