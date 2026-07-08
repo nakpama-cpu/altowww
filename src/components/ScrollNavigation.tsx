@@ -68,7 +68,7 @@ const ScrollNavigation = () => {
 
   return (
     <div
-      className="fixed left-1/2 -translate-x-1/2 z-[60] pointer-events-none bottom-4 md:bottom-auto transition-opacity duration-300"
+      className="fixed left-1/2 -translate-x-1/2 z-[60] pointer-events-none bottom-4 md:bottom-auto md:top-[var(--scroll-btn-top)] transition-opacity duration-300"
       style={
         {
           "--scroll-btn-top": `${top - BUTTON_RADIUS}px`,
@@ -76,12 +76,7 @@ const ScrollNavigation = () => {
       }
     >
       <div
-        className="hidden md:block absolute inset-x-0 -top-px h-px bg-secondary-foreground/30"
-        aria-hidden="true"
-      />
-      <div
         className="w-12 h-12 rounded-full backdrop-blur-md bg-secondary/30 border border-secondary-foreground/20 shadow-lg flex flex-col items-center justify-center overflow-hidden pointer-events-auto transition-colors hover:bg-secondary/40"
-        style={{ marginTop: "-1px" }}
       >
         <button
           type="button"
