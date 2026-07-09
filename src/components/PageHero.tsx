@@ -10,7 +10,7 @@ const PageHero = ({ image, imageAlt, children }: PageHeroProps) => {
   return (
     <>
       {/* Fixed on desktop; natural flow on mobile to match homepage hero */}
-      <section className="relative w-full overflow-hidden z-0 h-auto md:fixed md:inset-x-0 md:top-0 md:h-[380px]">
+      <section className="relative w-full overflow-hidden z-0 h-auto min-h-[380px] md:min-h-0 md:fixed md:inset-x-0 md:top-0 md:h-[380px]">
         <img
           src={image}
           alt={imageAlt}
