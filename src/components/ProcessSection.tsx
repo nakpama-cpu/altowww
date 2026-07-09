@@ -85,15 +85,15 @@ const ProcessSection = () => {
               <img
                 src={step.icon}
                 alt={step.title}
-                className="w-12 h-12 mx-auto mb-3 object-contain"
+                className="w-14 h-14 mx-auto mb-3 object-contain"
               />
               <p className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-1">
                 Step {step.number}
               </p>
-              <h3 className="font-display text-base md:text-lg font-light mb-1.5">
+              <h3 className="font-display text-lg font-light mb-1.5">
                 {step.title}
               </h3>
-              <p className="font-body text-xs md:text-sm text-muted-foreground leading-relaxed">
+              <p className="font-body text-sm text-muted-foreground leading-snug">
                 {step.description}
               </p>
             </div>
