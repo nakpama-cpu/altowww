@@ -17,6 +17,8 @@ const ScrollNavigation = () => {
     );
   }, []);
 
+  const ACTIVE_OFFSET = 80;
+
   const getHeaderHeight = useCallback(() => {
     const header = document.querySelector("header") as HTMLElement | null;
     if (!header) return 80;
@@ -31,15 +33,14 @@ const ScrollNavigation = () => {
     if (!sections.length) return 0;
 
     const scrollY = window.scrollY;
-    const headerHeight = getHeaderHeight();
     let idx = 0;
     sections.forEach((s, i) => {
       const absTop = s.getBoundingClientRect().top + scrollY;
-      if (absTop <= scrollY + headerHeight) idx = i;
+      if (absTop <= scrollY + ACTIVE_OFFSET) idx = i;
     });
     setCurrentIndex(idx);
     return idx;
-  }, [getHeaderHeight]);
+  }, []);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
