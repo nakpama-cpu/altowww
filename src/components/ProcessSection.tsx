@@ -73,7 +73,7 @@ const ProcessSection = () => {
         </h2>
 
         {/* 3-column grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 md:gap-x-6 gap-y-2 md:gap-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 md:gap-x-6 gap-y-1 md:gap-y-2">
           {steps.map((step, i) => (
             <div
               key={step.number}
