@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 
+const BUTTON_SIZE = 48;
+const BUTTON_RADIUS = BUTTON_SIZE / 2;
+const EDGE_MARGIN = 12;
 const ACTIVE_OFFSET = 80;
 
 const ScrollNavigation = () => {
   const [mounted, setMounted] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [viewportTop, setViewportTop] = useState<number | null>(null);
   const sectionsRef = useRef<HTMLElement[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -18,7 +22,7 @@ const ScrollNavigation = () => {
 
   const computeCurrent = useCallback(() => {
     const sections = sectionsRef.current;
-    if (!sections.length) return;
+    if (!sections.length) return 0;
 
     const scrollY = window.scrollY;
     let idx = 0;
@@ -27,22 +31,57 @@ const ScrollNavigation = () => {
       if (absTop <= scrollY + ACTIVE_OFFSET) idx = i;
     });
     setCurrentIndex(idx);
+    return idx;
   }, []);
+
+  const computePosition = useCallback(() => {
+    const sections = sectionsRef.current;
+    if (!sections.length) return;
+
+    const idx = computeCurrent();
+    const nextSection = sections[idx + 1];
+    const vh = window.innerHeight;
+    let desired: number;
+
+    if (nextSection) {
+      const rect = nextSection.getBoundingClientRect();
+      desired = rect.top - BUTTON_RADIUS;
+    } else {
+      desired = vh - BUTTON_SIZE - EDGE_MARGIN;
+    }
+
+    const min = EDGE_MARGIN;
+    const max = vh - BUTTON_SIZE - EDGE_MARGIN;
+    desired = Math.max(min, Math.min(max, desired));
+    setViewportTop(desired);
+  }, [computeCurrent]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
     collectSections();
-    computeCurrent();
+    computePosition();
     setMounted(true);
 
-    const onResize = () => collectSections();
-    const onScroll = () => computeCurrent();
+    const onResize = () => {
+      collectSections();
+      if (!hasInteracted) computePosition();
+    };
+    const onScroll = () => {
+      computeCurrent();
+      if (!hasInteracted) computePosition();
+    };
 
     window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    const t1 = window.setTimeout(collectSections, 400);
-    const t2 = window.setTimeout(collectSections, 1200);
+    const t1 = window.setTimeout(() => {
+      collectSections();
+      computePosition();
+    }, 400);
+    const t2 = window.setTimeout(() => {
+      collectSections();
+      computePosition();
+    }, 1200);
 
     return () => {
       window.removeEventListener("resize", onResize);
@@ -50,7 +89,14 @@ const ScrollNavigation = () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
     };
-  }, [collectSections, computeCurrent]);
+  }, [collectSections, computePosition, computeCurrent, hasInteracted]);
+
+  useEffect(() => {
+    if (!hasInteracted || viewportTop === null) return;
+    // Smoothly move the button to the bottom when first pressed
+    const vh = window.innerHeight;
+    setViewportTop(vh - BUTTON_SIZE - EDGE_MARGIN);
+  }, [hasInteracted]);
 
   const scrollTo = useCallback((direction: "up" | "down") => {
     setHasInteracted(true);
@@ -67,16 +113,16 @@ const ScrollNavigation = () => {
     target?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  if (!mounted || sectionsRef.current.length < 2) return null;
+  if (!mounted || viewportTop === null || sectionsRef.current.length < 2)
+    return null;
 
   const canGoUp = currentIndex > 0;
   const canGoDown = currentIndex < sectionsRef.current.length - 1;
 
   return (
     <div
-      className={`fixed left-1/2 -translate-x-1/2 z-[60] pointer-events-none transition-all duration-300 ${
-        hasInteracted ? "bottom-5" : "bottom-5"
-      }`}
+      className="fixed left-1/2 -translate-x-1/2 z-[60] pointer-events-none transition-[top,bottom] duration-300"
+      style={hasInteracted ? { bottom: `${EDGE_MARGIN}px`, top: "auto" } : { top: `${viewportTop}px`, bottom: "auto" }}
     >
       <div className="group w-12 h-12 rounded-full backdrop-blur-md bg-secondary/25 border border-secondary-foreground/15 shadow-lg flex flex-col items-center justify-center overflow-hidden pointer-events-auto transition-all duration-300 hover:bg-secondary/70 hover:border-secondary-foreground/30">
         <button
