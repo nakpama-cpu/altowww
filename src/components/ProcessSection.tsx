@@ -61,11 +61,11 @@ const ProcessSection = () => {
 
   return (
     <section id="process" className="section-light">
-      <div className="py-8 md:py-12" />
+      <div id="process-start" className="pt-6 md:pt-8 pb-2 md:pb-4" />
       <div ref={ref} className="max-w-5xl mx-auto px-6 md:px-12">
-        <p className="chapter-marker mb-6">How It Works</p>
+        <p className="chapter-marker mb-3 md:mb-4">How It Works</p>
         <h2
-          className={`display-heading text-3xl md:text-4xl mb-12 max-w-2xl transition-all duration-1000 ${
+          className={`display-heading text-3xl md:text-4xl mb-6 md:mb-8 max-w-2xl transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -73,7 +73,7 @@ const ProcessSection = () => {
         </h2>
 
         {/* 3-column grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {steps.map((step, i) => (
             <div
               key={step.number}
@@ -101,7 +101,7 @@ const ProcessSection = () => {
         </div>
 
         <div
-          className={`mt-12 flex flex-col sm:flex-row justify-center gap-4 transition-all duration-1000 delay-700 ${
+          className={`mt-6 md:mt-8 flex flex-col sm:flex-row justify-center gap-4 transition-all duration-1000 delay-700 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -111,7 +111,7 @@ const ProcessSection = () => {
           </ContactButton>
         </div>
       </div>
-      <div className="py-8" />
+      <div className="py-4 md:py-6" />
     </section>
   );
 };
