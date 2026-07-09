@@ -3,9 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import altoLogo from "@/assets/alto-logo.png";
 import BrochureButton from "@/components/BrochureButton";
 import LoginModal from "@/components/LoginModal";
+import NewsMegaDropdown from "@/components/NewsMegaDropdown";
 
 const mainLinks = [
   { to: "/", label: "Home" },
+  { to: "/news", label: "News & Insights", isNews: true as const },
   { to: "/how-it-works", label: "How It Works" },
   {
     label: "About Whisky",
