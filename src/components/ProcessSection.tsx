@@ -85,7 +85,7 @@ const ProcessSection = () => {
               <img
                 src={step.icon}
                 alt={step.title}
-                className="w-14 h-14 mx-auto mb-3 object-contain"
+                className="w-12 h-12 mx-auto mb-2 object-contain"
               />
               <p className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-1">
                 Step {step.number}
