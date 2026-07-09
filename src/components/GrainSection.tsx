@@ -47,7 +47,7 @@ const GrainSection = () => {
   const logos = distilleries;
 
   return (
-    <section id="distilleries" className="section-dark">
+    <section id="distilleries" className="section-dark pb-8 md:pb-16">
       <div>
         <img
           src={scotlandImg}
@@ -55,7 +55,7 @@ const GrainSection = () => {
           className="w-full h-[40vh] md:h-[60vh] object-cover"
         />
       </div>
-      <div id="distilleries-start" className="pt-4 md:pt-6 pb-0 md:pb-2" />
+      <div id="distilleries-start" className="pt-6 md:pt-8 pb-2 md:pb-4" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
         <p className="chapter-marker mb-4 md:mb-6 text-secondary-foreground/50">The Distilleries</p>
         <h2
@@ -80,7 +80,7 @@ const GrainSection = () => {
           Alto Whisky provides access to casks from a curated selection of Scotland's most sought-after distilleries — names that carry global recognition, collectability, and proven appreciation in value over time.
         </p>
         <div
-          className={`mt-4 transition-all duration-1000 delay-600 ${
+          className={`mt-6 transition-all duration-1000 delay-600 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -95,11 +95,11 @@ const GrainSection = () => {
 
       {/* Distillery Logo Carousel */}
       <div
-        className={`mt-5 md:mt-6 overflow-hidden transition-all duration-1000 delay-700 ${
+        className={`mt-12 md:mt-16 overflow-hidden transition-all duration-1000 delay-700 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
       >
-        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground/30 mb-4">
+        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground/30 mb-6">
           Whisky Casks We Have Access To
         </p>
         <div className="relative">
