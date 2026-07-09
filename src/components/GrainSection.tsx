@@ -47,7 +47,7 @@ const GrainSection = () => {
   const logos = distilleries;
 
   return (
-    <section id="distilleries" className="section-dark pb-8 md:pb-16">
+    <section id="distilleries" className="section-dark pb-6 md:pb-8">
       <div>
         <img
           src={scotlandImg}
@@ -95,11 +95,11 @@ const GrainSection = () => {
 
       {/* Distillery Logo Carousel */}
       <div
-        className={`mt-12 md:mt-16 overflow-hidden transition-all duration-1000 delay-700 ${
+        className={`mt-6 md:mt-8 overflow-hidden transition-all duration-1000 delay-700 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
       >
-        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground/30 mb-6">
+        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground/30 mb-4">
           Whisky Casks We Have Access To
         </p>
         <div className="relative">
