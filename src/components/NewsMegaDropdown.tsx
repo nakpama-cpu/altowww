@@ -27,9 +27,9 @@ interface Props {
 const Card = ({ article }: { article: Article }) => (
   <Link
     to={`/news/${article.slug}`}
-    className="group flex-shrink-0 w-[280px] mr-5 flex gap-3 items-start"
+    className="group flex-shrink-0 w-[320px] mr-6 flex gap-4 items-start"
   >
-    <div className="w-20 h-20 flex-shrink-0 overflow-hidden">
+    <div className="w-24 h-24 flex-shrink-0 overflow-hidden">
       <img
         src={article.image}
         alt={article.title}
@@ -38,7 +38,7 @@ const Card = ({ article }: { article: Article }) => (
       />
     </div>
     <div className="min-w-0">
-      <div className="flex items-center gap-2 mb-1">
+      <div className="flex items-center gap-2 mb-1.5">
         <span className="font-body text-[9px] uppercase tracking-[0.2em] text-primary">
           {article.category}
         </span>
@@ -47,7 +47,7 @@ const Card = ({ article }: { article: Article }) => (
           {article.date}
         </span>
       </div>
-      <h3 className="font-display text-[13px] font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 line-clamp-3">
+      <h3 className="font-display text-[14px] font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 line-clamp-3">
         {article.title}
       </h3>
     </div>
@@ -59,14 +59,14 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`absolute left-0 right-0 top-full mt-4 bg-secondary/95 backdrop-blur-md border-t border-secondary-foreground/10 transition-all duration-300 overflow-hidden ${
+      className={`absolute left-0 right-0 top-full mt-1 bg-secondary/95 backdrop-blur-md border-t border-secondary-foreground/10 transition-all duration-300 overflow-hidden ${
         open
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between mb-3">
+      <div className="max-w-7xl mx-auto px-6 py-7 pt-5 pb-12">
+        <div className="flex items-center justify-between mb-4">
           <p className="chapter-marker text-secondary-foreground/60">
             News &amp; Insights
           </p>
