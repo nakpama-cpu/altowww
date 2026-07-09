@@ -31,7 +31,7 @@ const Card = ({ article }: { article: Article }) => (
     to={`/news/${article.slug}`}
     className="group flex-shrink-0 w-[340px] mr-5 flex gap-4 items-center"
   >
-    <div className="w-24 h-24 flex-shrink-0 overflow-hidden">
+    <div className="w-28 h-28 flex-shrink-0 overflow-hidden aspect-square border border-secondary-foreground/10">
       <img
         src={article.image}
         alt={article.title}
@@ -102,7 +102,7 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
           : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 pt-4 pb-4">
+      <div className="max-w-7xl mx-auto px-6 pt-3 pb-3">
         <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
           <p className="chapter-marker text-secondary-foreground/60">
             News &amp; Insights
