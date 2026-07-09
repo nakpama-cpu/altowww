@@ -112,11 +112,11 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 pt-3 pb-3">
-        <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
-          <p className="chapter-marker text-secondary-foreground/60">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 mb-3">
+          <p className="chapter-marker text-secondary-foreground/60 justify-self-start">
             News &amp; Insights
           </p>
-          <div className="flex items-center gap-2 bg-secondary-foreground/5 border border-secondary-foreground/10 px-3 py-1.5 flex-1 max-w-xs">
+          <div className="flex items-center gap-2 bg-secondary-foreground/5 border border-secondary-foreground/10 px-3 py-1.5 w-full max-w-xs">
             <Search className="w-3.5 h-3.5 text-secondary-foreground/40" />
             <input
               type="text"
@@ -128,7 +128,7 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
           </div>
           <Link
             to="/news"
-            className="font-body text-[10px] uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-0.5 hover:border-primary transition-colors"
+            className="font-body text-[10px] uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-0.5 hover:border-primary transition-colors justify-self-end"
           >
             View All →
           </Link>
