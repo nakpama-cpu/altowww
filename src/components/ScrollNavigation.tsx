@@ -2,14 +2,14 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 
 const BUTTON_SIZE = 48;
-const BUTTON_RADIUS = BUTTON_SIZE / 2;
 const EDGE_MARGIN = 12;
 const ACTIVE_OFFSET = 80;
+const IDLE_HIDE_MS = 1000;
 
 const ScrollNavigation = () => {
   const [mounted, setMounted] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
-  const [viewportTop, setViewportTop] = useState<number | null>(null);
+  const [visible, setVisible] = useState(false);
+  const idleTimerRef = useRef<number | null>(null);
   const sectionsRef = useRef<HTMLElement[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -34,72 +34,52 @@ const ScrollNavigation = () => {
     return idx;
   }, []);
 
-  const computePosition = useCallback(() => {
-    const sections = sectionsRef.current;
-    if (!sections.length) return;
-
-    const idx = computeCurrent();
-    const nextSection = sections[idx + 1];
-    const vh = window.innerHeight;
-    let desired: number;
-
-    if (nextSection) {
-      const rect = nextSection.getBoundingClientRect();
-      desired = rect.top - BUTTON_RADIUS;
-    } else {
-      desired = vh - BUTTON_SIZE - EDGE_MARGIN;
-    }
-
-    const min = EDGE_MARGIN;
-    const max = vh - BUTTON_SIZE - EDGE_MARGIN;
-    desired = Math.max(min, Math.min(max, desired));
-    setViewportTop(desired);
-  }, [computeCurrent]);
+  const resetIdleTimer = useCallback(() => {
+    setVisible(true);
+    if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = window.setTimeout(() => {
+      setVisible(false);
+    }, IDLE_HIDE_MS);
+  }, []);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
     collectSections();
-    computePosition();
+    computeCurrent();
     setMounted(true);
 
     const onResize = () => {
       collectSections();
-      if (!hasInteracted) computePosition();
     };
     const onScroll = () => {
       computeCurrent();
-      if (!hasInteracted) computePosition();
     };
 
     window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("mousemove", resetIdleTimer, { passive: true });
+
+    // Show briefly on mount so the user notices it, then hide on idle
+    resetIdleTimer();
 
     const t1 = window.setTimeout(() => {
       collectSections();
-      computePosition();
     }, 400);
     const t2 = window.setTimeout(() => {
       collectSections();
-      computePosition();
     }, 1200);
 
     return () => {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("mousemove", resetIdleTimer);
+      if (idleTimerRef.current) window.clearTimeout(idleTimerRef.current);
       window.clearTimeout(t1);
       window.clearTimeout(t2);
     };
-  }, [collectSections, computePosition, computeCurrent, hasInteracted]);
-
-  useEffect(() => {
-    if (!hasInteracted || viewportTop === null) return;
-    // Smoothly move the button to the bottom when first pressed
-    const vh = window.innerHeight;
-    setViewportTop(vh - BUTTON_SIZE - EDGE_MARGIN);
-  }, [hasInteracted]);
+  }, [collectSections, computeCurrent, resetIdleTimer]);
 
   const scrollTo = useCallback((direction: "up" | "down") => {
-    setHasInteracted(true);
     const sections = sectionsRef.current;
     if (!sections.length) return;
     const scrollY = window.scrollY;
@@ -111,18 +91,19 @@ const ScrollNavigation = () => {
     const target =
       direction === "up" ? sections[idx - 1] : sections[idx + 1];
     target?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+    resetIdleTimer();
+  }, [resetIdleTimer]);
 
-  if (!mounted || viewportTop === null || sectionsRef.current.length < 2)
-    return null;
+  if (!mounted || sectionsRef.current.length < 2) return null;
 
   const canGoUp = currentIndex > 0;
   const canGoDown = currentIndex < sectionsRef.current.length - 1;
 
   return (
     <div
-      className="fixed left-1/2 -translate-x-1/2 z-[60] pointer-events-none transition-[top,bottom] duration-300"
-      style={hasInteracted ? { bottom: `${EDGE_MARGIN}px`, top: "auto" } : { top: `${viewportTop}px`, bottom: "auto" }}
+      className={`fixed bottom-3 left-1/2 -translate-x-1/2 z-[60] pointer-events-none transition-opacity duration-300 ${
+        visible ? "opacity-100" : "opacity-0"
+      }`}
     >
       <div className="group w-12 h-12 rounded-full backdrop-blur-md bg-secondary/25 border border-secondary-foreground/15 shadow-lg flex flex-col items-center justify-center overflow-hidden pointer-events-auto transition-all duration-300 hover:bg-secondary/70 hover:border-secondary-foreground/30">
         <button
