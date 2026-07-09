@@ -29,7 +29,7 @@ interface Props {
 const Card = ({ article }: { article: Article }) => (
   <Link
     to={`/news/${article.slug}`}
-    className="group flex-shrink-0 w-[300px] mr-5 flex gap-3 items-start"
+    className="group flex-shrink-0 w-[340px] mr-5 flex gap-3 items-start"
   >
     <div className="w-20 h-20 flex-shrink-0 overflow-hidden">
       <img
@@ -49,7 +49,7 @@ const Card = ({ article }: { article: Article }) => (
           {article.date}
         </span>
       </div>
-      <h3 className="font-display text-[14px] font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
+      <h3 className="font-display text-[15px] font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
         {article.title}
       </h3>
     </div>
