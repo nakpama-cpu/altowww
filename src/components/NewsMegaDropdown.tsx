@@ -102,8 +102,8 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
           : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-7 pt-4 pb-12">
-        <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
+      <div className="max-w-7xl mx-auto px-6 pt-3 pb-4">
+        <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
           <p className="chapter-marker text-secondary-foreground/60">
             News &amp; Insights
           </p>
@@ -113,7 +113,7 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search articles & tags..."
+              placeholder="Search articles"
               className="bg-transparent outline-none border-none text-secondary-foreground placeholder:text-secondary-foreground/40 font-body text-xs w-full"
             />
           </div>
