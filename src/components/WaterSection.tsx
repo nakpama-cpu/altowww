@@ -24,7 +24,7 @@ const WaterSection = () => {
 
         <p className="chapter-marker mb-8">The Opportunity</p>
         <h2
-          className={`display-heading text-3xl md:text-5xl mb-16 md:mb-24 transition-all duration-1000 ${
+          className={`display-heading text-3xl md:text-5xl mb-10 md:mb-14 transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
