@@ -99,7 +99,7 @@ const GrainSection = () => {
           visible ? "opacity-100" : "opacity-0"
         }`}
       >
-        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground/30 mb-6">
+        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground/30 mb-4">
           Whisky Casks We Have Access To
         </p>
         <div className="relative">
