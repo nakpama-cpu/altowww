@@ -9,6 +9,16 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
   const [activeChapter, setActiveChapter] = useState(chapters[0]?.id || "");
   const { visible } = useNavigationVisibility();
 
+  const getHeaderHeight = () => {
+    const header = document.querySelector("header") as HTMLElement | null;
+    if (!header) return 80;
+    const rootFontSize = parseFloat(
+      getComputedStyle(document.documentElement).fontSize
+    );
+    const expanded = header.classList.contains("py-6");
+    return header.offsetHeight - (expanded ? rootFontSize * 1.5 : 0);
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
