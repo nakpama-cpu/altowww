@@ -25,9 +25,23 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [newsOpen, setNewsOpen] = useState(false);
+  const newsCloseTimer = useRef<number | null>(null);
   const [loginOpen, setLoginOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+
+  const openNews = () => {
+    if (newsCloseTimer.current) {
+      window.clearTimeout(newsCloseTimer.current);
+      newsCloseTimer.current = null;
+    }
+    setNewsOpen(true);
+  };
+  const scheduleCloseNews = () => {
+    if (newsCloseTimer.current) window.clearTimeout(newsCloseTimer.current);
+    newsCloseTimer.current = window.setTimeout(() => setNewsOpen(false), 150);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
