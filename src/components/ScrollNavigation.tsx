@@ -53,6 +53,7 @@ const ScrollNavigation = () => {
     };
     const onScroll = () => {
       computeCurrent();
+      resetIdleTimer();
     };
 
     window.addEventListener("resize", onResize, { passive: true });
