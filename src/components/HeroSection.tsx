@@ -26,7 +26,7 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-secondary/50" />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
           <p
-            className="chapter-marker mb-6 text-secondary-foreground/70 animate-fade-in"
+            className="chapter-marker mt-12 md:mt-16 mb-6 text-secondary-foreground/70 animate-fade-in"
             style={{ animationDelay: "0.3s" }}
           >
             Whisky Cask Investment
