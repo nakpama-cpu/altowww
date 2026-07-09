@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { useNavigationVisibility } from "@/contexts/NavigationVisibilityContext";
 
-const ACTIVE_OFFSET = 80;
+
 
 const ScrollNavigation = () => {
   const { visible, show, hover } = useNavigationVisibility();
