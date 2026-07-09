@@ -49,12 +49,17 @@ const ArticlePage = () => {
       />
       <Header />
 
-      {/* Hero Image */}
-      <section className="relative h-[50vh] md:h-[60vh] w-full overflow-hidden">
+      {/* Hero Image — matches homepage sizing */}
+      <section className="relative h-screen md:h-[380px] w-full overflow-hidden">
         <img
           src={article.image}
           alt={article.title}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-fill"
+          style={{
+            transform: 'scale(1.25) translateZ(0)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+          }}
         />
         <div className="absolute inset-0 bg-secondary/60" />
         <div className="relative z-10 flex flex-col items-center justify-end h-full text-center px-6 pb-16">
