@@ -7,7 +7,7 @@ interface ChapterMarkerProps {
 
 const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
   const [activeChapter, setActiveChapter] = useState(chapters[0]?.id || "");
-  const { visible, hover } = useNavigationVisibility();
+  const { visible } = useNavigationVisibility();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -36,8 +36,6 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none"
       }`}
-      onMouseEnter={() => hover(true)}
-      onMouseLeave={() => hover(false)}
     >
       {chapters.map(({ id, label }) => (
         <a
