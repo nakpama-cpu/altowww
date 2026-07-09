@@ -130,6 +130,25 @@ const Header = () => {
                   ))}
                 </div>
               </div>
+            ) : "isNews" in link && link.isNews ? (
+              <div
+                key={link.to}
+                onMouseEnter={openNews}
+                onMouseLeave={scheduleCloseNews}
+              >
+                <Link
+                  to={link.to!}
+                  onFocus={openNews}
+                  onBlur={scheduleCloseNews}
+                  className={`px-4 py-2 font-body text-xs uppercase tracking-[0.2em] transition-all duration-300 inline-block ${
+                    isActive(link.to!) || newsOpen
+                      ? "text-primary"
+                      : "text-secondary-foreground/60 hover:text-secondary-foreground"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </div>
             ) : (
               <Link
                 key={link.to}
