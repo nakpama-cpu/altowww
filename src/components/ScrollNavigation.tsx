@@ -19,7 +19,11 @@ const ScrollNavigation = () => {
 
   const getHeaderHeight = useCallback(() => {
     const header = document.querySelector("header") as HTMLElement | null;
-    return header?.offsetHeight || 80;
+    if (!header) return 80;
+    if (window.innerWidth < 768) return header.offsetHeight;
+    const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const expanded = header.classList.contains("py-6");
+    return header.offsetHeight - (expanded ? rootFontSize * 1.5 : 0);
   }, []);
 
   const computeCurrent = useCallback(() => {
