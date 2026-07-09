@@ -14,13 +14,13 @@ import StickyMobileCTA from "@/components/StickyMobileCTA";
 
 
 const chapters = [
-  { id: "heritage", label: "Alto Whisky" },
+  { id: "heritage", label: "I. Alto Whisky" },
   { id: "opportunity", label: "II. The Opportunity" },
   { id: "why-whisky", label: "III. Why Whisky" },
   { id: "cask", label: "IV. Your Cask" },
   { id: "process", label: "V. The Process" },
   { id: "distilleries", label: "VI. Distilleries" },
-  { id: "news", label: "News & Insights" },
+  { id: "news", label: "VII. News & Insights" },
 ];
 
 const Index = () => {
