@@ -26,7 +26,7 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-secondary/50" />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
           <p
-            className="chapter-marker mt-16 md:mt-28 mb-6 text-secondary-foreground/70 animate-fade-in"
+            className="chapter-marker mt-12 md:mt-18 mb-3 text-secondary-foreground/70 animate-fade-in"
             style={{ animationDelay: "0.3s" }}
           >
             Whisky Cask Investment
@@ -35,13 +35,13 @@ const HeroSection = () => {
             Alto Whisky
           </h1>
           <p
-            className="mt-4 font-body text-base md:text-xl lg:text-2xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
+            className="mt-2 font-body text-base md:text-xl lg:text-2xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
             style={{ animationDelay: "0.4s" }}
           >
             Secure your financial future with the best collectible asset of the decade.
           </p>
           <div
-            className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-in"
+            className="mt-6 flex flex-col sm:flex-row gap-4 animate-fade-in"
             style={{ animationDelay: "0.8s" }}
           >
             <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
