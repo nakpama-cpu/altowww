@@ -37,7 +37,7 @@ const NewsSection = () => {
   const stepOffset = visibleCount > 1 ? gap - cardMarginShare : 0;
 
   return (
-    <section ref={ref} className="section-light py-10 md:py-16">
+    <section id="news" ref={ref} className="section-light py-10 md:py-16">
       <div className="max-w-5xl mx-auto px-6 md:px-12">
         <p
           className={`chapter-marker mb-6 text-muted-foreground/50 transition-all duration-1000 ${
