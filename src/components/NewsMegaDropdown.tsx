@@ -59,13 +59,13 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`absolute left-0 right-0 top-full mt-1 bg-secondary/95 backdrop-blur-md border-t border-secondary-foreground/10 transition-all duration-300 overflow-hidden ${
+      className={`absolute left-0 right-0 top-full mt-0 bg-secondary/95 backdrop-blur-md transition-all duration-300 overflow-hidden ${
         open
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-7 pt-5 pb-12">
+      <div className="max-w-7xl mx-auto px-6 py-7 pt-4 pb-12">
         <div className="flex items-center justify-between mb-4">
           <p className="chapter-marker text-secondary-foreground/60">
             News &amp; Insights
