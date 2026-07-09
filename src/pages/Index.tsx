@@ -17,10 +17,11 @@ const chapters = [
   { id: "heritage", label: "I. Alto Whisky" },
   { id: "opportunity", label: "II. The Opportunity" },
   { id: "why-whisky", label: "III. Why Whisky" },
-  { id: "cask", label: "IV. Your Cask" },
-  { id: "process", label: "V. The Process" },
-  { id: "distilleries", label: "VI. Distilleries" },
-  { id: "news", label: "VII. News & Insights" },
+  { id: "investment", label: "IV. The Investment" },
+  { id: "cask", label: "V. Your Cask" },
+  { id: "process", label: "VI. The Process" },
+  { id: "distilleries", label: "VII. Distilleries" },
+  { id: "news", label: "VIII. News & Insights" },
 ];
 
 const Index = () => {
