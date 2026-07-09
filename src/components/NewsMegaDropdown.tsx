@@ -111,7 +111,7 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
           : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 pt-3 pb-3">
+      <div className="max-w-6xl mx-auto px-6 pt-3 pb-3">
         <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
           <p className="chapter-marker text-secondary-foreground/60">
             News &amp; Insights
