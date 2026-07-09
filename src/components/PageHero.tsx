@@ -9,7 +9,7 @@ interface PageHeroProps {
 const PageHero = ({ image, imageAlt, children }: PageHeroProps) => {
   return (
     <>
-      {/* Fixed on desktop; natural flow on mobile to match homepage hero sizing */}
+      {/* Fixed on desktop; natural flow on mobile to match homepage hero */}
       <section className="relative w-full overflow-hidden z-0 h-auto md:fixed md:inset-x-0 md:top-0 md:h-[380px]">
         <img
           src={image}
@@ -17,7 +17,7 @@ const PageHero = ({ image, imageAlt, children }: PageHeroProps) => {
           width={1920}
           height={1080}
           fetchPriority="high"
-          className="w-full h-auto md:absolute md:inset-0 md:h-full object-cover object-[center_40%] md:object-center"
+          className="absolute inset-0 w-full h-full object-cover object-[center_40%] md:object-center"
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
