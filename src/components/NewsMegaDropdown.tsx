@@ -72,7 +72,16 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
   const scrollBy = (dir: 1 | -1) => {
     const el = scrollRef.current;
     if (!el) return;
-    el.scrollBy({ left: dir * Math.max(320, el.clientWidth * 0.6), behavior: "smooth" });
+    const step = Math.max(320, el.clientWidth * 0.6);
+    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+    const atStart = el.scrollLeft <= 2;
+    if (dir === 1 && atEnd) {
+      el.scrollTo({ left: 0, behavior: "smooth" });
+    } else if (dir === -1 && atStart) {
+      el.scrollTo({ left: el.scrollWidth - el.clientWidth, behavior: "smooth" });
+    } else {
+      el.scrollBy({ left: dir * step, behavior: "smooth" });
+    }
   };
 
   const [paused, setPaused] = useState(false);
@@ -84,7 +93,7 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
       if (!el) return;
       const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
       if (atEnd) {
-        el.scrollTo({ left: 0, behavior: "smooth" });
+        el.scrollLeft = 0;
       } else {
         el.scrollBy({ left: 1, behavior: "auto" });
       }
