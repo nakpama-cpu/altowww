@@ -51,8 +51,8 @@ const HeroSection = () => {
         </div>
       </section>
       
-      {/* Spacer to push content below the fixed hero */}
-      <div className="h-[55vh] md:h-[380px]" />
+      {/* Spacer to push content below the fixed hero (desktop only) */}
+      <div className="hidden md:block h-[380px]" />
     </>
   );
 };
