@@ -1,6 +1,6 @@
 import heroImg from "@/assets/hero-mountain.jpg";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
-import ScrollNavigation from "@/components/ScrollNavigation";
+
 
 const HeroSection = () => {
   return (
@@ -51,7 +51,7 @@ const HeroSection = () => {
           </div>
         </div>
       </section>
-      <ScrollNavigation />
+      
       {/* Spacer to push content below the fixed hero */}
       <div className="h-screen md:h-[380px]" />
     </>

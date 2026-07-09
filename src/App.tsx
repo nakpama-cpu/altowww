@@ -1,11 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrochureModalProvider } from "@/components/BrochureModal";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { NavigationVisibilityProvider } from "@/contexts/NavigationVisibilityContext";
+import ScrollNavigation from "@/components/ScrollNavigation";
 import Index from "./pages/Index.tsx";
 import HowItWorks from "./pages/HowItWorks.tsx";
 import WhyWhisky from "./pages/WhyWhisky.tsx";
@@ -16,6 +18,14 @@ import Contact from "./pages/Contact.tsx";
 import News from "./pages/News.tsx";
 import ArticlePage from "./pages/ArticlePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
+
+const MarketingLayout = () => (
+  <NavigationVisibilityProvider>
+    <Outlet />
+    <ScrollNavigation />
+  </NavigationVisibilityProvider>
+);
+
 
 // Portal
 import PortalLogin from "./pages/portal/Login";
@@ -54,15 +64,18 @@ const App = () => (
           <CartProvider>
           <BrochureModalProvider>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/how-it-works" element={<HowItWorks />} />
-              <Route path="/why-whisky" element={<WhyWhisky />} />
-              <Route path="/about-whisky" element={<AboutWhisky />} />
-              <Route path="/how-whisky-is-made" element={<HowWhiskyIsMade />} />
-              <Route path="/faqs" element={<FAQ />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/news" element={<News />} />
-              <Route path="/news/:slug" element={<ArticlePage />} />
+              <Route element={<MarketingLayout />}>
+                <Route path="/" element={<Index />} />
+                <Route path="/how-it-works" element={<HowItWorks />} />
+                <Route path="/why-whisky" element={<WhyWhisky />} />
+                <Route path="/about-whisky" element={<AboutWhisky />} />
+                <Route path="/how-whisky-is-made" element={<HowWhiskyIsMade />} />
+                <Route path="/faqs" element={<FAQ />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/news/:slug" element={<ArticlePage />} />
+              </Route>
+
 
               {/* Public auth pages */}
               <Route path="/portal/login" element={<PortalLogin />} />

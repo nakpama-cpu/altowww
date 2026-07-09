@@ -11,7 +11,7 @@ import ProcessSection from "@/components/ProcessSection";
 import NewsSection from "@/components/NewsSection";
 import FooterSection from "@/components/FooterSection";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
-import { NavigationVisibilityProvider } from "@/contexts/NavigationVisibilityContext";
+
 
 const chapters = [
   { id: "heritage", label: "I. Heritage" },
@@ -24,8 +24,8 @@ const chapters = [
 
 const Index = () => {
   return (
-    <NavigationVisibilityProvider>
-      <div className="relative">
+    <div className="relative">
+
         <Seo
           title="Alto Whisky | Premium Whisky Cask Investment"
           description="Invest in Scottish single malt whisky casks with Alto Whisky. Expert advisory, HMRC-bonded storage, and tax-efficient returns for discerning investors."
@@ -49,11 +49,11 @@ const Index = () => {
           </div>
           <NewsSection />
           <FooterSection />
-        </div>
-        <StickyMobileCTA />
       </div>
-    </NavigationVisibilityProvider>
+      <StickyMobileCTA />
+    </div>
   );
 };
+
 
 export default Index;
