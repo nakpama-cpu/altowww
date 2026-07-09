@@ -16,7 +16,7 @@ const HeroSection = () => {
           width={1920}
           height={1080}
           fetchPriority="high"
-          className="absolute inset-0 w-full h-full object-cover object-top md:object-center animate-cloud-drift"
+          className="absolute inset-0 w-full h-full object-cover object-[center_35%] md:object-center animate-cloud-drift"
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
