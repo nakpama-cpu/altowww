@@ -90,7 +90,7 @@ const ProcessSection = () => {
               <p className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-1">
                 Step {step.number}
               </p>
-              <h3 className="font-display text-lg font-light mb-1.5">
+              <h3 className="font-display text-lg font-light mb-1">
                 {step.title}
               </h3>
               <p className="font-body text-sm text-muted-foreground leading-snug">
