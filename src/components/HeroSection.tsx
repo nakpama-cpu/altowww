@@ -51,7 +51,7 @@ const HeroSection = () => {
           </div>
         </div>
       </section>
-      <ScrollNavigation />
+      
       {/* Spacer to push content below the fixed hero */}
       <div className="h-screen md:h-[380px]" />
     </>
