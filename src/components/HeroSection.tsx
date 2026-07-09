@@ -1,6 +1,6 @@
 import heroImg from "@/assets/hero-mountain.jpg";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
-import ScrollNavigation from "@/components/ScrollNavigation";
+
 
 const HeroSection = () => {
   return (
