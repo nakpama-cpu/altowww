@@ -72,8 +72,25 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
   const scrollBy = (dir: 1 | -1) => {
     const el = scrollRef.current;
     if (!el) return;
-    el.scrollBy({ left: dir * Math.max(340, el.clientWidth * 0.6), behavior: "smooth" });
+    el.scrollBy({ left: dir * Math.max(320, el.clientWidth * 0.6), behavior: "smooth" });
   };
+
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    if (!open || paused || query.trim()) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    const id = window.setInterval(() => {
+      if (!el) return;
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+      if (atEnd) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: 1, behavior: "auto" });
+      }
+    }, 30);
+    return () => window.clearInterval(id);
+  }, [open, paused, query]);
 
   return (
     <div
