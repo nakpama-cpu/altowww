@@ -101,7 +101,7 @@ const ProcessSection = () => {
         </div>
 
         <div
-          className={`mt-4 md:mt-6 flex flex-col sm:flex-row justify-center gap-4 transition-all duration-1000 delay-700 ${
+          className={`mt-5 md:mt-6 flex flex-col sm:flex-row justify-center gap-4 transition-all duration-1000 delay-700 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
