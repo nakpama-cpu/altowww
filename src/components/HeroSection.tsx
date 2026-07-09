@@ -23,7 +23,7 @@ const HeroSection = () => {
           }}
         />
         <div className="absolute inset-0 bg-secondary/50" />
-        <div className="relative z-10 flex flex-col items-center justify-start md:justify-center h-full text-center px-6 pt-20 pb-2 md:pt-0 md:pb-0">
+        <div className="relative z-10 flex flex-col items-center justify-start md:justify-center h-full text-center px-6 pt-20 pb-4 md:pt-0 md:pb-0">
           <p
             className="chapter-marker mb-3 md:mt-24 text-secondary-foreground/70 animate-fade-in"
             style={{ animationDelay: "0.3s" }}
