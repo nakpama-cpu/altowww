@@ -50,19 +50,21 @@ const ArticlePage = () => {
       <Header />
 
       {/* Hero Image — matches homepage sizing */}
-      <section className="relative h-screen md:h-[380px] w-full overflow-hidden">
+      <section className="relative w-full overflow-hidden h-auto min-h-[380px] md:h-[380px] md:min-h-0">
         <img
           src={article.image}
           alt={article.title}
-          className="absolute inset-0 w-full h-full object-fill"
+          width={1920}
+          height={1080}
+          fetchPriority="high"
+          className="absolute inset-0 w-full h-full object-cover object-[center_40%] md:object-center"
           style={{
-            transform: 'scale(1.25) translateZ(0)',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
           }}
         />
         <div className="absolute inset-0 bg-secondary/60" />
-        <div className="relative z-10 flex flex-col items-center justify-end h-full text-center px-6 pb-16">
+        <div className="relative z-10 flex flex-col items-center justify-end h-full text-center px-6 pt-20 pb-16 md:pt-0">
           <div className="flex items-center gap-3 mb-4">
             <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
               {article.category}
@@ -77,6 +79,7 @@ const ArticlePage = () => {
           </h1>
         </div>
       </section>
+
 
       {/* Article Content */}
       <section className="section-light py-16 md:py-24">
