@@ -27,9 +27,9 @@ interface Props {
 const Card = ({ article }: { article: Article }) => (
   <Link
     to={`/news/${article.slug}`}
-    className="group block flex-shrink-0 w-[260px] mr-6"
+    className="group flex-shrink-0 w-[280px] mr-5 flex gap-3 items-start"
   >
-    <div className="aspect-[4/3] overflow-hidden mb-3">
+    <div className="w-20 h-20 flex-shrink-0 overflow-hidden">
       <img
         src={article.image}
         alt={article.title}
@@ -37,18 +37,20 @@ const Card = ({ article }: { article: Article }) => (
         loading="lazy"
       />
     </div>
-    <div className="flex items-center gap-2 mb-1.5">
-      <span className="font-body text-[9px] uppercase tracking-[0.2em] text-primary">
-        {article.category}
-      </span>
-      <span className="w-1 h-1 rounded-full bg-secondary-foreground/30" />
-      <span className="font-body text-[9px] uppercase tracking-[0.15em] text-secondary-foreground/50">
-        {article.date}
-      </span>
+    <div className="min-w-0">
+      <div className="flex items-center gap-2 mb-1">
+        <span className="font-body text-[9px] uppercase tracking-[0.2em] text-primary">
+          {article.category}
+        </span>
+        <span className="w-1 h-1 rounded-full bg-secondary-foreground/30" />
+        <span className="font-body text-[9px] uppercase tracking-[0.15em] text-secondary-foreground/50">
+          {article.date}
+        </span>
+      </div>
+      <h3 className="font-display text-[13px] font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 line-clamp-3">
+        {article.title}
+      </h3>
     </div>
-    <h3 className="font-display text-sm font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
-      {article.title}
-    </h3>
   </Link>
 );
 
