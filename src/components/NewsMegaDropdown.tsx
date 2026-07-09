@@ -31,7 +31,7 @@ const Card = ({ article }: { article: Article }) => (
     to={`/news/${article.slug}`}
     className="group flex-shrink-0 w-[340px] mr-5 flex gap-4 items-center"
   >
-    <div className="w-28 h-28 flex-shrink-0 overflow-hidden aspect-square border border-secondary-foreground/10">
+    <div className="w-28 h-28 flex-shrink-0 overflow-hidden aspect-square">
       <img
         src={article.image}
         alt={article.title}
