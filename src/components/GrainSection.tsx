@@ -47,7 +47,7 @@ const GrainSection = () => {
   const logos = distilleries;
 
   return (
-    <section id="distilleries" className="section-dark pb-8 md:pb-16">
+    <section id="distilleries" className="section-dark pb-6 md:pb-8">
       <div>
         <img
           src={scotlandImg}
