@@ -1,4 +1,6 @@
+import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { articles, type Article } from "@/data/articles";
 
 const MONTHS: Record<string, number> = {
@@ -27,7 +29,7 @@ interface Props {
 const Card = ({ article }: { article: Article }) => (
   <Link
     to={`/news/${article.slug}`}
-    className="group flex-shrink-0 w-[320px] mr-6 flex gap-4 items-start"
+    className="group flex-shrink-0 w-[320px] mr-6 flex gap-4 items-start snap-start"
   >
     <div className="w-24 h-24 flex-shrink-0 overflow-hidden">
       <img
@@ -55,6 +57,24 @@ const Card = ({ article }: { article: Article }) => (
 );
 
 const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
+  const [query, setQuery] = useState("");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return sortedArticles;
+    return sortedArticles.filter((a) => {
+      const haystack = `${a.title} ${a.category} ${a.excerpt} ${a.slug.replace(/-/g, " ")}`.toLowerCase();
+      return haystack.includes(q);
+    });
+  }, [query]);
+
+  const scrollBy = (dir: 1 | -1) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * Math.max(340, el.clientWidth * 0.6), behavior: "smooth" });
+  };
+
   return (
     <div
       onMouseEnter={onMouseEnter}
@@ -66,10 +86,20 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-7 pt-4 pb-12">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
           <p className="chapter-marker text-secondary-foreground/60">
             News &amp; Insights
           </p>
+          <div className="flex items-center gap-2 bg-secondary-foreground/5 border border-secondary-foreground/10 px-3 py-1.5 flex-1 max-w-xs">
+            <Search className="w-3.5 h-3.5 text-secondary-foreground/40" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search articles & tags..."
+              className="bg-transparent outline-none border-none text-secondary-foreground placeholder:text-secondary-foreground/40 font-body text-xs w-full"
+            />
+          </div>
           <Link
             to="/news"
             className="font-body text-[10px] uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-0.5 hover:border-primary transition-colors"
@@ -77,20 +107,45 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
             View All →
           </Link>
         </div>
-        <div
-          className="group/marquee overflow-hidden"
-          style={{ maskImage: "linear-gradient(to right, transparent, black 4%, black 96%, transparent)" }}
-        >
-          <div
-            className="flex w-max animate-logo-scroll motion-reduce:animate-none group-hover/marquee:[animation-play-state:paused]"
-            style={{ animationDuration: "90s" }}
+
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => scrollBy(-1)}
+            aria-label="Scroll left"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary/90 border border-secondary-foreground/10 text-secondary-foreground/70 hover:text-primary hover:border-primary/40 transition-colors"
           >
-            {sortedArticles.map((a) => (
-              <Card key={`a-${a.slug}`} article={a} />
-            ))}
-            {sortedArticles.map((a) => (
-              <Card key={`b-${a.slug}`} article={a} />
-            ))}
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollBy(1)}
+            aria-label="Scroll right"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary/90 border border-secondary-foreground/10 text-secondary-foreground/70 hover:text-primary hover:border-primary/40 transition-colors"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+
+          <div
+            ref={scrollRef}
+            className="overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory px-10"
+            style={{
+              maskImage:
+                "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
+              scrollbarWidth: "thin",
+            }}
+          >
+            {filtered.length === 0 ? (
+              <p className="font-body text-xs text-secondary-foreground/60 py-8 text-center">
+                No articles match "{query}".
+              </p>
+            ) : (
+              <div className="flex w-max py-2">
+                {filtered.map((a) => (
+                  <Card key={a.slug} article={a} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
