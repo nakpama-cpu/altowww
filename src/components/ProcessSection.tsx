@@ -111,7 +111,7 @@ const ProcessSection = () => {
           </ContactButton>
         </div>
       </div>
-      <div className="py-10 md:py-14" />
+      <div className="py-10 md:py-12" />
     </section>
   );
 };
