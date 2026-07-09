@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigationVisibility } from "@/contexts/NavigationVisibilityContext";
 
 interface ChapterMarkerProps {
   chapters: { id: string; label: string }[];
@@ -6,6 +7,7 @@ interface ChapterMarkerProps {
 
 const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
   const [activeChapter, setActiveChapter] = useState(chapters[0]?.id || "");
+  const { visible, hover } = useNavigationVisibility();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -28,7 +30,15 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
   }, [chapters]);
 
   return (
-    <nav className="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-6">
+    <nav
+      className={`fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-6 transition-opacity duration-300 ${
+        visible
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+      }`}
+      onMouseEnter={() => hover(true)}
+      onMouseLeave={() => hover(false)}
+    >
       {chapters.map(({ id, label }) => (
         <a
           key={id}
