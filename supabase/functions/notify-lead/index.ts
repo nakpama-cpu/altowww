@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const ALTO_EMAIL = Deno.env.get("ALTO_NOTIFY_EMAIL") ?? "nick@altowhisky.com";
 const FROM_EMAIL = Deno.env.get("ALTO_FROM_EMAIL") ?? "noreply@altowhisky.com";
+const WEBHOOK_SECRET = Deno.env.get("LEAD_WEBHOOK_SECRET") ?? "";
 const FROM_NAME = "Alto Asset Management";
 
 interface Lead {
@@ -22,6 +23,22 @@ interface WebhookPayload {
   schema: string;
   record: Lead;
   old_record: Lead | null;
+}
+
+// Escape untrusted lead-provided text before it goes into an HTML template.
+function esc(v: unknown): string {
+  if (v === null || v === undefined) return "";
+  return String(v)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// Only safe to interpolate into href="mailto:" / "tel:" attributes.
+function escAttr(v: unknown): string {
+  return encodeURIComponent(String(v ?? ""));
 }
 
 async function sendEmail(to: string, toName: string, subject: string, html: string) {
@@ -87,7 +104,7 @@ function prospectEmail(lead: Lead): string {
     <p>Whisky Cask Investment</p>
   </div>
   <div class="body">
-    <h2>Thank you, ${lead.first_name}.</h2>
+    <h2>Thank you, ${esc(lead.first_name)}.</h2>
     <p>
       ${isBrochure
         ? "We've received your brochure request and a member of our team will be in touch shortly with your copy — along with some useful information about building a whisky cask portfolio."
@@ -158,26 +175,51 @@ function internalAlertEmail(lead: Lead): string {
     <p>Alto Asset Management</p>
   </div>
   <div class="body">
-    <div class="badge">${sourceStr}</div>
+    <div class="badge">${esc(sourceStr)}</div>
     <table>
-      <tr><td>Name</td><td>${lead.first_name} ${lead.last_name}</td></tr>
-      <tr><td>Email</td><td><a href="mailto:${lead.email}" style="color:#1a1a1a">${lead.email}</a></td></tr>
-      <tr><td>Phone</td><td><a href="tel:${lead.phone}" style="color:#1a1a1a">${lead.phone}</a></td></tr>
-      <tr><td>Source</td><td>${sourceStr}</td></tr>
-      ${lead.message ? `<tr class="message-row"><td>Message</td><td>${lead.message}</td></tr>` : ""}
-      <tr><td>Submitted</td><td>${submittedAt}</td></tr>
+      <tr><td>Name</td><td>${esc(lead.first_name)} ${esc(lead.last_name)}</td></tr>
+      <tr><td>Email</td><td><a href="mailto:${escAttr(lead.email)}" style="color:#1a1a1a">${esc(lead.email)}</a></td></tr>
+      <tr><td>Phone</td><td><a href="tel:${escAttr(lead.phone)}" style="color:#1a1a1a">${esc(lead.phone)}</a></td></tr>
+      <tr><td>Source</td><td>${esc(sourceStr)}</td></tr>
+      ${lead.message ? `<tr class="message-row"><td>Message</td><td>${esc(lead.message)}</td></tr>` : ""}
+      <tr><td>Submitted</td><td>${esc(submittedAt)}</td></tr>
     </table>
   </div>
-  <div class="footer">Nix · Alto AI System · Lead ID: ${lead.id}</div>
+  <div class="footer">Nix · Alto AI System · Lead ID: ${esc(lead.id)}</div>
 </div>
 </body>
 </html>`;
+}
+
+// Constant-time-ish string compare
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
 }
 
 serve(async (req) => {
   try {
     if (req.method !== "POST") {
       return new Response("Method not allowed", { status: 405 });
+    }
+
+    // Verify shared webhook secret. Configure the Supabase DB webhook to send
+    // header `x-webhook-secret: <LEAD_WEBHOOK_SECRET>`.
+    if (!WEBHOOK_SECRET) {
+      console.error("LEAD_WEBHOOK_SECRET is not configured");
+      return new Response(JSON.stringify({ ok: false, error: "server_misconfigured" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    const provided = req.headers.get("x-webhook-secret") ?? "";
+    if (!safeEqual(provided, WEBHOOK_SECRET)) {
+      return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     const payload: WebhookPayload = await req.json();
