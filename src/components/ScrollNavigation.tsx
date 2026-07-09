@@ -78,15 +78,15 @@ const ScrollNavigation = () => {
     const sections = sectionsRef.current;
     if (!sections.length) return;
     const scrollY = window.scrollY;
-    const headerHeight = getHeaderHeight();
     let idx = 0;
     sections.forEach((s, i) => {
       const absTop = s.getBoundingClientRect().top + scrollY;
-      if (absTop <= scrollY + headerHeight) idx = i;
+      if (absTop <= scrollY + ACTIVE_OFFSET) idx = i;
     });
     const target =
       direction === "up" ? sections[idx - 1] : sections[idx + 1];
     if (!target) return;
+    const headerHeight = getHeaderHeight();
     const scrollTarget =
       document.getElementById(`${target.id}-start`) || target;
     let targetTop: number;
