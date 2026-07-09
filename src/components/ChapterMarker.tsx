@@ -61,8 +61,7 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
             const el =
               document.getElementById(`${id}-start`) || document.getElementById(id);
             if (!el) return;
-            const header = document.querySelector("header");
-            const headerHeight = header ? (header as HTMLElement).offsetHeight : 0;
+            const headerHeight = getHeaderHeight();
             const top = el.getBoundingClientRect().top + window.scrollY - headerHeight;
             window.scrollTo({ top, behavior: "smooth" });
             history.replaceState(null, "", `#${id}`);
