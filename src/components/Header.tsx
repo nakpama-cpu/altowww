@@ -52,6 +52,7 @@ const Header = () => {
   useEffect(() => {
     setMenuOpen(false);
     setDropdownOpen(false);
+    setNewsOpen(false);
   }, [location]);
 
   // Close dropdown on outside click
