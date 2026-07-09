@@ -32,6 +32,7 @@ const ScrollNavigation = () => {
   useEffect(() => {
     if (typeof document === "undefined") return;
     collectSections();
+    computeCurrent();
     setMounted(true);
 
     const onResize = () => collectSections();
