@@ -9,25 +9,27 @@ interface PageHeroProps {
 const PageHero = ({ image, imageAlt, children }: PageHeroProps) => {
   return (
     <>
-      {/* Fixed hero that stays in place while content scrolls over it — matches homepage sizing */}
-      <section className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-screen md:h-[380px]">
+      {/* Fixed on desktop; natural flow on mobile to match homepage hero */}
+      <section className="relative w-full overflow-hidden z-0 h-auto min-h-[380px] md:min-h-0 md:fixed md:inset-x-0 md:top-0 md:h-[380px]">
         <img
           src={image}
           alt={imageAlt}
-          className="absolute inset-0 w-full h-full object-fill"
+          width={1920}
+          height={1080}
+          fetchPriority="high"
+          className="absolute inset-0 w-full h-full object-cover object-[center_40%] md:object-center"
           style={{
-            transform: 'scale(1.25) translateZ(0)',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
           }}
         />
-        <div className="absolute inset-0 bg-secondary/60" />
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+        <div className="absolute inset-0 bg-secondary/50" />
+        <div className="relative z-10 flex flex-col items-center justify-start md:justify-center h-full text-center px-6 pt-20 pb-8 md:pt-0 md:pb-0">
           {children}
         </div>
       </section>
-      {/* Spacer to push content below the fixed hero */}
-      <div className="h-screen md:h-[380px]" />
+      {/* Spacer to push content below the fixed hero (desktop only) */}
+      <div className="hidden md:block h-[380px]" />
     </>
   );
 };
