@@ -65,7 +65,7 @@ const ProcessSection = () => {
       <div ref={ref} className="max-w-5xl mx-auto px-6 md:px-12 flex-1 flex flex-col justify-center">
         <p className="chapter-marker mb-3 md:mb-4">How It Works</p>
         <h2
-          className={`display-heading text-3xl md:text-4xl mb-4 md:mb-6 max-w-2xl transition-all duration-1000 ${
+          className={`display-heading text-3xl md:text-4xl mb-4 md:mb-5 max-w-2xl transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
