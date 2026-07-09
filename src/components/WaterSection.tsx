@@ -19,8 +19,9 @@ const WaterSection = () => {
 
   return (
     <section id="opportunity" className="section-light">
-      <div className="py-10 md:py-16" />
+      <div className="py-4 md:py-6" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
+
         <p className="chapter-marker mb-8">The Opportunity</p>
         <h2
           className={`display-heading text-3xl md:text-5xl mb-8 transition-all duration-1000 ${
