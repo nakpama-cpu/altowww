@@ -55,7 +55,7 @@ const GrainSection = () => {
           className="w-full h-[40vh] md:h-[60vh] object-cover"
         />
       </div>
-      <div className="py-10 md:py-16" />
+      <div id="distilleries-start" className="pt-6 md:pt-8 pb-4 md:pb-6" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
         <p className="chapter-marker mb-8 text-secondary-foreground/50">The Distilleries</p>
         <h2

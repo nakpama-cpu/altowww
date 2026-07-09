@@ -48,14 +48,15 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
               history.replaceState(null, "", `#${id}`);
               return;
             }
-            const el = document.getElementById(id);
-            if (!el) return;
-            const header = document.querySelector("header");
-            const headerHeight = header ? (header as HTMLElement).offsetHeight : 0;
-            const top = el.getBoundingClientRect().top + window.scrollY - headerHeight;
-            window.scrollTo({ top, behavior: "smooth" });
-            history.replaceState(null, "", `#${id}`);
-          }}
+          const el =
+            document.getElementById(`${id}-start`) || document.getElementById(id);
+          if (!el) return;
+          const header = document.querySelector("header");
+          const headerHeight = header ? (header as HTMLElement).offsetHeight : 0;
+          const top = el.getBoundingClientRect().top + window.scrollY - headerHeight;
+          window.scrollTo({ top, behavior: "smooth" });
+          history.replaceState(null, "", `#${id}`);
+        }}
           className={`chapter-marker transition-all duration-500 ${
             activeChapter === id
               ? "opacity-100 translate-x-0"
