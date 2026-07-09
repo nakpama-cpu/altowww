@@ -16,3 +16,6 @@ On mobile, users land on the hero taking ~70% of viewport height, with the top o
 
 ## Optional tweak
 If 70vh feels too tall or too short after preview, we can dial to `65vh` or `75vh` in one line.
+
+## Pre-launch to-do
+- [ ] **Configure the `notify-lead` webhook secret.** The Supabase Database Webhook that calls `notify-lead` must include an `x-webhook-secret` HTTP header matching the `LEAD_WEBHOOK_SECRET` edge-function secret. Without this, lead alert emails will return HTTP 401 and fail to send.
