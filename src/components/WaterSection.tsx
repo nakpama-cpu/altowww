@@ -20,10 +20,10 @@ const WaterSection = () => {
   return (
     <section id="opportunity" className="section-light">
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
-        <div className="min-h-[calc(100vh-80px)] md:min-h-[calc(100vh-340px)] flex flex-col justify-center">
+        <div className="min-h-[calc(100vh-80px)] md:min-h-[calc(100vh-340px)] flex flex-col justify-start pt-24 md:pt-28">
           <p className="chapter-marker mb-8">The Opportunity</p>
           <h2
-            className={`display-heading text-3xl md:text-5xl mb-6 md:mb-8 transition-all duration-1000 ${
+            className={`display-heading text-3xl md:text-5xl mb-4 transition-all duration-1000 ${
               visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
