@@ -66,7 +66,7 @@ const GrainSection = () => {
           Access casks from Scotland's most prestigious distilleries.
         </h2>
         <p
-          className={`font-body text-base leading-relaxed text-secondary-foreground/70 max-w-xl mb-6 transition-all duration-1000 delay-300 ${
+          className={`font-body text-base leading-relaxed text-secondary-foreground/70 max-w-xl mb-4 transition-all duration-1000 delay-300 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -80,7 +80,7 @@ const GrainSection = () => {
           Alto Whisky provides access to casks from a curated selection of Scotland's most sought-after distilleries — names that carry global recognition, collectability, and proven appreciation in value over time.
         </p>
         <div
-          className={`mt-6 transition-all duration-1000 delay-600 ${
+          className={`mt-4 transition-all duration-1000 delay-600 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
