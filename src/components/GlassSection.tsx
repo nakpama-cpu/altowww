@@ -19,11 +19,11 @@ const GlassSection = () => {
     <section
       id="cask"
       ref={ref}
-      className="section-dark min-h-[80vh] flex flex-col items-center justify-center relative overflow-hidden"
+      className="section-dark min-h-[80vh] flex flex-col items-center justify-center relative overflow-hidden pt-6 md:pt-0"
     >
       <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
         <div
-          className={`transition-all duration-1000 delay-300 ${
+          className={`mt-6 md:mt-0 transition-all duration-1000 delay-300 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
         >
