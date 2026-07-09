@@ -60,12 +60,12 @@ const ProcessSection = () => {
   }, []);
 
   return (
-    <section id="process" className="section-light">
-      <div id="process-start" className="pt-5 md:pt-6 pb-1 md:pb-2" />
-      <div ref={ref} className="max-w-5xl mx-auto px-6 md:px-12">
+    <section id="process" className="section-light flex flex-col min-h-[calc(100vh-5rem)]">
+      <div id="process-start" className="pt-10 md:pt-12 pb-4 md:pb-5" />
+      <div ref={ref} className="max-w-5xl mx-auto px-6 md:px-12 flex-1 flex flex-col justify-center">
         <p className="chapter-marker mb-3 md:mb-4">How It Works</p>
         <h2
-          className={`display-heading text-3xl md:text-4xl mb-4 md:mb-6 max-w-2xl transition-all duration-1000 ${
+          className={`display-heading text-3xl md:text-4xl mb-4 md:mb-5 max-w-2xl transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -73,7 +73,7 @@ const ProcessSection = () => {
         </h2>
 
         {/* 3-column grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 md:gap-x-6 gap-y-2 md:gap-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 md:gap-x-6 gap-y-1 md:gap-y-2">
           {steps.map((step, i) => (
             <div
               key={step.number}
@@ -85,12 +85,12 @@ const ProcessSection = () => {
               <img
                 src={step.icon}
                 alt={step.title}
-                className="w-14 h-14 mx-auto mb-3 object-contain"
+                className="w-12 h-12 mx-auto mb-2 object-contain"
               />
               <p className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-1">
                 Step {step.number}
               </p>
-              <h3 className="font-display text-lg font-light mb-1.5">
+              <h3 className="font-display text-lg font-light mb-1">
                 {step.title}
               </h3>
               <p className="font-body text-sm text-muted-foreground leading-snug">
@@ -101,7 +101,7 @@ const ProcessSection = () => {
         </div>
 
         <div
-          className={`mt-4 md:mt-6 flex flex-col sm:flex-row justify-center gap-4 transition-all duration-1000 delay-700 ${
+          className={`mt-5 md:mt-6 flex flex-col sm:flex-row justify-center gap-4 transition-all duration-1000 delay-700 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -111,7 +111,7 @@ const ProcessSection = () => {
           </ContactButton>
         </div>
       </div>
-      <div className="py-3 md:py-4" />
+      <div className="py-10 md:py-14" />
     </section>
   );
 };
