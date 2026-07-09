@@ -11,7 +11,7 @@ import ProcessSection from "@/components/ProcessSection";
 import NewsSection from "@/components/NewsSection";
 import FooterSection from "@/components/FooterSection";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
-import { NavigationVisibilityProvider } from "@/contexts/NavigationVisibilityContext";
+
 
 const chapters = [
   { id: "heritage", label: "I. Heritage" },
