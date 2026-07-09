@@ -64,15 +64,18 @@ const App = () => (
           <CartProvider>
           <BrochureModalProvider>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/how-it-works" element={<HowItWorks />} />
-              <Route path="/why-whisky" element={<WhyWhisky />} />
-              <Route path="/about-whisky" element={<AboutWhisky />} />
-              <Route path="/how-whisky-is-made" element={<HowWhiskyIsMade />} />
-              <Route path="/faqs" element={<FAQ />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/news" element={<News />} />
-              <Route path="/news/:slug" element={<ArticlePage />} />
+              <Route element={<MarketingLayout />}>
+                <Route path="/" element={<Index />} />
+                <Route path="/how-it-works" element={<HowItWorks />} />
+                <Route path="/why-whisky" element={<WhyWhisky />} />
+                <Route path="/about-whisky" element={<AboutWhisky />} />
+                <Route path="/how-whisky-is-made" element={<HowWhiskyIsMade />} />
+                <Route path="/faqs" element={<FAQ />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/news/:slug" element={<ArticlePage />} />
+              </Route>
+
 
               {/* Public auth pages */}
               <Route path="/portal/login" element={<PortalLogin />} />
