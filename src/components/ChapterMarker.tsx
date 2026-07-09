@@ -9,6 +9,16 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
   const [activeChapter, setActiveChapter] = useState(chapters[0]?.id || "");
   const { visible } = useNavigationVisibility();
 
+  const getHeaderHeight = () => {
+    const header = document.querySelector("header") as HTMLElement | null;
+    if (!header) return 80;
+    const rootFontSize = parseFloat(
+      getComputedStyle(document.documentElement).fontSize
+    );
+    const expanded = header.classList.contains("py-6");
+    return header.offsetHeight - (expanded ? rootFontSize * 1.5 : 0);
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -48,14 +58,14 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
               history.replaceState(null, "", `#${id}`);
               return;
             }
-            const el = document.getElementById(id);
+            const el =
+              document.getElementById(`${id}-start`) || document.getElementById(id);
             if (!el) return;
-            const header = document.querySelector("header");
-            const headerHeight = header ? (header as HTMLElement).offsetHeight : 0;
+            const headerHeight = getHeaderHeight();
             const top = el.getBoundingClientRect().top + window.scrollY - headerHeight;
             window.scrollTo({ top, behavior: "smooth" });
             history.replaceState(null, "", `#${id}`);
-          }}
+        }}
           className={`chapter-marker transition-all duration-500 ${
             activeChapter === id
               ? "opacity-100 translate-x-0"

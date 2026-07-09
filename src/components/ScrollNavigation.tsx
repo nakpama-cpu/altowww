@@ -84,11 +84,14 @@ const ScrollNavigation = () => {
       direction === "up" ? sections[idx - 1] : sections[idx + 1];
     if (!target) return;
     const headerHeight = getHeaderHeight();
+    const scrollTarget =
+      document.getElementById(`${target.id}-start`) || target;
     let targetTop: number;
-    if (window.getComputedStyle(target).position === "fixed") {
+    if (window.getComputedStyle(scrollTarget).position === "fixed") {
       targetTop = 0;
     } else {
-      targetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight;
+      targetTop =
+        scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
     }
     window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
     show();
