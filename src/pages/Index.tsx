@@ -49,11 +49,11 @@ const Index = () => {
           </div>
           <NewsSection />
           <FooterSection />
-        </div>
-        <StickyMobileCTA />
       </div>
-    </NavigationVisibilityProvider>
+      <StickyMobileCTA />
+    </div>
   );
 };
+
 
 export default Index;
