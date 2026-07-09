@@ -10,7 +10,6 @@ import GrainSection from "@/components/GrainSection";
 import ProcessSection from "@/components/ProcessSection";
 import NewsSection from "@/components/NewsSection";
 import FooterSection from "@/components/FooterSection";
-import StickyMobileCTA from "@/components/StickyMobileCTA";
 
 
 const chapters = [
@@ -52,7 +51,6 @@ const Index = () => {
           <NewsSection />
           <FooterSection />
       </div>
-      <StickyMobileCTA />
     </div>
   );
 };
