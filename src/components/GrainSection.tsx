@@ -55,18 +55,18 @@ const GrainSection = () => {
           className="w-full h-[40vh] md:h-[60vh] object-cover"
         />
       </div>
-      <div id="distilleries-start" className="pt-6 md:pt-8 pb-4 md:pb-6" />
+      <div id="distilleries-start" className="pt-4 md:pt-6 pb-0 md:pb-2" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
-        <p className="chapter-marker mb-8 text-secondary-foreground/50">The Distilleries</p>
+        <p className="chapter-marker mb-4 md:mb-6 text-secondary-foreground/50">The Distilleries</p>
         <h2
-          className={`display-heading text-3xl md:text-5xl text-secondary-foreground mb-8 transition-all duration-1000 ${
+          className={`display-heading text-3xl md:text-5xl text-secondary-foreground mb-5 md:mb-6 transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
           Access casks from Scotland's most prestigious distilleries.
         </h2>
         <p
-          className={`font-body text-base leading-relaxed text-secondary-foreground/70 max-w-xl mb-6 transition-all duration-1000 delay-300 ${
+          className={`font-body text-base leading-relaxed text-secondary-foreground/70 max-w-xl mb-4 transition-all duration-1000 delay-300 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -80,7 +80,7 @@ const GrainSection = () => {
           Alto Whisky provides access to casks from a curated selection of Scotland's most sought-after distilleries — names that carry global recognition, collectability, and proven appreciation in value over time.
         </p>
         <div
-          className={`mt-8 transition-all duration-1000 delay-600 ${
+          className={`mt-4 transition-all duration-1000 delay-600 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
@@ -95,11 +95,11 @@ const GrainSection = () => {
 
       {/* Distillery Logo Carousel */}
       <div
-        className={`mt-12 md:mt-16 overflow-hidden transition-all duration-1000 delay-700 ${
+        className={`mt-5 md:mt-6 overflow-hidden transition-all duration-1000 delay-700 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
       >
-        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground/30 mb-10">
+        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground/30 mb-4">
           Whisky Casks We Have Access To
         </p>
         <div className="relative">
@@ -110,12 +110,12 @@ const GrainSection = () => {
             {[...logos, ...logos].map((d, i) => (
               <div
                 key={`${d.name}-${i}`}
-                className="flex-shrink-0 w-[200px] md:w-[260px] mx-4 md:mx-6 flex items-center justify-center h-32"
+                className="flex-shrink-0 w-[200px] md:w-[260px] mx-4 md:mx-6 flex items-center justify-center h-28"
               >
                 <img
                   src={d.logo}
                   alt={`${d.name} distillery logo`}
-                  className="max-h-28 max-w-[220px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 invert grayscale hover:grayscale-0"
+                  className="max-h-24 max-w-[220px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 invert grayscale hover:grayscale-0"
                   loading="lazy"
                 />
               </div>
