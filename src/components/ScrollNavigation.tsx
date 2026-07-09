@@ -17,19 +17,25 @@ const ScrollNavigation = () => {
     );
   }, []);
 
+  const getHeaderHeight = useCallback(() => {
+    const header = document.querySelector("header") as HTMLElement | null;
+    return header?.offsetHeight || 80;
+  }, []);
+
   const computeCurrent = useCallback(() => {
     const sections = sectionsRef.current;
     if (!sections.length) return 0;
 
     const scrollY = window.scrollY;
+    const headerHeight = getHeaderHeight();
     let idx = 0;
     sections.forEach((s, i) => {
       const absTop = s.getBoundingClientRect().top + scrollY;
-      if (absTop <= scrollY + ACTIVE_OFFSET) idx = i;
+      if (absTop <= scrollY + headerHeight) idx = i;
     });
     setCurrentIndex(idx);
     return idx;
-  }, []);
+  }, [getHeaderHeight]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
