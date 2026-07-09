@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { articles, type Article } from "@/data/articles";
@@ -29,9 +29,9 @@ interface Props {
 const Card = ({ article }: { article: Article }) => (
   <Link
     to={`/news/${article.slug}`}
-    className="group flex-shrink-0 w-[320px] mr-6 flex gap-4 items-start snap-start"
+    className="group flex-shrink-0 w-[300px] mr-5 flex gap-3 items-start"
   >
-    <div className="w-24 h-24 flex-shrink-0 overflow-hidden">
+    <div className="w-16 h-16 flex-shrink-0 overflow-hidden">
       <img
         src={article.image}
         alt={article.title}
@@ -40,7 +40,7 @@ const Card = ({ article }: { article: Article }) => (
       />
     </div>
     <div className="min-w-0">
-      <div className="flex items-center gap-2 mb-1.5">
+      <div className="flex items-center gap-2 mb-1">
         <span className="font-body text-[9px] uppercase tracking-[0.2em] text-primary">
           {article.category}
         </span>
@@ -49,7 +49,7 @@ const Card = ({ article }: { article: Article }) => (
           {article.date}
         </span>
       </div>
-      <h3 className="font-display text-[14px] font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 line-clamp-3">
+      <h3 className="font-display text-[13px] font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2">
         {article.title}
       </h3>
     </div>
@@ -72,8 +72,25 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
   const scrollBy = (dir: 1 | -1) => {
     const el = scrollRef.current;
     if (!el) return;
-    el.scrollBy({ left: dir * Math.max(340, el.clientWidth * 0.6), behavior: "smooth" });
+    el.scrollBy({ left: dir * Math.max(320, el.clientWidth * 0.6), behavior: "smooth" });
   };
+
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    if (!open || paused || query.trim()) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    const id = window.setInterval(() => {
+      if (!el) return;
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2;
+      if (atEnd) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        el.scrollBy({ left: 1, behavior: "auto" });
+      }
+    }, 30);
+    return () => window.clearInterval(id);
+  }, [open, paused, query]);
 
   return (
     <div
@@ -85,8 +102,8 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
           : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-7 pt-4 pb-12">
-        <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
+      <div className="max-w-7xl mx-auto px-6 pt-3 pb-4">
+        <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
           <p className="chapter-marker text-secondary-foreground/60">
             News &amp; Insights
           </p>
@@ -96,7 +113,7 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search articles & tags..."
+              placeholder="Search articles"
               className="bg-transparent outline-none border-none text-secondary-foreground placeholder:text-secondary-foreground/40 font-body text-xs w-full"
             />
           </div>
@@ -108,7 +125,11 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
           </Link>
         </div>
 
-        <div className="relative">
+        <div
+          className="relative"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
           <button
             type="button"
             onClick={() => scrollBy(-1)}
@@ -128,19 +149,19 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
 
           <div
             ref={scrollRef}
-            className="overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory px-10"
+            className="overflow-x-auto overflow-y-hidden scroll-smooth px-10"
             style={{
               maskImage:
                 "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
-              scrollbarWidth: "thin",
+              scrollbarWidth: "none",
             }}
           >
             {filtered.length === 0 ? (
-              <p className="font-body text-xs text-secondary-foreground/60 py-8 text-center">
+              <p className="font-body text-xs text-secondary-foreground/60 py-6 text-center">
                 No articles match "{query}".
               </p>
             ) : (
-              <div className="flex w-max py-2">
+              <div className="flex w-max py-1">
                 {filtered.map((a) => (
                   <Card key={a.slug} article={a} />
                 ))}
