@@ -125,7 +125,11 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
           </Link>
         </div>
 
-        <div className="relative">
+        <div
+          className="relative"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
           <button
             type="button"
             onClick={() => scrollBy(-1)}
@@ -145,19 +149,19 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
 
           <div
             ref={scrollRef}
-            className="overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory px-10"
+            className="overflow-x-auto overflow-y-hidden scroll-smooth px-10"
             style={{
               maskImage:
                 "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
-              scrollbarWidth: "thin",
+              scrollbarWidth: "none",
             }}
           >
             {filtered.length === 0 ? (
-              <p className="font-body text-xs text-secondary-foreground/60 py-8 text-center">
+              <p className="font-body text-xs text-secondary-foreground/60 py-6 text-center">
                 No articles match "{query}".
               </p>
             ) : (
-              <div className="flex w-max py-2">
+              <div className="flex w-max py-1">
                 {filtered.map((a) => (
                   <Card key={a.slug} article={a} />
                 ))}
