@@ -29,9 +29,9 @@ interface Props {
 const Card = ({ article }: { article: Article }) => (
   <Link
     to={`/news/${article.slug}`}
-    className="group flex-shrink-0 w-[340px] mr-5 flex gap-3 items-start"
+    className="group flex-shrink-0 w-[340px] mr-5 flex gap-4 items-center"
   >
-    <div className="w-20 h-20 flex-shrink-0 overflow-hidden">
+    <div className="w-24 h-24 flex-shrink-0 overflow-hidden">
       <img
         src={article.image}
         alt={article.title}
@@ -102,7 +102,7 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
           : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 pt-3 pb-4">
+      <div className="max-w-7xl mx-auto px-6 pt-4 pb-4">
         <div className="flex items-center justify-between gap-4 mb-3 flex-wrap">
           <p className="chapter-marker text-secondary-foreground/60">
             News &amp; Insights
@@ -161,7 +161,7 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
                 No articles match "{query}".
               </p>
             ) : (
-              <div className="flex w-max py-1">
+              <div className="flex w-max py-2">
                 {filtered.map((a) => (
                   <Card key={a.slug} article={a} />
                 ))}
