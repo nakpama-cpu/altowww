@@ -11,12 +11,7 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
 
   const getHeaderHeight = () => {
     const header = document.querySelector("header") as HTMLElement | null;
-    if (!header) return 80;
-    const rootFontSize = parseFloat(
-      getComputedStyle(document.documentElement).fontSize
-    );
-    const expanded = header.classList.contains("py-6");
-    return header.offsetHeight - (expanded ? rootFontSize * 1.5 : 0);
+    return header?.offsetHeight || 80;
   };
 
   useEffect(() => {
