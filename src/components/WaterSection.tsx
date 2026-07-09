@@ -19,17 +19,17 @@ const WaterSection = () => {
 
   return (
     <section id="opportunity" className="section-light">
-      <div className="py-4 md:py-6" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
-
-        <p className="chapter-marker mb-8">The Opportunity</p>
-        <h2
-          className={`display-heading text-3xl md:text-5xl mt-8 mb-10 md:mb-14 transition-all duration-1000 ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
-          Whisky cask investment is now widely considered to be one of the most secure assets available for long or medium term holds – alongside none other than gold.
-        </h2>
+        <div className="min-h-[calc(100vh-80px)] md:min-h-[calc(100vh-340px)] flex flex-col justify-center">
+          <p className="chapter-marker mb-8">The Opportunity</p>
+          <h2
+            className={`display-heading text-3xl md:text-5xl mb-6 md:mb-8 transition-all duration-1000 ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            Whisky cask investment is now widely considered to be one of the most secure assets available for long or medium term holds – alongside none other than gold.
+          </h2>
+        </div>
         <p
           className={`font-body text-base leading-relaxed text-muted-foreground max-w-xl mb-6 transition-all duration-1000 delay-300 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
