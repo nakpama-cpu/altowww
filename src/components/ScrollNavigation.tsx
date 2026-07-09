@@ -69,27 +69,19 @@ const ScrollNavigation = () => {
     };
   }, [collectSections, computeCurrent, show]);
 
-  const getHeaderHeight = useCallback(() => {
-    const header = document.querySelector("header") as HTMLElement | null;
-    if (!header) return 80;
-    const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    const expanded = header.classList.contains("py-6");
-    return header.offsetHeight - (expanded ? rootFontSize * 1.5 : 0);
-  }, []);
-
   const scrollTo = useCallback((direction: "up" | "down") => {
     const sections = sectionsRef.current;
     if (!sections.length) return;
     const scrollY = window.scrollY;
+    const headerHeight = getHeaderHeight();
     let idx = 0;
     sections.forEach((s, i) => {
       const absTop = s.getBoundingClientRect().top + scrollY;
-      if (absTop <= scrollY + ACTIVE_OFFSET) idx = i;
+      if (absTop <= scrollY + headerHeight) idx = i;
     });
     const target =
       direction === "up" ? sections[idx - 1] : sections[idx + 1];
     if (!target) return;
-    const headerHeight = getHeaderHeight();
     const scrollTarget =
       document.getElementById(`${target.id}-start`) || target;
     let targetTop: number;
