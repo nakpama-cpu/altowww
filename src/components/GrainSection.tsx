@@ -110,12 +110,12 @@ const GrainSection = () => {
             {[...logos, ...logos].map((d, i) => (
               <div
                 key={`${d.name}-${i}`}
-                className="flex-shrink-0 w-[200px] md:w-[260px] mx-4 md:mx-6 flex items-center justify-center h-32"
+                className="flex-shrink-0 w-[200px] md:w-[260px] mx-4 md:mx-6 flex items-center justify-center h-28"
               >
                 <img
                   src={d.logo}
                   alt={`${d.name} distillery logo`}
-                  className="max-h-28 max-w-[220px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 invert grayscale hover:grayscale-0"
+                  className="max-h-24 max-w-[220px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 invert grayscale hover:grayscale-0"
                   loading="lazy"
                 />
               </div>
