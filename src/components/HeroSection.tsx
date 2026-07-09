@@ -16,14 +16,14 @@ const HeroSection = () => {
           width={1920}
           height={1080}
           fetchPriority="high"
-          className="absolute inset-0 w-full h-full object-cover object-center animate-cloud-drift"
+          className="absolute inset-0 w-full h-full object-cover object-top md:object-center animate-cloud-drift"
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
           }}
         />
         <div className="absolute inset-0 bg-secondary/50" />
-        <div className="relative z-10 flex flex-col items-center justify-start md:justify-center h-full text-center px-6 pt-20 pb-20 md:pt-0 md:pb-0">
+        <div className="relative z-10 flex flex-col items-center justify-start md:justify-center h-full text-center px-6 pt-20 pb-4 md:pt-0 md:pb-0">
           <p
             className="chapter-marker mb-3 md:mt-24 text-secondary-foreground/70 animate-fade-in"
             style={{ animationDelay: "0.3s" }}
