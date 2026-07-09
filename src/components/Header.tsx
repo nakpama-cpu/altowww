@@ -3,9 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import altoLogo from "@/assets/alto-logo.png";
 import BrochureButton from "@/components/BrochureButton";
 import LoginModal from "@/components/LoginModal";
+import NewsMegaDropdown from "@/components/NewsMegaDropdown";
 
 const mainLinks = [
   { to: "/", label: "Home" },
+  { to: "/news", label: "News & Insights", isNews: true as const },
   { to: "/how-it-works", label: "How It Works" },
   {
     label: "About Whisky",
@@ -23,9 +25,23 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [newsOpen, setNewsOpen] = useState(false);
+  const newsCloseTimer = useRef<number | null>(null);
   const [loginOpen, setLoginOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+
+  const openNews = () => {
+    if (newsCloseTimer.current) {
+      window.clearTimeout(newsCloseTimer.current);
+      newsCloseTimer.current = null;
+    }
+    setNewsOpen(true);
+  };
+  const scheduleCloseNews = () => {
+    if (newsCloseTimer.current) window.clearTimeout(newsCloseTimer.current);
+    newsCloseTimer.current = window.setTimeout(() => setNewsOpen(false), 150);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -36,6 +52,7 @@ const Header = () => {
   useEffect(() => {
     setMenuOpen(false);
     setDropdownOpen(false);
+    setNewsOpen(false);
   }, [location]);
 
   // Close dropdown on outside click
@@ -112,6 +129,25 @@ const Header = () => {
                     </Link>
                   ))}
                 </div>
+              </div>
+            ) : "isNews" in link && link.isNews ? (
+              <div
+                key={link.to}
+                onMouseEnter={openNews}
+                onMouseLeave={scheduleCloseNews}
+              >
+                <Link
+                  to={link.to!}
+                  onFocus={openNews}
+                  onBlur={scheduleCloseNews}
+                  className={`px-4 py-2 font-body text-xs uppercase tracking-[0.2em] transition-all duration-300 inline-block ${
+                    isActive(link.to!) || newsOpen
+                      ? "text-primary"
+                      : "text-secondary-foreground/60 hover:text-secondary-foreground"
+                  }`}
+                >
+                  {link.label}
+                </Link>
               </div>
             ) : (
               <Link
@@ -204,6 +240,13 @@ const Header = () => {
           </button>
           <BrochureButton className="font-body text-sm uppercase tracking-[0.15em] bg-primary text-primary-foreground px-5 py-3 text-center mt-2 hover:opacity-90 transition-opacity w-full" />
         </nav>
+      </div>
+      <div className="hidden md:block">
+        <NewsMegaDropdown
+          open={newsOpen}
+          onMouseEnter={openNews}
+          onMouseLeave={scheduleCloseNews}
+        />
       </div>
       <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
     </header>

@@ -1,45 +1,46 @@
 ## Goal
-Replace the fabricated specifics in `src/data/articles.ts` with content grounded in real, verifiable Scotch whisky industry stories, while keeping the site's tone, structure, and Alto Whisky positioning intact.
 
-## Audit of current articles
+Add a new **News & Insights** tab to the fixed header (right after Home) that opens a wide hover-triggered dropdown panel. The panel shows all news articles in a slow-moving carousel, sorted newest-first. Clicking an article navigates to its full article page.
 
-Fictional / unverifiable (must be rewritten):
-1. **Rare 1978 Macallan Cask £2.8m auction (June 2026)** — invented sale/price.
-2. **Scottish Whisky Tourism 3M visitors (May 2026)** — invented stat.
-3. **New £50m Speyburn Glen Distillery (May 2026)** — distillery does not exist.
-4. **China Slashes Whisky Import Duty to 5% (March 2026)** — no such UK–China deal.
+## Placement & Spacing
 
-Largely accurate but to fact-check & tighten:
-5. **Green Revolution (April 2026)** — real direction (SWA Net Zero by 2040 is real), but specific figures invented.
-6. **Whisky Casks Outperform / Knight Frank (Feb 2026)** — Knight Frank KFLII is real; 10‑yr rare whisky figure peaked ~373% then declined in 2023–2024. Numbers must be corrected.
-7. **Wasting asset / CGT (Jan 2026)** — broadly accurate but HMRC's position on cask CGT status was clarified/challenged in 2023; needs nuance.
-8. **Most sought-after distilleries (Jan 2026)** — generally factual.
-9. **Bonded warehouses (Dec 2025)** — generally factual.
-10. **Five whisky regions (Nov 2025)** — generally factual.
+- Tab order in `Header.tsx`: **Home → News & Insights → How It Works → About Whisky → Why Whisky → Contact**.
+- Dropdown is a full-width panel anchored to the header (not a narrow menu under the tab), so it can overlay the hero headline area without covering the CTA buttons.
+- Vertical sizing rule: the panel's bottom edge sits above the "Request Brochure / Speak to an Advisor" buttons with the **same gap** currently used between the buttons and the bottom of the hero image (~21px, per the hero spacing we tuned earlier). Same rule applies to the gap between the header's bottom edge and the top of the dropdown panel.
+- On desktop, the panel spans the full viewport width with a translucent dark backdrop matching the header (`bg-secondary/95 backdrop-blur-md`).
+- On mobile, no hover panel — the tab behaves like a regular link to `/news` (the existing News page), matching current mobile menu patterns.
 
-## Replacement real stories
+## Interaction
 
-Each rewrite keeps the existing `slug` (and image where appropriate) to avoid breaking routes/imports. Titles, dates, excerpts, and content arrays are replaced.
+- **Trigger:** mouse enter on the tab OR the panel keeps it open; mouse leave from both closes it (small ~150ms grace delay to prevent flicker when moving cursor from tab into panel).
+- **Keyboard/focus:** focus on the tab also opens it; Escape closes.
+- **Click article:** navigates to `/news/:slug` (existing `ArticlePage` route).
+- Closing on route change already handled by existing `useEffect` on `location`.
 
-1. **Macallan auction record** → *"The Macallan 1926 Adami Sets £2.1m World Record for a Bottle of Whisky"* (Sotheby's, Nov 2023 — the genuine standing world record). Discusses what record bottle prices signal for cask values.
-2. **Whisky tourism** → *"Scotch Whisky Tourism Rebounds Past 2 Million Visitors"* (SWA visitor figures — 2 million+ visitors reported pre-pandemic and recovering; cite SWA Visitor Attraction Survey).
-3. **New Speyside distillery** → *"Rosebank Returns: Lowland Icon Reopens After 30 Years"* (Ian Macleod Distillers reopened Rosebank in 2023, first spirit 2023, official opening 2024) — a real, well-documented new-old distillery story relevant to investors.
-4. **China tariffs** → *"India–UK Free Trade Agreement Halves Tariff on Scotch Whisky"* (signed May 2025; cuts 150% duty to 75% immediately, to 40% over 10 years — genuine and material for the industry).
-5. **Green revolution** → tighten to real facts: SWA Sustainability Strategy and Net Zero by 2040 commitment, Glenmorangie's Deep loch project, Bruichladdich B Corp status, hydrogen trials (Glenfiddich biogas trucks).
-6. **Knight Frank KFLII** → correct numbers: rare whisky returned ~280–322% over 10 years per KFLII 2024 and was the leader for most of the 2010s but slipped in 2023; reframe honestly as a long-term outperformer with recent cooling.
-7. **CGT / wasting asset** → keep core point but add the 2023 HMRC clarification that the wasting-asset exemption applies to physical casks in bond but cannot be assumed automatically; recommend professional tax advice.
-8–10. Light factual tightening only.
+## Carousel
 
-## Implementation
+- Uses the existing `articles` array from `src/data/articles.ts`, sorted by date descending (newest first). Dates are stored as human strings ("June 2026") — add a parser or an explicit sort key.
+- Slow auto-advance: continuous marquee-style horizontal scroll (CSS `@keyframes` translateX loop), ~40–60s per full cycle. Pauses on hover of a card.
+- Shows 3 cards visible at a time on desktop, 2 on tablet. Each card: image thumbnail, category, date, title (compact — this is a dropdown, not a full section).
+- Duplicate the article list inline for a seamless infinite loop.
 
-- Edit `src/data/articles.ts` only.
-- Preserve all `slug` values, `image` imports, and the `Article` interface.
-- Update `title`, `date`, `excerpt`, and `content` paragraphs for items 1–7.
-- Light copy-edits for items 8–10 where needed.
-- No component, route, or image-asset changes required.
-- After edits, spot-check `/news`, `/news/:slug`, and `/portal/news` render correctly (titles, sorting still works because dates remain in "Month YYYY" format).
+## Files to change
+
+- `src/components/Header.tsx` — add News & Insights entry, add hover state, render new dropdown component, reorder links.
+- `src/components/NewsMegaDropdown.tsx` (new) — full-width panel with the marquee carousel and article cards.
+- `src/data/articles.ts` — add a `sortDate` (ISO) field or a helper to sort chronologically; keep display `date` unchanged.
+- `src/index.css` (or Tailwind config) — add a `marquee` keyframe if not already present.
+
+## Technical notes
+
+- The panel is `position: fixed; top: <header height>; left: 0; right: 0;` so it overlays hero content without shifting layout.
+- Height is bounded so the bottom edge lands above the hero CTA buttons. Use a fixed value tuned to the current hero layout (roughly `calc(380px - header - buttons-height - 21px*2)` on desktop; hard-code after measurement).
+- Marquee implementation: flex row with `animation: marquee Xs linear infinite`, `width: max-content`, list rendered twice.
+- Respect `prefers-reduced-motion`: pause animation.
 
 ## Out of scope
 
-- No new images, no schema changes, no new routes.
-- No changes to homepage news carousel logic (it reads the same data).
+- No changes to the `/news` page itself.
+- No changes to article content or the mobile menu structure beyond adding the new link.
+
+Confirm and I'll build it.
