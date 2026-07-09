@@ -11,6 +11,7 @@ import ProcessSection from "@/components/ProcessSection";
 import NewsSection from "@/components/NewsSection";
 import FooterSection from "@/components/FooterSection";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
+import { NavigationVisibilityProvider } from "@/contexts/NavigationVisibilityContext";
 
 const chapters = [
   { id: "heritage", label: "I. Heritage" },
@@ -23,33 +24,35 @@ const chapters = [
 
 const Index = () => {
   return (
-    <div className="relative">
-      <Seo
-        title="Alto Whisky | Premium Whisky Cask Investment"
-        description="Invest in Scottish single malt whisky casks with Alto Whisky. Expert advisory, HMRC-bonded storage, and tax-efficient returns for discerning investors."
-        path="/"
-      />
-      <Header />
-      <ChapterMarker chapters={chapters} />
-      <HeroSection />
-      {/* Content sits above the fixed hero and scrolls over it */}
-      <div className="relative z-10">
-        <WaterSection />
-        <WhyWhiskySection />
-        <InvestmentSection />
-        <GlassSection />
-        <ProcessSection />
-        <GrainSection />
-        <div className="section-light">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
-            <div className="w-full h-px bg-border" />
+    <NavigationVisibilityProvider>
+      <div className="relative">
+        <Seo
+          title="Alto Whisky | Premium Whisky Cask Investment"
+          description="Invest in Scottish single malt whisky casks with Alto Whisky. Expert advisory, HMRC-bonded storage, and tax-efficient returns for discerning investors."
+          path="/"
+        />
+        <Header />
+        <ChapterMarker chapters={chapters} />
+        <HeroSection />
+        {/* Content sits above the fixed hero and scrolls over it */}
+        <div className="relative z-10">
+          <WaterSection />
+          <WhyWhiskySection />
+          <InvestmentSection />
+          <GlassSection />
+          <ProcessSection />
+          <GrainSection />
+          <div className="section-light">
+            <div className="max-w-3xl mx-auto px-6 md:px-12">
+              <div className="w-full h-px bg-border" />
+            </div>
           </div>
+          <NewsSection />
+          <FooterSection />
         </div>
-        <NewsSection />
-        <FooterSection />
+        <StickyMobileCTA />
       </div>
-      <StickyMobileCTA />
-    </div>
+    </NavigationVisibilityProvider>
   );
 };
 
