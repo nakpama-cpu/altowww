@@ -60,9 +60,9 @@ const ProcessSection = () => {
   }, []);
 
   return (
-    <section id="process" className="section-light">
-      <div id="process-start" className="pt-5 md:pt-6 pb-1 md:pb-2" />
-      <div ref={ref} className="max-w-5xl mx-auto px-6 md:px-12">
+    <section id="process" className="section-light flex flex-col min-h-[calc(100vh-5rem)]">
+      <div id="process-start" className="pt-10 md:pt-14 pb-4 md:pb-6" />
+      <div ref={ref} className="max-w-5xl mx-auto px-6 md:px-12 flex-1 flex flex-col justify-center">
         <p className="chapter-marker mb-3 md:mb-4">How It Works</p>
         <h2
           className={`display-heading text-3xl md:text-4xl mb-4 md:mb-6 max-w-2xl transition-all duration-1000 ${
