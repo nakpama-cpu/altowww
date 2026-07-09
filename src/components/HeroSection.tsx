@@ -8,7 +8,7 @@ const HeroSection = () => {
       {/* Fixed hero that stays in place while content scrolls over it */}
       <section
         id="heritage"
-        className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-screen md:h-[340px]"
+        className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-screen md:h-[380px]"
       >
         <img
           src={heroImg}
@@ -26,7 +26,7 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-secondary/50" />
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
           <p
-            className="chapter-marker mt-12 md:mt-16 mb-6 text-secondary-foreground/70 animate-fade-in"
+            className="chapter-marker mt-14 md:mt-20 mb-6 text-secondary-foreground/70 animate-fade-in"
             style={{ animationDelay: "0.3s" }}
           >
             Whisky Cask Investment
@@ -53,7 +53,7 @@ const HeroSection = () => {
       </section>
       <ScrollNavigation />
       {/* Spacer to push content below the fixed hero */}
-      <div className="h-screen md:h-[340px]" />
+      <div className="h-screen md:h-[380px]" />
     </>
   );
 };
