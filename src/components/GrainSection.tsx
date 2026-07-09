@@ -95,7 +95,7 @@ const GrainSection = () => {
 
       {/* Distillery Logo Carousel */}
       <div
-        className={`mt-12 md:mt-16 overflow-hidden transition-all duration-1000 delay-700 ${
+        className={`mt-6 md:mt-8 overflow-hidden transition-all duration-1000 delay-700 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
       >
