@@ -63,6 +63,14 @@ const ScrollNavigation = () => {
     };
   }, [collectSections, computeCurrent, show]);
 
+  const getHeaderHeight = useCallback(() => {
+    const header = document.querySelector("header") as HTMLElement | null;
+    if (!header) return 80;
+    const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const expanded = header.classList.contains("py-6");
+    return header.offsetHeight - (expanded ? rootFontSize * 1.5 : 0);
+  }, []);
+
   const scrollTo = useCallback((direction: "up" | "down") => {
     const sections = sectionsRef.current;
     if (!sections.length) return;
@@ -74,9 +82,17 @@ const ScrollNavigation = () => {
     });
     const target =
       direction === "up" ? sections[idx - 1] : sections[idx + 1];
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!target) return;
+    const headerHeight = getHeaderHeight();
+    let targetTop: number;
+    if (window.getComputedStyle(target).position === "fixed") {
+      targetTop = 0;
+    } else {
+      targetTop = target.getBoundingClientRect().top + window.scrollY - headerHeight;
+    }
+    window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
     show();
-  }, [show]);
+  }, [getHeaderHeight, show]);
 
   if (!mounted || sectionsRef.current.length < 2) return null;
 
