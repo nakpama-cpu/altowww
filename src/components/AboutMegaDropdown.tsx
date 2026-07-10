@@ -67,10 +67,11 @@ const Card = ({
   </Link>
 );
 
-const AboutMegaDropdown = ({ open, onMouseEnter }: Props) => {
+const AboutMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
   return (
     <div
       onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       className={`absolute left-0 right-0 top-full mt-0 bg-secondary/95 backdrop-blur-md transition-all duration-300 overflow-hidden ${
         open
           ? "opacity-100 translate-y-0 pointer-events-auto"
