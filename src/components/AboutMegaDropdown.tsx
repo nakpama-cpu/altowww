@@ -43,7 +43,7 @@ const Card = ({
 }) => (
   <Link
     to={item.to}
-    className="group flex-shrink-0 w-[340px] flex gap-4 items-center"
+    className="group flex-shrink-0 w-[260px] md:w-[280px] lg:w-[300px] xl:w-[340px] flex gap-4 items-center"
   >
     <div className="w-28 h-28 flex-shrink-0 overflow-hidden aspect-square">
       <img
