@@ -133,15 +133,10 @@ const Header = () => {
                 </div>
               </div>
             ) : "isNews" in link && link.isNews ? (
-              <div
-                key={link.to}
-                onMouseEnter={openNews}
-                onMouseLeave={scheduleCloseNews}
-              >
+              <div key={link.to}>
                 <Link
                   to={link.to!}
                   onFocus={openNews}
-                  onBlur={scheduleCloseNews}
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 inline-block ${
                     isActive(link.to!)
                       ? "text-primary"
@@ -247,7 +242,6 @@ const Header = () => {
         <NewsMegaDropdown
           open={newsOpen}
           onMouseEnter={openNews}
-          onMouseLeave={scheduleCloseNews}
         />
       </div>
       <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
