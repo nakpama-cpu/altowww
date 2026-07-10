@@ -242,7 +242,6 @@ const Header = () => {
         <NewsMegaDropdown
           open={newsOpen}
           onMouseEnter={openNews}
-          onMouseLeave={scheduleCloseNews}
         />
       </div>
       <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />

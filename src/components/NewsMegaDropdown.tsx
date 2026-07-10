@@ -23,7 +23,7 @@ const sortedArticles: Article[] = [...articles].sort(
 interface Props {
   open: boolean;
   onMouseEnter: () => void;
-  onMouseLeave: () => void;
+  onMouseLeave?: () => void;
 }
 
 const Card = ({ article }: { article: Article }) => (
