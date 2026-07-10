@@ -104,7 +104,6 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
   return (
     <div
       onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
       className={`absolute left-0 right-0 top-full mt-0 bg-secondary/95 backdrop-blur-md transition-all duration-300 overflow-hidden min-h-[170px] md:min-h-[190px] ${
         open
           ? "opacity-100 translate-y-0 pointer-events-auto"
