@@ -79,13 +79,13 @@ const Header = () => {
           : "bg-transparent py-6"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 lg:px-6 flex items-center justify-between">
         <Link to="/">
-          <img src={altoLogo} alt="Alto Whisky" className="h-10 md:h-12 w-auto" />
+          <img src={altoLogo} alt="Alto Whisky" className="h-10 md:h-9 lg:h-12 w-auto" />
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-2">
+        <nav className="hidden md:flex items-center gap-0 lg:gap-1 xl:gap-2">
           {mainLinks.map((link) =>
             link.children ? (
               <div key={link.label} className="relative" ref={dropdownRef}>
