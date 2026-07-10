@@ -238,10 +238,7 @@ const Header = () => {
         <AboutMegaDropdown
           open={aboutOpen}
           onMouseEnter={openAbout}
-        />
-        {/* invisible bridge to catch mouse moving from about link to panel */}
-        <div
-          onMouseEnter={scheduleCloseAbout}
+          onMouseLeave={scheduleCloseAbout}
         />
       </div>
       <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
