@@ -94,12 +94,12 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
     <BrochureModalContext.Provider value={{ open }}>
       {children}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-lg bg-background border-border p-0 overflow-hidden">
+        <DialogContent className="w-[calc(100vw-1rem)] max-w-lg max-h-[90dvh] overflow-y-auto bg-background border-border p-0">
           {submitted ? (
-            <div className="py-16 px-8 text-center">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+            <div className="py-12 px-5 sm:py-16 sm:px-8 text-center">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-5 sm:mb-6 rounded-full bg-primary/10 flex items-center justify-center">
                 <svg
-                  className="w-8 h-8 text-primary"
+                  className="w-7 h-7 sm:w-8 sm:h-8 text-primary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -109,7 +109,7 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                 </svg>
               </div>
               <DialogHeader>
-                <DialogTitle className="display-heading text-2xl mb-4">Thank you.</DialogTitle>
+                <DialogTitle className="display-heading text-xl sm:text-2xl mb-3 sm:mb-4">Thank you.</DialogTitle>
                 <DialogDescription className="font-body text-sm text-muted-foreground leading-relaxed">
                   {isBrochure
                     ? "Your brochure request has been received. One of our expert Portfolio Advisors will be in touch shortly."
@@ -118,18 +118,18 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
               </DialogHeader>
             </div>
           ) : (
-            <div className="p-8">
-              <DialogHeader className="mb-6">
-                <DialogTitle className="display-heading text-2xl">
+            <div className="p-5 sm:p-8">
+              <DialogHeader className="mb-5 sm:mb-6">
+                <DialogTitle className="display-heading text-xl sm:text-2xl">
                   {isBrochure ? "Request Your Free Brochure" : "Speak to an Advisor"}
                 </DialogTitle>
-                <DialogDescription className="font-body text-sm text-muted-foreground leading-relaxed mt-2">
+                <DialogDescription className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed mt-2">
                   {isBrochure
                     ? "Fill in your details and one of our expert Portfolio Advisors will send you the brochure and answer any questions."
                     : "Fill in your details and one of our expert Portfolio Advisors will be in touch to discuss your requirements."}
                 </DialogDescription>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
@@ -229,7 +229,7 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-10 py-4 hover:opacity-90 transition-opacity disabled:opacity-50"
+                  className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 sm:px-10 py-3.5 sm:py-4 hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
                   {submitting
                     ? "Sending..."
