@@ -43,7 +43,7 @@ const Card = ({
 }) => (
   <Link
     to={item.to}
-    className="group flex-shrink-0 w-[340px] flex gap-4 items-center"
+    className="group flex-shrink-0 w-[280px] md:w-[300px] xl:w-[340px] flex gap-4 items-center"
   >
     <div className="w-28 h-28 flex-shrink-0 overflow-hidden aspect-square">
       <img
@@ -85,7 +85,7 @@ const AboutMegaDropdown = ({ open, onMouseEnter }: Props) => {
             About Whisky
           </p>
         </div>
-        <div className="flex justify-center gap-6">
+        <div className="flex justify-start lg:justify-center gap-4 lg:gap-5 xl:gap-6 overflow-x-auto lg:overflow-visible pb-1" style={{ scrollbarWidth: 'none' }}>
           {items.map((item) => (
             <Card key={item.to} item={item} />
           ))}
