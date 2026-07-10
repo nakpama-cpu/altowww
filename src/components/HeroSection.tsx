@@ -1,4 +1,5 @@
 import heroImg from "@/assets/hero-mountain.jpg";
+import altoLogo from "@/assets/alto-logo.png";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 
