@@ -118,7 +118,7 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
               </DialogHeader>
             </div>
           ) : (
-            <div className="p-4 sm:p-8">
+            <div className="p-3 sm:p-8">
               <DialogHeader className="mb-3 sm:mb-6">
                 <DialogTitle className="display-heading text-lg sm:text-2xl">
                   {isBrochure ? "Request Your Free Brochure" : "Speak to an Advisor"}
