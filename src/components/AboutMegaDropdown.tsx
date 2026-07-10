@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import regionsImg from "@/assets/nav-regions-distilleries.jpg";
+import regionsImg from "@/assets/scotland-landscape.jpg";
 import processImg from "@/assets/nav-how-whisky-made.jpg";
 import faqImg from "@/assets/nav-faqs.jpg";
 
@@ -43,9 +43,9 @@ const Card = ({
 }) => (
   <Link
     to={item.to}
-    className="group block w-[320px] flex-shrink-0"
+    className="group flex-shrink-0 w-[340px] flex gap-4 items-center"
   >
-    <div className="aspect-[4/3] overflow-hidden mb-3">
+    <div className="w-28 h-28 flex-shrink-0 overflow-hidden aspect-square">
       <img
         src={item.image}
         alt={item.label}
@@ -53,32 +53,33 @@ const Card = ({
         loading="lazy"
       />
     </div>
-    <div className="flex items-center gap-2 mb-1">
-      <span className="font-body text-[9px] uppercase tracking-[0.2em] text-primary">
-        {item.tagline}
-      </span>
+    <div className="min-w-0">
+      <div className="flex items-center gap-2 mb-1">
+        <span className="font-body text-[9px] uppercase tracking-[0.2em] text-primary">
+          {item.tagline}
+        </span>
+      </div>
+      <h3 className="font-display text-[15px] font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2 mb-1">
+        {item.label}
+      </h3>
+      <p className="font-body text-[11px] leading-relaxed text-secondary-foreground/60 line-clamp-2">
+        {item.description}
+      </p>
     </div>
-    <h3 className="font-display text-[16px] font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 mb-1">
-      {item.label}
-    </h3>
-    <p className="font-body text-[11px] leading-relaxed text-secondary-foreground/60 line-clamp-2">
-      {item.description}
-    </p>
   </Link>
 );
 
-const AboutMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
+const AboutMegaDropdown = ({ open, onMouseEnter }: Props) => {
   return (
     <div
       onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      className={`absolute left-0 right-0 top-full mt-0 bg-secondary/95 backdrop-blur-md transition-all duration-300 overflow-hidden ${
+      className={`absolute left-0 right-0 top-full mt-0 bg-secondary/95 backdrop-blur-md transition-all duration-300 overflow-hidden min-h-[170px] md:min-h-[190px] ${
         open
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 pt-3 pb-5">
+      <div className="max-w-6xl mx-auto px-6 pt-3 pb-3">
         <div className="mb-3">
           <p className="chapter-marker text-secondary-foreground/60">
             About Whisky
