@@ -3,8 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import altoLogo from "@/assets/alto-logo.png";
 import BrochureButton from "@/components/BrochureButton";
 import LoginModal from "@/components/LoginModal";
-import NewsMegaDropdown from "@/components/NewsMegaDropdown";
-import AboutMegaDropdown from "@/components/AboutMegaDropdown";
+import HeaderMegaDropdown from "@/components/HeaderMegaDropdown";
 
 const mainLinks = [
   { to: "/", label: "Home" },
