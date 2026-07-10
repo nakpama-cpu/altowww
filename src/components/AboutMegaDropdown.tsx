@@ -6,6 +6,7 @@ import faqImg from "@/assets/nav-faqs.jpg";
 interface Props {
   open: boolean;
   onMouseEnter: () => void;
+  onMouseLeave?: () => void;
 }
 
 const items = [
