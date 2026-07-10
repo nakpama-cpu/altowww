@@ -235,15 +235,16 @@ const Header = () => {
         </nav>
       </div>
       <div className="hidden md:block">
-        <NewsMegaDropdown
-          open={newsOpen}
-          onMouseEnter={openNews}
-          onMouseLeave={scheduleCloseNews}
-        />
-        <AboutMegaDropdown
-          open={aboutOpen}
-          onMouseEnter={openAbout}
-          onMouseLeave={scheduleCloseAbout}
+        <HeaderMegaDropdown
+          active={newsOpen ? "news" : aboutOpen ? "about" : null}
+          onMouseEnter={() => {
+            if (aboutOpen) openAbout();
+            else openNews();
+          }}
+          onMouseLeave={() => {
+            if (aboutOpen) scheduleCloseAbout();
+            else scheduleCloseNews();
+          }}
         />
       </div>
       <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
