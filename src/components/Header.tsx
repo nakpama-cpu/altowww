@@ -3,8 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import altoLogo from "@/assets/alto-logo.png";
 import BrochureButton from "@/components/BrochureButton";
 import LoginModal from "@/components/LoginModal";
-import NewsMegaDropdown from "@/components/NewsMegaDropdown";
-import AboutMegaDropdown from "@/components/AboutMegaDropdown";
+import HeaderMegaDropdown from "@/components/HeaderMegaDropdown";
 
 const mainLinks = [
   { to: "/", label: "Home" },
@@ -236,15 +235,16 @@ const Header = () => {
         </nav>
       </div>
       <div className="hidden md:block">
-        <NewsMegaDropdown
-          open={newsOpen}
-          onMouseEnter={openNews}
-          onMouseLeave={scheduleCloseNews}
-        />
-        <AboutMegaDropdown
-          open={aboutOpen}
-          onMouseEnter={openAbout}
-          onMouseLeave={scheduleCloseAbout}
+        <HeaderMegaDropdown
+          active={newsOpen ? "news" : aboutOpen ? "about" : null}
+          onMouseEnter={() => {
+            if (aboutOpen) openAbout();
+            else openNews();
+          }}
+          onMouseLeave={() => {
+            if (aboutOpen) scheduleCloseAbout();
+            else scheduleCloseNews();
+          }}
         />
       </div>
       <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
