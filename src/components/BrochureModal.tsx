@@ -96,7 +96,7 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-[calc(100vw-1rem)] max-w-lg max-h-[92dvh] sm:max-h-[90dvh] overflow-y-auto bg-background border-border p-0">
           {submitted ? (
-            <div className="py-10 px-4 sm:py-16 sm:px-8 text-center">
+            <div className="py-8 px-3 sm:py-16 sm:px-8 text-center">
               <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 rounded-full bg-primary/10 flex items-center justify-center">
                 <svg
                   className="w-7 h-7 sm:w-8 sm:h-8 text-primary"
