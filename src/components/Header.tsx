@@ -8,7 +8,7 @@ import NewsMegaDropdown from "@/components/NewsMegaDropdown";
 const mainLinks = [
   { to: "/", label: "Home" },
   { to: "/news", label: "News & Insights", isNews: true as const },
-  { to: "/how-it-works", label: "How It Works" },
+  { to: "/why-whisky", label: "Why Whisky" },
   {
     label: "About Whisky",
     children: [
@@ -17,7 +17,7 @@ const mainLinks = [
       { to: "/faqs", label: "FAQs" },
     ],
   },
-  { to: "/why-whisky", label: "Why Whisky" },
+  { to: "/how-it-works", label: "How It Works" },
   { to: "/contact", label: "Contact" },
 ];
 
