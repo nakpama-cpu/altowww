@@ -4,6 +4,7 @@ import altoLogo from "@/assets/alto-logo.png";
 import BrochureButton from "@/components/BrochureButton";
 import LoginModal from "@/components/LoginModal";
 import NewsMegaDropdown from "@/components/NewsMegaDropdown";
+import AboutMegaDropdown from "@/components/AboutMegaDropdown";
 
 const mainLinks = [
   { to: "/", label: "Home" },
@@ -24,23 +25,39 @@ const mainLinks = [
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [newsOpen, setNewsOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const newsCloseTimer = useRef<number | null>(null);
+  const aboutCloseTimer = useRef<number | null>(null);
   const [loginOpen, setLoginOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
-  const openNews = () => {
-    if (newsCloseTimer.current) {
-      window.clearTimeout(newsCloseTimer.current);
-      newsCloseTimer.current = null;
+  const clearTimer = (ref: React.MutableRefObject<number | null>) => {
+    if (ref.current) {
+      window.clearTimeout(ref.current);
+      ref.current = null;
     }
+  };
+
+  const openNews = () => {
+    clearTimer(newsCloseTimer);
+    clearTimer(aboutCloseTimer);
+    setAboutOpen(false);
     setNewsOpen(true);
   };
   const scheduleCloseNews = () => {
-    if (newsCloseTimer.current) window.clearTimeout(newsCloseTimer.current);
+    clearTimer(newsCloseTimer);
     newsCloseTimer.current = window.setTimeout(() => setNewsOpen(false), 150);
+  };
+  const openAbout = () => {
+    clearTimer(aboutCloseTimer);
+    clearTimer(newsCloseTimer);
+    setNewsOpen(false);
+    setAboutOpen(true);
+  };
+  const scheduleCloseAbout = () => {
+    clearTimer(aboutCloseTimer);
+    aboutCloseTimer.current = window.setTimeout(() => setAboutOpen(false), 150);
   };
 
   useEffect(() => {
@@ -51,20 +68,9 @@ const Header = () => {
 
   useEffect(() => {
     setMenuOpen(false);
-    setDropdownOpen(false);
     setNewsOpen(false);
+    setAboutOpen(false);
   }, [location]);
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
 
   const isActive = (path: string) => location.pathname === path;
   const isAboutActive = mainLinks
@@ -73,8 +79,6 @@ const Header = () => {
 
   return (
     <header
-      onMouseEnter={openNews}
-      onMouseLeave={scheduleCloseNews}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? "bg-secondary/95 backdrop-blur-md shadow-lg py-3"
@@ -90,9 +94,13 @@ const Header = () => {
         <nav className="hidden md:flex items-center gap-0 lg:gap-1">
           {mainLinks.map((link) =>
             link.children ? (
-              <div key={link.label} className="relative" ref={dropdownRef}>
+              <div
+                key={link.label}
+                onMouseEnter={openAbout}
+                onMouseLeave={scheduleCloseAbout}
+              >
                 <button
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  type="button"
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 flex items-center gap-1 ${
                     isAboutActive
                       ? "text-primary"
@@ -101,7 +109,7 @@ const Header = () => {
                 >
                   {link.label}
                   <svg
-                    className={`w-3 h-3 transition-transform duration-300 ${dropdownOpen ? "rotate-180" : ""}`}
+                    className={`w-3 h-3 transition-transform duration-300 ${aboutOpen ? "rotate-180" : ""}`}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -110,30 +118,13 @@ const Header = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div
-                  className={`absolute top-full left-0 mt-4 bg-secondary/95 backdrop-blur-md min-w-[220px] py-3 transition-all duration-300 ${
-                    dropdownOpen
-                      ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : "opacity-0 -translate-y-2 pointer-events-none"
-                  }`}
-                >
-                  {link.children.map((child) => (
-                    <Link
-                      key={child.to}
-                      to={child.to}
-                      className={`block px-6 py-2.5 font-body text-xs uppercase tracking-[0.15em] transition-colors ${
-                        isActive(child.to)
-                          ? "text-primary"
-                          : "text-secondary-foreground/60 hover:text-secondary-foreground hover:bg-secondary-foreground/5"
-                      }`}
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
-                </div>
               </div>
             ) : "isNews" in link && link.isNews ? (
-              <div key={link.to}>
+              <div
+                key={link.to}
+                onMouseEnter={openNews}
+                onMouseLeave={scheduleCloseNews}
+              >
                 <Link
                   to={link.to!}
                   onFocus={openNews}
@@ -242,6 +233,12 @@ const Header = () => {
         <NewsMegaDropdown
           open={newsOpen}
           onMouseEnter={openNews}
+          onMouseLeave={scheduleCloseNews}
+        />
+        <AboutMegaDropdown
+          open={aboutOpen}
+          onMouseEnter={openAbout}
+          onMouseLeave={scheduleCloseAbout}
         />
       </div>
       <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
