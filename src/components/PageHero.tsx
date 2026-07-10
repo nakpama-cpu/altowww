@@ -11,7 +11,7 @@ const PageHero = ({ image, imageAlt, children, height = "60vh" }: PageHeroProps)
     <>
       {/* Fixed hero that stays in place while content scrolls over it */}
       <section
-        className="relative w-full overflow-hidden z-0 fixed inset-x-0 top-0 h-[var(--hero-height)] min-h-[380px] md:min-h-0 md:h-[380px]"
+        className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-[var(--hero-height)] min-h-[380px] md:min-h-0 md:h-[380px]"
         style={{ "--hero-height": height } as React.CSSProperties}
       >
         <img
