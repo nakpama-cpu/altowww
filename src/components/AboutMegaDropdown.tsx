@@ -77,12 +77,13 @@ const AboutPanel = () => {
       </div>
 
       <div className="px-10">
-        <div className="flex justify-between gap-5 py-2">
+        <div className="flex items-center gap-6 py-2">
           {items.map((item) => (
             <Card key={item.to} item={item} />
           ))}
         </div>
       </div>
+
     </div>
   );
 };
