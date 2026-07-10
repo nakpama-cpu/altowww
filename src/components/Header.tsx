@@ -141,7 +141,7 @@ const Header = () => {
                   onFocus={openNews}
                   onBlur={scheduleCloseNews}
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 inline-block ${
-                    isActive(link.to!) || newsOpen
+                    isActive(link.to!)
                       ? "text-primary"
                       : "text-secondary-foreground/60 hover:text-secondary-foreground"
                   }`}
