@@ -2,9 +2,10 @@ interface PageHeroProps {
   image: string;
   imageAlt: string;
   children: React.ReactNode;
-  /** Mobile hero height; desktop is standardized to match the homepage hero. */
+  /** @deprecated Height is standardized to match the homepage hero. */
   height?: string;
 }
+
 
 const PageHero = ({ image, imageAlt, children }: PageHeroProps) => {
   return (
