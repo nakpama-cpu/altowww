@@ -109,7 +109,7 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                 </svg>
               </div>
               <DialogHeader>
-                <DialogTitle className="display-heading text-lg sm:text-2xl mb-2 sm:mb-4">Thank you.</DialogTitle>
+                <DialogTitle className="display-heading text-base sm:text-2xl mb-2 sm:mb-4">Thank you.</DialogTitle>
                 <DialogDescription className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed">
                   {isBrochure
                     ? "Your brochure request has been received. One of our expert Portfolio Advisors will be in touch shortly."
