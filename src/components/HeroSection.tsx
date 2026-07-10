@@ -1,5 +1,4 @@
 import heroImg from "@/assets/hero-mountain.jpg";
-import altoLogo from "@/assets/alto-logo.png";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 
@@ -24,19 +23,22 @@ const HeroSection = () => {
           }}
         />
         <div className="absolute inset-0 bg-secondary/50" />
-        <div className="relative z-10 flex flex-col items-center justify-start md:justify-center h-full text-center px-6 pt-16 pb-8 md:pt-0 md:pb-0">
-          <img
-            src={altoLogo}
-            alt="Alto Whisky"
-            className="h-20 md:h-28 lg:h-32 w-auto animate-fade-in-up brightness-0 invert md:mt-16"
-          />
+        <div className="relative z-10 flex flex-col items-center justify-start md:justify-center h-full text-center px-6 pt-20 pb-8 md:pt-0 md:pb-0">
           <p
-            className="chapter-marker mt-4 text-secondary-foreground/70 animate-fade-in"
+            className="chapter-marker mb-3 md:mt-24 text-secondary-foreground/70 animate-fade-in"
             style={{ animationDelay: "0.3s" }}
           >
             Whisky Cask Investment
           </p>
-
+          <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up font-bold">
+            Alto Whisky
+          </h1>
+          <p
+            className="mt-2 font-body text-sm md:text-base lg:text-xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
+            style={{ animationDelay: "0.4s" }}
+          >
+            Secure your financial future with the best collectible asset of the decade.
+          </p>
           <div
             className="mt-6 flex flex-col sm:flex-row gap-4 animate-fade-in"
             style={{ animationDelay: "0.8s" }}
