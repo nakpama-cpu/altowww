@@ -40,23 +40,24 @@ const HeaderMegaDropdown = ({ active, onMouseEnter, onMouseLeave }: Props) => {
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`absolute left-0 right-0 top-full mt-0 bg-secondary/95 backdrop-blur-md transition-[opacity,transform] duration-300 overflow-hidden h-[218px] ${
+      className={`absolute left-0 right-0 top-full mt-0 bg-secondary/95 backdrop-blur-md transition-[opacity,transform] duration-300 overflow-hidden h-[190px] ${
         open
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 -translate-y-2 pointer-events-none"
       }`}
     >
       <div
-        className={`absolute inset-0 transition-[transform,opacity] duration-500 ease-out ${panelClass("news")}`}
+        className={`absolute inset-0 transform-gpu will-change-transform transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${panelClass("news")}`}
       >
         <NewsPanel active={active === "news"} />
       </div>
       <div
-        className={`absolute inset-0 transition-[transform,opacity] duration-500 ease-out ${panelClass("about")}`}
+        className={`absolute inset-0 transform-gpu will-change-transform transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${panelClass("about")}`}
       >
         <AboutPanel />
       </div>
     </div>
+
   );
 };
 
