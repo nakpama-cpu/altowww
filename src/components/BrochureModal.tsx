@@ -119,17 +119,17 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
             </div>
           ) : (
             <div className="p-5 sm:p-8">
-              <DialogHeader className="mb-6">
-                <DialogTitle className="display-heading text-2xl">
+              <DialogHeader className="mb-5 sm:mb-6">
+                <DialogTitle className="display-heading text-xl sm:text-2xl">
                   {isBrochure ? "Request Your Free Brochure" : "Speak to an Advisor"}
                 </DialogTitle>
-                <DialogDescription className="font-body text-sm text-muted-foreground leading-relaxed mt-2">
+                <DialogDescription className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed mt-2">
                   {isBrochure
                     ? "Fill in your details and one of our expert Portfolio Advisors will send you the brochure and answer any questions."
                     : "Fill in your details and one of our expert Portfolio Advisors will be in touch to discuss your requirements."}
                 </DialogDescription>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
