@@ -8,7 +8,8 @@ const HeroSection = () => {
       {/* Fixed hero that stays in place while content scrolls over it */}
       <section
         id="heritage"
-        className="relative w-full overflow-hidden z-0 h-auto md:fixed md:inset-x-0 md:top-0 md:h-[380px]"
+        className="relative w-full overflow-hidden z-0 fixed inset-x-0 top-0 h-[var(--hero-height)] min-h-[380px] md:min-h-0 md:h-[380px]"
+        style={{ "--hero-height": "60vh" } as React.CSSProperties}
       >
         <img
           src={heroImg}
@@ -51,8 +52,8 @@ const HeroSection = () => {
         </div>
       </section>
       
-      {/* Spacer to push content below the fixed hero (desktop only) */}
-      <div className="hidden md:block h-[380px]" />
+      {/* Spacer to push content below the fixed hero */}
+      <div className="block h-[var(--hero-height)] min-h-[380px] md:min-h-0 md:h-[380px]" style={{ "--hero-height": "60vh" } as React.CSSProperties} />
     </>
   );
 };

@@ -2,15 +2,18 @@ interface PageHeroProps {
   image: string;
   imageAlt: string;
   children: React.ReactNode;
-  /** @deprecated Height is now standardized to match the homepage hero. */
+  /** Mobile hero height; desktop is standardized to match the homepage hero. */
   height?: string;
 }
 
-const PageHero = ({ image, imageAlt, children }: PageHeroProps) => {
+const PageHero = ({ image, imageAlt, children, height = "60vh" }: PageHeroProps) => {
   return (
     <>
-      {/* Fixed on desktop; natural flow on mobile to match homepage hero */}
-      <section className="relative w-full overflow-hidden z-0 h-auto min-h-[380px] md:min-h-0 md:fixed md:inset-x-0 md:top-0 md:h-[380px]">
+      {/* Fixed hero that stays in place while content scrolls over it */}
+      <section
+        className="relative w-full overflow-hidden z-0 fixed inset-x-0 top-0 h-[var(--hero-height)] min-h-[380px] md:min-h-0 md:h-[380px]"
+        style={{ "--hero-height": height } as React.CSSProperties}
+      >
         <img
           src={image}
           alt={imageAlt}
@@ -28,8 +31,11 @@ const PageHero = ({ image, imageAlt, children }: PageHeroProps) => {
           {children}
         </div>
       </section>
-      {/* Spacer to push content below the fixed hero (desktop only) */}
-      <div className="hidden md:block h-[380px]" />
+      {/* Spacer to push content below the fixed hero */}
+      <div
+        className="block h-[var(--hero-height)] min-h-[380px] md:min-h-0 md:h-[380px]"
+        style={{ "--hero-height": height } as React.CSSProperties}
+      />
     </>
   );
 };
