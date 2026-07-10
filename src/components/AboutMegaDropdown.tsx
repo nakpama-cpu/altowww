@@ -33,9 +33,9 @@ const items = [
 const Card = ({ item }: { item: (typeof items)[number] }) => (
   <Link
     to={item.to}
-    className="group flex-shrink-0 w-[340px] flex gap-4 items-center"
+    className="group flex-1 min-w-0 flex gap-3 items-center"
   >
-    <div className="w-28 h-28 flex-shrink-0 overflow-hidden aspect-square">
+    <div className="w-24 h-24 flex-shrink-0 overflow-hidden aspect-square">
       <img
         src={item.image}
         alt={item.label}
@@ -43,7 +43,7 @@ const Card = ({ item }: { item: (typeof items)[number] }) => (
         loading="lazy"
       />
     </div>
-    <div className="min-w-0">
+    <div className="min-w-0 flex-1">
       <div className="flex items-center gap-2 mb-1">
         <span className="font-body text-[9px] uppercase tracking-[0.2em] text-primary">
           {item.tagline}
@@ -58,6 +58,7 @@ const Card = ({ item }: { item: (typeof items)[number] }) => (
     </div>
   </Link>
 );
+
 
 const AboutPanel = () => {
   return (
