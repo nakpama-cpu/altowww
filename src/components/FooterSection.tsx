@@ -46,6 +46,7 @@ const FooterSection = ({ hideCta = false, lightCta = false }: { hideCta?: boolea
                 <Link to="/" className="font-body text-sm text-secondary-foreground/60 hover:text-primary transition-colors">Home</Link>
                 <Link to="/how-it-works" className="font-body text-sm text-secondary-foreground/60 hover:text-primary transition-colors">How It Works</Link>
                 <Link to="/why-whisky" className="font-body text-sm text-secondary-foreground/60 hover:text-primary transition-colors">Why Whisky</Link>
+                <Link to="/news" className="font-body text-sm text-secondary-foreground/60 hover:text-primary transition-colors">News & Insights</Link>
                 <Link to="/contact" className="font-body text-sm text-secondary-foreground/60 hover:text-primary transition-colors">Contact</Link>
               </div>
             </div>
