@@ -20,12 +20,6 @@ const sortedArticles: Article[] = [...articles].sort(
   (a, b) => parseArticleDate(b.date) - parseArticleDate(a.date)
 );
 
-interface Props {
-  open: boolean;
-  onMouseEnter: () => void;
-  onMouseLeave?: () => void;
-}
-
 const Card = ({ article }: { article: Article }) => (
   <Link
     to={`/news/${article.slug}`}
@@ -56,7 +50,11 @@ const Card = ({ article }: { article: Article }) => (
   </Link>
 );
 
-const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
+interface PanelProps {
+  active: boolean;
+}
+
+const NewsPanel = ({ active }: PanelProps) => {
   const [query, setQuery] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -86,7 +84,7 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
 
   const [paused, setPaused] = useState(false);
   useEffect(() => {
-    if (!open || paused || query.trim()) return;
+    if (!active || paused || query.trim()) return;
     const el = scrollRef.current;
     if (!el) return;
     const id = window.setInterval(() => {
@@ -99,88 +97,78 @@ const NewsMegaDropdown = ({ open, onMouseEnter, onMouseLeave }: Props) => {
       }
     }, 30);
     return () => window.clearInterval(id);
-  }, [open, paused, query]);
+  }, [active, paused, query]);
 
   return (
-    <div
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      className={`absolute left-0 right-0 top-full mt-0 bg-secondary/95 backdrop-blur-md transition-all duration-300 overflow-hidden min-h-[170px] md:min-h-[190px] ${
-        open
-          ? "opacity-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 -translate-y-2 pointer-events-none"
-      }`}
-    >
-      <div className="max-w-6xl mx-auto px-6 pt-3 pb-3">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 mb-3">
-          <p className="chapter-marker text-secondary-foreground/60 justify-self-start">
-            News &amp; Insights
-          </p>
-          <div className="flex items-center gap-2 bg-secondary-foreground/5 border border-secondary-foreground/10 px-3 py-1.5 w-full max-w-xs">
-            <Search className="w-3.5 h-3.5 text-secondary-foreground/40" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search articles"
-              className="bg-transparent outline-none border-none text-secondary-foreground placeholder:text-secondary-foreground/40 font-body text-xs w-full"
-            />
-          </div>
-          <Link
-            to="/news"
-            className="font-body text-[10px] uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-0.5 hover:border-primary transition-colors justify-self-end"
-          >
-            View All →
-          </Link>
+    <div className="max-w-6xl mx-auto px-6 pt-3 pb-3">
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 mb-3">
+        <p className="chapter-marker text-secondary-foreground/60 justify-self-start">
+          News &amp; Insights
+        </p>
+        <div className="flex items-center gap-2 bg-secondary-foreground/5 border border-secondary-foreground/10 px-3 py-1.5 w-full max-w-xs">
+          <Search className="w-3.5 h-3.5 text-secondary-foreground/40" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search articles"
+            className="bg-transparent outline-none border-none text-secondary-foreground placeholder:text-secondary-foreground/40 font-body text-xs w-full"
+          />
         </div>
+        <Link
+          to="/news"
+          className="font-body text-[10px] uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-0.5 hover:border-primary transition-colors justify-self-end"
+        >
+          View All →
+        </Link>
+      </div>
+
+      <div
+        className="relative"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        <button
+          type="button"
+          onClick={() => scrollBy(-1)}
+          aria-label="Scroll left"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary/90 border border-secondary-foreground/10 text-secondary-foreground/70 hover:text-primary hover:border-primary/40 transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollBy(1)}
+          aria-label="Scroll right"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary/90 border border-secondary-foreground/10 text-secondary-foreground/70 hover:text-primary hover:border-primary/40 transition-colors"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
 
         <div
-          className="relative"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
+          ref={scrollRef}
+          className="overflow-x-auto overflow-y-hidden scroll-smooth px-10"
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
+            scrollbarWidth: "none",
+          }}
         >
-          <button
-            type="button"
-            onClick={() => scrollBy(-1)}
-            aria-label="Scroll left"
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary/90 border border-secondary-foreground/10 text-secondary-foreground/70 hover:text-primary hover:border-primary/40 transition-colors"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollBy(1)}
-            aria-label="Scroll right"
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary/90 border border-secondary-foreground/10 text-secondary-foreground/70 hover:text-primary hover:border-primary/40 transition-colors"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-
-          <div
-            ref={scrollRef}
-            className="overflow-x-auto overflow-y-hidden scroll-smooth px-10"
-            style={{
-              maskImage:
-                "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
-              scrollbarWidth: "none",
-            }}
-          >
-            {filtered.length === 0 ? (
-              <p className="font-body text-xs text-secondary-foreground/60 py-6 text-center">
-                No articles match "{query}".
-              </p>
-            ) : (
-              <div className="flex w-max py-2">
-                {filtered.map((a) => (
-                  <Card key={a.slug} article={a} />
-                ))}
-              </div>
-            )}
-          </div>
+          {filtered.length === 0 ? (
+            <p className="font-body text-xs text-secondary-foreground/60 py-6 text-center">
+              No articles match "{query}".
+            </p>
+          ) : (
+            <div className="flex w-max py-2">
+              {filtered.map((a) => (
+                <Card key={a.slug} article={a} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default NewsMegaDropdown;
+export default NewsPanel;
