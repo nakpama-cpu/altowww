@@ -119,8 +119,8 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
             </div>
           ) : (
             <div className="p-3 sm:p-8">
-              <DialogHeader className="mb-3 sm:mb-6">
-                <DialogTitle className="display-heading text-lg sm:text-2xl">
+              <DialogHeader className="mb-2 sm:mb-6">
+                <DialogTitle className="display-heading text-base sm:text-2xl">
                   {isBrochure ? "Request Your Free Brochure" : "Speak to an Advisor"}
                 </DialogTitle>
                 <DialogDescription className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed mt-1 sm:mt-2">
@@ -129,8 +129,8 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                     : "Fill in your details and one of our expert Portfolio Advisors will be in touch to discuss your requirements."}
                 </DialogDescription>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+              <form onSubmit={handleSubmit} className="space-y-2 sm:space-y-5">
+                <div className="grid grid-cols-2 gap-3 sm:gap-5">
                   <div>
                     <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-1 sm:mb-2">
                       First Name *
