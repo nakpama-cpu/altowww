@@ -229,7 +229,7 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-10 py-4 hover:opacity-90 transition-opacity disabled:opacity-50"
+                  className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 sm:px-10 py-3.5 sm:py-4 hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
                   {submitting
                     ? "Sending..."
