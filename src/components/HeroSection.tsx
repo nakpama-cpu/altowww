@@ -1,5 +1,4 @@
 import heroImg from "@/assets/hero-mountain.jpg";
-import altoLogoWhite from "@/assets/alto-logo-white.png";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 
@@ -26,17 +25,14 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-secondary/50" />
         <div className="relative z-10 flex flex-col items-center justify-start md:justify-center h-full text-center px-6 pt-20 pb-8 md:pt-0 md:pb-0">
           <p
-            className="chapter-marker mb-3 md:mt-16 text-secondary-foreground/70 animate-fade-in"
+            className="chapter-marker mb-3 md:mt-24 text-secondary-foreground/70 animate-fade-in"
             style={{ animationDelay: "0.3s" }}
           >
             Whisky Cask Investment
           </p>
-          <h1 className="sr-only">Alto Whisky</h1>
-          <img
-            src={altoLogoWhite}
-            alt="Alto Whisky"
-            className="w-40 md:w-56 lg:w-64 h-auto animate-fade-in-up"
-          />
+          <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground animate-fade-in-up font-bold">
+            Alto Whisky
+          </h1>
           <p
             className="mt-2 font-body text-sm md:text-base lg:text-xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed animate-fade-in-up font-light"
             style={{ animationDelay: "0.4s" }}
