@@ -94,10 +94,10 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
     <BrochureModalContext.Provider value={{ open }}>
       {children}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="w-[calc(100vw-1rem)] max-w-lg max-h-[90dvh] overflow-y-auto bg-background border-border p-0">
+        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-[calc(100vw-1rem)] max-w-lg max-h-[92dvh] sm:max-h-[90dvh] overflow-y-auto bg-background border-border p-0">
           {submitted ? (
-            <div className="py-12 px-5 sm:py-16 sm:px-8 text-center">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-5 sm:mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+            <div className="py-8 px-3 sm:py-16 sm:px-8 text-center">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 rounded-full bg-primary/10 flex items-center justify-center">
                 <svg
                   className="w-7 h-7 sm:w-8 sm:h-8 text-primary"
                   fill="none"
@@ -109,8 +109,8 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                 </svg>
               </div>
               <DialogHeader>
-                <DialogTitle className="display-heading text-xl sm:text-2xl mb-3 sm:mb-4">Thank you.</DialogTitle>
-                <DialogDescription className="font-body text-sm text-muted-foreground leading-relaxed">
+                <DialogTitle className="display-heading text-base sm:text-2xl mb-2 sm:mb-4">Thank you.</DialogTitle>
+                <DialogDescription className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed">
                   {isBrochure
                     ? "Your brochure request has been received. One of our expert Portfolio Advisors will be in touch shortly."
                     : "Your request has been received. One of our expert Portfolio Advisors will call you shortly."}
@@ -118,21 +118,21 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
               </DialogHeader>
             </div>
           ) : (
-            <div className="p-5 sm:p-8">
-              <DialogHeader className="mb-5 sm:mb-6">
-                <DialogTitle className="display-heading text-xl sm:text-2xl">
+            <div className="p-3 sm:p-8">
+              <DialogHeader className="mb-2 sm:mb-6">
+                <DialogTitle className="display-heading text-base sm:text-2xl">
                   {isBrochure ? "Request Your Free Brochure" : "Speak to an Advisor"}
                 </DialogTitle>
-                <DialogDescription className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed mt-2">
+                <DialogDescription className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed mt-1 sm:mt-2">
                   {isBrochure
                     ? "Fill in your details and one of our expert Portfolio Advisors will send you the brochure and answer any questions."
                     : "Fill in your details and one of our expert Portfolio Advisors will be in touch to discuss your requirements."}
                 </DialogDescription>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <form onSubmit={handleSubmit} className="space-y-2 sm:space-y-5">
+                <div className="grid grid-cols-2 gap-3 sm:gap-5">
                   <div>
-                    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-1 sm:mb-2">
                       First Name *
                     </label>
                     <input
@@ -141,11 +141,11 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                       maxLength={100}
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      className="w-full bg-transparent border-b border-border py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
+                      className="w-full bg-transparent border-b border-border py-2 sm:py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
                   <div>
-                    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-1 sm:mb-2">
                       Last Name *
                     </label>
                     <input
@@ -154,12 +154,12 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                       maxLength={100}
                       value={formData.lastName}
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                      className="w-full bg-transparent border-b border-border py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
+                      className="w-full bg-transparent border-b border-border py-2 sm:py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                  <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-1 sm:mb-2">
                     Email *
                   </label>
                   <input
@@ -168,11 +168,11 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                     maxLength={255}
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-transparent border-b border-border py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-transparent border-b border-border py-2 sm:py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                  <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-1 sm:mb-2">
                     Phone Number *
                   </label>
                   <input
@@ -181,21 +181,21 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                     maxLength={30}
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-transparent border-b border-border py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
+                    className="w-full bg-transparent border-b border-border py-2 sm:py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
                   />
                 </div>
 
                 {/* Reason dropdown — only for advisor mode */}
                 {!isBrochure && (
                   <div>
-                    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-1 sm:mb-2">
                       Reason for Call *
                     </label>
                     <select
                       required
                       value={formData.reason}
                       onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-                      className="w-full bg-transparent border-b border-border py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer"
+                      className="w-full bg-transparent border-b border-border py-2 sm:py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors appearance-none cursor-pointer"
                     >
                       <option value="" disabled>
                         Select a reason...
@@ -210,7 +210,7 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                 )}
 
                 <div>
-                  <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                  <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-1 sm:mb-2">
                     Message (optional)
                   </label>
                   <textarea
@@ -218,7 +218,7 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                     maxLength={1000}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full bg-transparent border-b border-border py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors resize-none"
+                    className="w-full bg-transparent border-b border-border py-2 sm:py-3 font-body text-sm text-foreground focus:outline-none focus:border-primary transition-colors resize-none"
                     placeholder={
                       isBrochure
                         ? "Any specific questions or investment goals?"
@@ -229,7 +229,7 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 sm:px-10 py-3.5 sm:py-4 hover:opacity-90 transition-opacity disabled:opacity-50"
+                  className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-6 sm:px-10 py-2.5 sm:py-4 hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
                   {submitting
                     ? "Sending..."
