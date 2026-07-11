@@ -93,7 +93,7 @@ export default function PortalLayout() {
     <div className="min-h-screen md:flex bg-background">
       {/* Mobile top bar */}
       <header className="md:hidden sticky top-0 z-40 flex items-center justify-between pl-2 pr-4 h-14 bg-secondary text-secondary-foreground border-b border-secondary-foreground/10">
-        <Link to="/" className="block">
+        <Link to="/" className="block ml-2">
           <img src={altoLogo} alt="Alto Whisky" className="block w-[3.25rem] h-auto" />
         </Link>
         <Sheet open={open} onOpenChange={setOpen}>
