@@ -99,9 +99,7 @@ export default function PortalLayout() {
         </Link>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <button aria-label="Open menu" className="flex items-center justify-center w-10 h-10 -mr-2 text-secondary-foreground hover:text-primary transition-colors">
-              <Menu className="w-5 h-5" />
-            </button>
+            <MobileMenuButton open={open} ariaLabel="Open menu" />
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-72 max-w-[85vw] bg-secondary border-secondary-foreground/10">
             <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} onNavigate={() => setOpen(false)} cartCount={cartCount} />
