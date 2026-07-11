@@ -6,6 +6,9 @@ import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Menu,
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect } from "react";
 import CheckoutFab from "@/components/CheckoutFab";
+import altoLogo from "@/assets/alto-logo.png";
+
+
 
 const navItems = [
   { to: "/portal", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -21,7 +24,9 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { 
   return (
     <div className="flex flex-col h-full bg-secondary text-secondary-foreground">
       <div className="p-6 md:p-8 border-b border-secondary-foreground/10 flex-shrink-0">
-        <Link to="/" onClick={onNavigate} className="display-heading text-2xl md:text-3xl tracking-wide">Alto Whisky</Link>
+        <Link to="/" onClick={onNavigate} className="block">
+          <img src={altoLogo} alt="Alto Whisky" className="h-8 md:h-9 w-auto" />
+        </Link>
         <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mt-2">Client Portal</p>
       </div>
 
@@ -88,7 +93,9 @@ export default function PortalLayout() {
     <div className="min-h-screen md:flex bg-background">
       {/* Mobile top bar */}
       <header className="md:hidden sticky top-0 z-40 flex items-center justify-between px-4 h-14 bg-secondary text-secondary-foreground border-b border-secondary-foreground/10">
-        <Link to="/" className="display-heading text-xl tracking-wide">Alto Whisky</Link>
+        <Link to="/" className="block">
+          <img src={altoLogo} alt="Alto Whisky" className="h-7 w-auto" />
+        </Link>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <button aria-label="Open menu" className="flex items-center justify-center w-10 h-10 -mr-2 text-secondary-foreground hover:text-primary transition-colors">
