@@ -164,27 +164,12 @@ const Header = () => {
         </nav>
 
         {/* Mobile hamburger */}
-        <button
+        <MobileMenuButton
+          open={menuOpen}
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          aria-label="Toggle menu"
-        >
-          <span
-            className={`block w-6 h-px bg-secondary-foreground transition-all duration-300 ${
-              menuOpen ? "rotate-45 translate-y-[3.5px]" : ""
-            }`}
-          />
-          <span
-            className={`block w-6 h-px bg-secondary-foreground transition-all duration-300 ${
-              menuOpen ? "opacity-0" : ""
-            }`}
-          />
-          <span
-            className={`block w-6 h-px bg-secondary-foreground transition-all duration-300 ${
-              menuOpen ? "-rotate-45 -translate-y-[3.5px]" : ""
-            }`}
-          />
-        </button>
+          ariaLabel="Toggle menu"
+          className="md:hidden"
+        />
       </div>
 
       {/* Mobile menu */}
