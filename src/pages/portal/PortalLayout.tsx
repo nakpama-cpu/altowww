@@ -89,6 +89,7 @@ export default function PortalLayout() {
 
   useEffect(() => {
     setOpen(false);
+    markPortalVisit();
   }, [location.pathname]);
 
   return (
