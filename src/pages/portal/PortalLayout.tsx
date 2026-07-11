@@ -113,7 +113,7 @@ export default function PortalLayout() {
         <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} cartCount={cartCount} />
       </aside>
 
-      <main className="flex-1 p-4 md:p-6 lg:p-12 overflow-x-hidden">
+      <main className="flex-1 pt-4 pr-4 pb-4 pl-2 md:p-6 lg:p-12 overflow-x-hidden">
         <Outlet />
       </main>
       <CheckoutFab />
