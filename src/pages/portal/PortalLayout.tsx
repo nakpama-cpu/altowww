@@ -25,7 +25,7 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { 
     <div className="flex flex-col h-full bg-secondary text-secondary-foreground">
       <div className="p-6 md:p-8 border-b border-secondary-foreground/10 flex-shrink-0">
         <Link to="/" onClick={onNavigate} className="block">
-          <img src={altoLogo} alt="Alto Whisky" className="block w-36 md:w-44 h-auto" />
+          <img src={altoLogo} alt="Alto Whisky" className="block w-28 md:w-32 h-auto" />
         </Link>
         <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mt-2">Client Portal</p>
       </div>
