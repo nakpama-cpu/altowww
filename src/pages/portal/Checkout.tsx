@@ -64,15 +64,15 @@ export default function Checkout() {
   }
 
   return (
-    <div className="max-w-5xl">
+    <div className="max-w-5xl w-full min-w-0">
       <h1 className="display-heading text-4xl mb-2">Checkout</h1>
       <p className="font-body text-sm text-muted-foreground mb-8">
         Review your selected casks and submit your order request.
         {discount > 0 && <span className="text-primary"> Your {discount}% client discount is applied.</span>}
       </p>
 
-      <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-3">
+      <div className="grid lg:grid-cols-3 gap-6 min-w-0">
+        <div className="lg:col-span-2 space-y-3 min-w-0">
           {items.map((i) => {
             const lineTotal = i.unit_price * i.quantity;
             return (
