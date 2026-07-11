@@ -86,7 +86,7 @@ export default function Checkout() {
                   <div className="flex-1 min-w-0">
                     <div className="display-heading text-base sm:text-lg truncate">{i.distillery || i.spirit}</div>
                     <div className="font-body text-xs text-muted-foreground truncate">
-                      Cask #{i.cask_number} · {i.spirit}
+                      {i.spirit}
                     </div>
                     <div className="font-body text-xs text-muted-foreground mt-1">
                       £{Math.round(i.unit_price).toLocaleString()} each
