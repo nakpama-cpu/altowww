@@ -131,7 +131,7 @@ export default function Checkout() {
           </button>
         </div>
 
-        <aside className="bg-card border border-border p-6 h-fit">
+        <aside className="bg-card border border-border p-6 h-fit min-w-0">
           <h2 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-4">Order Summary</h2>
           <div className="flex justify-between font-body text-sm py-2">
             <span className="text-muted-foreground">Casks</span>
