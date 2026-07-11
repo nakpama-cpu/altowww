@@ -37,7 +37,7 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-5xl">
-      <div className="mb-10 pl-2 md:pl-0">
+      <div className="mb-10">
         <h1 className="display-heading text-4xl md:text-5xl mb-2">Welcome, {profile?.first_name || "Investor"}.</h1>
         <p className="font-body text-sm text-muted-foreground">Your whisky portfolio at a glance.</p>
       </div>
