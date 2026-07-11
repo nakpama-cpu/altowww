@@ -6,6 +6,8 @@ import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Menu,
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect } from "react";
 import CheckoutFab from "@/components/CheckoutFab";
+import altoLogo from "@/assets/alto-logo.png";
+
 
 const navItems = [
   { to: "/portal", label: "Dashboard", icon: LayoutDashboard, end: true },
