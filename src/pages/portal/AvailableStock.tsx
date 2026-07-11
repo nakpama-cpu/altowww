@@ -137,7 +137,7 @@ export default function AvailableStock() {
       hero_image_url: buyCask.hero_image_url,
       quantity: qty,
     });
-    toast({ title: "Added to cart", description: `${qty} × Cask #${buyCask.cask_number}` });
+    toast({ title: "Added to cart", description: `${qty} × ${buyCask.distilleries?.name ?? buyCask.spirit}` });
     setBuyCask(null);
   };
 
@@ -151,7 +151,6 @@ export default function AvailableStock() {
       const effectivePrice = priceFor(c.list_price);
       const matchesSearch =
         !q ||
-        c.cask_number.toLowerCase().includes(q) ||
         d.toLowerCase().includes(q) ||
         c.spirit.toLowerCase().includes(q) ||
         (c.cask_type ?? "").toLowerCase().includes(q) ||
@@ -338,7 +337,7 @@ export default function AvailableStock() {
               <div key={c.id} className="bg-card border border-border overflow-hidden flex flex-col">
                 {c.hero_image_url && (
                   <div className="aspect-[4/3] bg-muted overflow-hidden">
-                    <img src={c.hero_image_url} alt={c.cask_number} className="w-full h-full object-cover" loading="lazy" />
+                    <img src={c.hero_image_url} alt={c.distilleries?.name ?? c.spirit} className="w-full h-full object-cover" loading="lazy" />
                   </div>
                 )}
                   <div className="p-4 sm:p-6 flex-1 flex flex-col">
@@ -393,7 +392,6 @@ export default function AvailableStock() {
           <table className="w-full text-left font-body text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/30">
-                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Cask #</th>
                 <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Distillery</th>
                 <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Spirit</th>
                 <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Type</th>
@@ -411,7 +409,6 @@ export default function AvailableStock() {
                 const price = priceFor(c.list_price);
                 return (
                   <tr key={c.id} className="border-b border-border hover:bg-muted/20 transition-colors">
-                    <td className="px-4 py-3 whitespace-nowrap">{c.cask_number}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.distilleries?.name ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.spirit}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.cask_type ?? "—"}</td>
