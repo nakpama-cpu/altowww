@@ -342,14 +342,14 @@ export default function AvailableStock() {
                     <img src={c.hero_image_url} alt={c.cask_number} className="w-full h-full object-cover" loading="lazy" />
                   </div>
                 )}
-                <div className="p-6 flex-1 flex flex-col">
+                  <div className="p-4 sm:p-6 flex-1 flex flex-col">
                   <h3 className="display-heading text-xl leading-snug mb-1 h-[3.25rem] line-clamp-2">{c.distilleries?.name ?? c.spirit}</h3>
                   <p className="font-body text-xs leading-4 text-muted-foreground mb-4 h-[2rem] line-clamp-2">
                     {(() => { const a = computeCaskAge(c.fill_date, c.age_years); return [c.distilleries?.region, c.cask_type, a != null ? `${a} yrs` : null].filter(Boolean).join(" · "); })()}
                   </p>
                   <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
-                    <Mini label="ABV" v={c.abv ? `${c.abv}%` : "—"} />
-                    <Mini label="OLA" v={c.ola_litres ? `${c.ola_litres} L` : "—"} />
+                    <Mini label="ABV" v={formatMiniValue(c.abv, "%")} />
+                    <Mini label="OLA" v={formatMiniValue(c.ola_litres, " L")} />
                     <Mini label="Filled" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
                   </div>
                   {c.description && (
@@ -629,10 +629,16 @@ export default function AvailableStock() {
   );
 }
 
+const formatMiniValue = (value: number | null, suffix: string) => {
+  if (value == null) return "—";
+  const compact = Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, "");
+  return `${compact}${suffix}`;
+};
+
 const Mini = ({ label, v }: { label: string; v: string }) => (
-  <div className="border border-border h-14 px-1.5 text-center min-w-0 w-full flex flex-col items-center justify-center gap-1 overflow-hidden">
-    <div className="w-full font-body text-[9px] uppercase tracking-[0.1em] text-muted-foreground leading-none whitespace-nowrap truncate text-center" title={label}>{label}</div>
-    <div className="w-full font-body text-[12px] leading-none whitespace-nowrap truncate text-center" title={v}>{v}</div>
+  <div className="border border-border min-h-16 px-1 text-center min-w-0 w-full flex flex-col items-center justify-center gap-1 overflow-visible">
+    <div className="w-full font-body text-[9px] uppercase tracking-[0.08em] text-muted-foreground leading-none whitespace-nowrap text-center" title={label}>{label}</div>
+    <div className="w-full font-body text-[12px] leading-none whitespace-nowrap text-center" title={v}>{v}</div>
   </div>
 );
 
