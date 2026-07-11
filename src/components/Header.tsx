@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import altoLogo from "@/assets/alto-logo.png";
 import altoLogoTight from "@/assets/alto-logo-tight.png";
 import BrochureButton from "@/components/BrochureButton";
 import LoginModal from "@/components/LoginModal";
 import HeaderMegaDropdown from "@/components/HeaderMegaDropdown";
 import MobileMenuButton from "@/components/MobileMenuButton";
+import { useAuth } from "@/contexts/AuthContext";
+import { PORTAL_LAST_VISIT_KEY, PORTAL_REAUTH_WINDOW_MS } from "@/lib/portalSession";
 
 const mainLinks = [
   { to: "/", label: "Home" },
@@ -32,6 +34,26 @@ const Header = () => {
   const aboutCloseTimer = useRef<number | null>(null);
   const [loginOpen, setLoginOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleClientLogin = async () => {
+    if (user) {
+      try {
+        const raw = localStorage.getItem(PORTAL_LAST_VISIT_KEY);
+        const ts = raw ? Number(raw) : 0;
+        if (ts && Date.now() - ts < PORTAL_REAUTH_WINDOW_MS) {
+          navigate("/portal");
+          return;
+        }
+      } catch {
+        /* fall through to sign-out */
+      }
+      try { localStorage.removeItem(PORTAL_LAST_VISIT_KEY); } catch { /* ignore */ }
+      await signOut();
+    }
+    setLoginOpen(true);
+  };
 
   const clearTimer = (ref: React.MutableRefObject<number | null>) => {
     if (ref.current) {
@@ -159,7 +181,7 @@ const Header = () => {
             )
           )}
 
-          <button onClick={() => setLoginOpen(true)} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground/60 hover:text-secondary-foreground">Client Login</button>
+          <button onClick={handleClientLogin} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground/60 hover:text-secondary-foreground">Client Login</button>
           <BrochureButton className="hidden xl:inline-flex items-center px-3 py-2 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:opacity-90 transition-opacity whitespace-nowrap" />
         </nav>
 
@@ -214,7 +236,7 @@ const Header = () => {
             )
           )}
           <button
-            onClick={() => { setMenuOpen(false); setLoginOpen(true); }}
+            onClick={() => { setMenuOpen(false); handleClientLogin(); }}
             className="font-body text-sm uppercase tracking-[0.15em] py-2 text-left text-secondary-foreground/60"
           >
             Client Login

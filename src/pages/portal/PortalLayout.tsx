@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import CheckoutFab from "@/components/CheckoutFab";
 import MobileMenuButton from "@/components/MobileMenuButton";
 import altoLogo from "@/assets/alto-logo-tight.png";
+import { markPortalVisit } from "@/lib/portalSession";
 
 
 
@@ -88,6 +89,7 @@ export default function PortalLayout() {
 
   useEffect(() => {
     setOpen(false);
+    markPortalVisit();
   }, [location.pathname]);
 
   return (
