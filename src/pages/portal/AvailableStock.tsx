@@ -343,14 +343,20 @@ export default function AvailableStock() {
                   </div>
                 )}
                 <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="display-heading text-xl leading-snug mb-1 h-[3.25rem] line-clamp-2">{c.distilleries?.name ?? c.spirit}</h3>
-                  <p className="font-body text-xs leading-4 text-muted-foreground mb-4 h-[2rem] line-clamp-2">
-                    {(() => { const a = computeCaskAge(c.fill_date, c.age_years); return [c.distilleries?.region, c.cask_type, a != null ? `${a} yrs` : null].filter(Boolean).join(" · "); })()}
-                  </p>
-                  <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
-                    <Mini label="ABV" v={c.abv ? `${c.abv}%` : "—"} />
-                    <Mini label="OLA" v={c.ola_litres ? `${c.ola_litres} L` : "—"} />
-                    <Mini label="Filled" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
+                  <h3 className="display-heading text-xl leading-snug mb-4 line-clamp-2">{c.distilleries?.name ?? c.spirit}</h3>
+                  <div className="grid grid-cols-3 gap-px bg-border border border-border mb-4" style={{ gridAutoRows: "1fr" }}>
+                    {(() => {
+                      const a = computeCaskAge(c.fill_date, c.age_years);
+                      const cells: { label: string; v: string }[] = [
+                        { label: "Age", v: a != null ? `${a} yrs` : "—" },
+                        { label: "Wood", v: woodFromCaskType(c.cask_type) },
+                        { label: "Cask Type", v: c.cask_type ?? "—" },
+                        { label: "Filled", v: formatFillDate(c.fill_date) },
+                        { label: "OLA", v: c.ola_litres != null ? `${c.ola_litres} L` : "—" },
+                        { label: "Region", v: c.distilleries?.region ?? "—" },
+                      ];
+                      return cells.map((cell) => <Stat key={cell.label} label={cell.label} v={cell.v} />);
+                    })()}
                   </div>
                   {c.description && (
                     <p className="font-body text-sm text-muted-foreground mb-3 line-clamp-3">{c.description}</p>
