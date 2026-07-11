@@ -34,8 +34,27 @@ const Header = () => {
   const aboutCloseTimer = useRef<number | null>(null);
   const [loginOpen, setLoginOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
-  const clearTimer = (ref: React.MutableRefObject<number | null>) => {
+  const handleClientLogin = async () => {
+    if (user) {
+      try {
+        const raw = localStorage.getItem(PORTAL_LAST_VISIT_KEY);
+        const ts = raw ? Number(raw) : 0;
+        if (ts && Date.now() - ts < PORTAL_REAUTH_WINDOW_MS) {
+          navigate("/portal");
+          return;
+        }
+      } catch {
+        /* fall through to sign-out */
+      }
+      try { localStorage.removeItem(PORTAL_LAST_VISIT_KEY); } catch { /* ignore */ }
+      await signOut();
+    }
+    setLoginOpen(true);
+  };
+
     if (ref.current) {
       window.clearTimeout(ref.current);
       ref.current = null;
