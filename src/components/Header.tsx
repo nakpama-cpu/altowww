@@ -236,7 +236,7 @@ const Header = () => {
             )
           )}
           <button
-            onClick={() => { setMenuOpen(false); setLoginOpen(true); }}
+            onClick={() => { setMenuOpen(false); handleClientLogin(); }}
             className="font-body text-sm uppercase tracking-[0.15em] py-2 text-left text-secondary-foreground/60"
           >
             Client Login
