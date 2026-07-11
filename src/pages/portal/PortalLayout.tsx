@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Menu, Newspaper, ShoppingBag } from "lucide-react";
+import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Newspaper, ShoppingBag } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect } from "react";
 import CheckoutFab from "@/components/CheckoutFab";
+import MobileMenuButton from "@/components/MobileMenuButton";
 import altoLogo from "@/assets/alto-logo-tight.png";
 
 
@@ -98,9 +99,7 @@ export default function PortalLayout() {
         </Link>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <button aria-label="Open menu" className="flex items-center justify-center w-10 h-10 -mr-2 text-secondary-foreground hover:text-primary transition-colors">
-              <Menu className="w-5 h-5" />
-            </button>
+            <MobileMenuButton open={open} ariaLabel="Open menu" />
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-72 max-w-[85vw] bg-secondary border-secondary-foreground/10">
             <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} onNavigate={() => setOpen(false)} cartCount={cartCount} />

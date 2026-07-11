@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import altoLogo from "@/assets/alto-logo.png";
+import altoLogoTight from "@/assets/alto-logo-tight.png";
 import BrochureButton from "@/components/BrochureButton";
 import LoginModal from "@/components/LoginModal";
 import HeaderMegaDropdown from "@/components/HeaderMegaDropdown";
+import MobileMenuButton from "@/components/MobileMenuButton";
 
 const mainLinks = [
   { to: "/", label: "Home" },
@@ -78,15 +80,16 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 h-14 bg-secondary text-secondary-foreground border-b border-secondary-foreground/10 md:h-auto md:border-none md:text-secondary-foreground ${
         scrolled
-          ? "bg-secondary/95 backdrop-blur-md shadow-lg py-3"
-          : "bg-transparent py-6"
+          ? "md:bg-secondary/95 md:backdrop-blur-md md:shadow-lg md:py-3"
+          : "md:bg-transparent md:py-6"
       }`}
     >
-      <div className="max-w-6xl xl:max-w-7xl mx-auto px-4 lg:px-6 flex items-center justify-between">
-        <Link to="/">
-          <img src={altoLogo} alt="Alto Whisky" className="h-10 md:h-9 lg:h-12 w-auto" />
+      <div className="max-w-6xl xl:max-w-7xl mx-auto pl-2 pr-4 md:px-4 lg:px-6 flex items-center justify-between h-full md:h-auto">
+        <Link to="/" className="block ml-2 md:ml-0">
+          <img src={altoLogoTight} alt="Alto Whisky" className="block md:hidden w-[3.25rem] h-auto" />
+          <img src={altoLogo} alt="Alto Whisky" className="hidden md:block h-9 lg:h-12 w-auto" />
         </Link>
 
         {/* Desktop Nav */}
@@ -161,27 +164,12 @@ const Header = () => {
         </nav>
 
         {/* Mobile hamburger */}
-        <button
+        <MobileMenuButton
+          open={menuOpen}
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          aria-label="Toggle menu"
-        >
-          <span
-            className={`block w-6 h-px bg-secondary-foreground transition-all duration-300 ${
-              menuOpen ? "rotate-45 translate-y-[3.5px]" : ""
-            }`}
-          />
-          <span
-            className={`block w-6 h-px bg-secondary-foreground transition-all duration-300 ${
-              menuOpen ? "opacity-0" : ""
-            }`}
-          />
-          <span
-            className={`block w-6 h-px bg-secondary-foreground transition-all duration-300 ${
-              menuOpen ? "-rotate-45 -translate-y-[3.5px]" : ""
-            }`}
-          />
-        </button>
+          ariaLabel="Toggle menu"
+          className="md:hidden"
+        />
       </div>
 
       {/* Mobile menu */}
