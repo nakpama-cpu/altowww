@@ -642,9 +642,39 @@ const Mini = ({ label, v }: { label: string; v: string }) => (
   </div>
 );
 
+const Stat = ({ label, v }: { label: string; v: string }) => (
+  <div className="bg-card px-3 py-2 min-w-0 flex flex-col gap-1">
+    <div className="font-body text-[9px] uppercase tracking-[0.15em] text-muted-foreground leading-tight break-words">
+      {label}
+    </div>
+    <div className="font-body text-[13px] leading-tight text-foreground break-words">
+      {v}
+    </div>
+  </div>
+);
+
+function formatFillDate(d: string | null | undefined): string {
+  if (!d) return "—";
+  const dt = new Date(d);
+  if (isNaN(dt.getTime())) return "—";
+  return dt.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+function woodFromCaskType(ct: string | null | undefined): string {
+  if (!ct) return "—";
+  const s = ct.toLowerCase();
+  if (/mizunara/.test(s)) return "Japanese Oak";
+  if (/(sherry|oloroso|pedro\s*xim|px\b|palo\s*cortado|fino|amontillado|manzanilla|port|madeira|marsala|sauternes|wine|rum|cognac|armagnac|calvados)/.test(s)) return "European Oak";
+  if (/(bourbon|rye|tennessee|american|virgin\s*oak)/.test(s)) return "American Oak";
+  if (/european\s*oak/.test(s)) return "European Oak";
+  if (/american\s*oak/.test(s)) return "American Oak";
+  return "—";
+}
+
 const InfoSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section>
     <h4 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">{title}</h4>
     {children}
   </section>
 );
+
