@@ -1,30 +1,26 @@
-## Problem
-On tablet (~768–1024px), the desktop header nav in `src/components/Header.tsx` doesn't fit: 7 nav items + Client Login + Request Brochure CTA overflow, causing the logo to disappear, labels to wrap, and the Brochure button to clip off-screen.
+## Goal
+When a signed-in user clicks "Client Login" from a marketing page, take them straight into the portal — skipping the login modal — unless they haven't visited any portal page in the last 15 minutes, in which case make them sign in again.
 
-## Fix — keep the full horizontal nav, shrink it to fit
-All changes in `src/components/Header.tsx` (no other files touched):
+## Changes
 
-1. **Tighten link spacing at tablet, restore at desktop**
-   - Nav link/button padding: `px-4 py-2` → `px-2 py-2 lg:px-3 xl:px-4`
-   - Nav container gap: `gap-2` → `gap-0 lg:gap-1 xl:gap-2`
+### 1. Track last portal visit (`src/pages/portal/PortalLayout.tsx`)
+Add a `useEffect` on `location.pathname` that writes `Date.now()` to `localStorage` under the key `alto:lastPortalVisit` every time an authenticated user renders a `/portal/*` route (this component is already gated by `ProtectedRoute`, so a visit implies an active session).
 
-2. **Slightly smaller nav typography at tablet**
-   - Labels: `text-xs tracking-[0.2em]` → `text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em]`
-   - Dropdown children keep current sizing.
+### 2. Smart "Client Login" behaviour (`src/components/Header.tsx`)
+Replace the two `setLoginOpen(true)` handlers (desktop button ~line 162, mobile button ~line 217) with a shared `handleClientLogin` that:
 
-3. **Compact the Client Login + Brochure CTA at tablet**
-   - Client Login button uses the same tightened padding/typography as nav links.
-   - Brochure button: `px-4 py-2` → `px-3 py-2 lg:px-4` and inherits the smaller label size at tablet.
+- Reads `useAuth()` — `{ user, signOut }`.
+- Reads `localStorage.getItem("alto:lastPortalVisit")`.
+- If `user` exists AND `lastVisit` is within the last 15 minutes (`Date.now() - lastVisit < 15 * 60 * 1000`) → `navigate("/portal")`. No modal.
+- If `user` exists but the timestamp is missing or older than 15 min → call `await signOut()`, clear the stored timestamp, then open the login modal as today.
+- If no `user` → open the login modal (current behaviour).
 
-4. **Give the nav room by trimming the logo at tablet**
-   - Logo: `h-10 md:h-12` → `h-10 md:h-9 lg:h-12` (slightly smaller between 768–1023px so nav has more horizontal room).
+The 15-minute window is a soft client-side rule for UX only; Supabase session expiry is unchanged and continues to govern real auth.
 
-5. **Reduce outer container padding at tablet**
-   - Header inner wrapper: `px-6` → `px-4 lg:px-6`.
+### 3. No other files change
+`AuthContext`, `ProtectedRoute`, `LoginModal`, and Supabase config are untouched. The `MyCasks`, `AvailableStock`, etc. pages inherit the tracking through `PortalLayout`.
 
-## Result
-- Tablet (768–1023px): all 7 links + Client Login + Brochure CTA fit on a single row without wrapping or clipping, logo visible.
-- Desktop (≥1024px): visually unchanged (original spacing restored via `lg:`/`xl:` classes).
-- Mobile (<768px): unchanged.
-
-No layout or breakpoint switch — the desktop-style nav simply scales down cleanly for tablet.
+## Verification
+- Sign in, navigate to `/`, click Client Login → should land on `/portal` directly.
+- Sign in, wait 15+ minutes off-portal (or manually set `alto:lastPortalVisit` to an old value in devtools), click Client Login → should sign out and show the login modal.
+- Signed-out visitor clicks Client Login → login modal opens as before.
