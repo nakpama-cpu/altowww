@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import altoLogo from "@/assets/alto-logo.png";
 import altoLogoTight from "@/assets/alto-logo-tight.png";
 import BrochureButton from "@/components/BrochureButton";
 import LoginModal from "@/components/LoginModal";
 import HeaderMegaDropdown from "@/components/HeaderMegaDropdown";
 import MobileMenuButton from "@/components/MobileMenuButton";
+import { useAuth } from "@/contexts/AuthContext";
+import { PORTAL_LAST_VISIT_KEY, PORTAL_REAUTH_WINDOW_MS } from "@/lib/portalSession";
 
 const mainLinks = [
   { to: "/", label: "Home" },
