@@ -1,64 +1,30 @@
-## Cask card — top half redesign
+## Problem
+On tablet (~768–1024px), the desktop header nav in `src/components/Header.tsx` doesn't fit: 7 nav items + Client Login + Request Brochure CTA overflow, causing the logo to disappear, labels to wrap, and the Brochure button to clip off-screen.
 
-Replace the current 3-tile mini row (ABV / OLA / Filled) with a richer, fully-legible stats block showing the six details you named, in priority order:
+## Fix — keep the full horizontal nav, shrink it to fit
+All changes in `src/components/Header.tsx` (no other files touched):
 
-1. Age
-2. Wood
-3. Cask Type
-4. Filled
-5. OLA
-6. Region
+1. **Tighten link spacing at tablet, restore at desktop**
+   - Nav link/button padding: `px-4 py-2` → `px-2 py-2 lg:px-3 xl:px-4`
+   - Nav container gap: `gap-2` → `gap-0 lg:gap-1 xl:gap-2`
 
-### Layout
+2. **Slightly smaller nav typography at tablet**
+   - Labels: `text-xs tracking-[0.2em]` → `text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em]`
+   - Dropdown children keep current sizing.
 
-A 3-column × 2-row grid of stat cells (mobile stays 3 cols; each cell grows in height as needed — no truncation, no ellipsis).
+3. **Compact the Client Login + Brochure CTA at tablet**
+   - Client Login button uses the same tightened padding/typography as nav links.
+   - Brochure button: `px-4 py-2` → `px-3 py-2 lg:px-4` and inherits the smaller label size at tablet.
 
-```text
-┌───────────┬───────────┬───────────┐
-│ AGE       │ WOOD      │ CASK TYPE │
-│ 12 yrs    │ American  │ Ex-Bourbon│
-│           │ Oak       │ Barrel    │
-├───────────┼───────────┼───────────┤
-│ FILLED    │ OLA       │ REGION    │
-│ 22 Mar    │ 198 L     │ Speyside  │
-│ 2013      │           │           │
-└───────────┴───────────┴───────────┘
-```
+4. **Give the nav room by trimming the logo at tablet**
+   - Logo: `h-10 md:h-12` → `h-10 md:h-9 lg:h-12` (slightly smaller between 768–1023px so nav has more horizontal room).
 
-Each cell:
-- Small uppercase label on top (wraps if needed, no truncation)
-- Value below in body size, allowed to wrap onto 2–3 lines
-- Consistent min-height so the grid stays tidy; cells auto-grow together per row (`grid-auto-rows: 1fr`)
-- Left-aligned text (easier to read multi-word values like "American Oak", "Ex-Bourbon Barrel", "Speyside")
-- Thin border, subtle bg, tighter padding than today
+5. **Reduce outer container padding at tablet**
+   - Header inner wrapper: `px-6` → `px-4 lg:px-6`.
 
-Also remove the redundant "region · type · age" summary line above the grid (line 347–349), since those facts now live in the grid.
+## Result
+- Tablet (768–1023px): all 7 links + Client Login + Brochure CTA fit on a single row without wrapping or clipping, logo visible.
+- Desktop (≥1024px): visually unchanged (original spacing restored via `lg:`/`xl:` classes).
+- Mobile (<768px): unchanged.
 
-### Data mapping
-
-| Cell      | Source                                                          |
-| --------- | --------------------------------------------------------------- |
-| Age       | `computeCaskAge(fill_date, age_years)` → "12 yrs" / "—"         |
-| Wood      | **New** — not in DB today. See open question below.             |
-| Cask Type | `cask_type` (e.g. "Ex-Bourbon Barrel")                          |
-| Filled    | `fill_date` formatted "22 Mar 2013" (not just year)             |
-| OLA       | `ola_litres` → "198 L"                                          |
-| Region    | `distilleries.region`                                           |
-
-### Open question — "Wood"
-
-The `casks` table has `cask_type` (e.g. "Ex-Bourbon Barrel") but **no separate wood field**. Two options:
-
-- **A. Add a `wood` column** to `casks` (e.g. "American Oak", "European Oak", "Mizunara") — cleanest, needs a migration + admin form field + backfill.
-- **B. Derive wood from `cask_type`** with a simple map (Bourbon → American Oak, Sherry/Port → European Oak, etc.) — no schema change, but approximate.
-
-Tell me which you'd like and I'll implement. If A, I'll add the column, grant, expose it in the admin Casks editor, and default existing rows to null (shown as "—").
-
-### Files touched
-
-- `src/pages/portal/AvailableStock.tsx` — new stat-grid component, remove summary line, update card top half. Keep `Mini` for the Buy dialog or replace it there too for consistency.
-- (If option A) new migration + `src/pages/admin/Casks.tsx` field.
-
-### Verification
-
-Playwright at 360, 390, 768, 1280 px — screenshot the card and confirm every label and value renders in full with no `…`.
+No layout or breakpoint switch — the desktop-style nav simply scales down cleanly for tablet.

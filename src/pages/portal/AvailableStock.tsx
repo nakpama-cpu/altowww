@@ -343,20 +343,14 @@ export default function AvailableStock() {
                   </div>
                 )}
                 <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="display-heading text-xl leading-snug mb-4 line-clamp-2">{c.distilleries?.name ?? c.spirit}</h3>
-                  <div className="grid grid-cols-3 gap-px bg-border border border-border mb-4" style={{ gridAutoRows: "1fr" }}>
-                    {(() => {
-                      const a = computeCaskAge(c.fill_date, c.age_years);
-                      const cells: { label: string; v: string }[] = [
-                        { label: "Age", v: a != null ? `${a} yrs` : "—" },
-                        { label: "Wood", v: woodFromCaskType(c.cask_type) },
-                        { label: "Cask Type", v: c.cask_type ?? "—" },
-                        { label: "Filled", v: formatFillDate(c.fill_date) },
-                        { label: "OLA", v: c.ola_litres != null ? `${c.ola_litres} L` : "—" },
-                        { label: "Region", v: c.distilleries?.region ?? "—" },
-                      ];
-                      return cells.map((cell) => <Stat key={cell.label} label={cell.label} v={cell.v} />);
-                    })()}
+                  <h3 className="display-heading text-xl leading-snug mb-1 h-[3.25rem] line-clamp-2">{c.distilleries?.name ?? c.spirit}</h3>
+                  <p className="font-body text-xs leading-4 text-muted-foreground mb-4 h-[2rem] line-clamp-2">
+                    {(() => { const a = computeCaskAge(c.fill_date, c.age_years); return [c.distilleries?.region, c.cask_type, a != null ? `${a} yrs` : null].filter(Boolean).join(" · "); })()}
+                  </p>
+                  <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
+                    <Mini label="ABV" v={c.abv ? `${c.abv}%` : "—"} />
+                    <Mini label="OLA" v={c.ola_litres ? `${c.ola_litres} L` : "—"} />
+                    <Mini label="Filled" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
                   </div>
                   {c.description && (
                     <p className="font-body text-sm text-muted-foreground mb-3 line-clamp-3">{c.description}</p>
@@ -642,39 +636,9 @@ const Mini = ({ label, v }: { label: string; v: string }) => (
   </div>
 );
 
-const Stat = ({ label, v }: { label: string; v: string }) => (
-  <div className="bg-card px-3 py-2 min-w-0 flex flex-col gap-1">
-    <div className="font-body text-[9px] uppercase tracking-[0.15em] text-muted-foreground leading-tight break-words">
-      {label}
-    </div>
-    <div className="font-body text-[13px] leading-tight text-foreground break-words">
-      {v}
-    </div>
-  </div>
-);
-
-function formatFillDate(d: string | null | undefined): string {
-  if (!d) return "—";
-  const dt = new Date(d);
-  if (isNaN(dt.getTime())) return "—";
-  return dt.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
-}
-
-function woodFromCaskType(ct: string | null | undefined): string {
-  if (!ct) return "—";
-  const s = ct.toLowerCase();
-  if (/mizunara/.test(s)) return "Japanese Oak";
-  if (/(sherry|oloroso|pedro\s*xim|px\b|palo\s*cortado|fino|amontillado|manzanilla|port|madeira|marsala|sauternes|wine|rum|cognac|armagnac|calvados)/.test(s)) return "European Oak";
-  if (/(bourbon|rye|tennessee|american|virgin\s*oak)/.test(s)) return "American Oak";
-  if (/european\s*oak/.test(s)) return "European Oak";
-  if (/american\s*oak/.test(s)) return "American Oak";
-  return "—";
-}
-
 const InfoSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section>
     <h4 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">{title}</h4>
     {children}
   </section>
 );
-
