@@ -81,7 +81,6 @@ export default function AvailableStock() {
     };
     for (const c of casks) {
       add("Distillery", c.distilleries?.name);
-      add("Cask #", c.cask_number);
       add("Spirit", c.spirit);
       add("Cask Type", c.cask_type);
       add("Region", c.distilleries?.region);
