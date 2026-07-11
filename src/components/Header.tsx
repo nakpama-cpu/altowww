@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import altoLogo from "@/assets/alto-logo.png";
+import altoLogoTight from "@/assets/alto-logo-tight.png";
 import BrochureButton from "@/components/BrochureButton";
 import LoginModal from "@/components/LoginModal";
 import HeaderMegaDropdown from "@/components/HeaderMegaDropdown";
+import MobileMenuButton from "@/components/MobileMenuButton";
 
 const mainLinks = [
   { to: "/", label: "Home" },
