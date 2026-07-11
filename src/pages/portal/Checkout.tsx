@@ -76,51 +76,59 @@ export default function Checkout() {
           {items.map((i) => {
             const lineTotal = i.unit_price * i.quantity;
             return (
-              <div key={i.cask_id} className="bg-card border border-border p-4 flex items-center gap-4">
-                <div className="w-20 h-20 bg-muted flex-shrink-0 overflow-hidden">
-                  {i.hero_image_url ? (
-                    <img src={i.hero_image_url} alt={i.cask_number} className="w-full h-full object-cover" />
-                  ) : null}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="display-heading text-lg truncate">{i.distillery || i.spirit}</div>
-                  <div className="font-body text-xs text-muted-foreground">
-                    Cask #{i.cask_number} · {i.spirit}
+              <div key={i.cask_id} className="bg-card border border-border p-3 sm:p-4">
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-muted flex-shrink-0 overflow-hidden">
+                    {i.hero_image_url ? (
+                      <img src={i.hero_image_url} alt={i.cask_number} className="w-full h-full object-cover" />
+                    ) : null}
                   </div>
-                  <div className="font-body text-xs text-muted-foreground mt-1">
-                    £{Math.round(i.unit_price).toLocaleString()} each
+                  <div className="flex-1 min-w-0">
+                    <div className="display-heading text-base sm:text-lg truncate">{i.distillery || i.spirit}</div>
+                    <div className="font-body text-xs text-muted-foreground truncate">
+                      Cask #{i.cask_number} · {i.spirit}
+                    </div>
+                    <div className="font-body text-xs text-muted-foreground mt-1">
+                      £{Math.round(i.unit_price).toLocaleString()} each
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-stretch border border-border h-9">
                   <button
-                    type="button"
-                    onClick={() => setQuantity(i.cask_id, i.quantity - 1)}
-                    className="px-3 bg-muted hover:bg-muted/70 font-body"
-                    aria-label="Decrease quantity"
-                  >−</button>
-                  <span className="px-3 min-w-[2.5rem] flex items-center justify-center font-body text-sm">{i.quantity}</span>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(i.cask_id, i.quantity + 1)}
-                    className="px-3 bg-muted hover:bg-muted/70 font-body"
-                    aria-label="Increase quantity"
-                  >+</button>
+                    onClick={() => remove(i.cask_id)}
+                    className="p-2 -mr-2 -mt-1 text-muted-foreground hover:text-destructive transition-colors flex-shrink-0"
+                    aria-label="Remove from cart"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
-                <div className="text-right min-w-[5rem]">
+                <div className="flex items-center justify-between gap-3 mt-3 pt-3 border-t border-border">
+                  <div className="flex items-stretch border border-border h-9">
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(i.cask_id, i.quantity - 1)}
+                      className="px-3 bg-muted hover:bg-muted/70 font-body"
+                      aria-label="Decrease quantity"
+                    >−</button>
+                    <span className="px-3 min-w-[2.5rem] flex items-center justify-center font-body text-sm">{i.quantity}</span>
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(i.cask_id, i.quantity + 1)}
+                      className="px-3 bg-muted hover:bg-muted/70 font-body"
+                      aria-label="Increase quantity"
+                    >+</button>
+                  </div>
                   <div className="display-heading text-lg text-primary">
                     £{Math.round(lineTotal).toLocaleString()}
                   </div>
                 </div>
-                <button
-                  onClick={() => remove(i.cask_id)}
-                  className="p-2 text-muted-foreground hover:text-destructive transition-colors"
-                  aria-label="Remove from cart"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
               </div>
             );
           })}
+          <button
+            onClick={clear}
+            className="w-full flex items-center justify-center gap-2 font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground hover:text-destructive border border-border py-3 transition-colors"
+          >
+            <Trash2 className="w-3 h-3" /> Clear Cart
+          </button>
         </div>
 
         <aside className="bg-card border border-border p-6 h-fit">
