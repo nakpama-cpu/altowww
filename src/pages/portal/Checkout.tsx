@@ -157,12 +157,6 @@ export default function Checkout() {
           <p className="font-body text-[11px] text-muted-foreground mt-3 leading-relaxed">
             Submitting creates a pending order. An advisor will contact you to confirm payment, paperwork and delivery.
           </p>
-          <button
-            onClick={clear}
-            className="w-full mt-4 font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground hover:text-foreground"
-          >
-            Clear Cart
-          </button>
         </aside>
       </div>
     </div>
