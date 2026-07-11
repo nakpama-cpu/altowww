@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Menu, Newspaper, ShoppingBag } from "lucide-react";
+import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Newspaper, ShoppingBag } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect } from "react";
 import CheckoutFab from "@/components/CheckoutFab";
+import MobileMenuButton from "@/components/MobileMenuButton";
 import altoLogo from "@/assets/alto-logo-tight.png";
 
 
