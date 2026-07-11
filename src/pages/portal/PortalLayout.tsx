@@ -25,7 +25,7 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { 
     <div className="flex flex-col h-full bg-secondary text-secondary-foreground">
       <div className="p-6 md:p-8 border-b border-secondary-foreground/10 flex-shrink-0">
         <Link to="/" onClick={onNavigate} className="block">
-          <img src={altoLogo} alt="Alto Whisky" className="h-8 md:h-9 w-auto" />
+          <img src={altoLogo} alt="Alto Whisky" className="block w-36 md:w-44 h-auto" />
         </Link>
         <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mt-2">Client Portal</p>
       </div>
@@ -94,7 +94,7 @@ export default function PortalLayout() {
       {/* Mobile top bar */}
       <header className="md:hidden sticky top-0 z-40 flex items-center justify-between px-4 h-14 bg-secondary text-secondary-foreground border-b border-secondary-foreground/10">
         <Link to="/" className="block">
-          <img src={altoLogo} alt="Alto Whisky" className="h-7 w-auto" />
+          <img src={altoLogo} alt="Alto Whisky" className="block w-36 h-auto" />
         </Link>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
