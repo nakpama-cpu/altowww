@@ -55,6 +55,7 @@ const Header = () => {
     setLoginOpen(true);
   };
 
+  const clearTimer = (ref: React.MutableRefObject<number | null>) => {
     if (ref.current) {
       window.clearTimeout(ref.current);
       ref.current = null;
