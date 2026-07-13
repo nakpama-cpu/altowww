@@ -69,6 +69,7 @@ const Header = () => {
   };
 
   const openNews = () => {
+    if (suppressOpenRef.current) return;
     clearTimer(newsCloseTimer);
     clearTimer(aboutCloseTimer);
     setAboutOpen(false);
@@ -79,6 +80,7 @@ const Header = () => {
     newsCloseTimer.current = window.setTimeout(() => setNewsOpen(false), 150);
   };
   const openAbout = () => {
+    if (suppressOpenRef.current) return;
     clearTimer(aboutCloseTimer);
     clearTimer(newsCloseTimer);
     setNewsOpen(false);
