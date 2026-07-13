@@ -36,6 +36,12 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  // After navigation, suppress dropdown from opening until the cursor
+  // actually leaves the header area and re-enters it. This prevents the
+  // mega-menu from covering the hero on the newly loaded page when the
+  // mouse happens to still be over the nav item that was clicked.
+  const suppressOpenRef = useRef(true);
+  const headerRef = useRef<HTMLElement | null>(null);
 
   const handleClientLogin = async () => {
     if (user) {
