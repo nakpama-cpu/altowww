@@ -39,7 +39,7 @@ const Card = ({ article }: { article: Article }) => (
           {article.category}
         </span>
         <span className="w-1 h-1 rounded-full bg-secondary-foreground/30" />
-        <span className="font-body text-[9px] uppercase tracking-[0.15em] text-secondary-foreground/50">
+        <span className="font-body text-[9px] uppercase tracking-[0.15em] text-secondary-foreground">
           {article.date}
         </span>
       </div>
@@ -102,17 +102,17 @@ const NewsPanel = ({ active }: PanelProps) => {
   return (
     <div className="max-w-6xl mx-auto px-6 pt-3 pb-3">
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 mb-3">
-        <p className="chapter-marker text-secondary-foreground/60 justify-self-start">
+        <p className="chapter-marker text-secondary-foreground justify-self-start">
           News &amp; Insights
         </p>
         <div className="flex items-center gap-2 bg-secondary-foreground/5 border border-secondary-foreground/10 px-3 py-1.5 w-full max-w-xs">
-          <Search className="w-3.5 h-3.5 text-secondary-foreground/40" />
+          <Search className="w-3.5 h-3.5 text-secondary-foreground" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search articles"
-            className="bg-transparent outline-none border-none text-secondary-foreground placeholder:text-secondary-foreground/40 font-body text-xs w-full"
+            className="bg-transparent outline-none border-none text-secondary-foreground placeholder:text-secondary-foreground font-body text-xs w-full"
           />
         </div>
         <Link
@@ -155,7 +155,7 @@ const NewsPanel = ({ active }: PanelProps) => {
           }}
         >
           {filtered.length === 0 ? (
-            <p className="font-body text-xs text-secondary-foreground/60 py-6 text-center">
+            <p className="font-body text-xs text-secondary-foreground py-6 text-center">
               No articles match "{query}".
             </p>
           ) : (

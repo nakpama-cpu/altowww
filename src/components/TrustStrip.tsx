@@ -28,7 +28,7 @@ const TrustStrip = () => {
     >
       <div className="py-10 md:py-14">
         <p
-          className={`text-center font-body text-[10px] uppercase tracking-[0.3em] text-muted-foreground/50 mb-8 transition-all duration-1000 ${
+          className={`text-center font-body text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-8 transition-all duration-1000 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         >

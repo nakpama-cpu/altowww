@@ -35,7 +35,7 @@ const GlassSection = () => {
         </div>
         <div>
           <p
-            className={`chapter-marker mb-8 text-secondary-foreground/50 transition-all duration-1000 ${
+            className={`chapter-marker mb-8 text-secondary-foreground transition-all duration-1000 ${
               visible ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -53,12 +53,12 @@ const GlassSection = () => {
               visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <p className="font-body text-sm text-secondary-foreground/60 leading-relaxed">
+            <p className="font-body text-sm text-secondary-foreground leading-relaxed">
               Every cask you purchase through Alto Whisky is stored at HMRC 
               government-bonded warehouses across Scotland, fully covered by 
               insurance and exempt from taxation.
             </p>
-            <p className="font-body text-sm text-secondary-foreground/60 leading-relaxed">
+            <p className="font-body text-sm text-secondary-foreground leading-relaxed">
               You receive official certificates of ownership and regular market 
               updates from your dedicated Portfolio Advisor. When the time is right, 
               we'll help you sell or bottle your whisky.

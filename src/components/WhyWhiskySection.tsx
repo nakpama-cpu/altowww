@@ -39,7 +39,7 @@ const WhyWhiskySection = () => {
       <div className="py-10 md:py-16" />
       <div ref={ref} className="max-w-4xl mx-auto px-6 md:px-12">
         <p
-          className={`chapter-marker mb-8 text-secondary-foreground/50 transition-all duration-1000 ${
+          className={`chapter-marker mb-8 text-secondary-foreground transition-all duration-1000 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         >

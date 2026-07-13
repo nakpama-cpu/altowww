@@ -57,7 +57,7 @@ const GrainSection = () => {
       </div>
       <div id="distilleries-start" className="pt-6 md:pt-8 pb-2 md:pb-4" />
       <div ref={ref} className="max-w-3xl mx-auto px-6 md:px-12">
-        <p className="chapter-marker mb-4 md:mb-6 text-secondary-foreground/50">The Distilleries</p>
+        <p className="chapter-marker mb-4 md:mb-6 text-secondary-foreground">The Distilleries</p>
         <h2
           className={`display-heading text-3xl md:text-5xl text-secondary-foreground mb-5 md:mb-6 transition-all duration-1000 ${
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
@@ -99,7 +99,7 @@ const GrainSection = () => {
           visible ? "opacity-100" : "opacity-0"
         }`}
       >
-        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground/30 mb-4">
+        <p className="text-center font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground mb-4">
           Whisky Casks We Have Access To
         </p>
         <div className="relative">

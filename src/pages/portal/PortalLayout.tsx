@@ -39,7 +39,7 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { 
               `flex items-center gap-3 px-4 py-3 font-body text-xs uppercase tracking-[0.2em] transition-all border-l-2 ${
                 isActive
                   ? "border-primary bg-primary/10 text-secondary-foreground"
-                  : "border-transparent text-secondary-foreground/60 hover:text-secondary-foreground hover:border-primary/40"
+                  : "border-transparent text-secondary-foreground hover:text-secondary-foreground hover:border-primary/40"
               }`
             }
           >
@@ -57,7 +57,7 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { 
           <NavLink to="/admin" onClick={onNavigate}
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 mt-6 font-body text-xs uppercase tracking-[0.2em] transition-all border-l-2 border-t border-t-secondary-foreground/10 pt-6 ${
-                isActive ? "border-l-primary text-primary" : "border-l-transparent text-secondary-foreground/60 hover:text-primary"
+                isActive ? "border-l-primary text-primary" : "border-l-transparent text-secondary-foreground hover:text-primary"
               }`
             }
           >
@@ -73,7 +73,7 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { 
           {profile?.first_name} {profile?.last_name}
         </div>
         <button onClick={signOut}
-          className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.25em] text-secondary-foreground/60 hover:text-primary transition-colors">
+          className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.25em] text-secondary-foreground hover:text-primary transition-colors">
           <LogOut className="w-3 h-3" /> Sign out
         </button>
       </div>

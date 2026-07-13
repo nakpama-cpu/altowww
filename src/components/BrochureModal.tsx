@@ -237,7 +237,7 @@ export const BrochureModalProvider = ({ children }: { children: ReactNode }) => 
                     ? "Request Brochure"
                     : "Request Callback"}
                 </button>
-                <p className="font-body text-xs text-muted-foreground/50 text-center">
+                <p className="font-body text-xs text-muted-foreground text-center">
                   Your details are secure and will only be used to contact you.
                 </p>
               </form>

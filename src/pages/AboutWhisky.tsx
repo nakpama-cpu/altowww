@@ -111,10 +111,10 @@ const AboutWhisky = () => {
         {/* Regions */}
         <section className="section-dark py-24 md:py-32">
           <div className="max-w-3xl mx-auto px-6 md:px-12 mb-16">
-            <p className="chapter-marker mb-8 text-secondary-foreground/50">
+            <p className="chapter-marker mb-8 text-secondary-foreground">
               Regions
             </p>
-            <p className="font-body text-base leading-relaxed text-secondary-foreground/60 max-w-xl mb-8">
+            <p className="font-body text-base leading-relaxed text-secondary-foreground max-w-xl mb-8">
               For the layman, it is forgivable to assume that all Scottish whisky
               would taste the same, regardless of the region it comes from. For a
               whisky enthusiast, this couldn't be further from the truth.
@@ -140,7 +140,7 @@ const AboutWhisky = () => {
                   <h3 className="font-display text-2xl md:text-3xl text-secondary-foreground font-light italic mb-4">
                     {region.name}
                   </h3>
-                  <div className="font-body text-sm text-secondary-foreground/60 leading-relaxed max-w-2xl space-y-4">
+                  <div className="font-body text-sm text-secondary-foreground leading-relaxed max-w-2xl space-y-4">
                     {region.description.split('\n\n').map((paragraph, pi) => (
                       <p key={pi}>{paragraph}</p>
                     ))}
