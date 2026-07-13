@@ -9,8 +9,6 @@ const ScrollNavigation = () => {
   const [mounted, setMounted] = useState(false);
   const sectionsRef = useRef<HTMLElement[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const rafIdRef = useRef<number | null>(null);
-  const isProgrammaticScrollRef = useRef(false);
 
   const collectSections = useCallback(() => {
     const list = Array.from(document.querySelectorAll("section")) as HTMLElement[];
@@ -47,80 +45,21 @@ const ScrollNavigation = () => {
     return idx;
   }, []);
 
-  const cancelSmoothScroll = useCallback(() => {
-    if (rafIdRef.current !== null) {
-      cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = null;
-    }
-    isProgrammaticScrollRef.current = false;
-    document.documentElement.style.scrollBehavior = "";
-  }, []);
-
-  const smoothScrollTo = useCallback((targetY: number) => {
-    cancelSmoothScroll();
-
-    const startY = window.scrollY;
-    const distance = targetY - startY;
-
-    if (Math.abs(distance) < 2) {
-      computeCurrent();
-      return;
-    }
-
-    const duration = 760;
-    const startTime = performance.now();
-    isProgrammaticScrollRef.current = true;
-    document.documentElement.style.scrollBehavior = "auto";
-    show();
-
-    const animate = (now: number) => {
-      const progress = Math.min((now - startTime) / duration, 1);
-      const eased = progress < 0.5
-        ? 2 * progress * progress
-        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-
-      window.scrollTo(0, startY + distance * eased);
-
-      if (progress < 1) {
-        rafIdRef.current = requestAnimationFrame(animate);
-        return;
-      }
-
-      rafIdRef.current = null;
-      isProgrammaticScrollRef.current = false;
-      document.documentElement.style.scrollBehavior = "";
-      computeCurrent();
-    };
-
-    rafIdRef.current = requestAnimationFrame(animate);
-  }, [cancelSmoothScroll, computeCurrent, show]);
-
   useEffect(() => {
     if (typeof document === "undefined") return;
     collectSections();
     computeCurrent();
     setMounted(true);
 
-    const onResize = () => {
-      cancelSmoothScroll();
-      collectSections();
-      computeCurrent();
-    };
+    const onResize = () => collectSections();
     const onScroll = () => {
-      if (!isProgrammaticScrollRef.current) {
-        computeCurrent();
-      }
+      computeCurrent();
       show();
     };
-
-    const onWheel = () => cancelSmoothScroll();
-    const onTouchStart = () => cancelSmoothScroll();
 
     window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("mousemove", show, { passive: true });
-    window.addEventListener("wheel", onWheel, { passive: true });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
 
     const t1 = window.setTimeout(() => {
       collectSections();
@@ -133,13 +72,10 @@ const ScrollNavigation = () => {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("mousemove", show);
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouchStart);
       window.clearTimeout(t1);
       window.clearTimeout(t2);
-      cancelSmoothScroll();
     };
-  }, [collectSections, computeCurrent, show, cancelSmoothScroll]);
+  }, [collectSections, computeCurrent, show]);
 
   const scrollTo = useCallback((direction: "up" | "down") => {
     const sections = sectionsRef.current;
@@ -154,7 +90,8 @@ const ScrollNavigation = () => {
     if (direction === "up") {
       // If we're already on the first section but not at the very top, snap to 0
       if (idx === 0 && scrollY > 0) {
-        smoothScrollTo(0);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        show();
         return;
       }
       const target = sections[idx - 1];
@@ -171,7 +108,8 @@ const ScrollNavigation = () => {
             ? 0
             : scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
       }
-      smoothScrollTo(Math.max(0, targetTop));
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+      show();
       return;
     }
 
@@ -183,8 +121,9 @@ const ScrollNavigation = () => {
       window.getComputedStyle(scrollTarget).position === "fixed"
         ? 0
         : scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
-    smoothScrollTo(Math.max(0, targetTop));
-  }, [getHeaderHeight, smoothScrollTo]);
+    window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+    show();
+  }, [getHeaderHeight, show]);
 
   if (!mounted || sectionsRef.current.length < 2) return null;
 
