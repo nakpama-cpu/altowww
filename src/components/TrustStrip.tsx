@@ -42,7 +42,7 @@ const TrustStrip = () => {
           {trustLogos.map((logo, i) => (
             <span
               key={logo.name}
-              className="font-display text-lg md:text-xl tracking-wide text-muted-foreground/40 font-light transition-all duration-500 hover:text-muted-foreground/70"
+              className="font-display text-lg md:text-xl tracking-wide text-muted-foreground font-light transition-all duration-500 hover:text-muted-foreground"
               style={{ transitionDelay: `${300 + i * 100}ms` }}
             >
               {logo.display}
