@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { useToast } from "@/hooks/use-toast";
 
 type Props = { open: boolean; onClose: () => void };
@@ -40,19 +39,6 @@ export default function LoginModal({ open, onClose }: Props) {
     navigate("/portal");
   };
 
-  const handleOAuth = async (provider: "google") => {
-    const result = await lovable.auth.signInWithOAuth(provider, {
-      redirect_uri: `${window.location.origin}/portal`,
-    });
-    if (result.error) {
-      toast({
-        title: "Google sign in failed",
-        description: String(result.error),
-        variant: "destructive",
-      });
-    }
-  };
-
   const modal = (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-8 animate-in fade-in duration-200"
@@ -74,21 +60,6 @@ export default function LoginModal({ open, onClose }: Props) {
 
         <h2 className="display-heading text-2xl mb-2">Client Portal</h2>
         <p className="font-body text-sm text-muted-foreground mb-8">Sign in to view your portfolio.</p>
-
-        <div className="space-y-3 mb-6">
-          <button
-            onClick={() => handleOAuth("google")}
-            type="button"
-            className="w-full font-body text-xs uppercase tracking-[0.25em] border border-border py-3 hover:bg-muted transition-colors"
-          >
-            Continue with Google
-          </button>
-        </div>
-
-        <div className="relative my-6 text-center">
-          <span className="bg-card px-3 text-[10px] uppercase tracking-[0.25em] text-muted-foreground relative z-10">or</span>
-          <div className="absolute inset-x-0 top-1/2 h-px bg-border" />
-        </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
