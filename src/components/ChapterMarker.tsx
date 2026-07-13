@@ -41,7 +41,7 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
 
   return (
     <nav
-      className={`fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-6 transition-opacity duration-300 ${
+      className={`fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-6 transition-opacity duration-300 ${
         visible
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none"
