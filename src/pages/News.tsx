@@ -36,10 +36,6 @@ const News = () => {
   }, []);
 
   useEffect(() => {
-    setPage(1);
-  }, [query, sort]);
-
-  useEffect(() => {
     const next = new URLSearchParams(searchParams);
     if (page > 1) next.set("page", String(page));
     else next.delete("page");
@@ -108,7 +104,10 @@ const News = () => {
                   id="news-search"
                   type="text"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setPage(1);
+                  }}
                   placeholder="Search articles..."
                   className="w-full bg-background border border-border pl-11 pr-4 py-3 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                 />
@@ -121,7 +120,10 @@ const News = () => {
                 <select
                   id="news-sort"
                   value={sort}
-                  onChange={(e) => setSort(e.target.value as SortKey)}
+                  onChange={(e) => {
+                    setSort(e.target.value as SortKey);
+                    setPage(1);
+                  }}
                   className="appearance-none cursor-pointer bg-background border border-border pl-4 pr-10 py-3 font-body text-sm text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                   style={{
                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
