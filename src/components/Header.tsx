@@ -36,6 +36,12 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  // After navigation, suppress dropdown from opening until the cursor
+  // actually leaves the header area and re-enters it. This prevents the
+  // mega-menu from covering the hero on the newly loaded page when the
+  // mouse happens to still be over the nav item that was clicked.
+  const suppressOpenRef = useRef(true);
+  const headerRef = useRef<HTMLElement | null>(null);
 
   const handleClientLogin = async () => {
     if (user) {
@@ -63,6 +69,7 @@ const Header = () => {
   };
 
   const openNews = () => {
+    if (suppressOpenRef.current) return;
     clearTimer(newsCloseTimer);
     clearTimer(aboutCloseTimer);
     setAboutOpen(false);
@@ -73,6 +80,7 @@ const Header = () => {
     newsCloseTimer.current = window.setTimeout(() => setNewsOpen(false), 150);
   };
   const openAbout = () => {
+    if (suppressOpenRef.current) return;
     clearTimer(aboutCloseTimer);
     clearTimer(newsCloseTimer);
     setNewsOpen(false);
@@ -85,14 +93,21 @@ const Header = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScrollClearSuppress = () => { suppressOpenRef.current = false; };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("scroll", onScrollClearSuppress, { passive: true, once: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", onScrollClearSuppress);
+    };
+  }, [location]);
 
   useEffect(() => {
     setMenuOpen(false);
     setNewsOpen(false);
     setAboutOpen(false);
+    // Re-arm suppression on every navigation. Cleared when cursor leaves header.
+    suppressOpenRef.current = true;
   }, [location]);
 
   const isActive = (path: string) => location.pathname === path;
@@ -102,6 +117,8 @@ const Header = () => {
 
   return (
     <header
+      ref={headerRef}
+      onMouseLeave={() => { suppressOpenRef.current = false; }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 h-14 bg-secondary text-secondary-foreground border-b border-secondary-foreground/10 md:h-auto md:border-none md:text-secondary-foreground ${
         scrolled
           ? "md:bg-secondary/95 md:backdrop-blur-md md:shadow-lg md:py-3"
