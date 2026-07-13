@@ -1,26 +1,38 @@
+# Plan: Connect Squarespace domain to Lovable
+
 ## Goal
-When a signed-in user clicks "Client Login" from a marketing page, take them straight into the portal — skipping the login modal — unless they haven't visited any portal page in the last 15 minutes, in which case make them sign in again.
+Point a Squarespace-registered domain to the published Lovable site so both `yourdomain.com` and `www.yourdomain.com` resolve correctly.
 
-## Changes
+## Steps
 
-### 1. Track last portal visit (`src/pages/portal/PortalLayout.tsx`)
-Add a `useEffect` on `location.pathname` that writes `Date.now()` to `localStorage` under the key `alto:lastPortalVisit` every time an authenticated user renders a `/portal/*` route (this component is already gated by `ProtectedRoute`, so a visit implies an active session).
+1. **Publish the Lovable site**
+   - A custom domain can only be connected after the site is published.
+   - Current project is already published at `https://altowww.lovable.app`, so this prerequisite is met.
 
-### 2. Smart "Client Login" behaviour (`src/components/Header.tsx`)
-Replace the two `setLoginOpen(true)` handlers (desktop button ~line 162, mobile button ~line 217) with a shared `handleClientLogin` that:
+2. **Start domain setup in Lovable**
+   - Go to **Project Settings → Project → Domains** (desktop) or **... → Settings → Project → Domains** (mobile).
+   - Click **Connect Domain**.
+   - Add `yourdomain.com` as one entry.
+   - Add `www.yourdomain.com` as a second entry (www must be added explicitly).
+   - Lovable will display the required DNS records, including a unique `_lovable` TXT verification value.
 
-- Reads `useAuth()` — `{ user, signOut }`.
-- Reads `localStorage.getItem("alto:lastPortalVisit")`.
-- If `user` exists AND `lastVisit` is within the last 15 minutes (`Date.now() - lastVisit < 15 * 60 * 1000`) → `navigate("/portal")`. No modal.
-- If `user` exists but the timestamp is missing or older than 15 min → call `await signOut()`, clear the stored timestamp, then open the login modal as today.
-- If no `user` → open the login modal (current behaviour).
+3. **Configure DNS in Squarespace**
+   - Log in to Squarespace and open the domain's DNS settings.
+   - Add or update the following records:
+     - **A record** — Host: `@` — Value: `185.158.133.1`
+     - **A record** — Host: `www` — Value: `185.158.133.1`
+     - **TXT record** — Host: `_lovable` — Value: `lovable_verify=…` (copy the exact value from Lovable)
+   - Remove or update any conflicting A records for `@` or `www` that point elsewhere.
 
-The 15-minute window is a soft client-side rule for UX only; Supabase session expiry is unchanged and continues to govern real auth.
+4. **Wait and verify**
+   - DNS propagation can take up to 72 hours, though it often completes sooner.
+   - Lovable will automatically verify ownership and provision SSL once the records are detected.
+   - Check domain status in **Project Settings → Domains**; it should move from Verifying → Active.
 
-### 3. No other files change
-`AuthContext`, `ProtectedRoute`, `LoginModal`, and Supabase config are untouched. The `MyCasks`, `AvailableStock`, etc. pages inherit the tracking through `PortalLayout`.
+## Notes
+- Squarespace manages DNS for domains registered through them, so the records are added in your Squarespace account.
+- Use only the A-record values Lovable provides; do not switch to CNAMEs unless Lovable instructs you to (e.g., for a proxy like Cloudflare).
+- If a CAA record exists, ensure it allows Let's Encrypt so SSL can be issued.
 
-## Verification
-- Sign in, navigate to `/`, click Client Login → should land on `/portal` directly.
-- Sign in, wait 15+ minutes off-portal (or manually set `alto:lastPortalVisit` to an old value in devtools), click Client Login → should sign out and show the login modal.
-- Signed-out visitor clicks Client Login → login modal opens as before.
+## No code changes required
+This is a DNS and project-settings task only.
