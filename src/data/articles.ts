@@ -19,7 +19,7 @@ import rareCaskIndexImg from "@/assets/rare-cask-index.jpg";
 import globalSpiritsDemandImg from "@/assets/global-spirits-demand.jpg";
 import bruichladdichBcorpImg from "@/assets/bruichladdich-bcorp.jpg";
 import usTariffScotchImg from "@/assets/us-tariff-scotch.jpg";
-import sideritPxCaskImg from "@/assets/siderit-px-cask.webp";
+import sideritPxCaskImg from "@/assets/siderit-px-cask-hero.jpg";
 import diageoResultsImg from "@/assets/diageo-results.jpg";
 import portEllenReopeningImg from "@/assets/port-ellen-reopening.jpg";
 import rosebankRevivalImg from "@/assets/rosebank-lowland-revival.jpg";
