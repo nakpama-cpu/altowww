@@ -83,18 +83,23 @@ const ScrollNavigation = () => {
       const absTop = s.getBoundingClientRect().top + scrollY;
       if (absTop <= scrollY + ACTIVE_OFFSET) idx = i;
     });
-    const target =
-      direction === "up" ? sections[idx - 1] : sections[idx + 1];
+    const targetIdx = direction === "up" ? idx - 1 : idx + 1;
+    const target = sections[targetIdx];
     if (!target) return;
-    const headerHeight = getHeaderHeight();
-    const scrollTarget =
-      document.getElementById(`${target.id}-start`) || target;
     let targetTop: number;
-    if (window.getComputedStyle(scrollTarget).position === "fixed") {
+    if (targetIdx === 0) {
+      // Always go fully to the top for the first section (hero)
       targetTop = 0;
     } else {
-      targetTop =
-        scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
+      const headerHeight = getHeaderHeight();
+      const scrollTarget =
+        document.getElementById(`${target.id}-start`) || target;
+      if (window.getComputedStyle(scrollTarget).position === "fixed") {
+        targetTop = 0;
+      } else {
+        targetTop =
+          scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
+      }
     }
     window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
     show();
