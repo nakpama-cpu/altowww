@@ -223,7 +223,7 @@ export const articles: Article[] = [
   },
   {
     slug: "uk-india-fta-scotch-whisky-july-2026",
-    image: chinaTradeImg,
+    image: ukIndiaTradeImg,
     category: "Industry News",
     date: "June 2026",
     title: "UK–India Free Trade Agreement to Enter Into Force, Cutting Scotch Whisky Tariffs",
@@ -240,7 +240,7 @@ export const articles: Article[] = [
   },
   {
     slug: "karuizawa-casks-425-million-christies-2026",
-    image: auctionCaskImg,
+    image: karuizawaAuctionImg,
     category: "Market Insight",
     date: "May 2026",
     title: "'Last' Karuizawa Casks Sell for £4.25m at Christie's London",
@@ -257,7 +257,7 @@ export const articles: Article[] = [
   },
   {
     slug: "annandale-low-carbon-whisky-world-first-2026",
-    image: sustainableWhiskyImg,
+    image: annandaleLowCarbonImg,
     category: "Sustainability",
     date: "April 2026",
     title: "Annandale Distillery Commissions 'World First' Low-Carbon Heat System",
@@ -274,7 +274,7 @@ export const articles: Article[] = [
   },
   {
     slug: "old-pulteney-200-year-anniversary-50yo-2026",
-    image: distilleryStillsImg,
+    image: oldPulteney200Img,
     category: "Distillery News",
     date: "June 2026",
     title: "Old Pulteney Marks 200 Years with a 50-Year-Old Single Malt",
@@ -291,7 +291,7 @@ export const articles: Article[] = [
   },
   {
     slug: "isle-of-arran-james-hutton-anniversary-2026",
-    image: whiskyInvestmentImg,
+    image: arranHuttonImg,
     category: "Distillery News",
     date: "June 2026",
     title: "Isle of Arran Releases James Hutton Anniversary Single Malt",
