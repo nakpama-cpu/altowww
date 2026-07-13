@@ -83,26 +83,48 @@ const ScrollNavigation = () => {
       const absTop = s.getBoundingClientRect().top + scrollY;
       if (absTop <= scrollY + ACTIVE_OFFSET) idx = i;
     });
-    const target =
-      direction === "up" ? sections[idx - 1] : sections[idx + 1];
+
+    if (direction === "up") {
+      // If we're already on the first section but not at the very top, snap to 0
+      if (idx === 0 && scrollY > 0) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        show();
+        return;
+      }
+      const target = sections[idx - 1];
+      if (!target) return;
+      const targetIdx = idx - 1;
+      let targetTop: number;
+      if (targetIdx === 0) {
+        targetTop = 0;
+      } else {
+        const headerHeight = getHeaderHeight();
+        const scrollTarget = document.getElementById(`${target.id}-start`) || target;
+        targetTop =
+          window.getComputedStyle(scrollTarget).position === "fixed"
+            ? 0
+            : scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
+      }
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+      show();
+      return;
+    }
+
+    const target = sections[idx + 1];
     if (!target) return;
     const headerHeight = getHeaderHeight();
-    const scrollTarget =
-      document.getElementById(`${target.id}-start`) || target;
-    let targetTop: number;
-    if (window.getComputedStyle(scrollTarget).position === "fixed") {
-      targetTop = 0;
-    } else {
-      targetTop =
-        scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
-    }
+    const scrollTarget = document.getElementById(`${target.id}-start`) || target;
+    const targetTop =
+      window.getComputedStyle(scrollTarget).position === "fixed"
+        ? 0
+        : scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
     window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
     show();
   }, [getHeaderHeight, show]);
 
   if (!mounted || sectionsRef.current.length < 2) return null;
 
-  const canGoUp = currentIndex > 0;
+  const canGoUp = currentIndex > 0 || (typeof window !== "undefined" && window.scrollY > 0);
   const canGoDown = currentIndex < sectionsRef.current.length - 1;
 
   return (
