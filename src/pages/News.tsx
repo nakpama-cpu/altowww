@@ -2,7 +2,7 @@ import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import PageHero from "@/components/PageHero";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { articles } from "@/data/articles";
 import { Search, SlidersHorizontal } from "lucide-react";
