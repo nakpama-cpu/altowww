@@ -1,38 +1,29 @@
-# Plan: Connect Squarespace domain to Lovable
-
 ## Goal
-Point a Squarespace-registered domain to the published Lovable site so both `yourdomain.com` and `www.yourdomain.com` resolve correctly.
+Add 5 new news articles to the News & Insights page, all based on real, verifiable positive whisky stories from roughly the last 3 months, spanning: investment/cask market, distillery news, industry & exports, and sustainability & innovation.
 
-## Steps
+## Research approach
+1. Use web search (Firecrawl/web search) to find real, recent positive whisky stories from reputable sources (Scotch Whisky Association, BBC, Reuters, Whisky Magazine, The Spirits Business, Scotsman, Sotheby's, Bonhams, distiller press releases).
+2. Verify each story with at least one credible source before writing. No invented facts, figures or quotes.
+3. Aim for one story per topic + one flexible pick:
+   - Investment & cask market (e.g. notable auction result or index update)
+   - Distillery news (new release, expansion or milestone)
+   - Industry & exports (Scotch export figures or trade wins)
+   - Sustainability & innovation (green distilling milestone)
+   - +1 extra strong story from any of the above
 
-1. **Publish the Lovable site**
-   - A custom domain can only be connected after the site is published.
-   - Current project is already published at `https://altowww.lovable.app`, so this prerequisite is met.
+## Content changes
+Add 5 new entries to `src/data/articles.ts`, each following the existing `Article` shape:
+- Unique `slug`, `category`, `date` (Month YYYY within last 3 months)
+- Compelling `title` and 1–2 sentence `excerpt`
+- `content`: 5–6 paragraphs, factual, citing sources inline in prose (e.g. "as reported by the BBC"), ending with an Alto Whisky tie-in paragraph consistent with existing articles
+- Reuse existing images from `src/assets` (auction, distillery, sustainable, china-trade, investment, etc.) — no new image generation unless you request it
 
-2. **Start domain setup in Lovable**
-   - Go to **Project Settings → Project → Domains** (desktop) or **... → Settings → Project → Domains** (mobile).
-   - Click **Connect Domain**.
-   - Add `yourdomain.com` as one entry.
-   - Add `www.yourdomain.com` as a second entry (www must be added explicitly).
-   - Lovable will display the required DNS records, including a unique `_lovable` TXT verification value.
+No changes needed to `News.tsx` — the list, search and sort already read from `articles`.
 
-3. **Configure DNS in Squarespace**
-   - Log in to Squarespace and open the domain's DNS settings.
-   - Add or update the following records:
-     - **A record** — Host: `@` — Value: `185.158.133.1`
-     - **A record** — Host: `www` — Value: `185.158.133.1`
-     - **TXT record** — Host: `_lovable` — Value: `lovable_verify=…` (copy the exact value from Lovable)
-   - Remove or update any conflicting A records for `@` or `www` that point elsewhere.
+## Out of scope
+- No image generation (reusing existing assets)
+- No changes to article detail page layout
+- No fictionalised quotes, prices or statistics — anything not verifiable will be cut
 
-4. **Wait and verify**
-   - DNS propagation can take up to 72 hours, though it often completes sooner.
-   - Lovable will automatically verify ownership and provision SSL once the records are detected.
-   - Check domain status in **Project Settings → Domains**; it should move from Verifying → Active.
-
-## Notes
-- Squarespace manages DNS for domains registered through them, so the records are added in your Squarespace account.
-- Use only the A-record values Lovable provides; do not switch to CNAMEs unless Lovable instructs you to (e.g., for a proxy like Cloudflare).
-- If a CAA record exists, ensure it allows Let's Encrypt so SSL can be issued.
-
-## No code changes required
-This is a DNS and project-settings task only.
+## Confirm
+Approve and I'll research the stories and add the 5 articles. If you'd prefer new custom images per article instead of reusing existing ones, say so before approving.
