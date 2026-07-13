@@ -9,9 +9,11 @@ type Props = { open: boolean; onClose: () => void };
 export default function LoginModal({ open, onClose }: Props) {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [signupForm, setSignupForm] = useState({ firstName: "", lastName: "", email: "", phone: "", password: "" });
 
   useEffect(() => {
     if (!open) return;
@@ -23,6 +25,10 @@ export default function LoginModal({ open, onClose }: Props) {
       document.body.style.overflow = "";
     };
   }, [open, onClose]);
+
+  useEffect(() => {
+    if (!open) setMode("signin");
+  }, [open]);
 
   if (!open) return null;
 
@@ -37,6 +43,31 @@ export default function LoginModal({ open, onClose }: Props) {
     }
     onClose();
     navigate("/portal");
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email: signupForm.email.trim(),
+      password: signupForm.password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/portal`,
+        data: {
+          first_name: signupForm.firstName.trim(),
+          last_name: signupForm.lastName.trim(),
+          phone: signupForm.phone.trim(),
+        },
+      },
+    });
+    setLoading(false);
+    if (error) {
+      toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Account created", description: "Check your email to confirm, then sign in." });
+    setMode("signin");
+    setEmail(signupForm.email.trim());
   };
 
   const modal = (
@@ -58,47 +89,132 @@ export default function LoginModal({ open, onClose }: Props) {
           </svg>
         </button>
 
-        <h2 className="display-heading text-2xl mb-2">Client Portal</h2>
-        <p className="font-body text-sm text-muted-foreground mb-8">Sign in to view your portfolio.</p>
+        {mode === "signin" ? (
+          <>
+            <h2 className="display-heading text-2xl mb-2">Client Portal</h2>
+            <p className="font-body text-sm text-muted-foreground mb-8">Sign in to view your portfolio.</p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Email</label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
-            />
-          </div>
-          <div>
-            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Password</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
-          >
-            {loading ? "Signing in…" : "Sign In"}
-          </button>
-        </form>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Email</label>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+                />
+              </div>
+              <div>
+                <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Password</label>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
+                {loading ? "Signing in…" : "Sign In"}
+              </button>
+            </form>
 
-        <div className="mt-6 flex justify-between font-body text-xs">
-          <Link to="/portal/forgot-password" onClick={onClose} className="text-muted-foreground hover:text-primary">
-            Forgot password?
-          </Link>
-          <Link to="/portal/signup" onClick={onClose} className="text-muted-foreground hover:text-primary">
-            Create account
-          </Link>
-        </div>
+            <div className="mt-6 flex justify-between font-body text-xs">
+              <Link to="/portal/forgot-password" onClick={onClose} className="text-muted-foreground hover:text-primary">
+                Forgot password?
+              </Link>
+              <button
+                type="button"
+                onClick={() => setMode("signup")}
+                className="text-muted-foreground hover:text-primary"
+              >
+                Create account
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="display-heading text-2xl mb-2">Create Account</h2>
+            <p className="font-body text-sm text-muted-foreground mb-8">
+              Your account will be reviewed by our team before you can access portfolio features.
+            </p>
+
+            <form onSubmit={handleSignup} className="space-y-5">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">First Name</label>
+                  <input
+                    required
+                    maxLength={100}
+                    value={signupForm.firstName}
+                    onChange={(e) => setSignupForm({ ...signupForm, firstName: e.target.value })}
+                    className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Last Name</label>
+                  <input
+                    required
+                    maxLength={100}
+                    value={signupForm.lastName}
+                    onChange={(e) => setSignupForm({ ...signupForm, lastName: e.target.value })}
+                    className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Email</label>
+                <input
+                  type="email"
+                  required
+                  value={signupForm.email}
+                  onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
+                  className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+                />
+              </div>
+              <div>
+                <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Phone</label>
+                <input
+                  type="tel"
+                  required
+                  value={signupForm.phone}
+                  onChange={(e) => setSignupForm({ ...signupForm, phone: e.target.value })}
+                  className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+                />
+              </div>
+              <div>
+                <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Password</label>
+                <input
+                  type="password"
+                  required
+                  minLength={8}
+                  value={signupForm.password}
+                  onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
+                  className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
+                {loading ? "Creating…" : "Create Account"}
+              </button>
+            </form>
+
+            <p className="mt-6 text-center font-body text-xs text-muted-foreground">
+              Already have an account?{" "}
+              <button type="button" onClick={() => setMode("signin")} className="text-primary">
+                Sign in
+              </button>
+            </p>
+          </>
+        )}
       </div>
     </div>
   );
