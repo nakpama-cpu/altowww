@@ -117,6 +117,8 @@ const Header = () => {
 
   return (
     <header
+      ref={headerRef}
+      onMouseLeave={() => { suppressOpenRef.current = false; }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 h-14 bg-secondary text-secondary-foreground border-b border-secondary-foreground/10 md:h-auto md:border-none md:text-secondary-foreground ${
         scrolled
           ? "md:bg-secondary/95 md:backdrop-blur-md md:shadow-lg md:py-3"
