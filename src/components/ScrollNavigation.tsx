@@ -147,8 +147,7 @@ const ScrollNavigation = () => {
     if (direction === "up") {
       // If we're already on the first section but not at the very top, snap to 0
       if (idx === 0 && scrollY > 0) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        show();
+        smoothScrollTo(0);
         return;
       }
       const target = sections[idx - 1];
@@ -165,8 +164,7 @@ const ScrollNavigation = () => {
             ? 0
             : scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
       }
-      window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
-      show();
+      smoothScrollTo(Math.max(0, targetTop));
       return;
     }
 
@@ -178,9 +176,8 @@ const ScrollNavigation = () => {
       window.getComputedStyle(scrollTarget).position === "fixed"
         ? 0
         : scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
-    window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
-    show();
-  }, [getHeaderHeight, show]);
+    smoothScrollTo(Math.max(0, targetTop));
+  }, [getHeaderHeight, smoothScrollTo]);
 
   if (!mounted || sectionsRef.current.length < 2) return null;
 
