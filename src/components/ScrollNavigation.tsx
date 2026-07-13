@@ -24,7 +24,10 @@ const ScrollNavigation = () => {
     if (!header) return 80;
     if (window.innerWidth < 768) return header.offsetHeight;
     const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    const expanded = header.classList.contains("py-6");
+    // Header uses `md:py-6` when expanded (at top) and shrinks to `md:py-3` after scroll.
+    // Since we're scrolling AWAY from the top, use the shrunk header height as the offset.
+    const expanded =
+      header.classList.contains("md:py-6") || header.classList.contains("py-6");
     return header.offsetHeight - (expanded ? rootFontSize * 1.5 : 0);
   }, []);
 
