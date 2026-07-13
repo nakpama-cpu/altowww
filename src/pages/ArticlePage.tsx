@@ -4,8 +4,7 @@ import FooterSection from "@/components/FooterSection";
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { getArticleBySlug, articles } from "@/data/articles";
-
-const PAGE_SIZE = 9;
+import { usePageSize } from "@/hooks/usePageSize";
 
 const MONTHS: Record<string, number> = {
   january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
@@ -24,6 +23,7 @@ const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const pageSize = usePageSize();
   const fromPage = (location.state as { fromPage?: number } | null)?.fromPage;
   const article = getArticleBySlug(slug || "");
 
@@ -40,10 +40,11 @@ const ArticlePage = () => {
     .slice()
     .sort((a, b) => parseArticleDate(b.date) - parseArticleDate(a.date));
   const currentIndex = newsOrderedArticles.findIndex((a) => a.slug === slug);
-  const fallbackPage = currentIndex >= 0 ? Math.floor(currentIndex / PAGE_SIZE) + 1 : 1;
+  const fallbackPage = currentIndex >= 0 ? Math.floor(currentIndex / pageSize) + 1 : 1;
   const originPage = fromPage && fromPage > 0 ? fromPage : fallbackPage;
   const newsBackTo = originPage > 1 ? `/news?page=${originPage}` : "/news";
   const carryState = { fromPage: originPage };
+
   const prevArticle = currentIndex > 0 ? newsOrderedArticles[currentIndex - 1] : null;
   const nextArticle =
     currentIndex >= 0 && currentIndex < newsOrderedArticles.length - 1 ? newsOrderedArticles[currentIndex + 1] : null;

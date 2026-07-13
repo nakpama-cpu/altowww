@@ -5,6 +5,7 @@ import PageHero from "@/components/PageHero";
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { articles } from "@/data/articles";
+import { usePageSize } from "@/hooks/usePageSize";
 import { Search, SlidersHorizontal } from "lucide-react";
 import heroImg from "@/assets/whisky-investment-news.jpg";
 
@@ -27,9 +28,10 @@ const News = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("newest");
+  const pageSize = usePageSize();
   const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
   const [page, setPage] = useState(initialPage);
-  const PAGE_SIZE = 9;
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
