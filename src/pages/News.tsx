@@ -142,40 +142,97 @@ const News = () => {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
-                {filtered.map((article) => (
-                  <Link
-                    to={`/news/${article.slug}`}
-                    key={article.slug}
-                    className="group block"
-                  >
-                    <div className="aspect-[4/3] overflow-hidden mb-5">
-                      <img
-                        src={article.image}
-                        alt={article.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        loading="lazy"
-                      />
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
+                  {filtered
+                    .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+                    .map((article) => (
+                    <Link
+                      to={`/news/${article.slug}`}
+                      key={article.slug}
+                      className="group block"
+                    >
+                      <div className="aspect-[4/3] overflow-hidden mb-5">
+                        <img
+                          src={article.image}
+                          alt={article.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
+                          {article.category}
+                        </span>
+                        <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                        <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                          {article.date}
+                        </span>
+                      </div>
+                      <h2 className="font-display text-xl font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
+                        {article.title}
+                      </h2>
+                      <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                        {article.excerpt}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+
+                {filtered.length > PAGE_SIZE && (() => {
+                  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+                  return (
+                    <div className="mt-16 flex items-center justify-center gap-3">
+                      <button
+                        onClick={() => {
+                          setPage((p) => Math.max(1, p - 1));
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        disabled={page === 1}
+                        className="w-10 h-10 flex items-center justify-center border border-border rounded-full hover:border-primary hover:text-primary transition-colors disabled:opacity-20 disabled:pointer-events-none"
+                        aria-label="Previous page"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                        <button
+                          key={p}
+                          onClick={() => {
+                            setPage(p);
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                          }}
+                          className={`w-10 h-10 flex items-center justify-center font-body text-sm border rounded-full transition-colors ${
+                            p === page
+                              ? "border-primary text-primary"
+                              : "border-border text-muted-foreground hover:border-primary hover:text-primary"
+                          }`}
+                          aria-label={`Page ${p}`}
+                          aria-current={p === page ? "page" : undefined}
+                        >
+                          {p}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => {
+                          setPage((p) => Math.min(totalPages, p + 1));
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        disabled={page === totalPages}
+                        className="w-10 h-10 flex items-center justify-center border border-border rounded-full hover:border-primary hover:text-primary transition-colors disabled:opacity-20 disabled:pointer-events-none"
+                        aria-label="Next page"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
                     </div>
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
-                        {article.category}
-                      </span>
-                      <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-                      <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                        {article.date}
-                      </span>
-                    </div>
-                    <h2 className="font-display text-xl font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
-                      {article.title}
-                    </h2>
-                    <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                      {article.excerpt}
-                    </p>
-                  </Link>
-                ))}
-              </div>
+                  );
+                })()}
+              </>
             )}
+
           </div>
         </section>
 
