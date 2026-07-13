@@ -141,13 +141,13 @@ const Header = () => {
       }`}
     >
       <div className="max-w-6xl xl:max-w-7xl mx-auto pl-2 pr-4 md:px-4 lg:px-6 flex items-center justify-between h-full md:h-auto">
-        <Link to="/" className="block shrink-0 ml-2 md:ml-0">
+        <Link to="/" className="block ml-2 md:ml-0">
           <img src={altoLogoTight} alt="Alto Whisky" className="block md:hidden w-[3.25rem] h-auto" />
-          <img src={altoLogo} alt="Alto Whisky" className="hidden md:block h-9 lg:h-12 w-9 lg:w-12" />
+          <img src={altoLogo} alt="Alto Whisky" className="hidden md:block h-9 lg:h-12 w-auto" />
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-3 lg:gap-5">
+        <nav className="hidden md:flex items-center gap-0 lg:gap-1">
           {mainLinks.map((link) =>
             link.children ? (
               <div
@@ -160,7 +160,7 @@ const Header = () => {
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 flex items-center gap-1 ${
                     isAboutActive
                       ? "text-primary"
-                      : "text-secondary-foreground/85 hover:text-primary-foreground"
+                      : "text-secondary-foreground hover:text-secondary-foreground"
                   }`}
                 >
                   {link.label}
@@ -187,7 +187,7 @@ const Header = () => {
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 inline-block ${
                     isActive(link.to!)
                       ? "text-primary"
-                      : "text-secondary-foreground/85 hover:text-primary-foreground"
+                      : "text-secondary-foreground hover:text-secondary-foreground"
                   }`}
                 >
                   {link.label}
@@ -204,7 +204,7 @@ const Header = () => {
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 inline-block ${
                     isActive(link.to!)
                       ? "text-primary"
-                      : "text-secondary-foreground/85 hover:text-primary-foreground"
+                      : "text-secondary-foreground hover:text-secondary-foreground"
                   }`}
                 >
                   {link.label}
@@ -213,7 +213,7 @@ const Header = () => {
             )
           )}
 
-          <button onClick={handleClientLogin} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground/85 hover:text-primary-foreground transition-all duration-300">Client Login</button>
+          <button onClick={handleClientLogin} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground hover:text-secondary-foreground">Client Login</button>
           <BrochureButton className="hidden xl:inline-flex items-center px-3 py-2 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:opacity-90 transition-opacity whitespace-nowrap" />
         </nav>
 
