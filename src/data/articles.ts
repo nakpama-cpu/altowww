@@ -1,4 +1,4 @@
-import whiskyTastingImg from "@/assets/whisky-tasting.jpg";
+
 import distilleryStillsImg from "@/assets/distillery-stills.jpg";
 import whiskyInvestmentImg from "@/assets/whisky-investment-news.jpg";
 import taxBenefitsImg from "@/assets/tax-benefits.jpg";
