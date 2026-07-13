@@ -5,6 +5,7 @@ import PageHero from "@/components/PageHero";
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { articles } from "@/data/articles";
+import { usePageSize } from "@/hooks/usePageSize";
 import { Search, SlidersHorizontal } from "lucide-react";
 import heroImg from "@/assets/whisky-investment-news.jpg";
 
@@ -27,9 +28,10 @@ const News = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("newest");
+  const pageSize = usePageSize();
   const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
   const [page, setPage] = useState(initialPage);
-  const PAGE_SIZE = 9;
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -158,7 +160,7 @@ const News = () => {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
                   {filtered
-                    .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+                    .slice((page - 1) * pageSize, page * pageSize)
                     .map((article) => (
                     <Link
                       to={`/news/${article.slug}`}
@@ -193,10 +195,11 @@ const News = () => {
                   ))}
                 </div>
 
-                {filtered.length > PAGE_SIZE && (() => {
-                  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+                {filtered.length > pageSize && (() => {
+                  const totalPages = Math.ceil(filtered.length / pageSize);
                   return (
                     <div className="mt-16 flex items-center justify-center gap-3">
+
                       <button
                         onClick={() => {
                           setPage((p) => Math.max(1, p - 1));
