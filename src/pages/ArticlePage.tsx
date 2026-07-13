@@ -1,14 +1,17 @@
 import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
-import BrochureButton from "@/components/BrochureButton";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { getArticleBySlug, articles } from "@/data/articles";
 
 const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromPage = (location.state as { fromPage?: number } | null)?.fromPage;
+  const newsBackTo = fromPage && fromPage > 1 ? `/news?page=${fromPage}` : "/news";
+  const carryState = fromPage ? { fromPage } : undefined;
   const article = getArticleBySlug(slug || "");
 
   useEffect(() => {
