@@ -101,6 +101,8 @@ const Header = () => {
     setMenuOpen(false);
     setNewsOpen(false);
     setAboutOpen(false);
+    // Re-arm suppression on every navigation. Cleared when cursor leaves header.
+    suppressOpenRef.current = true;
   }, [location]);
 
   const isActive = (path: string) => location.pathname === path;
