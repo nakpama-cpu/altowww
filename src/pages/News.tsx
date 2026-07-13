@@ -28,10 +28,15 @@ const News = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("newest");
+  const [category, setCategory] = useState<string>("all");
   const pageSize = usePageSize();
   const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
   const [page, setPage] = useState(initialPage);
 
+  const categories = useMemo(() => {
+    const set = new Set(articles.map((a) => a.category));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -50,6 +55,9 @@ const News = () => {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     let list = articles.slice();
+    if (category !== "all") {
+      list = list.filter((a) => a.category === category);
+    }
     if (q) {
       list = list.filter((a) => {
         const haystack = `${a.title} ${a.excerpt} ${a.category} ${a.date}`.toLowerCase();
@@ -69,7 +77,7 @@ const News = () => {
       }
     });
     return list;
-  }, [query, sort]);
+  }, [query, sort, category]);
 
   return (
     <div className="relative">
@@ -116,6 +124,28 @@ const News = () => {
               </div>
               <div className="relative flex items-center gap-3">
                 <SlidersHorizontal className="w-4 h-4 text-muted-foreground" />
+                <label htmlFor="news-category" className="sr-only">
+                  Filter by sector
+                </label>
+                <select
+                  id="news-category"
+                  value={category}
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    setPage(1);
+                  }}
+                  className="appearance-none cursor-pointer bg-background border border-border pl-4 pr-10 py-3 font-body text-sm text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 12px center",
+                  }}
+                >
+                  <option value="all">All sectors</option>
+                  {categories.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
                 <label htmlFor="news-sort" className="sr-only">
                   Sort articles
                 </label>
