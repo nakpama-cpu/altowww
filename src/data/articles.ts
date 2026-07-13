@@ -409,7 +409,178 @@ export const articles: Article[] = [
       "At Alto Whisky, we make selection the centre of what we do. Our Portfolio Advisors can walk you through how we assess casks against the current market backdrop and how that translates into the specific opportunities available to clients today.",
     ],
   },
+  {
+    slug: "siderit-px-cask-rye-worlds-best-rye-2026",
+    image: sideritPxCaskImg,
+    category: "Distillery News",
+    date: "April 2026",
+    title: "Siderit Named World's Best Rye — A Fourth Consecutive Gold at the World Whisky Awards",
+    excerpt:
+      "The Cantabrian distillery has taken Gold for its PX Cask Rye at the World Whisky Awards for the fourth year running, and this year adds the top prize of World's Best Rye. It is a genuinely notable moment for one of the more distinctive craft producers our clients hold casks with.",
+    content: [
+      "In April, Destilería Siderit in Cantabria, northern Spain, was named World's Best Rye at the World Whisky Awards 2026 for its Whisky PX Cask Rye, alongside a further Gold in the country and category rounds. It is the fourth consecutive year that the PX Cask Rye has taken Gold at the awards, following wins in 2023, 2024 and 2025, and 2026 is the year the trophy at the very top of the rye category comes home with it.",
+      "This matters to us at Alto Whisky because Siderit is a distillery a number of our clients already hold casks with. When a producer in your portfolio moves from repeat category recognition to the outright world's-best trophy, it is a meaningful validation of the underlying quality of the spirit and, by extension, of the cask decisions our clients have made.",
+      "The PX Cask Rye is a 100% Spanish malted rye whisky, distilled in Cantabria and matured in small 100-litre Spanish white oak casks seasoned with Pedro Ximénez sherry. The combination of a smaller cask, an active PX seasoning and rye grain gives the spirit a distinctive profile: this year's judges' notes highlight chocolate and honeycomb on the nose, and a palate of white chocolate, honey, nougat, ginger, cinnamon and turmeric with warming ginger through the finish.",
+      "Siderit has been building this reputation quietly and consistently. The distillery's whisky programme began with a small parcel of casks laid down over a decade ago, and each successive release of the PX Cask Rye has taken Gold since 2023. Four years of unbroken Gold, followed this year by the World's Best Rye trophy, is a track record very few producers of any size can claim in the category.",
+      "For cask investors, this kind of steady critical recognition is exactly what we look for. It supports the underlying value of the maturing stock in Siderit's warehouses, it strengthens the case for the distillery's future releases, and it makes the eventual exit routes for our clients' casks materially stronger.",
+      "At Alto Whisky, we are proud to be able to offer selected Siderit cask opportunities alongside our Scotch programme. Speak to a Portfolio Advisor to discuss what is currently available and how Siderit fits alongside your existing holdings.",
+    ],
+  },
+  {
+    slug: "diageo-half-year-scotch-resilience-2026",
+    image: diageoResultsImg,
+    category: "Market Insight",
+    date: "February 2026",
+    title: "Diageo's Half-Year Numbers Confirm Scotch Is Holding Its Ground",
+    excerpt:
+      "The world's largest spirits group has reported another set of half-year results in which Scotch, and Scotch single malt in particular, continues to sit at the more resilient end of the portfolio. That is a meaningful read-through for the wider category.",
+    content: [
+      "Diageo's most recent set of half-year results, published in early 2026, offered another useful window into how the global spirits market is behaving. Group performance across the wider portfolio has been mixed, in line with a period of adjustment in international consumer spending, but Scotch, and Scotch single malt in particular, has continued to sit at the more resilient end of the picture.",
+      "This matters for cask investors for a simple reason. Diageo is the single largest owner of Scotch inventory in the world through brands including Johnnie Walker, Talisker, Lagavulin, Caol Ila, Oban, Cardhu, Cragganmore and Singleton. When the group's own reporting continues to point to premiumisation and single-malt strength as bright spots, that is a direct indication of underlying demand for the segment where most well-constructed cask portfolios sit.",
+      "The half-year commentary was consistent with what we have seen from Pernod Ricard, William Grant & Sons and the leading independents over the same period. Premium and above expressions continue to take share from the value end of the market. Aged single malts, in particular, are being reinforced by consumers who are drinking less overall but choosing more carefully when they do.",
+      "There are less flattering parts of the industry picture that deserve honest acknowledgement. Standard blends have had a harder period in some emerging markets. A few one-off distillery closures and mothballings have made headlines, particularly at the value end. None of this points to weakness in premium single malt cask stock, which is the specific segment we work in.",
+      "For cask investors, the useful frame is this. When the largest publicly reporting player in Scotch continues to highlight single malt and premium as areas of resilience, and when independent bottlers are competing hard for maturing stock in exactly that segment, the demand picture for well-selected casks is confirmed by the numbers rather than only by anecdote.",
+      "At Alto Whisky, we read the majors' results as one input among several when we advise clients. Speak to a Portfolio Advisor to discuss how the current earnings picture translates into the casks we are actively offering.",
+    ],
+  },
+  {
+    slug: "port-ellen-reopens-islay-2026",
+    image: portEllenReopeningImg,
+    category: "Distillery News",
+    date: "March 2026",
+    title: "Port Ellen Is Producing Spirit Again — And Islay Has Its Ghost Distillery Back",
+    excerpt:
+      "One of the most collected names in Islay whisky has restarted production after a forty-year absence. The reopening of Port Ellen has real implications both for the collectibility of legacy stock and for the future supply picture on the island.",
+    content: [
+      "Port Ellen closed in 1983 and, until recently, was the great ghost distillery of Islay. Its final pre-closure bottlings have been among the most fiercely traded whiskies in the collectibles market for the last twenty years, with fully aged bottlings routinely selling for five-figure sums at auction. In the last two years, Diageo has completed the long-signalled reopening of the site and Port Ellen new-make spirit is now flowing off the stills again.",
+      "For anyone paying attention to Islay, this is a genuinely significant moment. The rebuilt distillery pairs two heritage-style stills, aimed at recapturing something close to the pre-1983 spirit character, with two additional stills designed to allow experimentation with different mash bills and fermentation profiles. It is a serious, well-capitalised project rather than a nostalgia exercise.",
+      "The market implications are two-sided and it is worth being straight about both. Pre-closure bottlings retain their historical status and, if anything, the reopening tends to reinforce the mystique around genuinely old Port Ellen inventory. At the same time, over the coming decade there will be new Port Ellen aged stock in circulation for the first time in a generation, and that will begin to reshape how the name trades at the newer end of the age spectrum.",
+      "Alongside Port Ellen, the wider Islay picture continues to build depth. Ardnahoe, Farkin, Laggan Bay and the redeveloped Bunnahabhain facility all sit alongside the established names of Ardbeg, Bowmore, Bruichladdich, Bunnahabhain, Caol Ila, Kilchoman, Lagavulin and Laphroaig. The island is quietly becoming one of the most concentrated clusters of premium single malt production anywhere in the world.",
+      "For cask investors, the practical takeaway is that Islay's brand-level demand story remains one of the strongest in Scotch, and reopenings of legacy names are more likely to reinforce interest in aged peated single malt than to dilute it. Selection matters, and the distinction between long-aged legacy stock and freshly filled new-make is one we spend time on with clients.",
+      "At Alto Whisky, we think carefully about which Islay names sit best inside a considered portfolio and at what age profile. Speak to a Portfolio Advisor to discuss how the current wave of Islay activity feeds into the casks we are offering.",
+    ],
+  },
+  {
+    slug: "rosebank-lowlands-quiet-revival-2025",
+    image: rosebankRevivalImg,
+    category: "Industry News",
+    date: "November 2025",
+    title: "Rosebank and the Quiet Revival of the Lowland Region",
+    excerpt:
+      "The Lowlands were once written off as a region in permanent retreat. Rosebank's return, alongside a wider cluster of openings, has quietly re-established Lowland whisky as a category worth taking seriously again.",
+    content: [
+      "For a long stretch of the late twentieth century, the Lowlands looked like a region in permanent retreat. Rosebank was mothballed in 1993 and became one of the most romanticised lost names in Scotch. St. Magdalene, Littlemill and Inverleven had all fallen away in earlier decades. By the early 2000s, working Lowland malt distilleries could be counted on one hand.",
+      "That picture has now changed materially. Rosebank has been restored on its original site in Falkirk by Ian Macleod Distillers and, since its return to production, has been steadily building out its inventory of Lowland triple-distilled malt. It sits alongside a cluster of newer Lowland projects, including The Clydeside Distillery in Glasgow, Holyrood in Edinburgh, Lindores Abbey in Fife and the older Auchentoshan and Glenkinchie names, in a region that now offers a much broader base of quality production than it did fifteen years ago.",
+      "This matters because the Lowlands bring a distinct character to Scotch. Triple distillation, softer floral profiles and, in some cases, unusual cask programmes give the region a role that peated Islay and rich Speyside simply cannot fill. For cask investors, that offers useful diversification within a Scotch-focused portfolio.",
+      "The commercial picture is encouraging. Lowland releases have been picking up strong critical scores and quietly outperforming expectations at auction over the last two years, particularly for the older recovered stock from Rosebank and for early independent bottlings of the newer names. That is exactly the pattern we look for when we consider allocating to a region on behalf of clients.",
+      "None of this changes the underlying case for the more established regions. It does mean that a considered Scotch cask portfolio in 2025 and 2026 has more genuinely credible Lowland options than it has had in a long time.",
+      "At Alto Whisky, we treat the Lowlands as a region with real portfolio value alongside Speyside, the Highlands, Islay and Campbeltown. Speak to a Portfolio Advisor to discuss how a Lowland allocation might sit within your holdings.",
+    ],
+  },
+  {
+    slug: "glenallachie-billy-walker-speyside-2025",
+    image: glenallachieSpeysideImg,
+    category: "Distillery News",
+    date: "September 2025",
+    title: "GlenAllachie and the Power of the Independent Speyside Story",
+    excerpt:
+      "Under Billy Walker's ownership, GlenAllachie has become one of the most closely watched independent distilleries in Speyside. The pattern of what he has built there is a useful template for how modern brand-building supports cask value.",
+    content: [
+      "GlenAllachie in Speyside was, for most of its life, a quiet workhorse distillery producing malt largely destined for blends. Since its acquisition by industry veteran Billy Walker's team in 2017, it has been transformed into one of the most closely watched independent single malt houses in the region, with a core range of age-stated expressions and a steady stream of well-received cask-finish and single-cask releases.",
+      "That transformation offers a useful template for how modern brand-building supports underlying cask value. Walker's approach at GlenAllachie has been unusually disciplined: strong age statements, considered wood policy, a focused core range, and a limited-release strategy that consistently reinforces the premium credentials of the wider brand rather than diluting them.",
+      "The market has responded. GlenAllachie's core range has picked up international awards on a consistent basis over the last five years, and its limited releases attract genuine collector attention at auction. For a distillery that was largely off the single malt radar a decade ago, that is a significant repositioning.",
+      "For cask investors, GlenAllachie is a helpful case study rather than a specific recommendation. The pattern it illustrates matters generally: distilleries where an experienced team is actively building brand equity around aged single malt tend to see stronger secondary-market interest in their maturing stock over time. That is a real factor in how we assess distilleries when we advise clients.",
+      "Other Speyside names sit inside a similar frame. The independent revivals at Craigellachie, Aberlour's premium releases, Benromach under Gordon & MacPhail, and the newer BenRiach and Speyburn programmes have each in their own way built out the case for well-run Speyside single malt over the same period.",
+      "At Alto Whisky, we consider active brand-building and release discipline alongside heritage, cask type and inventory depth. Speak to a Portfolio Advisor to discuss how these factors influence the Speyside casks we make available.",
+    ],
+  },
+  {
+    slug: "kilchoman-farm-distillery-model-2025",
+    image: kilchomanFarmImg,
+    category: "Industry News",
+    date: "August 2025",
+    title: "The Farm Distillery Model Is Quietly Becoming a Category of Its Own",
+    excerpt:
+      "Kilchoman on Islay was the first serious modern farm distillery in Scotch. Twenty years on, that model is quietly becoming a distinct category, with clear implications for how a certain kind of premium cask is valued.",
+    content: [
+      "Kilchoman opened on Islay in 2005 as the first new distillery on the island in more than a century, and the first modern Scotch distillery built around a fully integrated farm model: barley grown on site, floor-malted on site, distilled and matured within the same property. Twenty years on, that model has quietly become a distinct category, with clear implications for how a certain kind of premium cask is valued.",
+      "The farm distillery proposition is straightforward but powerful. Every stage of production, from the field to the warehouse, sits within a single provenance envelope, and that provenance can be evidenced rather than only claimed. For a modern premium buyer in London, New York, Zurich or Singapore, that kind of end-to-end traceability is increasingly a defining part of what makes a whisky worth paying for.",
+      "Kilchoman has been joined by a small cluster of producers pursuing variants of the same model. Daftmill in Fife, run by the Cuthbert family on their working farm, has picked up serious critical attention for its releases in recent years. Nc'nean in the Highlands has combined a farm-adjacent approach with strong sustainability credentials. Ardnamurchan in Argyll has built out an equally provenance-focused proposition.",
+      "For cask investors, the read is not that the farm model is inherently better. It is that farm-integrated distilleries tend to attract a specific type of premium buyer who values provenance strongly, and that this supports the long-term brand equity of aged stock from those producers.",
+      "The farm model also intersects with the wider sustainability picture. Locally grown barley, on-site malting and shorter supply chains all sit naturally alongside the industry-wide push to reduce the carbon footprint of Scotch, which is another factor that plays through into premium demand.",
+      "At Alto Whisky, we consider provenance and production model alongside heritage and cask type when advising clients. Speak to a Portfolio Advisor to discuss how farm-distillery casks fit within a broader Scotch portfolio.",
+    ],
+  },
+  {
+    slug: "campbeltown-revival-springbank-glengyle-2025",
+    image: campbeltownRevivalImg,
+    category: "Market Insight",
+    date: "July 2025",
+    title: "Campbeltown's Long Revival Continues to Reward Patient Investors",
+    excerpt:
+      "Springbank's waiting lists and the wider Campbeltown revival have been one of the most consistent structural stories in Scotch for a decade. The pattern of demand for the region's aged stock is worth taking seriously.",
+    content: [
+      "Campbeltown was once described as the whisky capital of the world, with more than thirty distilleries operating in the town at its peak. By the mid-twentieth century, that number had collapsed to a handful. For a long stretch, the region was carried almost entirely by Springbank, and the story looked like one of managed decline.",
+      "That framing no longer fits. Springbank has spent the last decade operating under what is effectively a permanent allocation system, with retail waiting lists routinely running to thousands of names and secondary-market prices for its core range comfortably above retail. Its sibling distillery Glengyle, producing Kilkerran, has quietly built out a strong reputation of its own, and Glen Scotia has significantly raised its game under new investment. The region has moved from managed decline to constrained supply.",
+      "The pattern of demand for Campbeltown aged stock is worth taking seriously. Springbank in particular has become one of the very few distilleries where consumer, collector and secondary-market interest all consistently outstrip the available supply of well-aged bottled whisky. That is unusual in Scotch and it tends to feed through into the way cask stock from the same producers is valued.",
+      "New capacity in Campbeltown is genuinely constrained by the geography of the town, the character of the region's spirit and, in some cases, deliberate producer decisions to keep output tight. That is meaningfully different from parts of Speyside or the Highlands where expansion projects can add real volume relatively quickly.",
+      "For cask investors, Campbeltown allocations tend to be small in absolute terms but disproportionately influential in a portfolio. When they are available, they usually clear quickly, and they are one of the more genuine scarcity stories in the category.",
+      "At Alto Whisky, we treat Campbeltown as a specialist allocation within a broader Scotch portfolio rather than a bulk position. Speak to a Portfolio Advisor to discuss availability and how the region fits alongside your existing holdings.",
+    ],
+  },
+  {
+    slug: "highland-park-orkney-cask-programme-2025",
+    image: highlandParkOrkneyImg,
+    category: "Distillery News",
+    date: "June 2025",
+    title: "Highland Park and the Case for Northern Island Whisky",
+    excerpt:
+      "Orkney's Highland Park continues to run one of the most disciplined cask programmes in Scotch, and the wider case for northern island whisky in a portfolio has quietly strengthened over the last eighteen months.",
+    content: [
+      "Highland Park has always occupied a slightly unusual position in Scotch. Geographically it sits further north than most of the industry, on Orkney rather than the Scottish mainland. Stylistically it bridges the peated and unpeated worlds, with a light Orkney-cut peat character sitting alongside a strong sherry cask signature. Commercially it has spent the last decade building one of the more disciplined premium release programmes in the category.",
+      "The distillery's recent activity has continued in that vein. A steady cadence of age-stated core releases, cask-strength batches and travel-retail exclusives has kept Highland Park visible without ever tipping into the kind of over-issuance that has damaged other names during previous cycles. That kind of restraint tends to be rewarded in the secondary market over time.",
+      "For cask investors, the interesting point is broader than one distillery. The northern island cluster, taking in Highland Park and Scapa on Orkney together with the wider northern Highlands, offers a distinctive stylistic profile that a well-considered portfolio can benefit from. Sherry-forward Orkney malt sits alongside coastal northern Highland spirit in a way that adds real diversification within Scotch.",
+      "It is worth being straight about the constraints. The northern islands do not have the volume of Speyside or the concentrated premium cluster of Islay, and that means allocations from the leading names are frequently limited. When they are available, they tend to clear quickly, particularly at older age profiles.",
+      "Highland Park itself has also been quietly building out its sustainability credentials, with steady work on energy efficiency, packaging and cask lifecycle programmes over the last few years. That reinforces the long-term brand story in a market where premium buyers increasingly expect it.",
+      "At Alto Whisky, we treat northern island stock as a specialist component of a broader Scotch allocation. Speak to a Portfolio Advisor to discuss what is available and how it might complement holdings in Speyside, Islay and the Highlands.",
+    ],
+  },
+  {
+    slug: "loch-lomond-group-the-open-sponsorship-2025",
+    image: lochLomondSponsorshipImg,
+    category: "Industry News",
+    date: "May 2025",
+    title: "Sport, Sponsorship and What It Signals About Scotch's Premium Push",
+    excerpt:
+      "Loch Lomond Group's continuing role as the official spirit of The Open, alongside a wider wave of sport and cultural partnerships across the industry, is a useful window into how Scotch is investing behind its premium proposition.",
+    content: [
+      "Loch Lomond Group has continued its high-profile role as the official spirit of The Open, the world's oldest golf major, in a partnership that has now become one of the most visible sport-and-Scotch pairings in the industry. It sits alongside a wider wave of premium sponsorships across the sector: Johnnie Walker in Formula 1, Chivas Regal's cultural partnerships, Macallan's long-standing luxury-hotel and arts programmes, and Glenmorangie's design-led collaborations.",
+      "This kind of investment is more than marketing background noise. Sponsorship budgets of this scale are, in effect, a signal from the industry about which segments of the consumer market it is prioritising. When the leading Scotch groups continue to weight their spend behind premium and above expressions in prestige sport, luxury travel and cultural partnerships, that is a direct statement of intent about where they expect their brand equity to grow.",
+      "For cask investors, this matters at a structural level. Sustained premium marketing investment supports the long-term positioning of the underlying single malt brands, which in turn supports the secondary-market value of aged stock from those distilleries. It is one of the quieter reasons why well-selected casks from producers with active premium brand-building tend to outperform less visible peers over time.",
+      "The Open partnership is a particularly interesting case because it aligns Scotch with an international, high-net-worth audience concentrated in exactly the export markets that matter most to premium single malt: the UK, the US, parts of Europe and Asia. That is not a coincidence.",
+      "Beyond golf, similar patterns are visible across other prestige sport and cultural sponsorships. The consistent theme is that the industry's largest and most sophisticated players are investing significant sums to entrench Scotch as a premium global category, not to compete on the value shelf.",
+      "At Alto Whisky, we take these signals seriously when we assess long-term brand strength. Speak to a Portfolio Advisor to discuss how brand and marketing posture feeds into the casks we select for clients.",
+    ],
+  },
+  {
+    slug: "rare-whisky-101-index-market-health-2026",
+    image: rareWhisky101IndexImg,
+    category: "Market Insight",
+    date: "January 2026",
+    title: "Reading the Rare Whisky Indices at the Start of 2026",
+    excerpt:
+      "The published rare whisky indices have spent the last two years working through the excesses of the 2022 peak. The picture at the start of 2026 is quietly encouraging for patient buyers of well-selected stock.",
+    content: [
+      "The published rare whisky indices, most notably the Rare Whisky 101 Apex 1000 and its sibling indices, have spent the last two years working through the excesses of the 2022 peak in the collectible bottle market. Prices for many fashionable limited editions corrected sharply through 2023 and into 2024, before beginning to stabilise across 2025. At the start of 2026, the picture is quietly more encouraging than the headlines of the previous eighteen months would suggest.",
+      "Two points are worth being clear about. First, the indices track bottle prices, not cask prices. The two markets are related but not identical: cask pricing moves more slowly, is less exposed to short-term collectibles cycles and is anchored more directly to underlying demand for aged single malt. Second, the correction was concentrated at the more speculative end of the bottle market. Long-aged stock from the most established distilleries held up materially better through the same period.",
+      "Our own read of the current picture is that the rare whisky market has settled into a healthier place than it was three years ago. Speculative excess has largely worked its way out. Buyers are more disciplined about provenance, age and cask type. Sellers are more realistic about pricing. That is a better environment in which to build a considered portfolio than the froth of 2022.",
+      "The structural factors underneath are constructive. The India tariff cut is a genuine step change in demand. The US market has stabilised. Premiumisation continues to reshape spending across North America, Europe and much of Asia. On the supply side, the finite nature of aged single malt inventory from the best-regarded distilleries remains the single most important anchor.",
+      "None of this means every cask is a good cask. If anything, the case for careful selection has strengthened. In a more disciplined market, distillery pedigree, cask type, age at fill, warehousing arrangements and documentation matter more than they did during the more forgiving conditions of a few years ago.",
+      "At Alto Whisky, we make selection the centre of what we do. Our Portfolio Advisors can walk you through how we read the current market and how that translates into the specific opportunities available to clients today.",
+    ],
+  },
 ];
+
 
 export const getArticleBySlug = (slug: string): Article | undefined =>
   articles.find((a) => a.slug === slug);
