@@ -104,7 +104,7 @@ export const articles: Article[] = [
     excerpt:
       "From the Scotch Whisky Association's 2040 Net Zero commitment to Glenmorangie's wetlands project and Glenfiddich's biogas trucks, decarbonisation is reshaping the industry's investment story.",
     content: [
-      "The Scotch Whisky Association published its Sustainability Strategy in 2021, committing the industry to reach Net Zero emissions in its own operations by 2040, a decade ahead of the UK's national target. The strategy also sets out goals on packaging, water stewardship and responsible land use, and is publicly reported on each year.",
+      "The Scotch Whisky Association published its Sustainability Strategy in 2021, committing the industry to reach Net Zero emissions in its own operations by 2040 — a decade ahead of the UK's national target. The strategy also sets out goals on packaging, water stewardship and responsible land use, and is publicly reported on each year.",
       "Individual distilleries are putting concrete projects behind these commitments. Glenmorangie's DEEP (Dornoch Environmental Enhancement Project) has worked with the Marine Conservation Society and Heriot-Watt University to restore native European oyster reefs in the Dornoch Firth, helping filter water around the distillery's effluent outflow.",
       "William Grant & Sons has converted a fleet of Glenfiddich trucks to run on biogas produced from the distillery's own residues, while Bruichladdich on Islay became one of the first whisky distilleries in the world to achieve B Corp certification and has committed to becoming Net Zero by 2025 across its own operations.",
       "Diageo has invested in a series of energy projects across its Scottish sites, including biomass boilers and heat recovery, and is publicly trialling green hydrogen as a future fuel for distillation. Industry bodies such as the SWA report progress against the 2040 goals annually, and independent media including the Financial Times, BBC and The Drinks Business have covered the transition in depth.",
@@ -119,7 +119,7 @@ export const articles: Article[] = [
     date: "March 2026",
     title: "India–UK Trade Deal Halves Tariff on Scotch: What It Means for the Industry",
     excerpt:
-      "The India–UK Free Trade Agreement signed in 2025 cuts India's 150% tariff on Scotch whisky in half immediately, with further reductions over the coming decade, a structural shift for the world's largest whisky market.",
+      "The India–UK Free Trade Agreement signed in 2025 cuts India's 150% tariff on Scotch whisky in half immediately, with further reductions over the coming decade — a structural shift for the world's largest whisky market.",
     content: [
       "In May 2025 the UK and India concluded a Free Trade Agreement that included, for the first time, a substantial reduction in India's import tariff on Scotch whisky. Under the deal, the tariff falls from 150% to 75% on entry into force, and is set to decline progressively to 40% over a ten-year period. The announcement was confirmed by the UK government and welcomed publicly by the Scotch Whisky Association.",
       "India is widely reported as the world's largest whisky market by volume, but Scotch has historically held only a small share due to the tariff regime. The SWA has estimated that the agreement could be worth around £1bn in additional exports over the coming five years, and could support significant new investment in Scottish distilleries.",
@@ -191,7 +191,7 @@ export const articles: Article[] = [
     excerpt:
       "Everything you need to know about HMRC-bonded warehouses, from optimal storage conditions to insurance and documentation.",
     content: [
-      "When you invest in a whisky cask, one of the most common questions is: 'Where will my cask be stored?' The answer is in an HMRC-approved excise warehouse, a highly regulated secure facility that plays a crucial role in protecting your investment.",
+      "When you invest in a whisky cask, one of the most common questions is: 'Where will my cask be stored?' The answer is in an HMRC-approved excise warehouse — a highly regulated, secure facility that plays a crucial role in protecting your investment.",
       "Excise warehouses, often referred to as 'bonded warehouses', are approved by HMRC under the Warehousekeepers and Owners of Warehoused Goods Regulations. Spirits stored under bond can mature without excise duty or VAT becoming payable until the goods are removed for UK consumption.",
       "These warehouses are subject to strict government oversight. Operators must hold an Excise Warehousekeeper approval, and detailed records are maintained for every cask, including its origin, contents, date of filling, and ownership history. This documentation provides the chain of provenance that underpins the value of your investment.",
       "Storage conditions matter. Traditional 'dunnage' warehouses (stone-built with earthen floors and casks stacked no more than three high) are widely considered ideal for slow, stable maturation. Modern 'racked' warehouses are more space-efficient and are used across the industry, including by major producers, with good results.",
