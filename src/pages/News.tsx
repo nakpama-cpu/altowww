@@ -160,6 +160,7 @@ const News = () => {
                     .map((article) => (
                     <Link
                       to={`/news/${article.slug}`}
+                      state={{ fromPage: page }}
                       key={article.slug}
                       className="group block"
                     >
