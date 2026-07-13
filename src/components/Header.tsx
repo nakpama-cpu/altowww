@@ -93,9 +93,14 @@ const Header = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScrollClearSuppress = () => { suppressOpenRef.current = false; };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("scroll", onScrollClearSuppress, { passive: true, once: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", onScrollClearSuppress);
+    };
+  }, [location]);
 
   useEffect(() => {
     setMenuOpen(false);
