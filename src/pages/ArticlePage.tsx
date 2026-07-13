@@ -1,14 +1,17 @@
 import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
-import BrochureButton from "@/components/BrochureButton";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { getArticleBySlug, articles } from "@/data/articles";
 
 const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromPage = (location.state as { fromPage?: number } | null)?.fromPage;
+  const newsBackTo = fromPage && fromPage > 1 ? `/news?page=${fromPage}` : "/news";
+  const carryState = fromPage ? { fromPage } : undefined;
   const article = getArticleBySlug(slug || "");
 
   useEffect(() => {
@@ -96,17 +99,6 @@ const ArticlePage = () => {
             </p>
           ))}
 
-          {/* CTA */}
-          <div className="mt-16 pt-12 border-t border-border">
-            <p className="font-display text-2xl font-light mb-4">
-              Ready to start your whisky cask journey?
-            </p>
-            <p className="font-body text-sm text-muted-foreground mb-6 leading-relaxed">
-              Request our free brochure and one of our expert Portfolio Advisors
-              will be in touch.
-            </p>
-            <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-          </div>
         </div>
       </section>
 
@@ -117,6 +109,7 @@ const ArticlePage = () => {
             {prevArticle ? (
               <Link
                 to={`/news/${prevArticle.slug}`}
+                state={carryState}
                 className="group py-10 md:pr-12"
               >
                 <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
@@ -132,6 +125,7 @@ const ArticlePage = () => {
             {nextArticle ? (
               <Link
                 to={`/news/${nextArticle.slug}`}
+                state={carryState}
                 className="group py-10 md:pl-12 text-right"
               >
                 <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
@@ -150,11 +144,12 @@ const ArticlePage = () => {
 
       <div className="section-light text-center pb-12">
         <Link
-          to="/news"
+          to={newsBackTo}
           className="font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors"
         >
           ← Back to All Articles
         </Link>
+
       </div>
 
       <FooterSection />

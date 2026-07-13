@@ -2,7 +2,7 @@ import Seo from "@/components/Seo";
 import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import PageHero from "@/components/PageHero";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { articles } from "@/data/articles";
 import { Search, SlidersHorizontal } from "lucide-react";
@@ -24,9 +24,11 @@ const parseArticleDate = (d: string): number => {
 type SortKey = "newest" | "oldest" | "az" | "za";
 
 const News = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("newest");
-  const [page, setPage] = useState(1);
+  const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
+  const [page, setPage] = useState(initialPage);
   const PAGE_SIZE = 9;
 
   useEffect(() => {
@@ -36,6 +38,15 @@ const News = () => {
   useEffect(() => {
     setPage(1);
   }, [query, sort]);
+
+  useEffect(() => {
+    const next = new URLSearchParams(searchParams);
+    if (page > 1) next.set("page", String(page));
+    else next.delete("page");
+    if (next.toString() !== searchParams.toString()) {
+      setSearchParams(next, { replace: true });
+    }
+  }, [page, searchParams, setSearchParams]);
 
 
   const filtered = useMemo(() => {
@@ -149,6 +160,7 @@ const News = () => {
                     .map((article) => (
                     <Link
                       to={`/news/${article.slug}`}
+                      state={{ fromPage: page }}
                       key={article.slug}
                       className="group block"
                     >
