@@ -12,6 +12,7 @@ import {
   Html,
   Link,
   Preview,
+  Section,
   Text,
 } from 'npm:@react-email/components@0.0.22'
 
@@ -32,8 +33,11 @@ export const SignupEmail = ({
     <Head />
     <Preview>Confirm your email to access the {siteName} portal</Preview>
     <Body style={main}>
-      <Container style={container}>
+      <Section style={header}>
         <Img src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="140" style={logo} />
+      </Section>
+      <Container style={container}>
+        
         <Heading style={h1}>Confirm your email</Heading>
         <Text style={text}>
           Thank you for registering with{' '}
@@ -65,7 +69,8 @@ const main = {
   fontFamily: "'Inter', Arial, sans-serif",
 }
 const container = { padding: '32px 28px', maxWidth: '560px' }
-const logo = { display: "block", margin: "0 0 32px", height: "auto" }
+const header = { backgroundColor: 'hsl(220, 26%, 14%)', padding: '36px 24px', textAlign: 'center' as const }
+const logo = { display: 'block', margin: '0 auto', height: 'auto' }
 const brand = {
   fontFamily: "'Inter', Arial, sans-serif",
   fontSize: '11px',
