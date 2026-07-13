@@ -83,31 +83,48 @@ const ScrollNavigation = () => {
       const absTop = s.getBoundingClientRect().top + scrollY;
       if (absTop <= scrollY + ACTIVE_OFFSET) idx = i;
     });
-    const targetIdx = direction === "up" ? idx - 1 : idx + 1;
-    const target = sections[targetIdx];
-    if (!target) return;
-    let targetTop: number;
-    if (targetIdx === 0) {
-      // Always go fully to the top for the first section (hero)
-      targetTop = 0;
-    } else {
-      const headerHeight = getHeaderHeight();
-      const scrollTarget =
-        document.getElementById(`${target.id}-start`) || target;
-      if (window.getComputedStyle(scrollTarget).position === "fixed") {
+
+    if (direction === "up") {
+      // If we're already on the first section but not at the very top, snap to 0
+      if (idx === 0 && scrollY > 0) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        show();
+        return;
+      }
+      const target = sections[idx - 1];
+      if (!target) return;
+      const targetIdx = idx - 1;
+      let targetTop: number;
+      if (targetIdx === 0) {
         targetTop = 0;
       } else {
+        const headerHeight = getHeaderHeight();
+        const scrollTarget = document.getElementById(`${target.id}-start`) || target;
         targetTop =
-          scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
+          window.getComputedStyle(scrollTarget).position === "fixed"
+            ? 0
+            : scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
       }
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+      show();
+      return;
     }
+
+    const target = sections[idx + 1];
+    if (!target) return;
+    const headerHeight = getHeaderHeight();
+    const scrollTarget = document.getElementById(`${target.id}-start`) || target;
+    const targetTop =
+      window.getComputedStyle(scrollTarget).position === "fixed"
+        ? 0
+        : scrollTarget.getBoundingClientRect().top + window.scrollY - headerHeight;
     window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
     show();
   }, [getHeaderHeight, show]);
 
   if (!mounted || sectionsRef.current.length < 2) return null;
 
-  const canGoUp = currentIndex > 0;
+  const canGoUp = currentIndex > 0 || (typeof window !== "undefined" && window.scrollY > 0);
   const canGoDown = currentIndex < sectionsRef.current.length - 1;
 
   return (
