@@ -5,13 +5,26 @@ import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { getArticleBySlug, articles } from "@/data/articles";
 
+const PAGE_SIZE = 9;
+
+const MONTHS: Record<string, number> = {
+  january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+  july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
+};
+
+const parseArticleDate = (d: string): number => {
+  const parts = d.trim().split(/\s+/);
+  if (parts.length !== 2) return 0;
+  const m = MONTHS[parts[0].toLowerCase()] ?? 0;
+  const y = parseInt(parts[1], 10) || 0;
+  return new Date(y, m, 1).getTime();
+};
+
 const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const fromPage = (location.state as { fromPage?: number } | null)?.fromPage;
-  const newsBackTo = fromPage && fromPage > 1 ? `/news?page=${fromPage}` : "/news";
-  const carryState = fromPage ? { fromPage } : undefined;
   const article = getArticleBySlug(slug || "");
 
   useEffect(() => {
@@ -23,10 +36,17 @@ const ArticlePage = () => {
     return null;
   }
 
-  const currentIndex = articles.findIndex((a) => a.slug === slug);
-  const prevArticle = currentIndex > 0 ? articles[currentIndex - 1] : null;
+  const newsOrderedArticles = articles
+    .slice()
+    .sort((a, b) => parseArticleDate(b.date) - parseArticleDate(a.date));
+  const currentIndex = newsOrderedArticles.findIndex((a) => a.slug === slug);
+  const fallbackPage = currentIndex >= 0 ? Math.floor(currentIndex / PAGE_SIZE) + 1 : 1;
+  const originPage = fromPage && fromPage > 0 ? fromPage : fallbackPage;
+  const newsBackTo = originPage > 1 ? `/news?page=${originPage}` : "/news";
+  const carryState = { fromPage: originPage };
+  const prevArticle = currentIndex > 0 ? newsOrderedArticles[currentIndex - 1] : null;
   const nextArticle =
-    currentIndex < articles.length - 1 ? articles[currentIndex + 1] : null;
+    currentIndex >= 0 && currentIndex < newsOrderedArticles.length - 1 ? newsOrderedArticles[currentIndex + 1] : null;
 
   return (
     <div className="relative">
