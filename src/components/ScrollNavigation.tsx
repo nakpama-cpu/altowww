@@ -9,8 +9,6 @@ const ScrollNavigation = () => {
   const [mounted, setMounted] = useState(false);
   const sectionsRef = useRef<HTMLElement[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const isAnimatingRef = useRef(false);
-  const rafIdRef = useRef<number | null>(null);
 
   const collectSections = useCallback(() => {
     const list = Array.from(document.querySelectorAll("section")) as HTMLElement[];
@@ -47,45 +45,11 @@ const ScrollNavigation = () => {
     return idx;
   }, []);
 
-  const cancelSmoothScroll = useCallback(() => {
-    if (rafIdRef.current !== null) {
-      cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = null;
-    }
-    isAnimatingRef.current = false;
-  }, []);
-
-  const smoothScrollTo = useCallback((targetY: number, duration = 900) => {
-    cancelSmoothScroll();
-    const startY = window.scrollY;
-    const delta = targetY - startY;
-    if (Math.abs(delta) < 2) {
-      computeCurrent();
-      return;
-    }
-    const startTime = performance.now();
-    isAnimatingRef.current = true;
+  const smoothScrollTo = useCallback((targetY: number) => {
+    window.scrollTo({ top: targetY, behavior: "smooth" });
+    window.setTimeout(computeCurrent, 650);
     show();
-
-    const step = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // easeInOutCubic
-      const ease =
-        progress < 0.5
-          ? 4 * progress * progress * progress
-          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-      window.scrollTo(0, Math.round(startY + delta * ease));
-      if (progress < 1) {
-        rafIdRef.current = requestAnimationFrame(step);
-      } else {
-        isAnimatingRef.current = false;
-        rafIdRef.current = null;
-        computeCurrent();
-      }
-    };
-    rafIdRef.current = requestAnimationFrame(step);
-  }, [cancelSmoothScroll, computeCurrent, show]);
+  }, [computeCurrent, show]);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -94,26 +58,17 @@ const ScrollNavigation = () => {
     setMounted(true);
 
     const onResize = () => {
-      cancelSmoothScroll();
       collectSections();
       computeCurrent();
     };
     const onScroll = () => {
-      // Skip state updates during a programmatic scroll to avoid jitter.
-      if (!isAnimatingRef.current) {
-        computeCurrent();
-      }
+      computeCurrent();
       show();
     };
-
-    const onWheel = () => cancelSmoothScroll();
-    const onTouchStart = () => cancelSmoothScroll();
 
     window.addEventListener("resize", onResize, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("mousemove", show, { passive: true });
-    window.addEventListener("wheel", onWheel, { passive: true });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
 
     const t1 = window.setTimeout(() => {
       collectSections();
@@ -126,13 +81,10 @@ const ScrollNavigation = () => {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("mousemove", show);
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouchStart);
       window.clearTimeout(t1);
       window.clearTimeout(t2);
-      cancelSmoothScroll();
     };
-  }, [collectSections, computeCurrent, show, cancelSmoothScroll]);
+  }, [collectSections, computeCurrent, show]);
 
   const scrollTo = useCallback((direction: "up" | "down") => {
     const sections = sectionsRef.current;
