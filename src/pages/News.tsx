@@ -26,10 +26,17 @@ type SortKey = "newest" | "oldest" | "az" | "za";
 const News = () => {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("newest");
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 9;
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, sort]);
+
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
