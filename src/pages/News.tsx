@@ -160,7 +160,7 @@ const News = () => {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
                   {filtered
-                    .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+                    .slice((page - 1) * pageSize, page * pageSize)
                     .map((article) => (
                     <Link
                       to={`/news/${article.slug}`}
@@ -195,10 +195,11 @@ const News = () => {
                   ))}
                 </div>
 
-                {filtered.length > PAGE_SIZE && (() => {
-                  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+                {filtered.length > pageSize && (() => {
+                  const totalPages = Math.ceil(filtered.length / pageSize);
                   return (
                     <div className="mt-16 flex items-center justify-center gap-3">
+
                       <button
                         onClick={() => {
                           setPage((p) => Math.max(1, p - 1));
