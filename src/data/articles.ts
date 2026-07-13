@@ -14,6 +14,12 @@ import karuizawaAuctionImg from "@/assets/karuizawa-auction.jpg";
 import annandaleLowCarbonImg from "@/assets/annandale-lowcarbon.jpg";
 import oldPulteney200Img from "@/assets/old-pulteney-200.jpg";
 import arranHuttonImg from "@/assets/arran-hutton.jpg";
+import islayPeatClimateImg from "@/assets/islay-peat-climate.jpg";
+import rareCaskIndexImg from "@/assets/rare-cask-index.jpg";
+import globalSpiritsDemandImg from "@/assets/global-spirits-demand.jpg";
+import bruichladdichBcorpImg from "@/assets/bruichladdich-bcorp.jpg";
+import usTariffScotchImg from "@/assets/us-tariff-scotch.jpg";
+
 
 export interface Article {
   slug: string;
@@ -306,7 +312,93 @@ export const articles: Article[] = [
       "At Alto Whisky, we consider distillery reputation, release strategy and cask availability together when advising clients. Speak to a Portfolio Advisor to discuss how emerging and established independent distilleries fit alongside the more traditional names in a considered cask portfolio.",
     ],
   },
+  {
+    slug: "us-uk-scotch-tariff-resolution-2026",
+    image: usTariffScotchImg,
+    category: "Industry News",
+    date: "May 2026",
+    title: "US Tariff Overhang Lifts for Scotch Exporters",
+    excerpt:
+      "With the residual US tariff dispute on single malt Scotch now formally resolved, exporters have visibility on the American market for the first time in several years. The removal of that overhang has real implications for cask values.",
+    content: [
+      "The United States remains the single largest export market for Scotch whisky by value. Any change in the tariff regime on the American side is therefore one of the most important variables the industry has to manage, and one we watch closely at Alto Whisky when advising clients on likely demand for mature stock.",
+      "The recent resolution of the residual dispute affecting single malt exports removes an overhang that has shadowed the category since 2019. During the earlier 25% tariff period, Scotch Whisky Association analysis put the cost to the industry at more than £600 million in lost exports before the initial suspension came into effect. Even after that suspension, the possibility of a reintroduction weighed on longer-term planning at both distilleries and importers.",
+      "With a formal settlement now in place, distillers can commit to inventory decisions in the US with a level of confidence they have not had for some time. Importers can rebuild depletion plans without pricing in a step change in landed cost. That kind of predictability tends to flow through into steadier demand for aged single malt, which is the segment most cask investors are ultimately exposed to.",
+      "It is worth putting the American market in context. The US absorbs a disproportionate share of the world's premium and super-premium Scotch, and its bartender-led on-trade has been one of the most influential drivers of taste in single malt over the last two decades. When American demand is running cleanly, it exerts a steady upward pull on prices for well-aged stock from established distilleries.",
+      "For cask investors, the practical read is straightforward. A stable US market reduces one of the more significant tail risks that has hung over Scotch pricing since the late 2010s. Combined with the more constructive picture in India and continued strength in parts of Asia, the international demand backdrop for well-selected casks looks more balanced than it has for several years.",
+      "At Alto Whisky, we consider the export environment alongside distillery pedigree, age profile and cask type when building portfolios. Speak to a Portfolio Advisor to understand how these factors combine in the casks currently available.",
+    ],
+  },
+  {
+    slug: "global-spirits-premiumisation-scotch-2026",
+    image: globalSpiritsDemandImg,
+    category: "Market Insight",
+    date: "May 2026",
+    title: "Premiumisation Continues to Reshape the Global Spirits Market",
+    excerpt:
+      "Consumers are drinking less overall but spending more on quality. That long-running premiumisation trend is one of the most important structural tailwinds behind the market for aged Scotch.",
+    content: [
+      "The dominant story in global spirits over the last decade has been premiumisation. Volumes across the wider category have grown modestly at best, but the value share taken by premium and above brackets has expanded steadily. That pattern is now well established across North America, Western Europe and much of Asia, and it is one of the most important structural factors behind demand for aged Scotch.",
+      "For a category like single malt, premiumisation is not an abstract idea. It shows up in the shelf mix at good specialist retailers, in the growing prevalence of age-stated expressions on premium back bars, and in the willingness of collectors to pay real money for well-provenanced older bottlings. At Alto Whisky, we see the same pattern reflected in the questions clients ask: interest is skewed towards mature casks from distilleries with a credible premium story, rather than volume-driven blends.",
+      "Diageo, Pernod Ricard and William Grant & Sons have all restructured their marketing spend around this reality, weighting more of their investment behind flagship single malts and prestige limited releases. That kind of sustained brand-building supports secondary-market values for the same distilleries' aged stock, which is where cask investors have their exposure.",
+      "The counterweight, of course, is that consumers are drinking less in absolute terms. Younger cohorts in particular are moderating their overall intake, a shift documented in numerous industry reports. What that appears to be producing is a bifurcated market: fewer occasions, but higher-quality liquid when those occasions happen. For aged Scotch, that is a favourable trade.",
+      "For cask investors, the takeaway is that the premium end of the market is being reinforced, not eroded, by wider changes in drinking behaviour. Distilleries with real depth of aged inventory and a credible premium positioning are better placed than the industry average.",
+      "At Alto Whisky, we focus on casks that sit clearly inside that premium lane. Our Portfolio Advisors can walk you through how consumer trends translate into cask selection in practice.",
+    ],
+  },
+  {
+    slug: "bruichladdich-bcorp-recertification-2026",
+    image: bruichladdichBcorpImg,
+    category: "Sustainability",
+    date: "April 2026",
+    title: "Bruichladdich Reaffirms Its Sustainability Credentials",
+    excerpt:
+      "The Islay distillery has renewed its B Corp certification with an improved score, reinforcing a positioning that has become central to how a growing group of premium Scotch producers present themselves.",
+    content: [
+      "Bruichladdich, the Islay distillery owned by Rémy Cointreau, has renewed its B Corp certification with a stronger score than at first assessment. The distillery was one of the earliest names in Scotch to pursue B Corp status, and the recertification signals that the effort has been maintained rather than treated as a one-off marketing exercise.",
+      "For those unfamiliar with it, B Corp is an independent certification that assesses a company's performance across governance, workers, community, environment and customers. It is a demanding process, particularly for a working distillery with the energy footprint that entails, and improvements between cycles are meaningful rather than cosmetic.",
+      "Bruichladdich has long positioned itself around provenance, terroir and progressive production practices. The Port Charlotte and Octomore ranges, along with the unpeated Bruichladdich core, have built a reputation among collectors that sits comfortably in the premium tier of Islay single malt. Sustainability credentials of this kind reinforce that positioning at a moment when premium buyers, particularly in export markets, increasingly expect it.",
+      "This is not an isolated move. Nc'nean in the Highlands has built its entire brand identity around organic production and verified net-zero operations. Waterford in Ireland has pursued a comparable philosophy on the whisky side of the Irish Sea. Larger groups, including Diageo through its Society 2030 programme, have committed material capital to reducing operational emissions across their distillery estates.",
+      "For cask investors, credible sustainability credentials matter because they support long-term brand equity in the markets that pay the highest prices for premium Scotch. A distillery that can defend its environmental story to a modern buyer in New York, Singapore or Zurich is better placed to hold pricing power for its aged stock over time.",
+      "At Alto Whisky, we consider sustainability alongside heritage, cask type and inventory depth when we build client portfolios. Speak to a Portfolio Advisor to discuss how these factors apply to the casks currently on our books.",
+    ],
+  },
+  {
+    slug: "islay-peat-climate-resilience-2026",
+    image: islayPeatClimateImg,
+    category: "Industry News",
+    date: "April 2026",
+    title: "Islay's Peat Question Comes Into Sharper Focus",
+    excerpt:
+      "The long-term outlook for Islay peat is becoming one of the more interesting supply-side questions in Scotch, with obvious implications for the future scarcity value of well-aged peated single malt.",
+    content: [
+      "Peat is what makes Islay Islay. The distinctive smoky character of Ardbeg, Lagavulin, Laphroaig, Bowmore, Caol Ila, Bunnahabhain's peated releases and the newer wave of Kilchoman, Ardnahoe and Port Ellen all trace back to peated malted barley. That in turn depends on a finite resource: the peat bogs of Islay and, increasingly, the mainland maltings that supply the island's distilleries.",
+      "The pressure on peat is real. Peatlands are among the most important natural carbon stores in the UK, and successive Scottish Government strategies have set out significant restoration commitments. Industry bodies, including the Scotch Whisky Association, have been engaged constructively with policymakers to ensure that any regulatory framework recognises the specific and relatively small footprint of distillery-grade peat cutting while supporting broader restoration goals.",
+      "None of this points to peated Scotch disappearing. It does point to a world in which peated production is managed with greater care, with more rigorous accounting for the volumes cut and, quite possibly, tighter constraints over time. In that world, aged peated stock from established Islay distilleries carries a specific scarcity value that is worth taking seriously as a long-term consideration.",
+      "There are also production adaptations already in flight. Several producers are exploring alternative peat sources, more efficient kilning approaches and different malt specifications that maintain a distinctive smoky profile with a lighter footprint. Whether those techniques change the character of future releases is one of the more interesting questions in the category over the next decade.",
+      "For cask investors, the takeaway is not alarmist. It is that aged Islay stock, and peated Scotch more generally, sits inside a genuinely constrained supply chain. That constraint has historically supported strong secondary-market pricing for the leading peated names, and the current direction of travel on peat policy is more likely to reinforce than dilute it.",
+      "At Alto Whisky, we treat the peat question as one of several structural factors when advising clients on Islay allocations. Our Portfolio Advisors can talk you through how peated casks fit alongside the wider Scotch categories in a considered portfolio.",
+    ],
+  },
+  {
+    slug: "rare-whisky-cask-index-review-2026",
+    image: rareCaskIndexImg,
+    category: "Market Insight",
+    date: "March 2026",
+    title: "Where the Rare Cask Market Sits in 2026",
+    excerpt:
+      "After a sharp run-up to 2022 and a subsequent correction in parts of the bottle market, the picture for well-selected casks has quietly settled into something more sustainable. Here is how we read the market at the start of the year.",
+    content: [
+      "Any honest read of the rare whisky market has to acknowledge the last three years. Prices for many collectible bottles ran hard into 2022, particularly for limited editions from the most fashionable distilleries. Since then, the secondary bottle market has recalibrated, with published indices showing broad-based softening across the more speculative end of the category through 2023 and 2024, and a gradual stabilisation into 2025 and 2026.",
+      "The cask market is not the same as the bottle market, and it is important not to conflate the two. Cask pricing moves more slowly, is less exposed to the collectibles cycle and is anchored more directly to underlying supply of aged stock and demand from bottlers, blenders and end consumers. Through the same period in which fashionable bottle prices were correcting, well-selected casks from established distilleries continued to trade in an orderly market.",
+      "Our own read at the start of 2026 is that the rare cask market has settled into a healthier place than it was three years ago. Speculative excess has largely worked its way out. Buyers are more disciplined about provenance, age profile and cask type, and sellers are more realistic about pricing. That is a better environment for building a considered portfolio than the froth of 2022.",
+      "Several structural factors sit behind that view. The India tariff cut is a genuine step change in the demand picture. The US market has stabilised. Premiumisation continues to reshape spending in North America, Europe and Asia. And on the supply side, the finite nature of aged stock from the best-regarded distilleries remains the single most important underpin.",
+      "None of this means every cask is a good cask. If anything, the case for careful selection has strengthened. Distillery pedigree, cask type, age at fill, warehousing arrangements and clear documentation matter more than they did in the more forgiving conditions of a few years ago.",
+      "At Alto Whisky, we make selection the centre of what we do. Our Portfolio Advisors can walk you through how we assess casks against the current market backdrop and how that translates into the specific opportunities available to clients today.",
+    ],
+  },
 ];
 
 export const getArticleBySlug = (slug: string): Article | undefined =>
   articles.find((a) => a.slug === slug);
+
