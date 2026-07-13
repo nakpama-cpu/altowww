@@ -147,7 +147,7 @@ const Header = () => {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-0 lg:gap-1">
+        <nav className="hidden md:flex items-center gap-3 lg:gap-5">
           {mainLinks.map((link) =>
             link.children ? (
               <div
@@ -160,7 +160,7 @@ const Header = () => {
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 flex items-center gap-1 ${
                     isAboutActive
                       ? "text-primary"
-                      : "text-secondary-foreground hover:text-secondary-foreground"
+                      : "text-secondary-foreground/85 hover:text-primary-foreground"
                   }`}
                 >
                   {link.label}
@@ -187,7 +187,7 @@ const Header = () => {
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 inline-block ${
                     isActive(link.to!)
                       ? "text-primary"
-                      : "text-secondary-foreground hover:text-secondary-foreground"
+                      : "text-secondary-foreground/85 hover:text-primary-foreground"
                   }`}
                 >
                   {link.label}
@@ -204,7 +204,7 @@ const Header = () => {
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 inline-block ${
                     isActive(link.to!)
                       ? "text-primary"
-                      : "text-secondary-foreground hover:text-secondary-foreground"
+                      : "text-secondary-foreground/85 hover:text-primary-foreground"
                   }`}
                 >
                   {link.label}
@@ -213,7 +213,7 @@ const Header = () => {
             )
           )}
 
-          <button onClick={handleClientLogin} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground hover:text-secondary-foreground">Client Login</button>
+          <button onClick={handleClientLogin} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground/85 hover:text-primary-foreground transition-all duration-300">Client Login</button>
           <BrochureButton className="hidden xl:inline-flex items-center px-3 py-2 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:opacity-90 transition-opacity whitespace-nowrap" />
         </nav>
 
