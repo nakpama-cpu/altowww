@@ -93,12 +93,27 @@ const Header = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
-    const onScrollClearSuppress = () => { suppressOpenRef.current = false; };
+    const clearSuppress = () => { suppressOpenRef.current = false; };
+    // Track the cursor position at navigation; only clear suppression once
+    // the user actually moves the mouse (so hovering a different nav item
+    // opens the dropdown again), not just because the cursor happens to sit
+    // on the just-clicked link.
+    let startX: number | null = null;
+    let startY: number | null = null;
+    const onFirstMove = (e: MouseEvent) => {
+      if (startX === null) { startX = e.clientX; startY = e.clientY; return; }
+      if (Math.abs(e.clientX - startX) > 4 || Math.abs(e.clientY - (startY ?? 0)) > 4) {
+        clearSuppress();
+        window.removeEventListener("mousemove", onFirstMove);
+      }
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("scroll", onScrollClearSuppress, { passive: true, once: true });
+    window.addEventListener("scroll", clearSuppress, { passive: true, once: true });
+    window.addEventListener("mousemove", onFirstMove, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("scroll", onScrollClearSuppress);
+      window.removeEventListener("scroll", clearSuppress);
+      window.removeEventListener("mousemove", onFirstMove);
     };
   }, [location]);
 
