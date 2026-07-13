@@ -143,7 +143,7 @@ const Header = () => {
       <div className="max-w-6xl xl:max-w-7xl mx-auto pl-2 pr-4 md:px-4 lg:px-6 flex items-center justify-between h-full md:h-auto">
         <Link to="/" className="block ml-2 md:ml-0">
           <img src={altoLogoTight} alt="Alto Whisky" className="block md:hidden w-[3.25rem] h-auto" />
-          <img src={altoLogo} alt="Alto Whisky" className="hidden md:block h-9 lg:h-12 w-auto" />
+          <img src={altoLogo} alt="Alto Whisky" className="hidden md:block h-9 lg:h-12 w-9 lg:w-12" />
         </Link>
 
         {/* Desktop Nav */}
