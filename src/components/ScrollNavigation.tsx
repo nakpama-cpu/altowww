@@ -9,8 +9,8 @@ const ScrollNavigation = () => {
   const [mounted, setMounted] = useState(false);
   const sectionsRef = useRef<HTMLElement[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const isAnimatingRef = useRef(false);
   const rafIdRef = useRef<number | null>(null);
+  const isProgrammaticScrollRef = useRef(false);
 
   const collectSections = useCallback(() => {
     const list = Array.from(document.querySelectorAll("section")) as HTMLElement[];
@@ -52,39 +52,47 @@ const ScrollNavigation = () => {
       cancelAnimationFrame(rafIdRef.current);
       rafIdRef.current = null;
     }
-    isAnimatingRef.current = false;
+    isProgrammaticScrollRef.current = false;
+    document.documentElement.style.scrollBehavior = "";
   }, []);
 
-  const smoothScrollTo = useCallback((targetY: number, duration = 900) => {
+  const smoothScrollTo = useCallback((targetY: number) => {
     cancelSmoothScroll();
+
     const startY = window.scrollY;
-    const delta = targetY - startY;
-    if (Math.abs(delta) < 2) {
+    const distance = targetY - startY;
+
+    if (Math.abs(distance) < 2) {
       computeCurrent();
       return;
     }
+
+    const duration = 760;
     const startTime = performance.now();
-    isAnimatingRef.current = true;
+    isProgrammaticScrollRef.current = true;
+    document.documentElement.style.scrollBehavior = "auto";
     show();
 
-    const step = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // easeInOutCubic
-      const ease =
-        progress < 0.5
-          ? 4 * progress * progress * progress
-          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-      window.scrollTo(0, Math.round(startY + delta * ease));
+    const animate = (now: number) => {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const eased = progress < 0.5
+        ? 2 * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+      window.scrollTo(0, startY + distance * eased);
+
       if (progress < 1) {
-        rafIdRef.current = requestAnimationFrame(step);
-      } else {
-        isAnimatingRef.current = false;
-        rafIdRef.current = null;
-        computeCurrent();
+        rafIdRef.current = requestAnimationFrame(animate);
+        return;
       }
+
+      rafIdRef.current = null;
+      isProgrammaticScrollRef.current = false;
+      document.documentElement.style.scrollBehavior = "";
+      computeCurrent();
     };
-    rafIdRef.current = requestAnimationFrame(step);
+
+    rafIdRef.current = requestAnimationFrame(animate);
   }, [cancelSmoothScroll, computeCurrent, show]);
 
   useEffect(() => {
@@ -99,8 +107,7 @@ const ScrollNavigation = () => {
       computeCurrent();
     };
     const onScroll = () => {
-      // Skip state updates during a programmatic scroll to avoid jitter.
-      if (!isAnimatingRef.current) {
+      if (!isProgrammaticScrollRef.current) {
         computeCurrent();
       }
       show();
