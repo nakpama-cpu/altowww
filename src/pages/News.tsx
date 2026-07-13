@@ -3,14 +3,57 @@ import Header from "@/components/Header";
 import FooterSection from "@/components/FooterSection";
 import PageHero from "@/components/PageHero";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { articles } from "@/data/articles";
+import { Search, SlidersHorizontal } from "lucide-react";
 import heroImg from "@/assets/whisky-investment-news.jpg";
 
+const MONTHS: Record<string, number> = {
+  january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+  july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
+};
+
+const parseArticleDate = (d: string): number => {
+  const parts = d.trim().split(/\s+/);
+  if (parts.length !== 2) return 0;
+  const m = MONTHS[parts[0].toLowerCase()] ?? 0;
+  const y = parseInt(parts[1], 10) || 0;
+  return new Date(y, m, 1).getTime();
+};
+
+type SortKey = "newest" | "oldest" | "az" | "za";
+
 const News = () => {
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<SortKey>("newest");
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    let list = articles.slice();
+    if (q) {
+      list = list.filter((a) => {
+        const haystack = `${a.title} ${a.excerpt} ${a.category} ${a.date}`.toLowerCase();
+        return haystack.includes(q);
+      });
+    }
+    list.sort((a, b) => {
+      switch (sort) {
+        case "newest":
+          return parseArticleDate(b.date) - parseArticleDate(a.date);
+        case "oldest":
+          return parseArticleDate(a.date) - parseArticleDate(b.date);
+        case "az":
+          return a.title.localeCompare(b.title);
+        case "za":
+          return b.title.localeCompare(a.title);
+      }
+    });
+    return list;
+  }, [query, sort]);
 
   return (
     <div className="relative">
@@ -40,39 +83,92 @@ const News = () => {
         {/* Articles Grid */}
         <section className="section-light py-24 md:py-32">
           <div className="max-w-5xl mx-auto px-6 md:px-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
-              {articles.map((article) => (
-                <Link
-                  to={`/news/${article.slug}`}
-                  key={article.slug}
-                  className="group block"
+            <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-12 md:mb-16">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                <input
+                  id="news-search"
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search articles..."
+                  className="w-full bg-background border border-border pl-11 pr-4 py-3 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                />
+              </div>
+              <div className="relative flex items-center gap-3">
+                <SlidersHorizontal className="w-4 h-4 text-muted-foreground" />
+                <label htmlFor="news-sort" className="sr-only">
+                  Sort articles
+                </label>
+                <select
+                  id="news-sort"
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as SortKey)}
+                  className="appearance-none cursor-pointer bg-background border border-border pl-4 pr-10 py-3 font-body text-sm text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 12px center",
+                  }}
                 >
-                  <div className="aspect-[4/3] overflow-hidden mb-5">
-                    <img
-                      src={article.image}
-                      alt={article.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
-                      {article.category}
-                    </span>
-                    <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-                    <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                      {article.date}
-                    </span>
-                  </div>
-                  <h2 className="font-display text-xl font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
-                    {article.title}
-                  </h2>
-                  <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                    {article.excerpt}
-                  </p>
-                </Link>
-              ))}
+                  <option value="newest">Newest first</option>
+                  <option value="oldest">Oldest first</option>
+                  <option value="az">A–Z</option>
+                  <option value="za">Z–A</option>
+                </select>
+              </div>
             </div>
+
+            {filtered.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="font-body text-muted-foreground">
+                  No articles match your search.
+                </p>
+                {query.trim() && (
+                  <button
+                    type="button"
+                    onClick={() => setQuery("")}
+                    className="mt-4 font-body text-sm text-primary border-b border-primary/30 pb-0.5 hover:border-primary transition-colors"
+                  >
+                    Clear search
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
+                {filtered.map((article) => (
+                  <Link
+                    to={`/news/${article.slug}`}
+                    key={article.slug}
+                    className="group block"
+                  >
+                    <div className="aspect-[4/3] overflow-hidden mb-5">
+                      <img
+                        src={article.image}
+                        alt={article.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
+                        {article.category}
+                      </span>
+                      <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                      <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                        {article.date}
+                      </span>
+                    </div>
+                    <h2 className="font-display text-xl font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
+                      {article.title}
+                    </h2>
+                    <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                      {article.excerpt}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
