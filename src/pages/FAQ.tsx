@@ -112,7 +112,7 @@ const FAQ = () => {
             <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground mb-8">
               Still have questions?
             </h2>
-            <p className="font-body text-sm text-secondary-foreground/60 mb-10 max-w-md mx-auto leading-relaxed">
+            <p className="font-body text-sm text-secondary-foreground mb-10 max-w-md mx-auto leading-relaxed">
               Our expert Portfolio Advisors are here to help. Get in touch and
               we'll be happy to answer any questions you have.
             </p>

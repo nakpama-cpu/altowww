@@ -136,7 +136,7 @@ const HowItWorks = () => {
             <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground mb-8">
               Ready to get started?
             </h2>
-            <p className="font-body text-sm text-secondary-foreground/60 mb-10 max-w-md mx-auto leading-relaxed">
+            <p className="font-body text-sm text-secondary-foreground mb-10 max-w-md mx-auto leading-relaxed">
               Download our free brochure to learn more about whisky cask investment
               opportunities, or speak to one of our expert Portfolio Advisors.
             </p>

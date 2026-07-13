@@ -60,7 +60,7 @@ const News = () => {
                       {article.category}
                     </span>
                     <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-                    <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground/50">
+                    <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
                       {article.date}
                     </span>
                   </div>

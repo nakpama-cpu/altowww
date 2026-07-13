@@ -52,7 +52,7 @@ const Card = ({ item }: { item: (typeof items)[number] }) => (
       <h3 className="font-display text-[15px] font-light leading-snug text-secondary-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2 mb-1">
         {item.label}
       </h3>
-      <p className="font-body text-[11px] leading-relaxed text-secondary-foreground/60 line-clamp-2">
+      <p className="font-body text-[11px] leading-relaxed text-secondary-foreground line-clamp-2">
         {item.description}
       </p>
     </div>
@@ -64,7 +64,7 @@ const AboutPanel = () => {
   return (
     <div className="max-w-6xl mx-auto px-6 pt-3 pb-3">
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 mb-3">
-        <p className="chapter-marker text-secondary-foreground/60 justify-self-start">
+        <p className="chapter-marker text-secondary-foreground justify-self-start">
           About Whisky
         </p>
         <span />

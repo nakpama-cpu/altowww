@@ -117,7 +117,7 @@ const CaseStudySection = () => {
         </div>
 
         <p
-          className={`mt-8 font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground/50 transition-all duration-1000 delay-700 ${
+          className={`mt-8 font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground transition-all duration-1000 delay-700 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         >

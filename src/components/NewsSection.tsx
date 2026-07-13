@@ -40,7 +40,7 @@ const NewsSection = () => {
     <section id="news" ref={ref} className="section-light py-10 md:py-16">
       <div className="max-w-5xl mx-auto px-6 md:px-12">
         <p
-          className={`chapter-marker mb-6 text-muted-foreground/50 transition-all duration-1000 ${
+          className={`chapter-marker mb-6 text-muted-foreground transition-all duration-1000 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         >
@@ -122,7 +122,7 @@ const NewsSection = () => {
                     {article.category}
                   </span>
                   <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-                  <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground/50">
+                  <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
                     {article.date}
                   </span>
                 </div>
@@ -150,7 +150,7 @@ const NewsSection = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <span className="font-body text-xs text-muted-foreground/50">
+            <span className="font-body text-xs text-muted-foreground">
               {startIndex + 1} of {articles.length}
             </span>
             <button

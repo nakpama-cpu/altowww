@@ -104,7 +104,7 @@ const HowWhiskyIsMade = () => {
         {/* Steps */}
         <section className="section-dark py-24 md:py-32">
           <div className="max-w-3xl mx-auto px-6 md:px-12 mb-16">
-            <p className="chapter-marker mb-8 text-secondary-foreground/50">
+            <p className="chapter-marker mb-8 text-secondary-foreground">
               The Process
             </p>
             <h2 className="display-heading text-3xl md:text-5xl text-secondary-foreground">
@@ -130,7 +130,7 @@ const HowWhiskyIsMade = () => {
                   <h3 className="font-display text-xl md:text-2xl text-secondary-foreground font-light mb-4">
                     {step.title}
                   </h3>
-                  <p className="font-body text-sm text-secondary-foreground/60 leading-relaxed max-w-2xl">
+                  <p className="font-body text-sm text-secondary-foreground leading-relaxed max-w-2xl">
                     {step.description}
                   </p>
                 </div>

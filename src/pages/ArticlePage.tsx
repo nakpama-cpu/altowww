@@ -70,7 +70,7 @@ const ArticlePage = () => {
               {article.category}
             </span>
             <span className="w-1 h-1 rounded-full bg-secondary-foreground/30" />
-            <span className="font-body text-[10px] uppercase tracking-[0.15em] text-secondary-foreground/50">
+            <span className="font-body text-[10px] uppercase tracking-[0.15em] text-secondary-foreground">
               {article.date}
             </span>
           </div>
@@ -119,7 +119,7 @@ const ArticlePage = () => {
                 to={`/news/${prevArticle.slug}`}
                 className="group py-10 md:pr-12"
               >
-                <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 mb-3">
+                <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
                   ← Previous Article
                 </p>
                 <p className="font-display text-lg font-light group-hover:text-primary transition-colors duration-300">
@@ -134,7 +134,7 @@ const ArticlePage = () => {
                 to={`/news/${nextArticle.slug}`}
                 className="group py-10 md:pl-12 text-right"
               >
-                <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 mb-3">
+                <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
                   Next Article →
                 </p>
                 <p className="font-display text-lg font-light group-hover:text-primary transition-colors duration-300">

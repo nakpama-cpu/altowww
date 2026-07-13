@@ -128,7 +128,7 @@ const Header = () => {
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 flex items-center gap-1 ${
                     isAboutActive
                       ? "text-primary"
-                      : "text-secondary-foreground/60 hover:text-secondary-foreground"
+                      : "text-secondary-foreground hover:text-secondary-foreground"
                   }`}
                 >
                   {link.label}
@@ -155,7 +155,7 @@ const Header = () => {
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 inline-block ${
                     isActive(link.to!)
                       ? "text-primary"
-                      : "text-secondary-foreground/60 hover:text-secondary-foreground"
+                      : "text-secondary-foreground hover:text-secondary-foreground"
                   }`}
                 >
                   {link.label}
@@ -172,7 +172,7 @@ const Header = () => {
                   className={`px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap transition-all duration-300 inline-block ${
                     isActive(link.to!)
                       ? "text-primary"
-                      : "text-secondary-foreground/60 hover:text-secondary-foreground"
+                      : "text-secondary-foreground hover:text-secondary-foreground"
                   }`}
                 >
                   {link.label}
@@ -181,7 +181,7 @@ const Header = () => {
             )
           )}
 
-          <button onClick={handleClientLogin} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground/60 hover:text-secondary-foreground">Client Login</button>
+          <button onClick={handleClientLogin} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground hover:text-secondary-foreground">Client Login</button>
           <BrochureButton className="hidden xl:inline-flex items-center px-3 py-2 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:opacity-90 transition-opacity whitespace-nowrap" />
         </nav>
 
@@ -204,7 +204,7 @@ const Header = () => {
           {mainLinks.map((link) =>
             link.children ? (
               <div key={link.label}>
-                <p className="font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground/40 mb-2">
+                <p className="font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground mb-2">
                   {link.label}
                 </p>
                 {link.children.map((child) => (
@@ -214,7 +214,7 @@ const Header = () => {
                     className={`block font-body text-sm uppercase tracking-[0.15em] py-2 pl-4 transition-colors ${
                       isActive(child.to)
                         ? "text-primary"
-                        : "text-secondary-foreground/60"
+                        : "text-secondary-foreground"
                     }`}
                   >
                     {child.label}
@@ -228,7 +228,7 @@ const Header = () => {
                 className={`font-body text-sm uppercase tracking-[0.15em] py-2 transition-colors ${
                   isActive(link.to!)
                     ? "text-primary"
-                    : "text-secondary-foreground/60"
+                    : "text-secondary-foreground"
                 }`}
               >
                 {link.label}
@@ -237,7 +237,7 @@ const Header = () => {
           )}
           <button
             onClick={() => { setMenuOpen(false); handleClientLogin(); }}
-            className="font-body text-sm uppercase tracking-[0.15em] py-2 text-left text-secondary-foreground/60"
+            className="font-body text-sm uppercase tracking-[0.15em] py-2 text-left text-secondary-foreground"
           >
             Client Login
           </button>

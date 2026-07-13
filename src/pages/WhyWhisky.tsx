@@ -151,7 +151,7 @@ const WhyWhiskyPage = () => {
                 <p className="font-display text-5xl md:text-6xl text-primary font-light mb-3">
                   582%
                 </p>
-                <p className="font-body text-sm text-secondary-foreground/60">
+                <p className="font-body text-sm text-secondary-foreground">
                   Rare whisky appreciation over 10 years
                 </p>
               </div>
@@ -159,7 +159,7 @@ const WhyWhiskyPage = () => {
                 <p className="font-display text-5xl md:text-6xl text-primary font-light mb-3">
                   0%
                 </p>
-                <p className="font-body text-sm text-secondary-foreground/60">
+                <p className="font-body text-sm text-secondary-foreground">
                   Capital Gains Tax on whisky casks
                 </p>
               </div>
@@ -167,12 +167,12 @@ const WhyWhiskyPage = () => {
                 <p className="font-display text-5xl md:text-6xl text-primary font-light mb-3">
                   #1
                 </p>
-                <p className="font-body text-sm text-secondary-foreground/60">
+                <p className="font-body text-sm text-secondary-foreground">
                   Best performing collectible of the decade
                 </p>
               </div>
             </div>
-            <p className="text-center mt-12 font-body text-xs uppercase tracking-[0.15em] text-secondary-foreground/30">
+            <p className="text-center mt-12 font-body text-xs uppercase tracking-[0.15em] text-secondary-foreground">
               Source: Knight Frank Luxury Investment Index
             </p>
           </div>
