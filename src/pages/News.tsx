@@ -28,10 +28,15 @@ const News = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("newest");
+  const [category, setCategory] = useState<string>("all");
   const pageSize = usePageSize();
   const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
   const [page, setPage] = useState(initialPage);
 
+  const categories = useMemo(() => {
+    const set = new Set(articles.map((a) => a.category));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -50,6 +55,9 @@ const News = () => {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     let list = articles.slice();
+    if (category !== "all") {
+      list = list.filter((a) => a.category === category);
+    }
     if (q) {
       list = list.filter((a) => {
         const haystack = `${a.title} ${a.excerpt} ${a.category} ${a.date}`.toLowerCase();
@@ -69,7 +77,7 @@ const News = () => {
       }
     });
     return list;
-  }, [query, sort]);
+  }, [query, sort, category]);
 
   return (
     <div className="relative">
