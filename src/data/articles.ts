@@ -19,6 +19,18 @@ import rareCaskIndexImg from "@/assets/rare-cask-index.jpg";
 import globalSpiritsDemandImg from "@/assets/global-spirits-demand.jpg";
 import bruichladdichBcorpImg from "@/assets/bruichladdich-bcorp.jpg";
 import usTariffScotchImg from "@/assets/us-tariff-scotch.jpg";
+import sideritPxCaskImg from "@/assets/siderit-px-cask.webp";
+import diageoResultsImg from "@/assets/diageo-results.jpg";
+import portEllenReopeningImg from "@/assets/port-ellen-reopening.jpg";
+import rosebankRevivalImg from "@/assets/rosebank-lowland-revival.jpg";
+import glenallachieSpeysideImg from "@/assets/glenallachie-speyside.jpg";
+import kilchomanFarmImg from "@/assets/kilchoman-farm.jpg";
+import campbeltownRevivalImg from "@/assets/campbeltown-revival.jpg";
+import highlandParkOrkneyImg from "@/assets/highland-park-orkney.jpg";
+import lochLomondSponsorshipImg from "@/assets/loch-lomond-sponsorship.jpg";
+import rareWhisky101IndexImg from "@/assets/rare-whisky-101-index.jpg";
+
+
 
 
 export interface Article {
