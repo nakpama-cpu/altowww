@@ -9,6 +9,11 @@ import auctionCaskImg from "@/assets/auction-cask.jpg";
 import whiskyTourismImg from "@/assets/whisky-tourism.jpg";
 import sustainableWhiskyImg from "@/assets/sustainable-whisky.jpg";
 import heroDistilleryImg from "@/assets/hero-distillery.jpg";
+import ukIndiaTradeImg from "@/assets/uk-india-trade.jpg";
+import karuizawaAuctionImg from "@/assets/karuizawa-auction.jpg";
+import annandaleLowCarbonImg from "@/assets/annandale-lowcarbon.jpg";
+import oldPulteney200Img from "@/assets/old-pulteney-200.jpg";
+import arranHuttonImg from "@/assets/arran-hutton.jpg";
 
 export interface Article {
   slug: string;
