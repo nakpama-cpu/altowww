@@ -8,6 +8,7 @@ import {
   Container,
   Head,
   Heading,
+  Img,
   Html,
   Preview,
   Text,
@@ -26,7 +27,7 @@ export const RecoveryEmail = ({
     <Preview>Reset your Alto Whisky password</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Text style={brand}>ALTO WHISKY</Text>
+        <Img src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="140" style={logo} />
         <Heading style={h1}>Reset your password</Heading>
         <Text style={text}>
           We received a request to reset the password on your Alto Whisky
@@ -48,6 +49,7 @@ export default RecoveryEmail
 
 const main = { backgroundColor: '#ffffff', fontFamily: "'Inter', Arial, sans-serif" }
 const container = { padding: '32px 28px', maxWidth: '560px' }
+const logo = { display: "block", margin: "0 0 32px", height: "auto" }
 const brand = {
   fontFamily: "'Inter', Arial, sans-serif",
   fontSize: '11px',
