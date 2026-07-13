@@ -1,4 +1,4 @@
-import whiskyTastingImg from "@/assets/whisky-tasting.jpg";
+
 import distilleryStillsImg from "@/assets/distillery-stills.jpg";
 import whiskyInvestmentImg from "@/assets/whisky-investment-news.jpg";
 import taxBenefitsImg from "@/assets/tax-benefits.jpg";
@@ -217,26 +217,6 @@ export const articles: Article[] = [
       "Campbeltown, once the whisky capital of Scotland, now has just three working distilleries — Springbank, Glen Scotia and Glengyle. Springbank in particular is among the most collected brands in the entire industry, with allocations regularly oversubscribed.",
       "Many investors choose to diversify across regions to balance their exposure. A portfolio might combine a Speyside cask for steady appreciation potential, an Islay cask for its strong consumer demand, and a Campbeltown cask for rarity value.",
       "Alto Whisky's Portfolio Advisors can talk you through how each region's profile fits with your goals and timeframe.",
-    ],
-  },
-  {
-    slug: "beginners-guide-whisky-cask-investment-2026",
-    image: whiskyTastingImg,
-    category: "Investment Guide",
-    date: "November 2025",
-    title: "A Beginner's Guide to Whisky Cask Investment in 2026",
-    excerpt:
-      "Everything you need to know about purchasing, storing, and selling whisky casks — from tax treatment to exit strategies.",
-    content: [
-      "Whisky cask investment has become one of the more talked-about alternative asset classes of the past decade. If you are new to the world of cask ownership, this guide walks through the essentials.",
-      "At its core, whisky cask investment involves purchasing a specific, identifiable cask of maturing Scotch whisky, either directly from a distillery or through a specialist broker, and holding it in an HMRC-approved warehouse while it matures.",
-      "Maturation matters because, by law, Scotch whisky must be aged in oak casks in Scotland for a minimum of three years before it can be sold as Scotch. In practice, most single malt sold commercially is significantly older, and casks are often held for a decade or more before exit.",
-      "Tax treatment is one of the most-discussed features of cask investment. HMRC has historically treated physical casks held in bond as 'wasting assets' for Capital Gains Tax purposes. Individual tax outcomes depend on personal circumstances, and specialist tax advice should always be taken.",
-      "When you purchase a cask through a reputable broker, you should receive clear ownership documentation, including a delivery order and a warehouse account in your name, the cask's unique reference number, and details of insurance cover. This documentation is essential for evidencing ownership and for any future sale.",
-      "Costs vary widely depending on distillery, cask type and age. Entry-level new-make casks from less well-known distilleries can start in the low thousands of pounds, while well-aged casks from prestige distilleries can run into six figures or more.",
-      "Exit options typically include selling the cask privately or via a broker, selling to an independent bottler, or — for those with experience — bottling under a private label. Each route has its own commercial and regulatory considerations.",
-      "The FCA and HMRC have both warned about unregulated whisky cask schemes and there has been significant media coverage of cases where investors lost money. Working with an established broker, insisting on clear documentation, and seeking independent tax and legal advice are all important safeguards.",
-      "Alto Whisky's team can talk you through the process end to end. Request our brochure to learn more about how cask ownership might fit alongside your other investments.",
     ],
   },
   {
