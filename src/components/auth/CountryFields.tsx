@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { countries, countryByCode } from "@/data/countries";
 
 interface CountrySelectProps {
@@ -9,7 +10,7 @@ interface CountrySelectProps {
 export function CountrySelect({ value, onChange, required = true }: CountrySelectProps) {
   return (
     <div>
-      <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1.5">
         Country
       </label>
       <select
@@ -20,7 +21,7 @@ export function CountrySelect({ value, onChange, required = true }: CountrySelec
           const country = countryByCode.get(code);
           onChange(code, country?.dialingCode ?? "");
         }}
-        className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer"
+        className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer"
       >
         <option value="" disabled>
           Select country
@@ -38,30 +39,75 @@ export function CountrySelect({ value, onChange, required = true }: CountrySelec
 interface PhoneCountryCodeSelectProps {
   value: string;
   onChange: (dialingCode: string) => void;
-  required?: boolean;
 }
 
-export function PhoneCountryCodeSelect({ value, onChange, required = true }: PhoneCountryCodeSelectProps) {
+function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [open]);
+
+  const filtered = query
+    ? countries.filter(
+        (c) =>
+          c.name.toLowerCase().includes(query.toLowerCase()) ||
+          c.dialingCode.includes(query),
+      )
+    : countries;
+
   return (
-    <div>
-      <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
-        Dialling code
-      </label>
-      <select
-        required={required}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer"
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
       >
-        <option value="" disabled>
-          Code
-        </option>
-        {countries.map((c) => (
-          <option key={c.code} value={c.dialingCode}>
-            {c.dialingCode}
-          </option>
-        ))}
-      </select>
+        <span className={value ? "" : "text-muted-foreground"}>{value || "Code"}</span>
+        <svg className="w-3 h-3 text-muted-foreground" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 111.08 1.04l-4.25 4.39a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+        </svg>
+      </button>
+      {open && (
+        <div className="absolute z-50 left-0 right-0 mt-1 max-h-56 overflow-auto bg-card border border-border shadow-lg">
+          <input
+            type="text"
+            autoFocus
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search"
+            className="w-full px-3 py-2 bg-background border-b border-border font-body text-xs focus:outline-none"
+          />
+          <ul>
+            {filtered.map((c) => (
+              <li key={c.code}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChange(c.dialingCode);
+                    setOpen(false);
+                    setQuery("");
+                  }}
+                  className="w-full flex justify-between gap-3 px-3 py-2 text-left font-body text-xs hover:bg-muted"
+                >
+                  <span className="truncate">{c.name}</span>
+                  <span className="text-muted-foreground shrink-0">{c.dialingCode}</span>
+                </button>
+              </li>
+            ))}
+            {filtered.length === 0 && (
+              <li className="px-3 py-2 font-body text-xs text-muted-foreground">No results</li>
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
@@ -83,15 +129,11 @@ export function PhoneField({
 }: PhoneFieldProps) {
   return (
     <div>
-      <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
+      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1.5">
         Phone
       </label>
-      <div className="grid grid-cols-[1fr_2fr] gap-4">
-        <PhoneCountryCodeSelect
-          value={countryCode}
-          onChange={onCountryCodeChange}
-          required={required}
-        />
+      <div className="grid grid-cols-[110px_1fr] gap-3 items-end">
+        <PhoneCountryCodeSelect value={countryCode} onChange={onCountryCodeChange} />
         <input
           type="tel"
           required={required}
@@ -99,7 +141,7 @@ export function PhoneField({
           value={phone}
           onChange={(e) => onPhoneChange(e.target.value)}
           placeholder="Phone number"
-          className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+          className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
         />
       </div>
     </div>
