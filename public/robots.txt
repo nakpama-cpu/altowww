@@ -1,16 +1,31 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /portal/
+Disallow: /login
+Disallow: /signin
 
 User-agent: Bingbot
 Allow: /
+Disallow: /portal/
+Disallow: /login
+Disallow: /signin
 
 User-agent: Twitterbot
 Allow: /
+Disallow: /portal/
+Disallow: /login
+Disallow: /signin
 
 User-agent: facebookexternalhit
 Allow: /
+Disallow: /portal/
+Disallow: /login
+Disallow: /signin
 
 User-agent: *
 Allow: /
+Disallow: /portal/
+Disallow: /login
+Disallow: /signin
 
 Sitemap: https://www.altowhisky.com/sitemap.xml
