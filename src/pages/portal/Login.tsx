@@ -29,9 +29,12 @@ export default function PortalLogin() {
       title="Sign in"
       subtitle="Access your portfolio and available stock."
       footerSlot={
-        <p className="font-body text-xs text-muted-foreground">
-          New to Alto? <Link to="/portal/signup" className="text-primary hover:underline">Create an account</Link>
-        </p>
+        <div className="flex flex-col items-center gap-2 font-body text-xs text-muted-foreground">
+          <Link to="/portal/forgot-password" className="hover:text-primary">Forgot password?</Link>
+          <p>
+            New to Alto? <Link to="/portal/signup" className="text-primary hover:underline">Create an account</Link>
+          </p>
+        </div>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4">
