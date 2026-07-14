@@ -143,8 +143,8 @@ const Email = ({
                   <Img
                     src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
                     alt="Alto Whisky"
-                    width="72"
-                    style={{ display: 'block', height: 'auto' }}
+                    width="64"
+                    style={{ display: 'block', height: 'auto', margin: '0 auto' }}
                   />
                 </td>
                 <td style={sigDividerCell} aria-hidden="true"></td>
@@ -360,17 +360,22 @@ const sigWrap = {
   margin: '0 0 8px',
 }
 const sigLogoCell = {
-  width: '84px',
-  verticalAlign: 'top' as const,
-  paddingRight: '14px',
+  width: '110px',
+  height: '110px',
+  backgroundColor: 'hsl(220, 26%, 14%)',
+  textAlign: 'center' as const,
+  verticalAlign: 'middle' as const,
+  padding: 0,
 }
 const sigDividerCell = {
   width: '1px',
+  height: '110px',
   borderLeft: '1px solid hsl(24, 72%, 40%)',
   padding: 0,
 }
 const sigInfoCell = {
-  verticalAlign: 'top' as const,
+  height: '110px',
+  verticalAlign: 'middle' as const,
   paddingLeft: '16px',
   fontFamily: "'Inter', Arial, sans-serif",
 }
