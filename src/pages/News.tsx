@@ -215,7 +215,7 @@ const News = () => {
                           {article.date}
                         </span>
                       </div>
-                      <h2 className="font-display text-xl font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
+                      <h2 className="font-display text-2xl md:text-3xl font-light leading-snug mb-3 group-hover:text-primary transition-colors duration-300">
                         {article.title}
                       </h2>
                       <p className="font-body text-sm text-muted-foreground leading-relaxed">
