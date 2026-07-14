@@ -268,26 +268,26 @@ export default function LoginModal({ open, onClose }: Props) {
                 onPhoneChange={(phone) => setSignupForm({ ...signupForm, phone })}
               />
               <div>
-                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Password</label>
+                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Password</label>
                 <input
                   type="password"
                   required
                   minLength={8}
                   value={signupForm.password}
                   onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
-                  className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
+                  className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50 mt-1"
+                className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-2 hover:opacity-90 transition-opacity disabled:opacity-50 mt-1"
               >
                 {loading ? "Creating…" : "Create Account"}
               </button>
             </form>
 
-            <p className="mt-3 text-center font-body text-[11px] text-muted-foreground">
+            <p className="mt-2 text-center font-body text-[11px] text-muted-foreground">
               Already have an account?{" "}
               <button type="button" onClick={() => setMode("signin")} className="text-primary">
                 Sign in
