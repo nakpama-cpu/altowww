@@ -13,6 +13,11 @@ export default function PortalSignup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const phoneCheck = validateE164(form.phoneCountryCode, form.phone);
+    if (phoneCheck.valid === false) {
+      toast({ title: "Invalid phone number", description: phoneCheck.error, variant: "destructive" });
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email: form.email.trim(),
@@ -22,7 +27,7 @@ export default function PortalSignup() {
         data: {
           first_name: form.firstName.trim(),
           last_name: form.lastName.trim(),
-          phone: form.phone.trim(),
+          phone: phoneCheck.e164,
           phone_country_code: form.phoneCountryCode,
           country: form.country,
         },
