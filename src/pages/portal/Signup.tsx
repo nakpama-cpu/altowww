@@ -97,6 +97,9 @@ export default function PortalSignup() {
           {loading ? "Creating…" : "Create Account"}
         </button>
       </form>
+      <p className="mt-6 text-center font-body text-xs text-muted-foreground">
+        Already have an account? <Link to="/portal/login" className="text-primary hover:underline">Sign in</Link>
+      </p>
     </AuthShell>
   );
 }
