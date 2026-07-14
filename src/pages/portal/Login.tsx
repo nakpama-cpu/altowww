@@ -53,10 +53,6 @@ export default function PortalLogin() {
           {loading ? "Signing in…" : "Sign In"}
         </button>
       </form>
-
-      <div className="mt-5 flex justify-center font-body text-xs">
-        <Link to="/portal/forgot-password" className="text-muted-foreground hover:text-primary">Forgot password?</Link>
-      </div>
     </AuthShell>
   );
 }
