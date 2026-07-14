@@ -50,7 +50,7 @@ export default function LoginModal({ open, onClose }: Props) {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     const phoneCheck = validateE164(signupForm.phoneCountryCode, signupForm.phone);
-    if (!phoneCheck.valid) {
+    if (phoneCheck.valid === false) {
       toast({ title: "Invalid phone number", description: phoneCheck.error, variant: "destructive" });
       return;
     }
