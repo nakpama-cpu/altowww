@@ -33,7 +33,7 @@ const FooterSection = ({ hideCta = false, lightCta = false, hideBrochure = false
       {/* Footer links */}
       <div className="py-16 px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          <div className={`grid grid-cols-1 gap-12 mb-16 ${hideBrochure ? "md:grid-cols-3" : "md:grid-cols-4"}`}>
             <div>
               <h3 className="display-heading text-2xl text-secondary-foreground mb-4">
                 Alto Whisky
