@@ -126,7 +126,7 @@ function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps
       const next = (buf + e.key).toLowerCase();
       typeBuf.current = { text: next, ts: now };
       // If buffer is a single repeated letter, cycle through matches
-      const startsWith = (name: string) => name.toLowerCase().startsWith(next);
+      const startsWith = (c: (typeof countries)[number]) => c.name.toLowerCase().startsWith(next);
       let idx = countries.findIndex(startsWith);
       if (next.length === 1) {
         // cycle when repeating the same first letter
