@@ -52,6 +52,8 @@ const News = () => {
   }, [page, searchParams, setSearchParams]);
 
 
+
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     let list = articles.slice();
@@ -78,6 +80,14 @@ const News = () => {
     });
     return list;
   }, [query, sort, category]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+
+  useEffect(() => {
+    if (page > totalPages) setPage(1);
+  }, [page, totalPages]);
+
 
   return (
     <div className="relative">
@@ -190,11 +200,11 @@ const News = () => {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
                   {filtered
-                    .slice((page - 1) * pageSize, page * pageSize)
+                    .slice((currentPage - 1) * pageSize, currentPage * pageSize)
                     .map((article) => (
                     <Link
                       to={`/news/${article.slug}`}
-                      state={{ fromPage: page }}
+                      state={{ fromPage: currentPage }}
                       key={article.slug}
                       className="group block"
                     >
@@ -225,17 +235,15 @@ const News = () => {
                   ))}
                 </div>
 
-                {filtered.length > pageSize && (() => {
-                  const totalPages = Math.ceil(filtered.length / pageSize);
-                  return (
+                {totalPages > 1 && (
                     <div className="mt-16 flex items-center justify-center gap-3">
 
                       <button
                         onClick={() => {
-                          setPage((p) => Math.max(1, p - 1));
+                          setPage((p) => Math.max(1, Math.min(p, totalPages) - 1));
                           window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
-                        disabled={page === 1}
+                        disabled={currentPage === 1}
                         className="w-10 h-10 flex items-center justify-center border border-border rounded-full hover:border-primary hover:text-primary transition-colors disabled:opacity-20 disabled:pointer-events-none"
                         aria-label="Previous page"
                       >
@@ -251,22 +259,22 @@ const News = () => {
                             window.scrollTo({ top: 0, behavior: "smooth" });
                           }}
                           className={`w-10 h-10 flex items-center justify-center font-body text-sm border rounded-full transition-colors ${
-                            p === page
+                            p === currentPage
                               ? "border-primary text-primary"
                               : "border-border text-muted-foreground hover:border-primary hover:text-primary"
                           }`}
                           aria-label={`Page ${p}`}
-                          aria-current={p === page ? "page" : undefined}
+                          aria-current={p === currentPage ? "page" : undefined}
                         >
                           {p}
                         </button>
                       ))}
                       <button
                         onClick={() => {
-                          setPage((p) => Math.min(totalPages, p + 1));
+                          setPage((p) => Math.min(totalPages, Math.min(p, totalPages) + 1));
                           window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
-                        disabled={page === totalPages}
+                        disabled={currentPage === totalPages}
                         className="w-10 h-10 flex items-center justify-center border border-border rounded-full hover:border-primary hover:text-primary transition-colors disabled:opacity-20 disabled:pointer-events-none"
                         aria-label="Next page"
                       >
@@ -275,8 +283,7 @@ const News = () => {
                         </svg>
                       </button>
                     </div>
-                  );
-                })()}
+                )}
               </>
             )}
 
