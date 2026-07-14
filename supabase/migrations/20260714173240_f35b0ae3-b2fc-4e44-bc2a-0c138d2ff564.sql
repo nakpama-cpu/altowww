@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.create_approval_tokens() FROM PUBLIC, anon, authenticated;
