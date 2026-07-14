@@ -48,6 +48,11 @@ export default function LoginModal({ open, onClose }: Props) {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    const phoneCheck = validateE164(signupForm.phoneCountryCode, signupForm.phone);
+    if (!phoneCheck.valid) {
+      toast({ title: "Invalid phone number", description: phoneCheck.error, variant: "destructive" });
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email: signupForm.email.trim(),
@@ -57,7 +62,7 @@ export default function LoginModal({ open, onClose }: Props) {
         data: {
           first_name: signupForm.firstName.trim(),
           last_name: signupForm.lastName.trim(),
-          phone: signupForm.phone.trim(),
+          phone: phoneCheck.e164,
           phone_country_code: signupForm.phoneCountryCode,
           country: signupForm.country,
         },
