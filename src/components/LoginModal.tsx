@@ -217,12 +217,12 @@ export default function LoginModal({ open, onClose }: Props) {
 
         {mode === "signup" && (
           <>
-            <h2 className="display-heading text-xl mb-1">Create Account</h2>
-            <p className="font-body text-[11px] text-muted-foreground mb-3">
+            <h2 className="display-heading text-xl mb-0.5">Create Account</h2>
+            <p className="font-body text-[11px] text-muted-foreground mb-2">
               Your account will be reviewed before portfolio access.
             </p>
 
-            <form onSubmit={handleSignup} className="space-y-2.5">
+            <form onSubmit={handleSignup} className="space-y-2">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">First Name</label>
