@@ -18,7 +18,13 @@ export default function PortalSignup() {
       password: form.password,
       options: {
         emailRedirectTo: `${window.location.origin}/portal`,
-        data: { first_name: form.firstName.trim(), last_name: form.lastName.trim(), phone: form.phone.trim() },
+        data: {
+          first_name: form.firstName.trim(),
+          last_name: form.lastName.trim(),
+          phone: form.phone.trim(),
+          phone_country_code: form.phoneCountryCode,
+          country: form.country,
+        },
       },
     });
     setLoading(false);
