@@ -107,13 +107,28 @@ export default function LoginModal({ open, onClose }: Props) {
     setResetSent(true);
   };
 
+  const renderHeader = (eyebrow: string, title: string, subtitle?: string) => (
+    <>
+      <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mb-2 text-center">
+        {eyebrow}
+      </p>
+      <h2 className="display-heading text-xl sm:text-2xl text-center mb-1">{title}</h2>
+      <div className="mx-auto mb-3 h-px w-16 bg-primary" aria-hidden="true" />
+      {subtitle && (
+        <p className="font-body text-xs text-muted-foreground text-center mb-4 leading-snug">
+          {subtitle}
+        </p>
+      )}
+    </>
+  );
+
   const modal = (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-2 py-2 sm:px-4 sm:py-6 animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md bg-card border border-border p-4 sm:p-6 pb-8 sm:pb-10 relative max-h-[calc(100vh-0.5rem)] sm:max-h-[calc(100vh-2rem)] overflow-visible shadow-2xl"
+        className="w-full max-w-md bg-card border border-border shadow-2xl p-4 sm:p-6 pb-6 sm:pb-8 text-foreground relative max-h-[calc(100vh-0.5rem)] sm:max-h-[calc(100vh-2rem)] overflow-visible"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -128,8 +143,7 @@ export default function LoginModal({ open, onClose }: Props) {
 
         {mode === "signin" && (
           <>
-            <h2 className="display-heading text-2xl mb-1">Client Portal</h2>
-            <p className="font-body text-sm text-muted-foreground mb-6">Sign in to view your portfolio.</p>
+            {renderHeader("Client Portal", "Sign in", "Access your portfolio and available stock.")}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -161,33 +175,35 @@ export default function LoginModal({ open, onClose }: Props) {
               </button>
             </form>
 
-            <div className="mt-5 flex justify-between font-body text-xs">
-              <button
-                type="button"
-                onClick={() => { setResetEmail(email); setResetSent(false); setMode("forgot"); }}
-                className="text-muted-foreground hover:text-primary"
-              >
-                Forgot password?
-              </button>
-              <button
-                type="button"
-                onClick={() => setMode("signup")}
-                className="text-muted-foreground hover:text-primary"
-              >
-                Create account
-              </button>
+            <div className="mt-4 text-center">
+              <div className="flex flex-col items-center gap-2 font-body text-xs text-muted-foreground">
+                <button
+                  type="button"
+                  onClick={() => { setResetEmail(email); setResetSent(false); setMode("forgot"); }}
+                  className="hover:text-primary"
+                >
+                  Forgot password?
+                </button>
+                <p>
+                  New to Alto?{" "}
+                  <button type="button" onClick={() => setMode("signup")} className="text-primary hover:underline">
+                    Create an account
+                  </button>
+                </p>
+              </div>
             </div>
           </>
         )}
 
         {mode === "forgot" && (
           <>
-            <h2 className="display-heading text-2xl mb-1">Reset Password</h2>
-            <p className="font-body text-sm text-muted-foreground mb-6">
-              {resetSent
+            {renderHeader(
+              "Client Portal",
+              "Reset password",
+              resetSent
                 ? "If an account exists for that email, a reset link has been sent."
-                : "Enter your email and we'll send you a reset link."}
-            </p>
+                : "Enter your email and we'll send you a reset link."
+            )}
 
             {!resetSent && (
               <form onSubmit={handleReset} className="space-y-4">
@@ -211,20 +227,17 @@ export default function LoginModal({ open, onClose }: Props) {
               </form>
             )}
 
-            <p className="mt-5 text-center font-body text-xs">
-              <button type="button" onClick={() => setMode("signin")} className="text-muted-foreground hover:text-primary">
+            <div className="mt-4 text-center font-body text-xs text-muted-foreground">
+              <button type="button" onClick={() => setMode("signin")} className="hover:text-primary">
                 Back to sign in
               </button>
-            </p>
+            </div>
           </>
         )}
 
         {mode === "signup" && (
           <>
-            <h2 className="display-heading text-xl mb-0.5">Create Account</h2>
-            <p className="font-body text-[11px] text-muted-foreground mb-2">
-              Your account will be reviewed before portfolio access.
-            </p>
+            {renderHeader("Client Portal", "Create account", "Your account will be reviewed before portfolio access.")}
 
             <form onSubmit={handleSignup} className="space-y-2">
               <div className="grid grid-cols-2 gap-3">
@@ -291,12 +304,12 @@ export default function LoginModal({ open, onClose }: Props) {
               </button>
             </form>
 
-            <p className="mt-2 text-center font-body text-[11px] text-muted-foreground">
+            <div className="mt-4 text-center font-body text-xs text-muted-foreground">
               Already have an account?{" "}
-              <button type="button" onClick={() => setMode("signin")} className="text-primary">
+              <button type="button" onClick={() => setMode("signin")} className="text-primary hover:underline">
                 Sign in
               </button>
-            </p>
+            </div>
           </>
         )}
       </div>
