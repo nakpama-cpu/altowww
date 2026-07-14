@@ -21,11 +21,12 @@ export default function Account() {
 
   const changed = useMemo(() => {
     if (!profile) return false;
+    const current = splitStoredPhone(profile.phone, profile.phone_country_code);
     return (
       form.first_name !== (profile.first_name ?? "") ||
       form.last_name !== (profile.last_name ?? "") ||
-      form.phone !== (profile.phone ?? "") ||
-      form.phone_country_code !== (profile.phone_country_code ?? "") ||
+      form.phone !== current.nationalNumber ||
+      form.phone_country_code !== current.dialingCode ||
       form.country !== (profile.country ?? "")
     );
   }, [form, profile]);
