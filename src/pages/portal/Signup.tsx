@@ -56,11 +56,6 @@ export default function PortalSignup() {
       eyebrow="Client Portal"
       title="Create your account"
       subtitle="Your account will be reviewed by our team before you can access portfolio features."
-      footerSlot={
-        <p className="font-body text-xs text-muted-foreground">
-          Already have an account? <Link to="/portal/login" className="text-primary hover:underline">Sign in</Link>
-        </p>
-      }
     >
       <form onSubmit={handleSubmit} className="space-y-2">
         <div className="grid grid-cols-2 gap-3">
@@ -102,6 +97,10 @@ export default function PortalSignup() {
           {loading ? "Creating…" : "Create Account"}
         </button>
       </form>
+
+      <p className="mt-2 text-center font-body text-[11px] text-muted-foreground">
+        Already have an account? <Link to="/portal/login" className="text-primary hover:underline">Sign in</Link>
+      </p>
     </AuthShell>
   );
 }
