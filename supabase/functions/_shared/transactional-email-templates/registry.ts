@@ -1,7 +1,6 @@
 import * as React from 'npm:react@18.3.1'
-
-// Registry of transactional email templates.
-// Add templates by importing them and mapping a kebab-case key to the template object.
+import { template as adminNewSignup } from './admin-new-signup.tsx'
+import { template as clientApproved } from './client-approved.tsx'
 
 export interface TemplateEntry {
   component: (props: any) => React.ReactElement
@@ -11,4 +10,7 @@ export interface TemplateEntry {
   to?: string
 }
 
-export const TEMPLATES: Record<string, TemplateEntry> = {}
+export const TEMPLATES: Record<string, TemplateEntry> = {
+  'admin-new-signup': adminNewSignup,
+  'client-approved': clientApproved,
+}

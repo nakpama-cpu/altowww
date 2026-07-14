@@ -33,9 +33,77 @@ export default function AdminClients() {
     else load();
   };
 
+  const decide = async (c: Client, decision: "approved" | "suspended") => {
+    const { error } = await supabase.from("profiles").update({ status: decision }).eq("id", c.id);
+    if (error) {
+      toast({ title: "Update failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    if (decision === "approved") {
+      supabase.functions
+        .invoke("send-transactional-email", {
+          body: {
+            templateName: "client-approved",
+            recipientEmail: c.email,
+            idempotencyKey: `client-approved-${c.id}`,
+            templateData: {
+              firstName: c.first_name || "there",
+              loginUrl: `${window.location.origin}/portal/login`,
+            },
+          },
+        })
+        .catch((e) => console.error("client-approved send failed", e));
+      toast({ title: "Client approved", description: `${c.email} has been notified.` });
+    } else {
+      toast({ title: "Client rejected", description: `${c.email} marked as suspended.` });
+    }
+    load();
+  };
+
+  const pending = clients.filter((c) => c.status === "pending");
+  const others = clients.filter((c) => c.status !== "pending");
+
   return (
     <div className="max-w-7xl">
       <h1 className="display-heading text-4xl mb-8">Clients</h1>
+
+      {pending.length > 0 && (
+        <section className="mb-10">
+          <h2 className="font-body text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
+            Pending approvals ({pending.length})
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            {pending.map((c) => (
+              <div key={c.id} className="bg-card border border-border p-5 flex flex-col gap-3">
+                <div>
+                  <div className="display-heading text-xl">{c.first_name} {c.last_name}</div>
+                  <div className="font-body text-sm text-muted-foreground">{c.email}</div>
+                </div>
+                <div className="font-body text-xs text-muted-foreground grid grid-cols-2 gap-x-4 gap-y-1">
+                  <div><span className="uppercase tracking-[0.15em] text-[10px] mr-2">Country</span>{c.country ?? "—"}</div>
+                  <div><span className="uppercase tracking-[0.15em] text-[10px] mr-2">Phone</span>{c.phone_country_code ? `${c.phone_country_code} ${c.phone}` : (c.phone || "—")}</div>
+                  <div className="col-span-2"><span className="uppercase tracking-[0.15em] text-[10px] mr-2">Signed up</span>{new Date(c.created_at).toLocaleString()}</div>
+                </div>
+                <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={() => decide(c, "approved")}
+                    className="flex-1 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-2.5 hover:opacity-90"
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => decide(c, "suspended")}
+                    className="flex-1 font-body text-xs uppercase tracking-[0.25em] border border-border py-2.5 hover:bg-muted"
+                  >
+                    Reject
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <div className="bg-card border border-border overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-muted">
@@ -45,7 +113,7 @@ export default function AdminClients() {
             </tr>
           </thead>
           <tbody>
-            {clients.map((c) => (
+            {others.map((c) => (
               <tr key={c.id} className="border-t border-border">
                 <td className="p-3">{c.first_name} {c.last_name}</td>
                 <td className="p-3">{c.email}</td>
