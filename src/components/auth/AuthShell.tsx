@@ -59,7 +59,7 @@ const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShell
         </div>
       </main>
 
-      <div className="section-dark pt-24 pb-3 md:py-32">
+      <div className="section-dark pt-24 pb-3">
         <div className="h-px bg-secondary-foreground/10" aria-hidden="true" />
       </div>
       <FooterSection hideBrochure compact />
