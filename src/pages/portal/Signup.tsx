@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
 import { useDetectedCountry } from "@/hooks/useDetectedCountry";
 import AuthShell from "@/components/auth/AuthShell";
+import Seo from "@/components/Seo";
 
 
 export default function PortalSignup() {
@@ -52,6 +53,12 @@ export default function PortalSignup() {
   };
 
   return (
+    <>
+    <Seo
+      title="Create a Client Account | Alto Whisky"
+      description="Open an Alto Whisky client account to access cask investment opportunities and portfolio tools."
+      path="/portal/signup"
+    />
     <AuthShell
       eyebrow="Client Portal"
       title="Create your account"
@@ -102,5 +109,6 @@ export default function PortalSignup() {
         Already have an account? <Link to="/portal/login" className="text-primary hover:underline">Sign in</Link>
       </p>
     </AuthShell>
+    </>
   );
 }
