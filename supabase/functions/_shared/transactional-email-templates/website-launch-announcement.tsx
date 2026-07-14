@@ -141,7 +141,10 @@ const Email = ({
               <tr>
                 <td style={sigInfoCell}>
                   <div style={sigName}>{senderName}</div>
-                  <div style={sigRole}>{senderRole} · Alto Whisky</div>
+                  <div style={sigRoleWrap}>
+                    <div style={sigRoleLine}>{senderRole}</div>
+                    <div style={sigRoleLine}>Alto Whisky</div>
+                  </div>
                   <div style={sigLine}>
                     <span style={sigLabel}>E</span>{' '}
                     <Link href={`mailto:${senderEmail}`} style={sigLink}>
@@ -153,7 +156,8 @@ const Email = ({
                     <Link href={telHref(senderPhone)} style={sigLink}>
                       {senderPhone}
                     </Link>
-                    <span style={sigSep}> · </span>
+                  </div>
+                  <div style={sigLine}>
                     <span style={sigLabel}>M</span>{' '}
                     <Link href={telHref(senderMobile)} style={sigLink}>
                       {senderMobile}
