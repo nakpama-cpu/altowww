@@ -57,7 +57,7 @@ export default function PortalSignup() {
       title="Create your account"
       subtitle="Your account will be reviewed by our team before you can access portfolio features."
       footerSlot={
-        <p className="font-body text-xs text-secondary-foreground/80">
+        <p className="font-body text-xs text-muted-foreground">
           Already have an account? <Link to="/portal/login" className="text-primary hover:underline">Sign in</Link>
         </p>
       }

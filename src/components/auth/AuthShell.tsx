@@ -50,8 +50,12 @@ const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShell
               </p>
             )}
             {children}
+            {footerSlot && (
+              <div className="mt-8 pt-6 border-t border-border text-center">
+                {footerSlot}
+              </div>
+            )}
           </div>
-          {footerSlot && <div className="mt-6 text-center">{footerSlot}</div>}
         </div>
       </main>
 

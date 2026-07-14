@@ -29,7 +29,7 @@ export default function PortalLogin() {
       title="Sign in"
       subtitle="Access your portfolio and available stock."
       footerSlot={
-        <p className="font-body text-xs text-secondary-foreground/80">
+        <p className="font-body text-xs text-muted-foreground">
           New to Alto? <Link to="/portal/signup" className="text-primary hover:underline">Create an account</Link>
         </p>
       }
