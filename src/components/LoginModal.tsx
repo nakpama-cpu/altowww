@@ -246,13 +246,13 @@ export default function LoginModal({ open, onClose }: Props) {
                 </div>
               </div>
               <div>
-                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Email</label>
+                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Email</label>
                 <input
                   type="email"
                   required
                   value={signupForm.email}
                   onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
-                  className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
+                  className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
                 />
               </div>
               <CountrySelect
