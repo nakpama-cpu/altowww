@@ -5,9 +5,10 @@ interface FooterSectionProps {
   hideCta?: boolean;
   lightCta?: boolean;
   hideBrochure?: boolean;
+  compact?: boolean;
 }
 
-const FooterSection = ({ hideCta = false, lightCta = false, hideBrochure = false }: FooterSectionProps) => {
+const FooterSection = ({ hideCta = false, lightCta = false, hideBrochure = false, compact = false }: FooterSectionProps) => {
   return (
     <footer className="section-dark">
       {/* Final CTA — single consolidated one for entire page */}
@@ -31,7 +32,7 @@ const FooterSection = ({ hideCta = false, lightCta = false, hideBrochure = false
       )}
 
       {/* Footer links */}
-      <div className="py-16 px-6">
+      <div className={`px-6 ${compact ? "pt-4 pb-16 md:py-16" : "py-16"}`}>
         <div className="max-w-4xl mx-auto">
           <div className={`grid grid-cols-1 gap-12 mb-16 ${hideBrochure ? "md:grid-cols-3" : "md:grid-cols-4"}`}>
             <div>
