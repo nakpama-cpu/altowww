@@ -374,10 +374,15 @@ const sigDividerCell = {
   borderLeft: '1px solid hsl(24, 72%, 40%)',
   padding: 0,
 }
+const sigSpacerCell = {
+  width: '14px',
+  height: '110px',
+  padding: 0,
+}
 const sigInfoCell = {
   height: '110px',
   verticalAlign: 'middle' as const,
-  paddingLeft: '16px',
+  paddingRight: '12px',
   fontFamily: "'Inter', Arial, sans-serif",
 }
 const sigName = {
