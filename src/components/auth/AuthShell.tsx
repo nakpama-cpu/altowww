@@ -33,9 +33,8 @@ const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShell
           aria-hidden="true"
         />
 
-        <div className="relative z-10 w-full max-w-md px-4 py-8 md:py-12">
-          <div className="bg-card border border-border shadow-2xl p-6 md:p-8 text-foreground">
-
+        <div className="relative z-10 w-full max-w-md px-4 py-24 md:py-32">
+          <div className="bg-card border border-border shadow-2xl p-8 md:p-12 text-foreground">
             {eyebrow && (
               <p className="font-body text-[11px] uppercase tracking-[0.3em] text-primary mb-4 text-center">
                 {eyebrow}
