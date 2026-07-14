@@ -7,7 +7,7 @@ import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
 export default function PortalSignup() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phone: "", password: "" });
+  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
