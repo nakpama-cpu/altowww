@@ -40,7 +40,7 @@ export default function ForgotPassword() {
           If an account exists for that email, a reset link has been sent.
         </p>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Email</label>
             <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}

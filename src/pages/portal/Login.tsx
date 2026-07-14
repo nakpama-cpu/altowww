@@ -34,7 +34,7 @@ export default function PortalLogin() {
         </p>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Email</label>
           <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
@@ -51,7 +51,7 @@ export default function PortalLogin() {
         </button>
       </form>
 
-      <div className="mt-6 flex justify-center font-body text-xs">
+      <div className="mt-5 flex justify-center font-body text-xs">
         <Link to="/portal/forgot-password" className="text-muted-foreground hover:text-primary">Forgot password?</Link>
       </div>
     </AuthShell>

@@ -18,7 +18,7 @@ interface AuthShellProps {
  */
 const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShellProps) => {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-dvh flex flex-col bg-background">
       <Header hideBrochure />
 
       <main className="relative flex-1 flex items-center justify-center overflow-hidden section-dark">
@@ -33,25 +33,25 @@ const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShell
           aria-hidden="true"
         />
 
-        <div className="relative z-10 w-full max-w-md px-4 py-24 md:py-32">
-          <div className="bg-card border border-border shadow-2xl p-8 md:p-12 text-foreground">
+        <div className="relative z-10 w-full max-w-md px-3 sm:px-4 py-4 md:py-8">
+          <div className="bg-card border border-border shadow-2xl p-4 sm:p-6 pb-6 sm:pb-8 text-foreground">
             {eyebrow && (
-              <p className="font-body text-[11px] uppercase tracking-[0.3em] text-primary mb-4 text-center">
+              <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mb-2 text-center">
                 {eyebrow}
               </p>
             )}
-            <h1 className="display-heading text-3xl md:text-4xl text-center mb-4">
+            <h1 className="display-heading text-xl sm:text-2xl text-center mb-1">
               {title}
             </h1>
-            <div className="mx-auto mb-6 h-px w-16 bg-primary" aria-hidden="true" />
+            <div className="mx-auto mb-3 h-px w-16 bg-primary" aria-hidden="true" />
             {subtitle && (
-              <p className="font-body text-sm text-muted-foreground text-center mb-8 leading-relaxed">
+              <p className="font-body text-xs text-muted-foreground text-center mb-4 leading-snug">
                 {subtitle}
               </p>
             )}
             {children}
             {footerSlot && (
-              <div className="mt-8 pt-6 border-t border-border text-center">
+              <div className="mt-4 pt-4 border-t border-border text-center">
                 {footerSlot}
               </div>
             )}

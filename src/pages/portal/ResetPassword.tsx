@@ -29,7 +29,7 @@ export default function ResetPassword() {
       title="Set new password"
       subtitle="Choose a strong password of at least 8 characters."
     >
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">New Password</label>
           <input type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)}
