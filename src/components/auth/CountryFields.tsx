@@ -158,7 +158,7 @@ function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps
           tabIndex={-1}
           role="listbox"
           onKeyDown={onKeyDown}
-          className="absolute z-50 left-0 right-0 mt-1 max-h-56 overflow-auto bg-card border border-border shadow-lg min-w-[240px] focus:outline-none"
+          className="absolute z-50 left-0 right-0 mt-1 max-h-48 overflow-auto bg-card border border-border shadow-lg min-w-[240px] focus:outline-none"
         >
           {countries.map((c, i) => (
             <li key={c.code}>
