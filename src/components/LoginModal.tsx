@@ -109,7 +109,7 @@ export default function LoginModal({ open, onClose }: Props) {
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md bg-card border border-border p-4 sm:p-6 relative max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)] overflow-y-auto shadow-2xl"
+        className="w-full max-w-md bg-card border border-border p-4 sm:p-6 pb-6 sm:pb-8 relative max-h-[calc(100vh-0.5rem)] sm:max-h-[calc(100vh-2rem)] overflow-visible shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
