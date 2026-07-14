@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://altowww.lovable.app/sitemap.xml
+Sitemap: https://www.altowhisky.com/sitemap.xml

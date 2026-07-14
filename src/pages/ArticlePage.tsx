@@ -64,11 +64,11 @@ const ArticlePage = () => {
           description: article.excerpt,
           image: article.image.startsWith("http")
             ? article.image
-            : `https://altowww.lovable.app${article.image}`,
+            : `https://www.altowhisky.com${article.image}`,
           datePublished: article.date,
           author: { "@type": "Organization", name: "Alto Whisky" },
           publisher: { "@type": "Organization", name: "Alto Whisky" },
-          mainEntityOfPage: `https://altowww.lovable.app/news/${article.slug}`,
+          mainEntityOfPage: `https://www.altowhisky.com/news/${article.slug}`,
         }}
       />
       <Header />
