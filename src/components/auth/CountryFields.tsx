@@ -45,7 +45,7 @@ export function PhoneCountryCodeSelect({ value, onChange, required = true }: Pho
   return (
     <div>
       <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
-        Code
+        Dialling code
       </label>
       <select
         required={required}
@@ -58,7 +58,7 @@ export function PhoneCountryCodeSelect({ value, onChange, required = true }: Pho
         </option>
         {countries.map((c) => (
           <option key={c.code} value={c.dialingCode}>
-            {c.name} ({c.dialingCode})
+            {c.dialingCode}
           </option>
         ))}
       </select>

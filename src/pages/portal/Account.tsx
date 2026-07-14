@@ -65,7 +65,7 @@ export default function Account() {
         <CountrySelect
           value={form.country}
           onChange={(code, dialingCode) =>
-            setForm((f) => ({ ...f, country: code, phone_country_code: f.phone_country_code || dialingCode }))
+            setForm((f) => ({ ...f, country: code, phone_country_code: dialingCode }))
           }
         />
         <PhoneField
