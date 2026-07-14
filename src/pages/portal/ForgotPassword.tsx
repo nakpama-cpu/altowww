@@ -30,7 +30,7 @@ export default function ForgotPassword() {
       title="Reset password"
       subtitle={sent ? undefined : "Enter your email and we'll send you a reset link."}
       footerSlot={
-        <p className="font-body text-xs text-secondary-foreground/80">
+        <p className="font-body text-xs text-muted-foreground">
           <Link to="/portal/login" className="text-primary hover:underline">Back to sign in</Link>
         </p>
       }
