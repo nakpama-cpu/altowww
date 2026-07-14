@@ -4,7 +4,10 @@ const DESKTOP_PAGE_SIZE = 9;
 const TABLET_MOBILE_PAGE_SIZE = 8;
 
 export function usePageSize() {
-  const [pageSize, setPageSize] = useState(DESKTOP_PAGE_SIZE);
+  const [pageSize, setPageSize] = useState(() => {
+    if (typeof window === "undefined") return DESKTOP_PAGE_SIZE;
+    return window.innerWidth >= 1024 ? DESKTOP_PAGE_SIZE : TABLET_MOBILE_PAGE_SIZE;
+  });
 
   useEffect(() => {
     const update = () => {
@@ -14,6 +17,7 @@ export function usePageSize() {
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
+
 
   return pageSize;
 }
