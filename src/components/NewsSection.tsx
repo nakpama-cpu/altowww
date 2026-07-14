@@ -11,6 +11,11 @@ const NewsSection = () => {
 
   const visibleCount = isMobile ? 1 : 3;
 
+  // Swipe state (mobile)
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const touchActive = useRef(false);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -35,6 +40,43 @@ const NewsSection = () => {
   const gap = isMobile ? 0 : 40;
   const cardMarginShare = visibleCount > 1 ? ((visibleCount - 1) * gap) / visibleCount : 0;
   const stepOffset = visibleCount > 1 ? gap - cardMarginShare : 0;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!isMobile) return;
+    const t = e.touches[0];
+    touchStartX.current = t.clientX;
+    touchStartY.current = t.clientY;
+    touchActive.current = true;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchActive.current || touchStartX.current === null || touchStartY.current === null) return;
+    const t = e.touches[0];
+    const dx = t.clientX - touchStartX.current;
+    const dy = t.clientY - touchStartY.current;
+    // If clearly horizontal, prevent vertical scroll interference
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) {
+      // no preventDefault to keep passive listener happy
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchActive.current || touchStartX.current === null || touchStartY.current === null) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartX.current;
+    const dy = t.clientY - touchStartY.current;
+    touchActive.current = false;
+    touchStartX.current = null;
+    touchStartY.current = null;
+    const threshold = 40;
+    if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) {
+        setStartIndex((i) => Math.min(maxStart, i + 1));
+      } else {
+        setStartIndex((i) => Math.max(0, i - 1));
+      }
+    }
+  };
 
   return (
     <section id="news" ref={ref} className="section-light py-10 md:py-16">
@@ -90,18 +132,23 @@ const NewsSection = () => {
           </div>
         </div>
 
-        <div className="overflow-hidden">
+        <div
+          className="overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <div
             className={`flex transition-transform duration-700 ease-in-out ${isMobile ? "gap-0" : "gap-10"}`}
             style={{
               transform: `translateX(calc(${-startIndex} * (${stepPercent}% + ${stepOffset}px)))`,
+              touchAction: isMobile ? "pan-y" : undefined,
             }}
           >
             {articles.map((article, i) => (
-              <Link
-                to={`/news/${article.slug}`}
+              <div
                 key={article.slug}
-                className={`group block flex-shrink-0 transition-opacity duration-700 ${
+                className={`flex-shrink-0 transition-opacity duration-700 ${
                   visible ? "opacity-100" : "opacity-0"
                 }`}
                 style={{
@@ -109,30 +156,43 @@ const NewsSection = () => {
                   transitionDelay: `${300 + i * 150}ms`,
                 }}
               >
-                <div className="aspect-[4/3] overflow-hidden mb-4 md:mb-5">
-                  <img
-                    src={article.image}
-                    alt={article.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="flex items-center gap-3 mb-2 md:mb-3">
-                  <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
-                    {article.category}
-                  </span>
-                  <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
-                  <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                    {article.date}
-                  </span>
-                </div>
-                <h3 className="font-display text-base md:text-lg font-light leading-snug mb-2 md:mb-3 group-hover:text-primary transition-colors duration-300">
-                  {article.title}
-                </h3>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                  {article.excerpt}
-                </p>
-              </Link>
+                <Link to={`/news/${article.slug}`} className="group block">
+                  <div className="aspect-[4/3] overflow-hidden mb-4 md:mb-5">
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                      draggable={false}
+                    />
+                  </div>
+                  <div className="flex items-center gap-3 mb-2 md:mb-3">
+                    <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
+                      {article.category}
+                    </span>
+                    <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                    <span className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                      {article.date}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-base md:text-lg font-light leading-snug mb-2 md:mb-3 group-hover:text-primary transition-colors duration-300">
+                    {article.title}
+                  </h3>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed mb-3 md:mb-4">
+                    {article.excerpt}
+                  </p>
+                </Link>
+                <Link
+                  to={`/news/${article.slug}`}
+                  className="inline-flex items-center gap-2 font-body text-[11px] uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors"
+                  aria-label={`Read more: ${article.title}`}
+                >
+                  Read More
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
             ))}
           </div>
         </div>
