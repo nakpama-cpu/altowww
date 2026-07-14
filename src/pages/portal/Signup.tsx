@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
 import { useDetectedCountry } from "@/hooks/useDetectedCountry";
+import AuthShell from "@/components/auth/AuthShell";
+
 
 export default function PortalSignup() {
   const navigate = useNavigate();
