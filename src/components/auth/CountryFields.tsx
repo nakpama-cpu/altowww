@@ -17,7 +17,7 @@ interface CountrySelectProps {
 export function CountrySelect({ value, onChange, required = true }: CountrySelectProps) {
   return (
     <div>
-      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1.5">
+      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">
         Country
       </label>
       <select
@@ -228,7 +228,7 @@ export function PhoneField({
 
   return (
     <div>
-      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1.5">
+      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">
         Phone
       </label>
       <div className="grid grid-cols-[110px_1fr] gap-3 items-end">
