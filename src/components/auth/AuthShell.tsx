@@ -51,7 +51,7 @@ const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShell
             )}
             {children}
             {footerSlot && (
-              <div className="mt-4 pt-4 border-t border-border text-center">
+              <div className="mt-4 text-center">
                 {footerSlot}
               </div>
             )}
