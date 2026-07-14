@@ -198,7 +198,7 @@ const NewsSection = () => {
         </div>
 
         {/* Mobile nav */}
-        <div className="mt-4 flex flex-col items-center gap-3 md:hidden">
+        <div className="mt-2 flex flex-col items-center gap-2 md:hidden">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setStartIndex((i) => Math.max(0, i - 1))}
