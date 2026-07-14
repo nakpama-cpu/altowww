@@ -360,17 +360,22 @@ const sigWrap = {
   margin: '0 0 8px',
 }
 const sigLogoCell = {
-  width: '84px',
-  verticalAlign: 'top' as const,
-  paddingRight: '14px',
+  width: '110px',
+  height: '110px',
+  backgroundColor: 'hsl(220, 26%, 14%)',
+  textAlign: 'center' as const,
+  verticalAlign: 'middle' as const,
+  padding: 0,
 }
 const sigDividerCell = {
   width: '1px',
+  height: '110px',
   borderLeft: '1px solid hsl(24, 72%, 40%)',
   padding: 0,
 }
 const sigInfoCell = {
-  verticalAlign: 'top' as const,
+  height: '110px',
+  verticalAlign: 'middle' as const,
   paddingLeft: '16px',
   fontFamily: "'Inter', Arial, sans-serif",
 }
