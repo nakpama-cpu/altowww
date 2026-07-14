@@ -200,11 +200,11 @@ const News = () => {
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
                   {filtered
-                    .slice((page - 1) * pageSize, page * pageSize)
+                    .slice((currentPage - 1) * pageSize, currentPage * pageSize)
                     .map((article) => (
                     <Link
                       to={`/news/${article.slug}`}
-                      state={{ fromPage: page }}
+                      state={{ fromPage: currentPage }}
                       key={article.slug}
                       className="group block"
                     >
