@@ -8,6 +8,8 @@ type Client = {
   last_name: string;
   email: string;
   phone: string;
+  phone_country_code: string | null;
+  country: string | null;
   status: "pending" | "approved" | "suspended";
   client_discount_pct: number;
   created_at: string;
