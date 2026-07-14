@@ -81,6 +81,14 @@ const News = () => {
     return list;
   }, [query, sort, category]);
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+
+  useEffect(() => {
+    if (page > totalPages) setPage(1);
+  }, [page, totalPages]);
+
+
   return (
     <div className="relative">
       <Seo
