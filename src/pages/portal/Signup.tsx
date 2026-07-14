@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
 
 export default function PortalSignup() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phone: "", password: "" });
+  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,7 +18,13 @@ export default function PortalSignup() {
       password: form.password,
       options: {
         emailRedirectTo: `${window.location.origin}/portal`,
-        data: { first_name: form.firstName.trim(), last_name: form.lastName.trim(), phone: form.phone.trim() },
+        data: {
+          first_name: form.firstName.trim(),
+          last_name: form.lastName.trim(),
+          phone: form.phone.trim(),
+          phone_country_code: form.phoneCountryCode,
+          country: form.country,
+        },
       },
     });
     setLoading(false);
@@ -56,11 +63,18 @@ export default function PortalSignup() {
               <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary" />
             </div>
-            <div>
-              <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Phone</label>
-              <input type="tel" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary" />
-            </div>
+            <CountrySelect
+              value={form.country}
+              onChange={(code, dialingCode) =>
+                setForm((f) => ({ ...f, country: code, phoneCountryCode: f.phoneCountryCode || dialingCode }))
+              }
+            />
+            <PhoneField
+              countryCode={form.phoneCountryCode}
+              onCountryCodeChange={(phoneCountryCode) => setForm({ ...form, phoneCountryCode })}
+              phone={form.phone}
+              onPhoneChange={(phone) => setForm({ ...form, phone })}
+            />
             <div>
               <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Password</label>
               <input type="password" required minLength={8} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}

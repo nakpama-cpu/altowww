@@ -414,6 +414,7 @@ export type Database = {
       profiles: {
         Row: {
           client_discount_pct: number
+          country: string | null
           created_at: string
           email: string
           first_name: string
@@ -421,11 +422,13 @@ export type Database = {
           last_name: string
           notes: string | null
           phone: string
+          phone_country_code: string | null
           status: Database["public"]["Enums"]["profile_status"]
           updated_at: string
         }
         Insert: {
           client_discount_pct?: number
+          country?: string | null
           created_at?: string
           email?: string
           first_name?: string
@@ -433,11 +436,13 @@ export type Database = {
           last_name?: string
           notes?: string | null
           phone?: string
+          phone_country_code?: string | null
           status?: Database["public"]["Enums"]["profile_status"]
           updated_at?: string
         }
         Update: {
           client_discount_pct?: number
+          country?: string | null
           created_at?: string
           email?: string
           first_name?: string
@@ -445,6 +450,7 @@ export type Database = {
           last_name?: string
           notes?: string | null
           phone?: string
+          phone_country_code?: string | null
           status?: Database["public"]["Enums"]["profile_status"]
           updated_at?: string
         }

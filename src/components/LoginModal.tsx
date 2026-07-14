@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
 
 type Props = { open: boolean; onClose: () => void };
 
@@ -13,7 +14,7 @@ export default function LoginModal({ open, onClose }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [signupForm, setSignupForm] = useState({ firstName: "", lastName: "", email: "", phone: "", password: "" });
+  const [signupForm, setSignupForm] = useState({ firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
 
   useEffect(() => {
     if (!open) return;
@@ -57,6 +58,8 @@ export default function LoginModal({ open, onClose }: Props) {
           first_name: signupForm.firstName.trim(),
           last_name: signupForm.lastName.trim(),
           phone: signupForm.phone.trim(),
+          phone_country_code: signupForm.phoneCountryCode,
+          country: signupForm.country,
         },
       },
     });
@@ -177,16 +180,18 @@ export default function LoginModal({ open, onClose }: Props) {
                   className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
                 />
               </div>
-              <div>
-                <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Phone</label>
-                <input
-                  type="tel"
-                  required
-                  value={signupForm.phone}
-                  onChange={(e) => setSignupForm({ ...signupForm, phone: e.target.value })}
-                  className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
-                />
-              </div>
+              <CountrySelect
+                value={signupForm.country}
+                onChange={(code, dialingCode) =>
+                  setSignupForm((f) => ({ ...f, country: code, phoneCountryCode: f.phoneCountryCode || dialingCode }))
+                }
+              />
+              <PhoneField
+                countryCode={signupForm.phoneCountryCode}
+                onCountryCodeChange={(phoneCountryCode) => setSignupForm({ ...signupForm, phoneCountryCode })}
+                phone={signupForm.phone}
+                onPhoneChange={(phone) => setSignupForm({ ...signupForm, phone })}
+              />
               <div>
                 <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Password</label>
                 <input
