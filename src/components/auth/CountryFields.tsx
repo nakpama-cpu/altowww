@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
-import { countries, countryByCode } from "@/data/countries";
+import { countries, countryByCode, countryByDialingCode } from "@/data/countries";
+
 
 export function isValidPhone(dialingCode: string, phone: string): boolean {
   if (!dialingCode || !phone.trim()) return false;
