@@ -73,8 +73,8 @@ const ArticlePage = () => {
       />
       <Header />
 
-      {/* Hero Image — matches homepage sizing */}
-      <section className="relative w-full overflow-hidden h-auto min-h-[380px] md:h-[380px] md:min-h-0">
+      {/* Fixed hero — matches homepage curtain effect */}
+      <section className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-[380px]">
         <img
           src={article.image}
           alt={article.title}
@@ -88,7 +88,7 @@ const ArticlePage = () => {
           }}
         />
         <div className="absolute inset-0 bg-secondary/60" />
-        <div className="relative z-10 flex flex-col items-center justify-end h-full text-center px-6 pt-20 pb-16 md:pt-0">
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
           <div className="flex items-center gap-3 mb-4">
             <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
               {article.category}
@@ -103,10 +103,13 @@ const ArticlePage = () => {
           </h1>
         </div>
       </section>
+      {/* Spacer to push content below the fixed hero */}
+      <div className="h-[380px]" />
 
 
       {/* Article Content */}
       <section className="section-light py-16 md:py-24">
+
         <div className="max-w-2xl mx-auto px-6 md:px-12">
           <p className="font-body text-lg text-foreground leading-relaxed mb-8 first-letter:text-5xl first-letter:font-display first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-primary">
             {article.content[0]}
