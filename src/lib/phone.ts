@@ -32,3 +32,56 @@ export function validateE164(dialingCode: string, nationalNumber: string):
   }
   return { valid: true, e164: parsed.number };
 }
+
+/**
+ * Format a stored phone value for display. Accepts either a full E.164 string
+ * (preferred, e.g. "+442079460958") or a legacy dialling-code + national pair.
+ * Returns the international format ("+44 20 7946 0958") when parseable, or a
+ * best-effort fallback so we never render an empty cell.
+ */
+export function formatPhoneDisplay(phone?: string | null, dialingCode?: string | null): string {
+  const raw = (phone ?? "").trim();
+  if (!raw) return "";
+
+  const candidate = raw.startsWith("+")
+    ? raw
+    : `+${(dialingCode ?? "").replace(/[^\d]/g, "")}${raw.replace(/[^\d]/g, "")}`;
+
+  const parsed = parsePhoneNumberFromString(candidate);
+  if (parsed && parsed.isValid()) return parsed.formatInternational();
+
+  const cc = (dialingCode ?? "").trim();
+  return cc ? `${cc} ${raw}` : raw;
+}
+
+/**
+ * Split a stored E.164 phone into the `{ dialingCode, nationalNumber }` pair
+ * used by the signup / account form inputs. Falls back to the provided
+ * dialling code and raw number when parsing fails (legacy rows).
+ */
+export function splitStoredPhone(
+  phone?: string | null,
+  dialingCode?: string | null,
+): { dialingCode: string; nationalNumber: string } {
+  const raw = (phone ?? "").trim();
+  const fallbackCode = (dialingCode ?? "").trim();
+
+  if (raw.startsWith("+")) {
+    const parsed = parsePhoneNumberFromString(raw);
+    if (parsed) {
+      const cc = `+${parsed.countryCallingCode}`;
+      // Prefer the exact stored dialling code when it matches (handles "+1-242" style).
+      const preferred = fallbackCode && fallbackCode.replace(/[^\d]/g, "") === String(parsed.countryCallingCode)
+        ? fallbackCode
+        : cc;
+      // Match back to our countries list so the dropdown value stays consistent.
+      const known = countries.find((c) => c.dialingCode === preferred);
+      return {
+        dialingCode: known?.dialingCode ?? preferred,
+        nationalNumber: parsed.nationalNumber ?? "",
+      };
+    }
+  }
+
+  return { dialingCode: fallbackCode, nationalNumber: raw };
+}
