@@ -183,7 +183,7 @@ export default function LoginModal({ open, onClose }: Props) {
               <CountrySelect
                 value={signupForm.country}
                 onChange={(code, dialingCode) =>
-                  setSignupForm((f) => ({ ...f, country: code, phoneCountryCode: f.phoneCountryCode || dialingCode }))
+                  setSignupForm((f) => ({ ...f, country: code, phoneCountryCode: dialingCode }))
                 }
               />
               <PhoneField

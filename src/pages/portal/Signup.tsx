@@ -66,7 +66,7 @@ export default function PortalSignup() {
             <CountrySelect
               value={form.country}
               onChange={(code, dialingCode) =>
-                setForm((f) => ({ ...f, country: code, phoneCountryCode: f.phoneCountryCode || dialingCode }))
+                setForm((f) => ({ ...f, country: code, phoneCountryCode: dialingCode }))
               }
             />
             <PhoneField
