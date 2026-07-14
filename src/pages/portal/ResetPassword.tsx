@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import AuthShell from "@/components/auth/AuthShell";
+import Seo from "@/components/Seo";
 
 export default function ResetPassword() {
   const { toast } = useToast();
@@ -24,6 +25,12 @@ export default function ResetPassword() {
   };
 
   return (
+    <>
+    <Seo
+      title="Set a New Password | Alto Whisky"
+      description="Set a new password for your Alto Whisky client account."
+      path="/portal/reset-password"
+    />
     <AuthShell
       eyebrow="Client Portal"
       title="Set new password"
@@ -41,5 +48,6 @@ export default function ResetPassword() {
         </button>
       </form>
     </AuthShell>
+    </>
   );
 }
