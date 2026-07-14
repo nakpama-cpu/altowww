@@ -145,7 +145,7 @@ function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
+        className="w-full flex items-center justify-between bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
       >
         <span className={value ? "" : "text-muted-foreground"}>{value || "Code"}</span>
         <svg className="w-3 h-3 text-muted-foreground" viewBox="0 0 20 20" fill="currentColor">
@@ -243,7 +243,7 @@ export function PhoneField({
           onBlur={() => setTouched(true)}
           inputMode="tel"
           placeholder="Phone number"
-          className={`w-full bg-transparent border-b py-1.5 font-body text-sm focus:outline-none ${
+          className={`w-full bg-transparent border-b py-1 font-body text-sm focus:outline-none ${
             showError ? "border-destructive focus:border-destructive" : "border-border focus:border-primary"
           }`}
         />
