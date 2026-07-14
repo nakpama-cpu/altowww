@@ -30,7 +30,10 @@ const entries: SitemapEntry[] = [
     changefreq: "monthly" as const,
     priority: "0.6",
   })),
-
+  { path: "/portal/login", changefreq: "monthly", priority: "0.5" },
+  { path: "/portal/signup", changefreq: "monthly", priority: "0.5" },
+  { path: "/portal/forgot-password", changefreq: "yearly", priority: "0.3" },
+  { path: "/portal/reset-password", changefreq: "yearly", priority: "0.3" },
 ];
 
 
