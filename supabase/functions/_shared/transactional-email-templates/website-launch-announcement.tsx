@@ -395,12 +395,15 @@ const sigName = {
   color: 'hsl(220, 26%, 14%)',
   lineHeight: '1.2',
 }
-const sigRole = {
+const sigRoleWrap = {
+  margin: '4px 0 10px',
+}
+const sigRoleLine = {
   fontSize: '11px',
   letterSpacing: '0.18em',
   textTransform: 'uppercase' as const,
   color: 'hsl(24, 72%, 40%)',
-  margin: '4px 0 10px',
+  lineHeight: '1.4',
 }
 const sigLine = {
   fontSize: '12px',
