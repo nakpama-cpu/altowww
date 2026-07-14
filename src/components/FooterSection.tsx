@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
-import BrochureButton, { ContactButton } from "@/components/BrochureButton";
+import BrochureButton from "@/components/BrochureButton";
 
-const FooterSection = ({ hideCta = false, lightCta = false }: { hideCta?: boolean; lightCta?: boolean }) => {
+interface FooterSectionProps {
+  hideCta?: boolean;
+  lightCta?: boolean;
+  hideBrochure?: boolean;
+}
+
+const FooterSection = ({ hideCta = false, lightCta = false, hideBrochure = false }: FooterSectionProps) => {
   return (
     <footer className="section-dark">
       {/* Final CTA — single consolidated one for entire page */}
-      {!hideCta && !lightCta && (
+      {!hideCta && !lightCta && !hideBrochure && (
         <div className="py-20 px-6 text-center border-b border-secondary-foreground/10">
           <div className="max-w-lg mx-auto">
             <h3 className="display-heading text-2xl md:text-3xl text-secondary-foreground mb-4">
@@ -16,9 +22,6 @@ const FooterSection = ({ hideCta = false, lightCta = false }: { hideCta?: boolea
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <BrochureButton className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3.5 hover:opacity-90 transition-opacity" />
-              <ContactButton className="font-body text-xs uppercase tracking-[0.25em] text-secondary-foreground border border-secondary-foreground/30 px-8 py-3.5 hover:bg-secondary-foreground/10 transition-all duration-500">
-                Speak to an Advisor
-              </ContactButton>
             </div>
           </div>
         </div>
@@ -60,18 +63,20 @@ const FooterSection = ({ hideCta = false, lightCta = false }: { hideCta?: boolea
                 <Link to="/faqs" className="font-body text-sm text-secondary-foreground hover:text-primary transition-colors">FAQs</Link>
               </div>
             </div>
-            <div>
-              <p className="font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground mb-4">
-                Get Started
-              </p>
-              <p className="font-body text-sm text-secondary-foreground leading-relaxed mb-4">
-                Ready to explore whisky cask investment? Request your free brochure
-                or speak to a Portfolio Advisor.
-              </p>
-              <BrochureButton className="inline-block font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors">
-                Request Brochure →
-              </BrochureButton>
-            </div>
+            {!hideBrochure && (
+              <div>
+                <p className="font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground mb-4">
+                  Get Started
+                </p>
+                <p className="font-body text-sm text-secondary-foreground leading-relaxed mb-4">
+                  Ready to explore whisky cask investment? Request your free brochure
+                  or speak to a Portfolio Advisor.
+                </p>
+                <BrochureButton className="inline-block font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors">
+                  Request Brochure →
+                </BrochureButton>
+              </div>
+            )}
           </div>
 
           {/* Regulatory disclaimer */}
