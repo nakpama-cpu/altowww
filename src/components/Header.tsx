@@ -9,6 +9,10 @@ import MobileMenuButton from "@/components/MobileMenuButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { PORTAL_LAST_VISIT_KEY, PORTAL_REAUTH_WINDOW_MS } from "@/lib/portalSession";
 
+interface HeaderProps {
+  hideBrochure?: boolean;
+}
+
 const mainLinks = [
   { to: "/", label: "Home" },
   { to: "/news", label: "News & Insights", isNews: true as const },
@@ -25,7 +29,7 @@ const mainLinks = [
   { to: "/contact", label: "Contact" },
 ];
 
-const Header = () => {
+const Header = ({ hideBrochure }: HeaderProps) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [newsOpen, setNewsOpen] = useState(false);
@@ -214,7 +218,9 @@ const Header = () => {
           )}
 
           <button onClick={handleClientLogin} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground/80 hover:text-white transition-all duration-300">Client Login</button>
-          <BrochureButton className="hidden xl:inline-flex items-center px-3 py-2 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:opacity-90 transition-opacity whitespace-nowrap" />
+          {!hideBrochure && (
+            <BrochureButton className="hidden xl:inline-flex items-center px-3 py-2 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:opacity-90 transition-opacity whitespace-nowrap" />
+          )}
         </nav>
 
         {/* Mobile hamburger */}
@@ -273,7 +279,9 @@ const Header = () => {
           >
             Client Login
           </button>
-          <BrochureButton className="font-body text-sm uppercase tracking-[0.15em] bg-primary text-primary-foreground px-5 py-3 text-center mt-2 hover:opacity-90 transition-opacity w-full" />
+          {!hideBrochure && (
+            <BrochureButton className="font-body text-sm uppercase tracking-[0.15em] bg-primary text-primary-foreground px-5 py-3 text-center mt-2 hover:opacity-90 transition-opacity w-full" />
+          )}
         </nav>
       </div>
       <div className="hidden md:block">

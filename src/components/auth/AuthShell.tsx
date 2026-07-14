@@ -19,7 +19,7 @@ interface AuthShellProps {
 const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShellProps) => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header />
+      <Header hideBrochure />
 
       <main className="relative flex-1 flex items-center justify-center overflow-hidden section-dark">
         {/* Cinematic backdrop */}
@@ -55,7 +55,7 @@ const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShell
         </div>
       </main>
 
-      <FooterSection />
+      <FooterSection hideBrochure />
     </div>
   );
 };
