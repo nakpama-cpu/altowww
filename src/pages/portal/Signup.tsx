@@ -23,8 +23,9 @@ export default function PortalSignup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    const email = form.email.trim();
     const { error } = await supabase.auth.signUp({
-      email: form.email.trim(),
+      email,
       password: form.password,
       options: {
         emailRedirectTo: `${window.location.origin}/portal`,
@@ -42,6 +43,8 @@ export default function PortalSignup() {
       toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
       return;
     }
+    // Fire-and-forget admin notification (also enqueued when profile trigger fires).
+    supabase.functions.invoke("notify-new-signup", { body: { email } }).catch(() => {});
     toast({ title: "Account created", description: "Check your email to confirm, then sign in." });
     navigate("/portal/login");
   };

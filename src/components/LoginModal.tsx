@@ -65,8 +65,9 @@ export default function LoginModal({ open, onClose }: Props) {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    const email = signupForm.email.trim();
     const { error } = await supabase.auth.signUp({
-      email: signupForm.email.trim(),
+      email,
       password: signupForm.password,
       options: {
         emailRedirectTo: `${window.location.origin}/portal`,
@@ -80,6 +81,9 @@ export default function LoginModal({ open, onClose }: Props) {
       },
     });
     setLoading(false);
+    if (!error) {
+      supabase.functions.invoke("notify-new-signup", { body: { email } }).catch(() => {});
+    }
     if (error) {
       toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
       return;
