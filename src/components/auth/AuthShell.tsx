@@ -63,6 +63,7 @@ const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShell
         <div className="h-px bg-secondary-foreground/10" aria-hidden="true" />
       </div>
       <FooterSection hideBrochure compact />
+    </div>
   );
 };
 
