@@ -41,6 +41,26 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.altowhisky.com/news/rare-macallan-cask-record-auction-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/scottish-whisky-tourism-record-visitors-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/new-speyside-distillery-opens-investors-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/scottish-distilleries-green-revolution-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.altowhisky.com/news/china-slashes-whisky-import-duty-2026</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -71,7 +91,102 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.altowhisky.com/news/beginners-guide-whisky-cask-investment-2026</loc>
+    <loc>https://www.altowhisky.com/news/uk-india-fta-scotch-whisky-july-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/karuizawa-casks-425-million-christies-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/annandale-low-carbon-whisky-world-first-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/old-pulteney-200-year-anniversary-50yo-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/isle-of-arran-james-hutton-anniversary-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/us-uk-scotch-tariff-resolution-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/global-spirits-premiumisation-scotch-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/bruichladdich-bcorp-recertification-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/islay-peat-climate-resilience-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/rare-whisky-cask-index-review-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/siderit-px-cask-rye-worlds-best-rye-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/diageo-half-year-scotch-resilience-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/port-ellen-reopens-islay-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/rosebank-lowlands-quiet-revival-2025</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/glenallachie-billy-walker-speyside-2025</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/kilchoman-farm-distillery-model-2025</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/campbeltown-revival-springbank-glengyle-2025</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/highland-park-orkney-cask-programme-2025</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/loch-lomond-group-the-open-sponsorship-2025</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/rare-whisky-101-index-market-health-2026</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
