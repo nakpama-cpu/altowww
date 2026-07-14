@@ -139,15 +139,6 @@ const Email = ({
           >
             <tbody>
               <tr>
-                <td style={sigLogoCell}>
-                  <Img
-                    src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
-                    alt="Alto Whisky"
-                    width="64"
-                    style={{ display: 'block', height: 'auto', margin: '0 auto' }}
-                  />
-                </td>
-                <td style={sigDividerCell} aria-hidden="true"></td>
                 <td style={sigInfoCell}>
                   <div style={sigName}>{senderName}</div>
                   <div style={sigRole}>{senderRole} · Alto Whisky</div>
@@ -175,6 +166,16 @@ const Email = ({
                     </Link>
                   </div>
                   <div style={sigAddress}>{senderAddress}</div>
+                </td>
+                <td style={sigDividerCell} aria-hidden="true"></td>
+                <td style={sigSpacerCell} aria-hidden="true"></td>
+                <td style={sigLogoCell}>
+                  <Img
+                    src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
+                    alt="Alto Whisky"
+                    width="64"
+                    style={{ display: 'block', height: 'auto', margin: '0 auto' }}
+                  />
                 </td>
               </tr>
             </tbody>
@@ -373,10 +374,15 @@ const sigDividerCell = {
   borderLeft: '1px solid hsl(24, 72%, 40%)',
   padding: 0,
 }
+const sigSpacerCell = {
+  width: '14px',
+  height: '110px',
+  padding: 0,
+}
 const sigInfoCell = {
   height: '110px',
   verticalAlign: 'middle' as const,
-  paddingLeft: '16px',
+  paddingRight: '12px',
   fontFamily: "'Inter', Arial, sans-serif",
 }
 const sigName = {
