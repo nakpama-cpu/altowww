@@ -1,6 +1,11 @@
-import { writeFileSync } from "fs";
+import { writeFileSync, readFileSync } from "fs";
 import { resolve } from "path";
-import { articles } from "../src/data/articles";
+
+const articlesSource = readFileSync(resolve("src/data/articles.ts"), "utf8");
+const articleSlugs = Array.from(
+  articlesSource.matchAll(/^\s{4}slug:\s*"([^"]+)"/gm),
+).map((m) => m[1]);
+
 
 const BASE_URL = "https://www.altowhisky.com";
 
