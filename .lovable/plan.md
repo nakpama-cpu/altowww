@@ -1,62 +1,35 @@
 ## Goal
 
-Rebuild the Google sitemap so it lists only pages that should be publicly discovered: the marketing site plus the four unauthenticated portal auth pages (login, signup, forgot-password, reset-password). Exclude every admin route and every authenticated portal route.
+Give every page in the sitemap a correct self-referencing canonical, so Google attributes each URL to itself instead of the homepage.
 
-## What stays in the sitemap
+## Current state
 
-Marketing (unchanged):
-- `/`
-- `/how-it-works`
-- `/why-whisky`
-- `/about-whisky`
-- `/how-whisky-is-made`
-- `/faqs`
-- `/contact`
-- `/news`
-- `/news/:slug` (auto-generated from `src/data/articles.ts`)
+- `react-helmet-async` is wired up (`HelmetProvider` in `src/main.tsx`).
+- `src/components/Seo.tsx` already emits `<link rel="canonical">`, `og:url`, and per-route og/twitter title/description.
+- Marketing pages already use `<Seo>`: Index, HowItWorks, WhyWhisky, AboutWhisky, HowWhiskyIsMade, FAQ, Contact, News, ArticlePage.
+- **Missing canonicals**: the four portal auth pages we just added to the sitemap — Login, Signup, ForgotPassword, ResetPassword.
+- **Duplicate canonical bug**: `index.html` still hardcodes `<link rel="canonical" href="https://www.altowhisky.com/" />`. Helmet's per-route `<link>` does not dedupe by `rel`, so on every non-home route two canonicals ship — one pointing to `/` and one to the real URL. Google may pick either; this silently undermines the whole per-page setup.
 
-Newly added (client-facing auth entry points):
-- `/portal/login` — priority 0.5, changefreq monthly
-- `/portal/signup` — priority 0.5, changefreq monthly
-- `/portal/forgot-password` — priority 0.3, changefreq yearly
-- `/portal/reset-password` — priority 0.3, changefreq yearly
+## Changes
 
-## What stays out of the sitemap (and why)
+### 1. `index.html`
 
-Authenticated portal routes — no value to Google, gated content:
-- `/portal` (Dashboard), `/portal/my-casks`, `/portal/available`, `/portal/news`, `/portal/checkout`, `/portal/callback`, `/portal/account`
-- `/portal/pending` (account-review holding page)
+Remove the sitewide `<link rel="canonical" href="https://www.altowhisky.com/" />`. The homepage will get its canonical from `<Seo path="/">` in `src/pages/Index.tsx` (already present). Every other route already sets its own via `<Seo>`. Leave the sitewide `og:*` tags in place — they're the fallback for non-JS social crawlers.
 
-Admin routes — private staff area:
-- `/admin`, `/admin/casks`, `/admin/holdings`, `/admin/distilleries`, `/admin/callbacks`, `/admin/orders`
+### 2. Add `<Seo>` to the four portal auth pages
 
-Also excluded:
-- `/portal/reset-password` — reconsidered: technically it only works with a token in the URL, but including the bare page is harmless and matches your instruction. Kept in the sitemap as requested.
-- The catch-all `*` / NotFound route — never indexable.
+Each gets a self-referencing canonical, a real title/description, and `og:url` pointing at the page itself. These pages are functional entry points, not marketing content, so descriptions are short and factual.
 
-## Technical changes
+- `src/pages/portal/Login.tsx` — `path="/portal/login"`, title `Client Sign In | Alto Whisky`, description `Sign in to your Alto Whisky client portal to view your cask portfolio and available stock.`
+- `src/pages/portal/Signup.tsx` — `path="/portal/signup"`, title `Create a Client Account | Alto Whisky`, description `Open an Alto Whisky client account to access cask investment opportunities and portfolio tools.`
+- `src/pages/portal/ForgotPassword.tsx` — `path="/portal/forgot-password"`, title `Reset Your Password | Alto Whisky`, description `Request a password reset link for your Alto Whisky client account.`
+- `src/pages/portal/ResetPassword.tsx` — `path="/portal/reset-password"`, title `Set a New Password | Alto Whisky`, description `Set a new password for your Alto Whisky client account.`
 
-1. **`scripts/generate-sitemap.ts`** — append four entries to the `entries` array:
-   ```ts
-   { path: "/portal/login", changefreq: "monthly", priority: "0.5" },
-   { path: "/portal/signup", changefreq: "monthly", priority: "0.5" },
-   { path: "/portal/forgot-password", changefreq: "yearly", priority: "0.3" },
-   { path: "/portal/reset-password", changefreq: "yearly", priority: "0.3" },
-   ```
-   The generator runs on `predev`/`prebuild` and rewrites `public/sitemap.xml` automatically.
+### Out of scope
 
-2. **`public/robots.txt`** — currently `Disallow: /portal/` blocks the four auth pages we're now advertising. Add explicit `Allow:` lines above the `Disallow` in every `User-agent` block so crawlers can reach the auth pages while the rest of `/portal/` stays blocked:
-   ```
-   Allow: /portal/login
-   Allow: /portal/signup
-   Allow: /portal/forgot-password
-   Allow: /portal/reset-password
-   Disallow: /portal/
-   ```
-   Keep existing `Disallow: /login` and `Disallow: /signin` (legacy paths). No admin rule needed because `/admin` isn't linked anywhere crawlable and isn't in the sitemap; optionally add `Disallow: /admin/` for defence in depth — recommended, included.
-
-3. No changes to route code, no changes to page components.
+- Authenticated portal pages (Dashboard, MyCasks, AvailableStock, Checkout, Callback, Account, PendingApproval, PortalNews) and admin pages — not in the sitemap, no canonical needed.
+- `NotFound` — 404s should not have a canonical.
 
 ## Verification
 
-After the edit, `bunx tsx scripts/generate-sitemap.ts` regenerates `public/sitemap.xml`; the file should contain 12 marketing/auth `<url>` entries plus one per article slug, and no `/admin` or authenticated `/portal/*` entries.
+After publish: `curl -s https://www.altowhisky.com/portal/login | grep -i canonical` should show a single canonical to `/portal/login`, and the homepage should show only one canonical to `/`. Then re-inspect the four auth URLs in Search Console; canonical should read as `User-declared canonical` matching the URL itself.
