@@ -50,20 +50,25 @@ interface PhoneCountryCodeSelectProps {
 
 function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps) {
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer"
-    >
-      <option value="" disabled>
-        Code
-      </option>
-      {countries.map((c) => (
-        <option key={c.code} value={c.dialingCode}>
-          {c.name} {c.dialingCode}
+    <div className="relative">
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer text-transparent [&>option]:text-foreground"
+      >
+        <option value="" disabled>
+          Code
         </option>
-      ))}
-    </select>
+        {countries.map((c) => (
+          <option key={c.code} value={c.dialingCode}>
+            {c.name} {c.dialingCode}
+          </option>
+        ))}
+      </select>
+      <span className="pointer-events-none absolute inset-0 flex items-center font-body text-sm text-foreground">
+        {value || <span className="text-muted-foreground">Code</span>}
+      </span>
+    </div>
   );
 }
 
@@ -114,7 +119,7 @@ export function PhoneField({
       <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">
         Phone
       </label>
-      <div className="grid grid-cols-[minmax(140px,45%)_1fr] gap-3 items-end">
+      <div className="grid grid-cols-[90px_1fr] gap-3 items-end">
         <PhoneCountryCodeSelect value={countryCode} onChange={onCountryCodeChange} />
         <input
           ref={inputRef}
