@@ -73,8 +73,8 @@ const ArticlePage = () => {
       />
       <Header />
 
-      {/* Hero Image — matches homepage sizing */}
-      <section className="relative w-full overflow-hidden h-auto min-h-[380px] md:h-[380px] md:min-h-0">
+      {/* Fixed hero — matches homepage curtain effect */}
+      <section className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-[380px]">
         <img
           src={article.image}
           alt={article.title}
@@ -88,7 +88,7 @@ const ArticlePage = () => {
           }}
         />
         <div className="absolute inset-0 bg-secondary/60" />
-        <div className="relative z-10 flex flex-col items-center justify-end h-full text-center px-6 pt-20 pb-16 md:pt-0">
+        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
           <div className="flex items-center gap-3 mb-4">
             <span className="font-body text-[10px] uppercase tracking-[0.2em] text-primary">
               {article.category}
@@ -103,77 +103,83 @@ const ArticlePage = () => {
           </h1>
         </div>
       </section>
+      {/* Spacer to push content below the fixed hero */}
+      <div className="h-[380px]" />
 
 
-      {/* Article Content */}
-      <section className="section-light py-16 md:py-24">
-        <div className="max-w-2xl mx-auto px-6 md:px-12">
-          <p className="font-body text-lg text-foreground leading-relaxed mb-8 first-letter:text-5xl first-letter:font-display first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-primary">
-            {article.content[0]}
-          </p>
-          {article.content.slice(1).map((paragraph, i) => (
-            <p
-              key={i}
-              className="font-body text-base text-muted-foreground leading-relaxed mb-6"
-            >
-              {paragraph}
+      <div className="relative z-10">
+        {/* Article Content */}
+        <section className="section-light py-16 md:py-24">
+
+          <div className="max-w-2xl mx-auto px-6 md:px-12">
+            <p className="font-body text-lg text-foreground leading-relaxed mb-8 first-letter:text-5xl first-letter:font-display first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-primary">
+              {article.content[0]}
             </p>
-          ))}
-
-        </div>
-      </section>
-
-      {/* Navigation */}
-      <section className="section-light border-t border-border">
-        <div className="max-w-5xl mx-auto px-6 md:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border">
-            {prevArticle ? (
-              <Link
-                to={`/news/${prevArticle.slug}`}
-                state={carryState}
-                className="group py-10 md:pr-12"
+            {article.content.slice(1).map((paragraph, i) => (
+              <p
+                key={i}
+                className="font-body text-base text-muted-foreground leading-relaxed mb-6"
               >
-                <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
-                  ← Previous Article
-                </p>
-                <p className="font-display text-lg font-light group-hover:text-primary transition-colors duration-300">
-                  {prevArticle.title}
-                </p>
-              </Link>
-            ) : (
-              <div className="py-10 md:pr-12" />
-            )}
-            {nextArticle ? (
-              <Link
-                to={`/news/${nextArticle.slug}`}
-                state={carryState}
-                className="group py-10 md:pl-12 text-right"
-              >
-                <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
-                  Next Article →
-                </p>
-                <p className="font-display text-lg font-light group-hover:text-primary transition-colors duration-300">
-                  {nextArticle.title}
-                </p>
-              </Link>
-            ) : (
-              <div className="py-10 md:pl-12" />
-            )}
+                {paragraph}
+              </p>
+            ))}
+
           </div>
+        </section>
+
+        {/* Navigation */}
+        <section className="section-light border-t border-border">
+          <div className="max-w-5xl mx-auto px-6 md:px-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border">
+              {prevArticle ? (
+                <Link
+                  to={`/news/${prevArticle.slug}`}
+                  state={carryState}
+                  className="group py-10 md:pr-12"
+                >
+                  <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
+                    ← Previous Article
+                  </p>
+                  <p className="font-display text-lg font-light group-hover:text-primary transition-colors duration-300">
+                    {prevArticle.title}
+                  </p>
+                </Link>
+              ) : (
+                <div className="py-10 md:pr-12" />
+              )}
+              {nextArticle ? (
+                <Link
+                  to={`/news/${nextArticle.slug}`}
+                  state={carryState}
+                  className="group py-10 md:pl-12 text-right"
+                >
+                  <p className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
+                    Next Article →
+                  </p>
+                  <p className="font-display text-lg font-light group-hover:text-primary transition-colors duration-300">
+                    {nextArticle.title}
+                  </p>
+                </Link>
+              ) : (
+                <div className="py-10 md:pl-12" />
+              )}
+            </div>
+          </div>
+        </section>
+
+        <div className="section-light text-center pb-12">
+          <Link
+            to={newsBackTo}
+            className="font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors"
+          >
+            ← Back to All Articles
+          </Link>
+
         </div>
-      </section>
 
-      <div className="section-light text-center pb-12">
-        <Link
-          to={newsBackTo}
-          className="font-body text-xs uppercase tracking-[0.2em] text-primary border-b border-primary/30 pb-1 hover:border-primary transition-colors"
-        >
-          ← Back to All Articles
-        </Link>
-
+        <FooterSection />
       </div>
 
-      <FooterSection />
     </div>
   );
 };
