@@ -40,7 +40,7 @@ export default function AdminClients() {
         <table className="w-full text-sm">
           <thead className="bg-muted">
             <tr className="text-left font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              <th className="p-3">Name</th><th className="p-3">Email</th><th className="p-3">Phone</th>
+              <th className="p-3">Name</th><th className="p-3">Email</th><th className="p-3">Country</th><th className="p-3">Phone</th>
               <th className="p-3">Status</th><th className="p-3">Discount %</th><th className="p-3">Actions</th>
             </tr>
           </thead>
@@ -49,7 +49,8 @@ export default function AdminClients() {
               <tr key={c.id} className="border-t border-border">
                 <td className="p-3">{c.first_name} {c.last_name}</td>
                 <td className="p-3">{c.email}</td>
-                <td className="p-3">{c.phone}</td>
+                <td className="p-3">{c.country ?? "—"}</td>
+                <td className="p-3">{c.phone_country_code ? `${c.phone_country_code} ${c.phone}` : c.phone}</td>
                 <td className="p-3">
                   <select value={c.status} onChange={(e) => update(c.id, { status: e.target.value as any })}
                     className="bg-transparent border border-border px-2 py-1 text-xs">
