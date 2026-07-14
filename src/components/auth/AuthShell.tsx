@@ -21,7 +21,7 @@ const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShell
     <div className="min-h-dvh flex flex-col bg-background">
       <Header hideBrochure />
 
-      <main className="relative flex-1 flex items-center justify-center overflow-hidden section-dark">
+      <main className="relative min-h-dvh flex items-center justify-center overflow-hidden section-dark">
         {/* Cinematic backdrop */}
         <div
           className="absolute inset-0 bg-cover bg-center opacity-25"
