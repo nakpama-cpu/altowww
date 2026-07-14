@@ -223,7 +223,7 @@ export default function LoginModal({ open, onClose }: Props) {
           <>
             <h2 className="display-heading text-xl mb-0.5">Create Account</h2>
             <p className="font-body text-[11px] text-muted-foreground mb-2">
-              Your account will be reviewed by our team before you can access client portal features.
+              Your account will be reviewed before portfolio access.
             </p>
 
             <form onSubmit={handleSignup} className="space-y-2">
