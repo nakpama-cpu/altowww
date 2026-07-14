@@ -75,11 +75,11 @@ export default function LoginModal({ open, onClose }: Props) {
 
   const modal = (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 py-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-3 py-3 sm:px-4 sm:py-6 animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md bg-card border border-border p-6 md:p-7 relative max-h-[95vh] overflow-y-auto shadow-2xl"
+        className="w-full max-w-md bg-card border border-border p-5 sm:p-6 md:p-7 relative max-h-[calc(100vh-1.5rem)] sm:max-h-[95vh] overflow-y-auto shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
