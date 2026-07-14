@@ -5,9 +5,10 @@ interface FooterSectionProps {
   hideCta?: boolean;
   lightCta?: boolean;
   hideBrochure?: boolean;
+  compact?: boolean;
 }
 
-const FooterSection = ({ hideCta = false, lightCta = false, hideBrochure = false }: FooterSectionProps) => {
+const FooterSection = ({ hideCta = false, lightCta = false, hideBrochure = false, compact = false }: FooterSectionProps) => {
   return (
     <footer className="section-dark">
       {/* Final CTA — single consolidated one for entire page */}
