@@ -17,7 +17,7 @@ interface CountrySelectProps {
 export function CountrySelect({ value, onChange, required = true }: CountrySelectProps) {
   return (
     <div>
-      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1.5">
+      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">
         Country
       </label>
       <select
@@ -145,7 +145,7 @@ function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
+        className="w-full flex items-center justify-between bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
       >
         <span className={value ? "" : "text-muted-foreground"}>{value || "Code"}</span>
         <svg className="w-3 h-3 text-muted-foreground" viewBox="0 0 20 20" fill="currentColor">
@@ -158,7 +158,7 @@ function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps
           tabIndex={-1}
           role="listbox"
           onKeyDown={onKeyDown}
-          className="absolute z-50 left-0 right-0 mt-1 max-h-56 overflow-auto bg-card border border-border shadow-lg min-w-[240px] focus:outline-none"
+          className="absolute z-50 left-0 right-0 mt-1 max-h-48 overflow-auto bg-card border border-border shadow-lg min-w-[240px] focus:outline-none"
         >
           {countries.map((c, i) => (
             <li key={c.code}>
@@ -228,7 +228,7 @@ export function PhoneField({
 
   return (
     <div>
-      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1.5">
+      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">
         Phone
       </label>
       <div className="grid grid-cols-[110px_1fr] gap-3 items-end">
@@ -243,7 +243,7 @@ export function PhoneField({
           onBlur={() => setTouched(true)}
           inputMode="tel"
           placeholder="Phone number"
-          className={`w-full bg-transparent border-b py-1.5 font-body text-sm focus:outline-none ${
+          className={`w-full bg-transparent border-b py-1 font-body text-sm focus:outline-none ${
             showError ? "border-destructive focus:border-destructive" : "border-border focus:border-primary"
           }`}
         />

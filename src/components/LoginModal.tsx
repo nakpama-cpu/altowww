@@ -105,11 +105,11 @@ export default function LoginModal({ open, onClose }: Props) {
 
   const modal = (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-3 py-3 sm:px-4 sm:py-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm px-2 py-2 sm:px-4 sm:py-6 animate-in fade-in duration-200"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md bg-card border border-border p-4 sm:p-6 relative max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-3rem)] overflow-y-auto shadow-2xl"
+        className="w-full max-w-md bg-card border border-border p-4 sm:p-6 pb-8 sm:pb-10 relative max-h-[calc(100vh-0.5rem)] sm:max-h-[calc(100vh-2rem)] overflow-visible shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -217,42 +217,42 @@ export default function LoginModal({ open, onClose }: Props) {
 
         {mode === "signup" && (
           <>
-            <h2 className="display-heading text-xl mb-1">Create Account</h2>
-            <p className="font-body text-[11px] text-muted-foreground mb-3">
+            <h2 className="display-heading text-xl mb-0.5">Create Account</h2>
+            <p className="font-body text-[11px] text-muted-foreground mb-2">
               Your account will be reviewed before portfolio access.
             </p>
 
-            <form onSubmit={handleSignup} className="space-y-2.5">
+            <form onSubmit={handleSignup} className="space-y-2">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">First Name</label>
+                  <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">First Name</label>
                   <input
                     required
                     maxLength={100}
                     value={signupForm.firstName}
                     onChange={(e) => setSignupForm({ ...signupForm, firstName: e.target.value })}
-                    className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
+                    className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
                   />
                 </div>
                 <div>
-                  <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Last Name</label>
+                  <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Last Name</label>
                   <input
                     required
                     maxLength={100}
                     value={signupForm.lastName}
                     onChange={(e) => setSignupForm({ ...signupForm, lastName: e.target.value })}
-                    className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
+                    className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
                   />
                 </div>
               </div>
               <div>
-                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Email</label>
+                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Email</label>
                 <input
                   type="email"
                   required
                   value={signupForm.email}
                   onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
-                  className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
+                  className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
                 />
               </div>
               <CountrySelect
@@ -268,26 +268,26 @@ export default function LoginModal({ open, onClose }: Props) {
                 onPhoneChange={(phone) => setSignupForm({ ...signupForm, phone })}
               />
               <div>
-                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Password</label>
+                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Password</label>
                 <input
                   type="password"
                   required
                   minLength={8}
                   value={signupForm.password}
                   onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
-                  className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
+                  className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50 mt-1"
+                className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-2 hover:opacity-90 transition-opacity disabled:opacity-50 mt-1"
               >
                 {loading ? "Creating…" : "Create Account"}
               </button>
             </form>
 
-            <p className="mt-3 text-center font-body text-[11px] text-muted-foreground">
+            <p className="mt-2 text-center font-body text-[11px] text-muted-foreground">
               Already have an account?{" "}
               <button type="button" onClick={() => setMode("signin")} className="text-primary">
                 Sign in
