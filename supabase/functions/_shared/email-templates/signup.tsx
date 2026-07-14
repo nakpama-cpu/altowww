@@ -50,7 +50,7 @@ export const SignupEmail = ({
         </Button>
         <Text style={text}>
           Once confirmed, our team will review your account before granting
-          access to the portfolio portal. You'll receive a follow-up email
+          access to the client portal. You'll receive a follow-up email
           from us as soon as your account is approved.
         </Text>
         <Text style={footer}>
