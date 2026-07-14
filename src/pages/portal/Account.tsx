@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
 
 export default function Account() {
   const { profile, refreshProfile } = useAuth();
@@ -10,9 +11,22 @@ export default function Account() {
     first_name: profile?.first_name ?? "",
     last_name: profile?.last_name ?? "",
     phone: profile?.phone ?? "",
+    phone_country_code: profile?.phone_country_code ?? "",
+    country: profile?.country ?? "",
   });
   const [password, setPassword] = useState("");
   const [saving, setSaving] = useState(false);
+
+  const changed = useMemo(() => {
+    if (!profile) return false;
+    return (
+      form.first_name !== (profile.first_name ?? "") ||
+      form.last_name !== (profile.last_name ?? "") ||
+      form.phone !== (profile.phone ?? "") ||
+      form.phone_country_code !== (profile.phone_country_code ?? "") ||
+      form.country !== (profile.country ?? "")
+    );
+  }, [form, profile]);
 
   const saveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,12 +58,23 @@ export default function Account() {
       <form onSubmit={saveProfile} className="bg-card border border-border p-8 mb-6 space-y-5">
         <h2 className="display-heading text-xl mb-4">Profile</h2>
         <div className="grid grid-cols-2 gap-4">
-          <Field label="First Name" value={form.first_name} onChange={(v) => setForm({ ...form, first_name: v })} />
-          <Field label="Last Name" value={form.last_name} onChange={(v) => setForm({ ...form, last_name: v })} />
+          <Field label="First Name" value={form.first_name} onChange={(v: string) => setForm({ ...form, first_name: v )} />
+          <Field label="Last Name" value={form.last_name} onChange={(v: string) => setForm({ ...form, last_name: v })} />
         </div>
         <Field label="Email" value={profile?.email ?? ""} onChange={() => {}} disabled />
-        <Field label="Phone" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
-        <button type="submit" disabled={saving}
+        <CountrySelect
+          value={form.country}
+          onChange={(code, dialingCode) =>
+            setForm((f) => ({ ...f, country: code, phone_country_code: f.phone_country_code || dialingCode }))
+          }
+        />
+        <PhoneField
+          countryCode={form.phone_country_code}
+          onCountryCodeChange={(phone_country_code) => setForm({ ...form, phone_country_code })}
+          phone={form.phone}
+          onPhoneChange={(phone) => setForm({ ...form, phone })}
+        />
+        <button type="submit" disabled={saving || !changed}
           className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3 hover:opacity-90 disabled:opacity-50">
           {saving ? "Saving…" : "Save"}
         </button>
