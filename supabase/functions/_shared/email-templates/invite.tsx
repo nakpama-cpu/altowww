@@ -35,7 +35,7 @@ export const InviteEmail = ({ siteUrl, confirmationUrl }: InviteEmailProps) => (
         <Heading style={h1}>You've been invited</Heading>
         <Text style={text}>
           You've been invited to join the{' '}
-          <Link href={siteUrl} style={link}>Alto Whisky</Link> portfolio
+          <Link href={siteUrl} style={link}>Alto Whisky</Link> client
           portal. Accept your invitation below to set up your account.
         </Text>
         <Button style={button} href={confirmationUrl}>
