@@ -114,7 +114,7 @@ export function PhoneField({
       <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">
         Phone
       </label>
-      <div className="grid grid-cols-[110px_1fr] gap-3 items-end">
+      <div className="grid grid-cols-[minmax(140px,45%)_1fr] gap-3 items-end">
         <PhoneCountryCodeSelect value={countryCode} onChange={onCountryCodeChange} />
         <input
           ref={inputRef}
