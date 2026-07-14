@@ -9,6 +9,8 @@ type Profile = {
   last_name: string;
   email: string;
   phone: string;
+  country: string | null;
+  phone_country_code: string | null;
   status: "pending" | "approved" | "suspended";
   client_discount_pct: number;
 };
