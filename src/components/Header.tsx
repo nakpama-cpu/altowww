@@ -25,7 +25,11 @@ const mainLinks = [
   { to: "/contact", label: "Contact" },
 ];
 
-const Header = () => {
+interface HeaderProps {
+  showCTAs?: boolean;
+}
+
+const Header = ({ showCTAs = true }: HeaderProps) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [newsOpen, setNewsOpen] = useState(false);
