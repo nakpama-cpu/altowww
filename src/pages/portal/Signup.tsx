@@ -10,6 +10,15 @@ export default function PortalSignup() {
   const { toast } = useToast();
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const detected = useDetectedCountry();
+
+  useEffect(() => {
+    if (!detected) return;
+    setForm((f) => {
+      if (f.country || f.phoneCountryCode) return f;
+      return { ...f, country: detected.code, phoneCountryCode: detected.dialingCode };
+    });
+  }, [detected]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
