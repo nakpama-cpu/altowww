@@ -58,7 +58,7 @@ export default function Account() {
       <form onSubmit={saveProfile} className="bg-card border border-border p-8 mb-6 space-y-5">
         <h2 className="display-heading text-xl mb-4">Profile</h2>
         <div className="grid grid-cols-2 gap-4">
-          <Field label="First Name" value={form.first_name} onChange={(v: string) => setForm({ ...form, first_name: v )} />
+          <Field label="First Name" value={form.first_name} onChange={(v: string) => setForm({ ...form, first_name: v })} />
           <Field label="Last Name" value={form.last_name} onChange={(v: string) => setForm({ ...form, last_name: v })} />
         </div>
         <Field label="Email" value={profile?.email ?? ""} onChange={() => {}} disabled />
