@@ -1,5 +1,6 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
+import { articles } from "../src/data/articles";
 
 const BASE_URL = "https://www.altowhisky.com";
 
@@ -19,14 +20,13 @@ const entries: SitemapEntry[] = [
   { path: "/faqs", changefreq: "monthly", priority: "0.7" },
   { path: "/contact", changefreq: "monthly", priority: "0.7" },
   { path: "/news", changefreq: "weekly", priority: "0.7" },
-  { path: "/news/china-slashes-whisky-import-duty-2026", changefreq: "monthly", priority: "0.6" },
-  { path: "/news/whisky-casks-outperform-traditional-assets", changefreq: "monthly", priority: "0.6" },
-  { path: "/news/tax-free-investment-whisky-cask-wasting-asset", changefreq: "monthly", priority: "0.6" },
-  { path: "/news/scotlands-most-sought-after-distilleries", changefreq: "monthly", priority: "0.6" },
-  { path: "/news/how-whisky-casks-are-stored-bonded-warehouses", changefreq: "monthly", priority: "0.6" },
-  { path: "/news/five-whisky-regions-scotland-investor-guide", changefreq: "monthly", priority: "0.6" },
-  { path: "/news/beginners-guide-whisky-cask-investment-2026", changefreq: "monthly", priority: "0.6" },
+  ...articles.map((a) => ({
+    path: `/news/${a.slug}`,
+    changefreq: "monthly" as const,
+    priority: "0.6",
+  })),
 ];
+
 
 function generateSitemap(entries: SitemapEntry[]) {
   const urls = entries.map((e) =>
