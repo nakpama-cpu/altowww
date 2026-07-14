@@ -175,7 +175,7 @@ const NewsSection = () => {
                       {article.date}
                     </span>
                   </div>
-                  <h3 className="font-display text-base md:text-lg font-light leading-snug mb-2 md:mb-3 group-hover:text-primary transition-colors duration-300">
+                  <h3 className="font-display text-lg md:text-2xl font-light leading-snug mb-2 md:mb-3 group-hover:text-primary transition-colors duration-300">
                     {article.title}
                   </h3>
                   <p className="font-body text-sm text-muted-foreground leading-relaxed mb-3 md:mb-4">
@@ -198,7 +198,7 @@ const NewsSection = () => {
         </div>
 
         {/* Mobile nav */}
-        <div className="mt-2 flex flex-col items-center gap-2 md:hidden">
+        <div className="mt-0 flex flex-col items-center gap-1 md:hidden">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setStartIndex((i) => Math.max(0, i - 1))}

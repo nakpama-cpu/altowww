@@ -124,7 +124,7 @@ export default function PortalNews() {
                 {article.date}
               </span>
             </div>
-            <h2 className="font-display text-lg font-light leading-snug mb-2 group-hover:text-primary transition-colors duration-300">
+            <h2 className="font-display text-xl md:text-2xl font-light leading-snug mb-2 group-hover:text-primary transition-colors duration-300">
               {article.title}
             </h2>
             <p className="font-body text-sm text-muted-foreground leading-relaxed">
