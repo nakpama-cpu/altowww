@@ -43,7 +43,6 @@ interface PhoneCountryCodeSelectProps {
 
 function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps) {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -54,14 +53,6 @@ function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
   }, [open]);
-
-  const filtered = query
-    ? countries.filter(
-        (c) =>
-          c.name.toLowerCase().includes(query.toLowerCase()) ||
-          c.dialingCode.includes(query),
-      )
-    : countries;
 
   return (
     <div ref={ref} className="relative">
@@ -76,37 +67,23 @@ function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps
         </svg>
       </button>
       {open && (
-        <div className="absolute z-50 left-0 right-0 mt-1 max-h-56 overflow-auto bg-card border border-border shadow-lg">
-          <input
-            type="text"
-            autoFocus
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search"
-            className="w-full px-3 py-2 bg-background border-b border-border font-body text-xs focus:outline-none"
-          />
-          <ul>
-            {filtered.map((c) => (
-              <li key={c.code}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onChange(c.dialingCode);
-                    setOpen(false);
-                    setQuery("");
-                  }}
-                  className="w-full flex justify-between gap-3 px-3 py-2 text-left font-body text-xs hover:bg-muted"
-                >
-                  <span className="truncate">{c.name}</span>
-                  <span className="text-muted-foreground shrink-0">{c.dialingCode}</span>
-                </button>
-              </li>
-            ))}
-            {filtered.length === 0 && (
-              <li className="px-3 py-2 font-body text-xs text-muted-foreground">No results</li>
-            )}
-          </ul>
-        </div>
+        <ul className="absolute z-50 left-0 right-0 mt-1 max-h-56 overflow-auto bg-card border border-border shadow-lg min-w-[240px]">
+          {countries.map((c) => (
+            <li key={c.code}>
+              <button
+                type="button"
+                onClick={() => {
+                  onChange(c.dialingCode);
+                  setOpen(false);
+                }}
+                className="w-full flex justify-between gap-3 px-3 py-2 text-left font-body text-xs hover:bg-muted"
+              >
+                <span className="truncate">{c.name}</span>
+                <span className="text-muted-foreground shrink-0">{c.dialingCode}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
