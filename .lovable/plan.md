@@ -1,30 +1,62 @@
 ## Goal
-Rebrand the portal signup page (`/portal/signup`) — the destination of the "Access the Client Portal" link in the launch email — so it matches the cinematic marketing theme and includes the main-site navigation. Apply the same treatment to the sibling auth pages so the flow feels consistent.
 
-## Scope
-Redesign these four pages using the marketing design system (cream/dark blue sections, copper accents, Cormorant Garamond headings, Inter body, generous vertical rhythm):
-- `src/pages/portal/Signup.tsx` (primary — linked from the email)
-- `src/pages/portal/Login.tsx`
-- `src/pages/portal/ForgotPassword.tsx`
-- `src/pages/portal/ResetPassword.tsx`
+Rebuild the Google sitemap so it lists only pages that should be publicly discovered: the marketing site plus the four unauthenticated portal auth pages (login, signup, forgot-password, reset-password). Exclude every admin route and every authenticated portal route.
 
-No functional/auth changes — only presentation.
+## What stays in the sitemap
 
-## Design approach
-- **Top navigation:** Reuse the marketing `Header` component so users get the full nav (How It Works, Why Whisky, About Whisky, News, Contact, Sign In, Request Brochure) on these pages.
-- **Backdrop:** Dark-blue section background with a subtle whisky/cask hero image (reuse an existing marketing image asset) at low opacity for cinematic depth, matching the alternating cream/dark-blue theme.
-- **Card:** Cream-surfaced form card, centered, with a thin copper divider under the heading. Copper accent on the primary CTA and inline links.
-- **Typography:** Cormorant Garamond display heading ("Create your Alto Whisky account" / "Sign in"), Inter labels in uppercase tracked style (already used) — kept but re-tokenised through the marketing palette.
-- **Footer:** Add the standard marketing footer (with FCA/compliance disclaimers) below the card so the page reads as part of the site, not a detached form.
-- **Responsiveness:** Header clearance margin at top (matches marketing hero rule); form card stays centered on mobile with reduced padding.
+Marketing (unchanged):
+- `/`
+- `/how-it-works`
+- `/why-whisky`
+- `/about-whisky`
+- `/how-whisky-is-made`
+- `/faqs`
+- `/contact`
+- `/news`
+- `/news/:slug` (auto-generated from `src/data/articles.ts`)
 
-## Out of scope
-- No changes to auth logic, form fields, validation, redirects, or Supabase calls.
-- No changes to the authenticated portal shell (`PortalLayout`, Dashboard, etc.) — those already have their own portal chrome.
-- No changes to the email template.
+Newly added (client-facing auth entry points):
+- `/portal/login` — priority 0.5, changefreq monthly
+- `/portal/signup` — priority 0.5, changefreq monthly
+- `/portal/forgot-password` — priority 0.3, changefreq yearly
+- `/portal/reset-password` — priority 0.3, changefreq yearly
 
-## Technical notes
-- Import and render `<Header />` (from `src/components/Header.tsx`) and the marketing `Footer` at the top/bottom of each auth page, wrapping the existing form markup in a themed section.
-- Use existing semantic tokens (`bg-background`, `bg-card`, `text-primary`, copper accent classes already defined in `index.css`) — no hardcoded colors.
-- Reuse an existing hero/backdrop image from `src/assets/` rather than generating a new one.
-- Keep the `LoginModal` behavior on the header intact; a user landing on `/portal/signup` who clicks "Sign In" in the header will still get the modal as designed.
+## What stays out of the sitemap (and why)
+
+Authenticated portal routes — no value to Google, gated content:
+- `/portal` (Dashboard), `/portal/my-casks`, `/portal/available`, `/portal/news`, `/portal/checkout`, `/portal/callback`, `/portal/account`
+- `/portal/pending` (account-review holding page)
+
+Admin routes — private staff area:
+- `/admin`, `/admin/casks`, `/admin/holdings`, `/admin/distilleries`, `/admin/callbacks`, `/admin/orders`
+
+Also excluded:
+- `/portal/reset-password` — reconsidered: technically it only works with a token in the URL, but including the bare page is harmless and matches your instruction. Kept in the sitemap as requested.
+- The catch-all `*` / NotFound route — never indexable.
+
+## Technical changes
+
+1. **`scripts/generate-sitemap.ts`** — append four entries to the `entries` array:
+   ```ts
+   { path: "/portal/login", changefreq: "monthly", priority: "0.5" },
+   { path: "/portal/signup", changefreq: "monthly", priority: "0.5" },
+   { path: "/portal/forgot-password", changefreq: "yearly", priority: "0.3" },
+   { path: "/portal/reset-password", changefreq: "yearly", priority: "0.3" },
+   ```
+   The generator runs on `predev`/`prebuild` and rewrites `public/sitemap.xml` automatically.
+
+2. **`public/robots.txt`** — currently `Disallow: /portal/` blocks the four auth pages we're now advertising. Add explicit `Allow:` lines above the `Disallow` in every `User-agent` block so crawlers can reach the auth pages while the rest of `/portal/` stays blocked:
+   ```
+   Allow: /portal/login
+   Allow: /portal/signup
+   Allow: /portal/forgot-password
+   Allow: /portal/reset-password
+   Disallow: /portal/
+   ```
+   Keep existing `Disallow: /login` and `Disallow: /signin` (legacy paths). No admin rule needed because `/admin` isn't linked anywhere crawlable and isn't in the sitemap; optionally add `Disallow: /admin/` for defence in depth — recommended, included.
+
+3. No changes to route code, no changes to page components.
+
+## Verification
+
+After the edit, `bunx tsx scripts/generate-sitemap.ts` regenerates `public/sitemap.xml`; the file should contain 12 marketing/auth `<url>` entries plus one per article slug, and no `/admin` or authenticated `/portal/*` entries.
