@@ -16,6 +16,15 @@ export default function LoginModal({ open, onClose }: Props) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [signupForm, setSignupForm] = useState({ firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
+  const detected = useDetectedCountry();
+
+  useEffect(() => {
+    if (!detected) return;
+    setSignupForm((f) => {
+      if (f.country || f.phoneCountryCode) return f;
+      return { ...f, country: detected.code, phoneCountryCode: detected.dialingCode };
+    });
+  }, [detected]);
 
   useEffect(() => {
     if (!open) return;
