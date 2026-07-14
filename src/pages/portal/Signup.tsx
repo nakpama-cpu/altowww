@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
-import { validateE164 } from "@/lib/phone";
 
 export default function PortalSignup() {
   const navigate = useNavigate();
@@ -13,11 +12,6 @@ export default function PortalSignup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const phoneCheck = validateE164(form.phoneCountryCode, form.phone);
-    if (phoneCheck.valid === false) {
-      toast({ title: "Invalid phone number", description: phoneCheck.error, variant: "destructive" });
-      return;
-    }
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email: form.email.trim(),
@@ -27,7 +21,7 @@ export default function PortalSignup() {
         data: {
           first_name: form.firstName.trim(),
           last_name: form.lastName.trim(),
-          phone: phoneCheck.e164,
+          phone: form.phone.trim(),
           phone_country_code: form.phoneCountryCode,
           country: form.country,
         },

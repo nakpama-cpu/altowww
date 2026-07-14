@@ -3,17 +3,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
-import { splitStoredPhone, validateE164 } from "@/lib/phone";
 
 export default function Account() {
   const { profile, refreshProfile } = useAuth();
   const { toast } = useToast();
-  const initialPhone = splitStoredPhone(profile?.phone, profile?.phone_country_code);
   const [form, setForm] = useState({
     first_name: profile?.first_name ?? "",
     last_name: profile?.last_name ?? "",
-    phone: initialPhone.nationalNumber,
-    phone_country_code: initialPhone.dialingCode,
+    phone: profile?.phone ?? "",
+    phone_country_code: profile?.phone_country_code ?? "",
     country: profile?.country ?? "",
   });
   const [password, setPassword] = useState("");
@@ -21,12 +19,11 @@ export default function Account() {
 
   const changed = useMemo(() => {
     if (!profile) return false;
-    const current = splitStoredPhone(profile.phone, profile.phone_country_code);
     return (
       form.first_name !== (profile.first_name ?? "") ||
       form.last_name !== (profile.last_name ?? "") ||
-      form.phone !== current.nationalNumber ||
-      form.phone_country_code !== current.dialingCode ||
+      form.phone !== (profile.phone ?? "") ||
+      form.phone_country_code !== (profile.phone_country_code ?? "") ||
       form.country !== (profile.country ?? "")
     );
   }, [form, profile]);
@@ -34,13 +31,8 @@ export default function Account() {
   const saveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile) return;
-    const phoneCheck = validateE164(form.phone_country_code, form.phone);
-    if (phoneCheck.valid === false) {
-      toast({ title: "Invalid phone number", description: phoneCheck.error, variant: "destructive" });
-      return;
-    }
     setSaving(true);
-    const { error } = await supabase.from("profiles").update({ ...form, phone: phoneCheck.e164 }).eq("id", profile.id);
+    const { error } = await supabase.from("profiles").update(form).eq("id", profile.id);
     setSaving(false);
     if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
     else {

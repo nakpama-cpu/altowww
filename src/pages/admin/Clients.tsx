@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { formatPhoneDisplay } from "@/lib/phone";
 
 type Client = {
   id: string;
@@ -51,7 +50,7 @@ export default function AdminClients() {
                 <td className="p-3">{c.first_name} {c.last_name}</td>
                 <td className="p-3">{c.email}</td>
                 <td className="p-3">{c.country ?? "—"}</td>
-                <td className="p-3">{formatPhoneDisplay(c.phone, c.phone_country_code)}</td>
+                <td className="p-3">{c.phone_country_code ? `${c.phone_country_code} ${c.phone}` : c.phone}</td>
                 <td className="p-3">
                   <select value={c.status} onChange={(e) => update(c.id, { status: e.target.value as any })}
                     className="bg-transparent border border-border px-2 py-1 text-xs">
