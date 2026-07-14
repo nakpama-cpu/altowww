@@ -51,18 +51,6 @@ const News = () => {
     }
   }, [page, searchParams, setSearchParams]);
 
-  const totalPages = Math.max(1, Math.ceil(
-    articles.filter((a) => {
-      if (category !== "all" && a.category !== category) return false;
-      const q = query.trim().toLowerCase();
-      if (!q) return true;
-      return `${a.title} ${a.excerpt} ${a.category} ${a.date}`.toLowerCase().includes(q);
-    }).length / pageSize
-  ));
-
-  useEffect(() => {
-    if (page > totalPages) setPage(1);
-  }, [page, totalPages]);
 
 
 
