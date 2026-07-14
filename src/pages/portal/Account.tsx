@@ -32,8 +32,13 @@ export default function Account() {
   const saveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile) return;
+    const phoneCheck = validateE164(form.phone_country_code, form.phone);
+    if (phoneCheck.valid === false) {
+      toast({ title: "Invalid phone number", description: phoneCheck.error, variant: "destructive" });
+      return;
+    }
     setSaving(true);
-    const { error } = await supabase.from("profiles").update(form).eq("id", profile.id);
+    const { error } = await supabase.from("profiles").update({ ...form, phone: phoneCheck.e164 }).eq("id", profile.id);
     setSaving(false);
     if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
     else {
