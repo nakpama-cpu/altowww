@@ -1,30 +1,55 @@
 User-agent: Googlebot
 Allow: /
+Allow: /portal/login
+Allow: /portal/signup
+Allow: /portal/forgot-password
+Allow: /portal/reset-password
 Disallow: /portal/
+Disallow: /admin/
 Disallow: /login
 Disallow: /signin
 
 User-agent: Bingbot
 Allow: /
+Allow: /portal/login
+Allow: /portal/signup
+Allow: /portal/forgot-password
+Allow: /portal/reset-password
 Disallow: /portal/
+Disallow: /admin/
 Disallow: /login
 Disallow: /signin
 
 User-agent: Twitterbot
 Allow: /
+Allow: /portal/login
+Allow: /portal/signup
+Allow: /portal/forgot-password
+Allow: /portal/reset-password
 Disallow: /portal/
+Disallow: /admin/
 Disallow: /login
 Disallow: /signin
 
 User-agent: facebookexternalhit
 Allow: /
+Allow: /portal/login
+Allow: /portal/signup
+Allow: /portal/forgot-password
+Allow: /portal/reset-password
 Disallow: /portal/
+Disallow: /admin/
 Disallow: /login
 Disallow: /signin
 
 User-agent: *
 Allow: /
+Allow: /portal/login
+Allow: /portal/signup
+Allow: /portal/forgot-password
+Allow: /portal/reset-password
 Disallow: /portal/
+Disallow: /admin/
 Disallow: /login
 Disallow: /signin
 
