@@ -173,7 +173,7 @@ const Email = ({
                   <Img
                     src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
                     alt="Alto Whisky"
-                    width="64"
+                    width="94"
                     style={{ display: 'block', height: 'auto', margin: '0 auto' }}
                   />
                 </td>
