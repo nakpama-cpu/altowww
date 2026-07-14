@@ -58,6 +58,8 @@ export default function LoginModal({ open, onClose }: Props) {
           first_name: signupForm.firstName.trim(),
           last_name: signupForm.lastName.trim(),
           phone: signupForm.phone.trim(),
+          phone_country_code: signupForm.phoneCountryCode,
+          country: signupForm.country,
         },
       },
     });
