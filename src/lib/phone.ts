@@ -1,4 +1,5 @@
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { countries } from "@/data/countries";
 
 /**
  * Validates and normalizes a phone number to E.164 format.
