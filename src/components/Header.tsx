@@ -25,7 +25,11 @@ const mainLinks = [
   { to: "/contact", label: "Contact" },
 ];
 
-const Header = () => {
+interface HeaderProps {
+  showCTAs?: boolean;
+}
+
+const Header = ({ showCTAs = true }: HeaderProps) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [newsOpen, setNewsOpen] = useState(false);
@@ -213,8 +217,12 @@ const Header = () => {
             )
           )}
 
-          <button onClick={handleClientLogin} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground/80 hover:text-white transition-all duration-300">Client Login</button>
-          <BrochureButton className="hidden xl:inline-flex items-center px-3 py-2 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:opacity-90 transition-opacity whitespace-nowrap" />
+          {showCTAs && (
+            <>
+              <button onClick={handleClientLogin} className="px-2 py-2 lg:px-3 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase whitespace-nowrap text-secondary-foreground/80 hover:text-white transition-all duration-300">Client Login</button>
+              <BrochureButton className="hidden xl:inline-flex items-center px-3 py-2 font-body text-[10px] tracking-[0.15em] lg:text-xs lg:tracking-[0.2em] uppercase bg-primary text-primary-foreground hover:opacity-90 transition-opacity whitespace-nowrap" />
+            </>
+          )}
         </nav>
 
         {/* Mobile hamburger */}
@@ -267,13 +275,17 @@ const Header = () => {
               </Link>
             )
           )}
-          <button
-            onClick={() => { setMenuOpen(false); handleClientLogin(); }}
-            className="font-body text-sm uppercase tracking-[0.15em] py-2 text-left text-secondary-foreground"
-          >
-            Client Login
-          </button>
-          <BrochureButton className="font-body text-sm uppercase tracking-[0.15em] bg-primary text-primary-foreground px-5 py-3 text-center mt-2 hover:opacity-90 transition-opacity w-full" />
+          {showCTAs && (
+            <>
+              <button
+                onClick={() => { setMenuOpen(false); handleClientLogin(); }}
+                className="font-body text-sm uppercase tracking-[0.15em] py-2 text-left text-secondary-foreground"
+              >
+                Client Login
+              </button>
+              <BrochureButton className="font-body text-sm uppercase tracking-[0.15em] bg-primary text-primary-foreground px-5 py-3 text-center mt-2 hover:opacity-90 transition-opacity w-full" />
+            </>
+          )}
         </nav>
       </div>
       <div className="hidden md:block">

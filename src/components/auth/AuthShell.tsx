@@ -19,7 +19,7 @@ interface AuthShellProps {
 const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShellProps) => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header />
+      <Header showCTAs={false} />
 
       <main className="relative flex-1 flex items-center justify-center overflow-hidden section-dark">
         {/* Cinematic backdrop */}
