@@ -225,23 +225,23 @@ export default function LoginModal({ open, onClose }: Props) {
             <form onSubmit={handleSignup} className="space-y-2">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">First Name</label>
+                  <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">First Name</label>
                   <input
                     required
                     maxLength={100}
                     value={signupForm.firstName}
                     onChange={(e) => setSignupForm({ ...signupForm, firstName: e.target.value })}
-                    className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
+                    className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
                   />
                 </div>
                 <div>
-                  <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Last Name</label>
+                  <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Last Name</label>
                   <input
                     required
                     maxLength={100}
                     value={signupForm.lastName}
                     onChange={(e) => setSignupForm({ ...signupForm, lastName: e.target.value })}
-                    className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary"
+                    className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
                   />
                 </div>
               </div>
