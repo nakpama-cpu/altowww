@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
 
 type Props = { open: boolean; onClose: () => void };
 
