@@ -63,11 +63,18 @@ export default function PortalSignup() {
               <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary" />
             </div>
-            <div>
-              <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Phone</label>
-              <input type="tel" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary" />
-            </div>
+            <CountrySelect
+              value={form.country}
+              onChange={(code, dialingCode) =>
+                setForm((f) => ({ ...f, country: code, phoneCountryCode: f.phoneCountryCode || dialingCode }))
+              }
+            />
+            <PhoneField
+              countryCode={form.phoneCountryCode}
+              onCountryCodeChange={(phoneCountryCode) => setForm({ ...form, phoneCountryCode })}
+              phone={form.phone}
+              onPhoneChange={(phone) => setForm({ ...form, phone })}
+            />
             <div>
               <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Password</label>
               <input type="password" required minLength={8} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}
