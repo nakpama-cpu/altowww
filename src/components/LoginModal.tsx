@@ -242,6 +242,7 @@ export default function LoginModal({ open, onClose }: Props) {
             {renderHeader("Client Portal", "Create account", "Your account will be reviewed before portfolio access.")}
 
             <form onSubmit={handleSignup} className="space-y-2">
+              <TitleSelect value={signupForm.title} onChange={(title) => setSignupForm({ ...signupForm, title })} />
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">First Name</label>
