@@ -1,6 +1,8 @@
 import { Helmet } from "react-helmet-async";
 import heroImg from "@/assets/hero-mountain.jpg";
+import wordmark from "@/assets/altowhisky-wordmark.png.asset.json";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
+
 
 
 const HeroSection = () => {
