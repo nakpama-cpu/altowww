@@ -119,7 +119,7 @@ export default function AdminClients() {
           <tbody>
             {others.map((c) => (
               <tr key={c.id} className="border-t border-border">
-                <td className="p-3">{c.first_name} {c.last_name}</td>
+                <td className="p-3">{fullName(c)}</td>
                 <td className="p-3">{c.email}</td>
                 <td className="p-3">{c.country ?? "—"}</td>
                 <td className="p-3">{c.phone_country_code ? `${c.phone_country_code} ${c.phone}` : c.phone}</td>
