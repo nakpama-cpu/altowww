@@ -539,13 +539,6 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
 
           <DialogFooter>
             <button
-              type="button"
-              onClick={() => onOpenChange(false)}
-              className="font-body text-xs uppercase tracking-[0.25em] border border-border px-5 py-2 hover:bg-muted"
-            >
-              Cancel
-            </button>
-            <button
               type="submit"
               disabled={saving}
               className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
