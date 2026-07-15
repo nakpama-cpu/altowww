@@ -86,9 +86,7 @@ const App = () => (
               <Route path="/portal/signup" element={<PortalSignup />} />
               <Route path="/portal/forgot-password" element={<ForgotPassword />} />
               <Route path="/portal/reset-password" element={<ResetPassword />} />
-              <Route path="/portal/pending" element={
-                <ProtectedRoute><PendingApprovalGuard /></ProtectedRoute>
-              } />
+              <Route path="/portal/pending" element={<PendingApprovalGuard />} />
 
               {/* Client portal */}
               <Route path="/portal" element={<PortalEntry />}>
