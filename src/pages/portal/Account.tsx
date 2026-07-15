@@ -79,16 +79,27 @@ export default function Account() {
     }
   };
 
+  const identityLocked = profile?.age_verification_status === "verified";
+
   return (
     <div className="max-w-2xl">
       <h1 className="display-heading text-4xl mb-8">Account</h1>
 
       <form onSubmit={saveProfile} className="bg-card border border-border p-8 mb-6 space-y-5">
         <h2 className="display-heading text-xl mb-4">Profile</h2>
+        {identityLocked && (
+          <p className="font-body text-[11px] text-muted-foreground -mt-2">
+            Your legal name and date of birth are locked because your identity has been verified. Contact support to correct them.
+          </p>
+        )}
         <div className="grid grid-cols-[6rem_1fr_1fr] gap-4">
-          <TitleSelect value={form.title} onChange={(title) => setForm({ ...form, title })} />
-          <Field label="First Name" value={form.first_name} onChange={(v: string) => setForm({ ...form, first_name: v })} />
-          <Field label="Last Name" value={form.last_name} onChange={(v: string) => setForm({ ...form, last_name: v })} />
+          {identityLocked ? (
+            <Field label="Title" value={form.title} onChange={() => {}} disabled />
+          ) : (
+            <TitleSelect value={form.title} onChange={(title) => setForm({ ...form, title })} />
+          )}
+          <Field label="First Name" value={form.first_name} onChange={(v: string) => setForm({ ...form, first_name: v })} disabled={identityLocked} />
+          <Field label="Last Name" value={form.last_name} onChange={(v: string) => setForm({ ...form, last_name: v })} disabled={identityLocked} />
         </div>
         <Field label="Email" value={profile?.email ?? ""} onChange={() => {}} disabled />
         <CountrySelect
@@ -123,6 +134,7 @@ export default function Account() {
     </div>
   );
 }
+
 
 const Field = ({ label, value, onChange, type = "text", disabled = false }: any) => (
   <div>
