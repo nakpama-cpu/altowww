@@ -37,6 +37,7 @@ import ForgotPassword from "./pages/portal/ForgotPassword";
 import ResetPassword from "./pages/portal/ResetPassword";
 import PendingApproval from "./pages/portal/PendingApproval";
 import PortalLayout from "./pages/portal/PortalLayout";
+import PortalEntry from "./pages/portal/PortalEntry";
 import Dashboard from "./pages/portal/Dashboard";
 import MyCasks from "./pages/portal/MyCasks";
 import AvailableStock from "./pages/portal/AvailableStock";
