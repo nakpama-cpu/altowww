@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
+import { TitleSelect } from "@/components/auth/TitleSelect";
 import { useDetectedCountry } from "@/hooks/useDetectedCountry";
 
 type Props = { open: boolean; onClose: () => void };
