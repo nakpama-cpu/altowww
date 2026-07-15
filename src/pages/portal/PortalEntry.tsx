@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { supabase } from "@/integrations/supabase/client";
+import AuthShell from "@/components/auth/AuthShell";
 import PortalLayout from "./PortalLayout";
+
 
 type ConfirmationState =
   | { status: "none" }
@@ -65,29 +67,28 @@ export default function PortalEntry() {
   if (confirmationState.status !== "none") {
     const isError = confirmationState.status === "error";
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
-        <div className="w-full max-w-lg text-center">
-          <Link to="/" className="block mb-8 display-heading text-3xl">Alto Whisky</Link>
-          <div className="bg-card border border-border p-10">
-            <h1 className="display-heading text-3xl mb-4">
-              {isError ? "Email link expired" : "Email confirmed"}
-            </h1>
-            <p className="font-body text-sm text-muted-foreground leading-relaxed mb-8">
-              {isError
-                ? "This confirmation link has already been used or has expired. If your email has already been confirmed, you can continue to sign in."
-                : "Thank you for confirming your email. One of our Portfolio Advisors will review your account shortly. You'll receive an email as soon as it's approved."}
-            </p>
-            <button
-              onClick={() => navigate(isError ? "/portal/login" : "/portal")}
-              className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3 hover:opacity-90 transition-opacity"
-            >
-              {isError ? "Sign in" : "Continue"}
-            </button>
-          </div>
-        </div>
-      </div>
+      <AuthShell
+        eyebrow="Client Portal"
+        title={isError ? "Email link expired" : "Email confirmed"}
+        subtitle={
+          isError
+            ? "This confirmation link has already been used or has expired. If your email has already been confirmed, you can continue to sign in."
+            : "Thank you for confirming your email. One of our Portfolio Advisors will review your account shortly. You'll receive an email as soon as it's approved."
+        }
+      >
+        <button
+          onClick={() => navigate(isError ? "/portal/login" : "/portal")}
+          className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-2 hover:opacity-90 transition-opacity mt-1"
+        >
+          {isError ? "Sign in" : "Continue"}
+        </button>
+        <p className="mt-2 text-center font-body text-[11px] text-muted-foreground">
+          Need help? <Link to="/portal/login" className="text-primary hover:underline">Sign in</Link>
+        </p>
+      </AuthShell>
     );
   }
+
 
   return (
     <ProtectedRoute>
