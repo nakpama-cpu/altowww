@@ -22,6 +22,7 @@ export default function Account() {
   const changed = useMemo(() => {
     if (!profile) return false;
     return (
+      form.title !== (profile.title ?? "") ||
       form.first_name !== (profile.first_name ?? "") ||
       form.last_name !== (profile.last_name ?? "") ||
       form.phone !== (profile.phone ?? "") ||
