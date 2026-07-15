@@ -56,17 +56,21 @@ export default function Account() {
     if (!profile) return;
     setSaving(true);
     const identityLocked = profile.age_verification_status === "verified";
-    const payload: Record<string, unknown> = {
+    const basePayload = {
       phone: form.phone,
       phone_country_code: form.phone_country_code,
       country: form.country,
     };
-    if (!identityLocked) {
-      payload.title = form.title;
-      payload.first_name = formatName(form.first_name);
-      payload.last_name = formatName(form.last_name);
-    }
+    const payload = identityLocked
+      ? basePayload
+      : {
+          ...basePayload,
+          title: form.title,
+          first_name: formatName(form.first_name),
+          last_name: formatName(form.last_name),
+        };
     const { error } = await supabase.from("profiles").update(payload).eq("id", profile.id);
+
     setSaving(false);
     if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
     else {
