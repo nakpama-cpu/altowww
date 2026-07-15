@@ -190,7 +190,8 @@ function AddressVerificationCard() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const status = profile?.address_verification_status ?? "not_submitted";
-  const locked = status === "verified" || status === "pending";
+  const locked = status === "pending";
+
 
   const [addr, setAddr] = useState({
     address_line1: profile?.address_line1 ?? "",
