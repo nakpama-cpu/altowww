@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { supabase } from "@/integrations/supabase/client";
+import AuthShell from "@/components/auth/AuthShell";
 import PortalLayout from "./PortalLayout";
+
 
 type ConfirmationState =
   | { status: "none" }
