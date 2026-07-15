@@ -78,7 +78,7 @@ export default function MyCasks() {
       const d = c.distilleries?.name ?? "";
       const matchesSearch =
         !q ||
-        c.cask_number.toLowerCase().includes(q) ||
+        (c.cask_number ?? "").toLowerCase().includes(q) ||
         d.toLowerCase().includes(q) ||
         c.spirit.toLowerCase().includes(q) ||
         (c.cask_type ?? "").toLowerCase().includes(q);
@@ -236,11 +236,11 @@ export default function MyCasks() {
               <div key={r.id} className="bg-card border border-border p-6 md:p-8">
                 <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                   <div>
-                    <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">Cask #{r.casks.cask_number}</div>
+                    <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">Cask #{r.casks.cask_number ?? "TBC"}</div>
                     <h3 className="display-heading text-2xl">{r.casks.distilleries?.name ?? "Distillery"}</h3>
                   </div>
                   {r.certificate_path && (
-                    <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number}`)}
+                    <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
                       disabled={loadingCert}
                       className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-4 py-2 hover:bg-muted disabled:opacity-50">
                       <FileText className="w-3 h-3" /> View Certificate
@@ -284,7 +284,7 @@ export default function MyCasks() {
               <tbody>
                 {filtered.map((r) => (
                   <tr key={r.id} className="border-b border-border hover:bg-muted/20 transition-colors">
-                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_number}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_number ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.distilleries?.name ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.spirit}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_type ?? "—"}</td>
@@ -298,7 +298,7 @@ export default function MyCasks() {
                     <td className="pl-4 pr-6 py-3 whitespace-nowrap">
                       {r.certificate_path ? (
                         <button
-                          onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number}`)}
+                          onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
                           disabled={loadingCert}
                           className="flex items-center gap-1 font-body text-[10px] uppercase tracking-[0.15em] border border-border px-2 py-1 hover:bg-muted disabled:opacity-50"
                         >
