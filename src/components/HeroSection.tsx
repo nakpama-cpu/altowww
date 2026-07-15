@@ -1,6 +1,8 @@
 import { Helmet } from "react-helmet-async";
 import heroImg from "@/assets/hero-mountain.jpg";
+import wordmark from "@/assets/altowhisky-wordmark.png.asset.json";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
+
 
 
 const HeroSection = () => {
@@ -32,9 +34,14 @@ const HeroSection = () => {
         <p className="chapter-marker mb-3 md:mt-24 text-secondary-foreground/70">
           Whisky Cask Investment
         </p>
-        <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground font-bold">
-          Alto Whisky
+        <h1 className="flex justify-center">
+          <img
+            src={wordmark.url}
+            alt="Alto Whisky"
+            className="h-10 md:h-14 lg:h-16 w-auto"
+          />
         </h1>
+
         <p
           className="mt-2 font-body text-sm md:text-base lg:text-xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed font-light"
         >
