@@ -1,29 +1,39 @@
-import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import AuthShell from "@/components/auth/AuthShell";
 
 export default function PendingApproval() {
-  const { profile, signOut } = useAuth();
+  const { user, profile, loading, isAdmin, signOut } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="font-body text-xs uppercase tracking-[0.25em] text-muted-foreground">Loading…</div>
+      </div>
+    );
+  }
+
+  if (!user) return <Navigate to="/portal/login" replace />;
+  if (isAdmin || profile?.status === "approved") return <Navigate to="/portal" replace />;
+
   const isSuspended = profile?.status === "suspended";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-lg text-center">
-        <Link to="/" className="block mb-8 display-heading text-3xl">Alto Whisky</Link>
-        <div className="bg-card border border-border p-10">
-          <h1 className="display-heading text-3xl mb-4">
-            {isSuspended ? "Account suspended" : "Awaiting approval"}
-          </h1>
-          <p className="font-body text-sm text-muted-foreground leading-relaxed mb-8">
-            {isSuspended
-              ? "Your account has been suspended. Please contact us if you believe this is in error."
-              : "Thank you for registering. One of our Portfolio Advisors will review your account shortly. You'll receive an email once it's approved."}
-          </p>
-          <button onClick={signOut}
-            className="font-body text-xs uppercase tracking-[0.25em] border border-border px-8 py-3 hover:bg-muted">
-            Sign out
-          </button>
-        </div>
-      </div>
-    </div>
+    <AuthShell
+      eyebrow="Client Portal"
+      title={isSuspended ? "Account suspended" : "Awaiting approval"}
+      subtitle={
+        isSuspended
+          ? "Your account has been suspended. Please contact us if you believe this is in error."
+          : "Thank you for registering. One of our Portfolio Advisors will review your account shortly. You'll receive an email as soon as it's approved."
+      }
+    >
+      <button
+        onClick={signOut}
+        className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-2 hover:opacity-90 transition-opacity mt-1"
+      >
+        Sign out
+      </button>
+    </AuthShell>
   );
 }
