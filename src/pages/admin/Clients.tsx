@@ -80,7 +80,7 @@ export default function AdminClients() {
             {pending.map((c) => (
               <div key={c.id} className="bg-card border border-border p-5 flex flex-col gap-3">
                 <div>
-                  <div className="display-heading text-xl">{c.first_name} {c.last_name}</div>
+                  <div className="display-heading text-xl">{fullName(c)}</div>
                   <div className="font-body text-sm text-muted-foreground">{c.email}</div>
                 </div>
                 <div className="font-body text-xs text-muted-foreground grid grid-cols-2 gap-x-4 gap-y-1">
