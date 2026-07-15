@@ -55,12 +55,22 @@ export default function Account() {
     e.preventDefault();
     if (!profile) return;
     setSaving(true);
-    const payload = {
-      ...form,
-      first_name: formatName(form.first_name),
-      last_name: formatName(form.last_name),
+    const identityLocked = profile.age_verification_status === "verified";
+    const basePayload = {
+      phone: form.phone,
+      phone_country_code: form.phone_country_code,
+      country: form.country,
     };
+    const payload = identityLocked
+      ? basePayload
+      : {
+          ...basePayload,
+          title: form.title,
+          first_name: formatName(form.first_name),
+          last_name: formatName(form.last_name),
+        };
     const { error } = await supabase.from("profiles").update(payload).eq("id", profile.id);
+
     setSaving(false);
     if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
     else {
@@ -68,6 +78,7 @@ export default function Account() {
       await refreshProfile();
     }
   };
+
 
   const changePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,16 +90,27 @@ export default function Account() {
     }
   };
 
+  const identityLocked = profile?.age_verification_status === "verified";
+
   return (
     <div className="max-w-2xl">
       <h1 className="display-heading text-4xl mb-8">Account</h1>
 
       <form onSubmit={saveProfile} className="bg-card border border-border p-8 mb-6 space-y-5">
         <h2 className="display-heading text-xl mb-4">Profile</h2>
+        {identityLocked && (
+          <p className="font-body text-[11px] text-muted-foreground -mt-2">
+            Your legal name and date of birth are locked because your identity has been verified. Contact support to correct them.
+          </p>
+        )}
         <div className="grid grid-cols-[6rem_1fr_1fr] gap-4">
-          <TitleSelect value={form.title} onChange={(title) => setForm({ ...form, title })} />
-          <Field label="First Name" value={form.first_name} onChange={(v: string) => setForm({ ...form, first_name: v })} />
-          <Field label="Last Name" value={form.last_name} onChange={(v: string) => setForm({ ...form, last_name: v })} />
+          {identityLocked ? (
+            <Field label="Title" value={form.title} onChange={() => {}} disabled />
+          ) : (
+            <TitleSelect value={form.title} onChange={(title) => setForm({ ...form, title })} />
+          )}
+          <Field label="First Name" value={form.first_name} onChange={(v: string) => setForm({ ...form, first_name: v })} disabled={identityLocked} />
+          <Field label="Last Name" value={form.last_name} onChange={(v: string) => setForm({ ...form, last_name: v })} disabled={identityLocked} />
         </div>
         <Field label="Email" value={profile?.email ?? ""} onChange={() => {}} disabled />
         <CountrySelect
@@ -123,6 +145,7 @@ export default function Account() {
     </div>
   );
 }
+
 
 const Field = ({ label, value, onChange, type = "text", disabled = false }: any) => (
   <div>
@@ -167,7 +190,8 @@ function AddressVerificationCard() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const status = profile?.address_verification_status ?? "not_submitted";
-  const locked = status === "verified" || status === "pending";
+  const locked = status === "pending";
+
 
   const [addr, setAddr] = useState({
     address_line1: profile?.address_line1 ?? "",
@@ -271,6 +295,13 @@ function AddressVerificationCard() {
         </div>
       )}
 
+      {status === "verified" && (
+        <div className="border border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200 font-body text-xs p-3">
+          Your address is verified. If you move, update the fields below and upload a new proof — it will be sent for review again.
+        </div>
+      )}
+
+
       <form onSubmit={submit} className="space-y-4">
         <fieldset disabled={locked} className="space-y-4 disabled:opacity-70">
           <Field label="Address line 1" value={addr.address_line1} onChange={(v: string) => setAddr({ ...addr, address_line1: v })} />
@@ -330,9 +361,10 @@ function AddressVerificationCard() {
           <button type="submit" disabled={saving}
             className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3 hover:opacity-90 disabled:opacity-50">
             <Upload className="w-4 h-4" />
-            {uploading ? "Uploading…" : saving ? "Submitting…" : status === "rejected" ? "Resubmit" : "Submit for review"}
+            {uploading ? "Uploading…" : saving ? "Submitting…" : status === "verified" ? "Update address" : status === "rejected" ? "Resubmit" : "Submit for review"}
           </button>
         )}
+
         {locked && status === "pending" && (
           <p className="font-body text-xs text-muted-foreground">Under review — you'll be notified once verified.</p>
         )}
