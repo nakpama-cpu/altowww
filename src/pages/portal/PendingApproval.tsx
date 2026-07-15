@@ -1,9 +1,20 @@
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthShell from "@/components/auth/AuthShell";
 
 export default function PendingApproval() {
   const { user, profile, loading, isAdmin, signOut } = useAuth();
+
+  const isSuspended = profile?.status === "suspended";
+  const shouldSignOut = !!user && !isAdmin && profile && profile.status !== "approved";
+
+  // Ensure unapproved users are never left signed in.
+  useEffect(() => {
+    if (shouldSignOut) {
+      signOut();
+    }
+  }, [shouldSignOut, signOut]);
 
   if (loading) {
     return (
@@ -13,10 +24,7 @@ export default function PendingApproval() {
     );
   }
 
-  if (!user) return <Navigate to="/portal/login" replace />;
   if (isAdmin || profile?.status === "approved") return <Navigate to="/portal" replace />;
-
-  const isSuspended = profile?.status === "suspended";
 
   return (
     <AuthShell
@@ -28,12 +36,12 @@ export default function PendingApproval() {
           : "Thank you for registering. One of our Portfolio Advisors will review your account shortly. You'll receive an email as soon as it's approved."
       }
     >
-      <button
-        onClick={signOut}
-        className="w-full font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-2 hover:opacity-90 transition-opacity mt-1"
+      <Link
+        to="/"
+        className="block w-full text-center font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground py-2 hover:opacity-90 transition-opacity mt-1"
       >
-        Sign out
-      </button>
+        Back to Homepage
+      </Link>
     </AuthShell>
   );
 }
