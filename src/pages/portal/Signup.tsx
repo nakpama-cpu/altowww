@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
+import { TitleSelect } from "@/components/auth/TitleSelect";
 import { useDetectedCountry } from "@/hooks/useDetectedCountry";
 import AuthShell from "@/components/auth/AuthShell";
 import Seo from "@/components/Seo";
@@ -11,7 +12,7 @@ import Seo from "@/components/Seo";
 export default function PortalSignup() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
+  const [form, setForm] = useState({ title: "", firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
   const [loading, setLoading] = useState(false);
   const detected = useDetectedCountry();
 
@@ -33,6 +34,7 @@ export default function PortalSignup() {
       options: {
         emailRedirectTo: `${window.location.origin}/portal`,
         data: {
+          title: form.title,
           first_name: form.firstName.trim(),
           last_name: form.lastName.trim(),
           phone: form.phone.trim(),
@@ -65,6 +67,7 @@ export default function PortalSignup() {
       subtitle="Your account will be reviewed by our team before you can access portfolio features."
     >
       <form onSubmit={handleSubmit} className="space-y-2">
+        <TitleSelect value={form.title} onChange={(title) => setForm({ ...form, title })} />
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">First Name</label>

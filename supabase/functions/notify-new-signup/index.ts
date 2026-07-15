@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
 
     const { data: profile } = await supabase
       .from('profiles')
-      .select('id, first_name, last_name, email, phone, phone_country_code, country, status, created_at')
+      .select('id, title, first_name, last_name, email, phone, phone_country_code, country, status, created_at')
       .eq('email', email.trim().toLowerCase())
       .maybeSingle()
 
@@ -58,7 +58,7 @@ Deno.serve(async (req) => {
         recipientEmail: adminRecipient,
         idempotencyKey: `admin-new-signup-${profile.id}`,
         templateData: {
-          clientName: `${profile.first_name} ${profile.last_name}`.trim() || profile.email,
+          clientName: [profile.title, profile.first_name, profile.last_name].filter(Boolean).join(' ').trim() || profile.email,
           clientEmail: profile.email,
           clientPhone: phone,
           clientCountry: profile.country ?? '',
