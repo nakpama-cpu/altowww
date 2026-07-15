@@ -41,7 +41,7 @@ export default function AdminOrders() {
               <tr key={o.id} className="border-t border-border">
                 <td className="p-3">{new Date(o.created_at).toLocaleString()}</td>
                 <td className="p-3">{o.profiles?.first_name} {o.profiles?.last_name}<br /><span className="text-xs text-muted-foreground">{o.profiles?.email}</span></td>
-                <td className="p-3 font-mono">{o.casks?.cask_number}</td>
+                <td className="p-3">{o.casks?.cask_number ? <span className="font-mono">{o.casks.cask_number}</span> : <span className="text-muted-foreground text-xs">Pending · {o.cask_listings?.distilleries?.name ?? o.cask_listings?.spirit ?? "—"}</span>}</td>
                 <td className="p-3">{o.currency} {Number(o.amount).toLocaleString()}</td>
                 <td className="p-3">{o.status}</td>
               </tr>
