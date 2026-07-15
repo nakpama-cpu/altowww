@@ -181,12 +181,12 @@ export default function Account() {
       <form onSubmit={changePassword} className="bg-card border border-border p-8 space-y-5">
         <h2 className="display-heading text-xl mb-4">Change Password</h2>
         <div>
-          <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">New Password</label>
+          <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">New Password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+            className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
           />
         </div>
         <button
@@ -313,32 +313,32 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-lg w-[calc(100vw-1.5rem)] p-4 sm:p-5 gap-3 max-h-[calc(100dvh-1.5rem)] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="display-heading text-2xl">Verify your address</DialogTitle>
+          <DialogTitle className="display-heading text-xl">Verify your address</DialogTitle>
           <DialogDescription>
             Enter your current address and upload a document issued within the last 3 months.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={submit} className="space-y-4">
+        <form onSubmit={submit} className="space-y-2.5">
           <TextField label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
           <TextField label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <TextField label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
             <TextField label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
           </div>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <TextField label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
             <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
           </div>
 
-          <div className="pt-4 border-t border-border grid md:grid-cols-2 gap-4">
+          <div className="pt-2 border-t border-border grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Document type</label>
+              <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
               <select
                 value={addr.proof_of_address_type}
                 onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+                className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
               >
                 <option value="">Select…</option>
                 {ADDRESS_PROOF_TYPES.map((t) => (
@@ -355,14 +355,14 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
           </div>
 
           <div>
-            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Upload document</label>
+            <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Upload document</label>
             <input
               type="file"
               accept="application/pdf,image/jpeg,image/png,image/webp"
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              className="font-body text-sm w-full"
+              className="font-body text-xs w-full"
             />
-            <p className="font-body text-[11px] text-muted-foreground mt-1">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
+            <p className="font-body text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
           </div>
 
           {addr.proof_of_address_type === "driving_licence" && !ageAlreadyVerified && (
@@ -383,14 +383,14 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="font-body text-xs uppercase tracking-[0.25em] border border-border px-6 py-3 hover:bg-muted"
+              className="font-body text-xs uppercase tracking-[0.25em] border border-border px-5 py-2 hover:bg-muted"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-6 py-3 hover:opacity-90 disabled:opacity-50"
+              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
             >
               <Upload className="w-4 h-4" /> {saving ? "Submitting…" : "Submit for review"}
             </button>
@@ -490,22 +490,22 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-lg w-[calc(100vw-1.5rem)] p-4 sm:p-5 gap-3 max-h-[calc(100dvh-1.5rem)] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="display-heading text-2xl">Verify your date of birth</DialogTitle>
+          <DialogTitle className="display-heading text-xl">Verify your date of birth</DialogTitle>
           <DialogDescription>
             Confirm your date of birth and upload a government-issued ID.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={submit} className="space-y-4">
+        <form onSubmit={submit} className="space-y-2.5">
           <TextField label="Date of birth" type="date" value={dob} onChange={setDob} />
 
           <div>
-            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Document type</label>
+            <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
             <select
               value={docType}
               onChange={(e) => setDocType(e.target.value as ProofOfAgeType)}
-              className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+              className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
             >
               <option value="">Select…</option>
               {AGE_PROOF_TYPES.map((t) => (
@@ -515,14 +515,14 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
           </div>
 
           <div>
-            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Upload document</label>
+            <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Upload document</label>
             <input
               type="file"
               accept="application/pdf,image/jpeg,image/png,image/webp"
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              className="font-body text-sm w-full"
+              className="font-body text-xs w-full"
             />
-            <p className="font-body text-[11px] text-muted-foreground mt-1">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
+            <p className="font-body text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
           </div>
 
           {docType === "driving_licence" && !addressAlreadyVerified && (
@@ -548,14 +548,14 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="font-body text-xs uppercase tracking-[0.25em] border border-border px-6 py-3 hover:bg-muted"
+              className="font-body text-xs uppercase tracking-[0.25em] border border-border px-5 py-2 hover:bg-muted"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-6 py-3 hover:opacity-90 disabled:opacity-50"
+              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
             >
               <Upload className="w-4 h-4" /> {saving ? "Submitting…" : "Submit for review"}
             </button>
@@ -676,9 +676,9 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-lg w-[calc(100vw-1.5rem)] p-4 sm:p-5 gap-3 max-h-[calc(100dvh-1.5rem)] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="display-heading text-2xl">Edit profile</DialogTitle>
+          <DialogTitle className="display-heading text-xl">Edit profile</DialogTitle>
           <DialogDescription>Update your contact number or address. Name, date of birth and email are locked for identity purposes.</DialogDescription>
         </DialogHeader>
 
@@ -688,7 +688,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
         </div>
 
         {tab === "phone" ? (
-          <div className="space-y-4 pt-2">
+          <div className="space-y-2.5 pt-1">
             <CountrySelect value={country} onChange={(code, dialingCode) => { setCountry(code); setPhoneCode(dialingCode); }} />
             <PhoneField
               countryCode={phoneCode}
@@ -700,7 +700,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
               <button
                 type="button"
                 onClick={() => onOpenChange(false)}
-                className="font-body text-xs uppercase tracking-[0.25em] border border-border px-6 py-3 hover:bg-muted"
+                className="font-body text-xs uppercase tracking-[0.25em] border border-border px-5 py-2 hover:bg-muted"
               >
                 Cancel
               </button>
@@ -708,34 +708,34 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
                 type="button"
                 onClick={savePhone}
                 disabled={saving || !phoneChanged}
-                className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-6 py-3 hover:opacity-90 disabled:opacity-50"
+                className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
               >
                 {saving ? "Saving…" : "Save"}
               </button>
             </DialogFooter>
           </div>
         ) : (
-          <div className="space-y-4 pt-2">
+          <div className="space-y-2.5 pt-1">
             <div className="border border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200 p-3 font-body text-xs">
               Changing your address requires re-verification. Please upload a new proof of address issued within the last 3 months.
             </div>
             <TextField label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
             <TextField label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <TextField label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
               <TextField label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
             </div>
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <TextField label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
               <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
             </div>
-            <div className="pt-2 border-t border-border grid md:grid-cols-2 gap-4">
+            <div className="pt-2 border-t border-border grid grid-cols-2 gap-3">
               <div>
-                <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Document type</label>
+                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
                 <select
                   value={addr.proof_of_address_type}
                   onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                  className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+                  className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
                 >
                   <option value="">Select…</option>
                   {ADDRESS_PROOF_TYPES.map((t) => (
@@ -751,20 +751,20 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
               />
             </div>
             <div>
-              <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Upload new proof of address</label>
+              <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Upload new proof of address</label>
               <input
                 type="file"
                 accept="application/pdf,image/jpeg,image/png,image/webp"
                 onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                className="font-body text-sm w-full"
+                className="font-body text-xs w-full"
               />
-              <p className="font-body text-[11px] text-muted-foreground mt-1">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
+              <p className="font-body text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
             </div>
             <DialogFooter>
               <button
                 type="button"
                 onClick={() => onOpenChange(false)}
-                className="font-body text-xs uppercase tracking-[0.25em] border border-border px-6 py-3 hover:bg-muted"
+                className="font-body text-xs uppercase tracking-[0.25em] border border-border px-5 py-2 hover:bg-muted"
               >
                 Cancel
               </button>
@@ -772,7 +772,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
                 type="button"
                 onClick={saveAddress}
                 disabled={saving}
-                className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-6 py-3 hover:opacity-90 disabled:opacity-50"
+                className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
               >
                 <Upload className="w-4 h-4" /> {saving ? "Submitting…" : "Save & re-verify"}
               </button>
@@ -811,12 +811,12 @@ function TextField({
 }) {
   return (
     <div>
-      <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">{label}</label>
+      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">{label}</label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+        className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
       />
     </div>
   );
