@@ -361,9 +361,10 @@ function AddressVerificationCard() {
           <button type="submit" disabled={saving}
             className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3 hover:opacity-90 disabled:opacity-50">
             <Upload className="w-4 h-4" />
-            {uploading ? "Uploading…" : saving ? "Submitting…" : status === "rejected" ? "Resubmit" : "Submit for review"}
+            {uploading ? "Uploading…" : saving ? "Submitting…" : status === "verified" ? "Update address" : status === "rejected" ? "Resubmit" : "Submit for review"}
           </button>
         )}
+
         {locked && status === "pending" && (
           <p className="font-body text-xs text-muted-foreground">Under review — you'll be notified once verified.</p>
         )}
