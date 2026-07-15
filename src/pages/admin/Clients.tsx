@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 
 type Client = {
   id: string;
+  title: string | null;
   first_name: string;
   last_name: string;
   email: string;
@@ -14,6 +15,9 @@ type Client = {
   client_discount_pct: number;
   created_at: string;
 };
+
+const fullName = (c: Client) =>
+  [c.title, c.first_name, c.last_name].filter(Boolean).join(" ").trim();
 
 export default function AdminClients() {
   const { toast } = useToast();
