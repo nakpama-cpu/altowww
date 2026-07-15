@@ -10,6 +10,7 @@ import {
   Img,
   Link,
   Preview,
+  Hr,
   Section,
   Text,
 } from 'npm:@react-email/components@0.0.22'
@@ -202,6 +203,8 @@ const Email = ({
           </table>
         </Section>
 
+        <Hr style={signatureBottomLine} />
+
       </Container>
     </Body>
   </Html>
@@ -375,6 +378,11 @@ const sigWrap = {
   borderTop: '1px solid hsl(0, 0%, 88%)',
   paddingTop: '16px',
   margin: '0 0 8px',
+}
+const signatureBottomLine = {
+  border: 'none',
+  borderTop: '1px solid hsl(0, 0%, 88%)',
+  margin: '16px 0 0',
 }
 const sigLogoCell = {
   textAlign: 'center' as const,
