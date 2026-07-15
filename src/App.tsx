@@ -57,6 +57,7 @@ import AdminCallbacks from "./pages/admin/Callbacks";
 import AdminOrders from "./pages/admin/Orders";
 import AdminDiscountCodes from "./pages/admin/DiscountCodes";
 import AdminListings from "./pages/admin/Listings";
+import AdminVerifications from "./pages/admin/Verifications";
 
 const queryClient = new QueryClient();
 
