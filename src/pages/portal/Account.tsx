@@ -55,11 +55,17 @@ export default function Account() {
     e.preventDefault();
     if (!profile) return;
     setSaving(true);
-    const payload = {
-      ...form,
-      first_name: formatName(form.first_name),
-      last_name: formatName(form.last_name),
+    const identityLocked = profile.age_verification_status === "verified";
+    const payload: Record<string, unknown> = {
+      phone: form.phone,
+      phone_country_code: form.phone_country_code,
+      country: form.country,
     };
+    if (!identityLocked) {
+      payload.title = form.title;
+      payload.first_name = formatName(form.first_name);
+      payload.last_name = formatName(form.last_name);
+    }
     const { error } = await supabase.from("profiles").update(payload).eq("id", profile.id);
     setSaving(false);
     if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
@@ -68,6 +74,7 @@ export default function Account() {
       await refreshProfile();
     }
   };
+
 
   const changePassword = async (e: React.FormEvent) => {
     e.preventDefault();
