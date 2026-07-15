@@ -34,6 +34,7 @@ export default function PortalSignup() {
       options: {
         emailRedirectTo: `${window.location.origin}/portal`,
         data: {
+          title: form.title,
           first_name: form.firstName.trim(),
           last_name: form.lastName.trim(),
           phone: form.phone.trim(),
