@@ -38,7 +38,7 @@ const HeroSection = () => {
           <img
             src={wordmark.url}
             alt="Alto Whisky"
-            className="h-16 md:h-24 lg:h-28 w-auto"
+            className="h-10 md:h-14 lg:h-16 w-auto"
           />
         </h1>
 
