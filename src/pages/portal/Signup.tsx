@@ -7,6 +7,7 @@ import { useDetectedCountry } from "@/hooks/useDetectedCountry";
 import AuthShell from "@/components/auth/AuthShell";
 import Seo from "@/components/Seo";
 import { TitleSelect } from "@/components/auth/TitleSelect";
+import { formatName, formatEmail } from "@/lib/formatName";
 
 
 export default function PortalSignup() {
@@ -27,7 +28,9 @@ export default function PortalSignup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const email = form.email.trim();
+    const email = formatEmail(form.email);
+    const firstName = formatName(form.firstName);
+    const lastName = formatName(form.lastName);
     const { error } = await supabase.auth.signUp({
       email,
       password: form.password,
@@ -35,8 +38,8 @@ export default function PortalSignup() {
         emailRedirectTo: `${window.location.origin}/portal`,
         data: {
           title: form.title,
-          first_name: form.firstName.trim(),
-          last_name: form.lastName.trim(),
+          first_name: firstName,
+          last_name: lastName,
           phone: form.phone.trim(),
           phone_country_code: form.phoneCountryCode,
           country: form.country,

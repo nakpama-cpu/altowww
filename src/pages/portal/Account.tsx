@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
 import { TitleSelect } from "@/components/auth/TitleSelect";
+import { formatName } from "@/lib/formatName";
 
 export default function Account() {
   const { profile, refreshProfile } = useAuth();
@@ -35,7 +36,12 @@ export default function Account() {
     e.preventDefault();
     if (!profile) return;
     setSaving(true);
-    const { error } = await supabase.from("profiles").update(form).eq("id", profile.id);
+    const payload = {
+      ...form,
+      first_name: formatName(form.first_name),
+      last_name: formatName(form.last_name),
+    };
+    const { error } = await supabase.from("profiles").update(payload).eq("id", profile.id);
     setSaving(false);
     if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
     else {
