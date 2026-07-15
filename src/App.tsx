@@ -37,6 +37,7 @@ import ForgotPassword from "./pages/portal/ForgotPassword";
 import ResetPassword from "./pages/portal/ResetPassword";
 import PendingApproval from "./pages/portal/PendingApproval";
 import PortalLayout from "./pages/portal/PortalLayout";
+import PortalEntry from "./pages/portal/PortalEntry";
 import Dashboard from "./pages/portal/Dashboard";
 import MyCasks from "./pages/portal/MyCasks";
 import AvailableStock from "./pages/portal/AvailableStock";
@@ -90,7 +91,7 @@ const App = () => (
               } />
 
               {/* Client portal */}
-              <Route path="/portal" element={<ProtectedRoute><PortalLayout /></ProtectedRoute>}>
+              <Route path="/portal" element={<PortalEntry />}>
                 <Route index element={<Dashboard />} />
                 <Route path="my-casks" element={<MyCasks />} />
                 <Route path="available" element={<AvailableStock />} />
