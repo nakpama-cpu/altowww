@@ -295,6 +295,13 @@ function AddressVerificationCard() {
         </div>
       )}
 
+      {status === "verified" && (
+        <div className="border border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200 font-body text-xs p-3">
+          Your address is verified. If you move, update the fields below and upload a new proof — it will be sent for review again.
+        </div>
+      )}
+
+
       <form onSubmit={submit} className="space-y-4">
         <fieldset disabled={locked} className="space-y-4 disabled:opacity-70">
           <Field label="Address line 1" value={addr.address_line1} onChange={(v: string) => setAddr({ ...addr, address_line1: v })} />
