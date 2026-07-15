@@ -73,6 +73,7 @@ export default function LoginModal({ open, onClose }: Props) {
       options: {
         emailRedirectTo: `${window.location.origin}/portal`,
         data: {
+          title: signupForm.title,
           first_name: signupForm.firstName.trim(),
           last_name: signupForm.lastName.trim(),
           phone: signupForm.phone.trim(),
