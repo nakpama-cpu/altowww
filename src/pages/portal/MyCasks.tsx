@@ -12,7 +12,7 @@ type Row = {
   certificate_path: string | null;
   notes: string | null;
   casks: {
-    cask_number: string;
+    cask_number: string | null;
     spirit: string;
     cask_type: string | null;
     fill_date: string | null;
