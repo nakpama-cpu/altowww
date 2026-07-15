@@ -7,7 +7,7 @@ const HeroSection = () => {
   return (
     <>
       <Helmet>
-        <link rel="preload" as="image" href={heroImg} fetchpriority="high" />
+        <link rel="preload" as="image" href={heroImg} fetchPriority="high" />
       </Helmet>
       {/* Fixed hero that stays in place while content scrolls over it */}
       <section
