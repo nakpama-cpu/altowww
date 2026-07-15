@@ -179,13 +179,13 @@ const Email = ({
                     cellPadding={0}
                     cellSpacing={0}
                     border={0}
-                    width="94"
+                    width="112"
                     height="94"
                     style={{ borderCollapse: 'collapse' as const, backgroundColor: 'hsl(220, 26%, 14%)' }}
                   >
                     <tbody>
                       <tr>
-                        <td align="center" valign="middle" width="94" height="94" style={{ padding: 0 }}>
+                        <td align="center" valign="middle" width="112" height="94" style={{ padding: 0 }}>
                           <Img
                             src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
                             alt="Alto Whisky"
