@@ -4,9 +4,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth, type ProofOfAddressType, type ProofOfAgeType, type VerificationStatus } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
-import { TitleSelect } from "@/components/auth/TitleSelect";
-import { formatName } from "@/lib/formatName";
-import { CheckCircle2, Clock, XCircle, Upload, FileText } from "lucide-react";
+import { CheckCircle2, Clock, XCircle, ShieldCheck, Pencil, FileText, Upload } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import type { TablesUpdate } from "@/integrations/supabase/types";
+
+type ProfileUpdate = TablesUpdate<"profiles">;
 
 const ADDRESS_PROOF_TYPES: { value: ProofOfAddressType; label: string }[] = [
   { value: "utility_bill", label: "Utility Bill" },
@@ -25,60 +34,86 @@ const AGE_PROOF_TYPES: { value: ProofOfAgeType; label: string }[] = [
 const MAX_FILE_MB = 10;
 const ALLOWED_MIMES = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
 
-export default function Account() {
-  const { profile, refreshProfile } = useAuth();
-  const { toast } = useToast();
-  const [form, setForm] = useState({
-    title: profile?.title ?? "",
-    first_name: profile?.first_name ?? "",
-    last_name: profile?.last_name ?? "",
-    phone: profile?.phone ?? "",
-    phone_country_code: profile?.phone_country_code ?? "",
-    country: profile?.country ?? "",
-  });
-  const [password, setPassword] = useState("");
-  const [saving, setSaving] = useState(false);
+function formatDob(iso: string | null) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+}
 
-  const changed = useMemo(() => {
-    if (!profile) return false;
-    return (
-      form.title !== (profile.title ?? "") ||
-      form.first_name !== (profile.first_name ?? "") ||
-      form.last_name !== (profile.last_name ?? "") ||
-      form.phone !== (profile.phone ?? "") ||
-      form.phone_country_code !== (profile.phone_country_code ?? "") ||
-      form.country !== (profile.country ?? "")
-    );
-  }, [form, profile]);
+function formatAddress(p: {
+  address_line1: string | null;
+  address_line2: string | null;
+  address_city: string | null;
+  address_region: string | null;
+  address_postcode: string | null;
+  address_country: string | null;
+}) {
+  const parts = [p.address_line1, p.address_line2, p.address_city, p.address_region, p.address_postcode, p.address_country]
+    .filter((x) => x && String(x).trim().length > 0);
+  return parts.length ? parts.join(", ") : "—";
+}
 
-  const saveProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!profile) return;
-    setSaving(true);
-    const identityLocked = profile.age_verification_status === "verified";
-    const basePayload = {
-      phone: form.phone,
-      phone_country_code: form.phone_country_code,
-      country: form.country,
-    };
-    const payload = identityLocked
-      ? basePayload
-      : {
-          ...basePayload,
-          title: form.title,
-          first_name: formatName(form.first_name),
-          last_name: formatName(form.last_name),
-        };
-    const { error } = await supabase.from("profiles").update(payload).eq("id", profile.id);
+function formatPhone(profile: { phone_country_code: string | null; phone: string | null }) {
+  const code = profile.phone_country_code?.trim() ?? "";
+  const num = profile.phone?.trim() ?? "";
+  if (!num) return "—";
+  return code ? `${code} ${num}` : num;
+}
 
-    setSaving(false);
-    if (error) toast({ title: "Save failed", description: error.message, variant: "destructive" });
-    else {
-      toast({ title: "Profile updated" });
-      await refreshProfile();
-    }
+function StatusPill({ status }: { status: VerificationStatus }) {
+  const map: Record<VerificationStatus, { label: string; className: string; Icon: any }> = {
+    not_submitted: { label: "Not submitted", className: "border-border text-muted-foreground", Icon: FileText },
+    pending: { label: "Pending review", className: "border-amber-500/40 text-amber-600 bg-amber-500/10", Icon: Clock },
+    verified: { label: "Verified", className: "border-emerald-500/40 text-emerald-700 bg-emerald-500/10", Icon: CheckCircle2 },
+    rejected: { label: "Rejected", className: "border-destructive/40 text-destructive bg-destructive/10", Icon: XCircle },
   };
+  const cfg = map[status];
+  const Icon = cfg.Icon;
+  return (
+    <span className={`inline-flex items-center gap-1.5 px-2 py-1 border font-body text-[10px] uppercase tracking-[0.2em] ${cfg.className}`}>
+      <Icon className="w-3 h-3" /> {cfg.label}
+    </span>
+  );
+}
 
+function RowStatus({
+  status,
+  onVerify,
+}: {
+  status: VerificationStatus;
+  onVerify: () => void;
+}) {
+  if (status === "pending" || status === "verified") return <StatusPill status={status} />;
+  return (
+    <button
+      type="button"
+      onClick={onVerify}
+      className={`font-body text-[10px] uppercase tracking-[0.2em] px-3 py-1.5 border transition-colors ${
+        status === "rejected"
+          ? "border-destructive text-destructive hover:bg-destructive/10"
+          : "border-primary text-primary hover:bg-primary/10"
+      }`}
+    >
+      {status === "rejected" ? "Resubmit" : "Verify"}
+    </button>
+  );
+}
+
+export default function Account() {
+  const { profile } = useAuth();
+  const { toast } = useToast();
+  const [addressOpen, setAddressOpen] = useState(false);
+  const [dobOpen, setDobOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [password, setPassword] = useState("");
+
+  if (!profile) return null;
+
+  const addrStatus = profile.address_verification_status;
+  const ageStatus = profile.age_verification_status;
+  const fullyVerified = addrStatus === "verified" && ageStatus === "verified";
+  const displayName = [profile.title, profile.first_name, profile.last_name].filter(Boolean).join(" ");
 
   const changePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,124 +125,118 @@ export default function Account() {
     }
   };
 
-  const identityLocked = profile?.age_verification_status === "verified";
-
   return (
     <div className="max-w-2xl">
       <h1 className="display-heading text-4xl mb-8">Account</h1>
 
-      <form onSubmit={saveProfile} className="bg-card border border-border p-8 mb-6 space-y-5">
-        <h2 className="display-heading text-xl mb-4">Profile</h2>
-        {identityLocked && (
-          <p className="font-body text-[11px] text-muted-foreground -mt-2">
-            Your legal name and date of birth are locked because your identity has been verified. Contact support to correct them.
-          </p>
-        )}
-        <div className="grid grid-cols-[6rem_1fr_1fr] gap-4">
-          {identityLocked ? (
-            <Field label="Title" value={form.title} onChange={() => {}} disabled />
-          ) : (
-            <TitleSelect value={form.title} onChange={(title) => setForm({ ...form, title })} />
-          )}
-          <Field label="First Name" value={form.first_name} onChange={(v: string) => setForm({ ...form, first_name: v })} disabled={identityLocked} />
-          <Field label="Last Name" value={form.last_name} onChange={(v: string) => setForm({ ...form, last_name: v })} disabled={identityLocked} />
+      {fullyVerified && (
+        <div className="border border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200 p-3 mb-6 flex items-center gap-2 font-body text-xs">
+          <ShieldCheck className="w-4 h-4" /> Verified account — you're cleared to purchase.
         </div>
-        <Field label="Email" value={profile?.email ?? ""} onChange={() => {}} disabled />
-        <CountrySelect
-          value={form.country}
-          onChange={(code, dialingCode) =>
-            setForm((f) => ({ ...f, country: code, phone_country_code: dialingCode }))
-          }
-        />
-        <PhoneField
-          countryCode={form.phone_country_code}
-          onCountryCodeChange={(phone_country_code) => setForm({ ...form, phone_country_code })}
-          phone={form.phone}
-          onPhoneChange={(phone) => setForm({ ...form, phone })}
-        />
-        <button type="submit" disabled={saving || !changed}
-          className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3 hover:opacity-90 disabled:opacity-50">
-          {saving ? "Saving…" : "Save"}
-        </button>
-      </form>
+      )}
 
-      <AddressVerificationCard />
-      <AgeVerificationCard />
+      <section className="bg-card border border-border p-8 mb-6">
+        <div className="flex items-start justify-between gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            <h2 className="display-heading text-xl">Profile</h2>
+            {fullyVerified && (
+              <span className="inline-flex items-center gap-1.5 px-2 py-1 border border-emerald-500/40 text-emerald-700 bg-emerald-500/10 font-body text-[10px] uppercase tracking-[0.2em]">
+                <ShieldCheck className="w-3 h-3" /> Verified
+              </span>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => setEditOpen(true)}
+            className="inline-flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.25em] border border-border px-3 py-1.5 hover:bg-muted"
+          >
+            <Pencil className="w-3 h-3" /> Edit
+          </button>
+        </div>
+
+        <dl className="divide-y divide-border">
+          <ProfileRow label="Name" value={displayName || "—"} />
+          <ProfileRow
+            label="Date of birth"
+            value={formatDob(profile.date_of_birth)}
+            action={<RowStatus status={ageStatus} onVerify={() => setDobOpen(true)} />}
+          />
+          <ProfileRow label="Email" value={profile.email} />
+          <ProfileRow
+            label="Address"
+            value={formatAddress(profile)}
+            action={<RowStatus status={addrStatus} onVerify={() => setAddressOpen(true)} />}
+          />
+          <ProfileRow label="Contact number" value={formatPhone(profile)} />
+        </dl>
+
+        {(addrStatus === "rejected" || ageStatus === "rejected") && profile.verification_notes && (
+          <div className="mt-5 border border-destructive/40 bg-destructive/10 text-destructive font-body text-xs p-3">
+            <strong className="uppercase tracking-[0.2em] text-[10px] block mb-1">Reviewer note</strong>
+            {profile.verification_notes}
+          </div>
+        )}
+      </section>
 
       <form onSubmit={changePassword} className="bg-card border border-border p-8 space-y-5">
         <h2 className="display-heading text-xl mb-4">Change Password</h2>
-        <Field label="New Password" type="password" value={password} onChange={setPassword} />
-        <button type="submit"
-          className="font-body text-xs uppercase tracking-[0.25em] border border-border px-8 py-3 hover:bg-muted">
+        <div>
+          <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">New Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+          />
+        </div>
+        <button
+          type="submit"
+          className="font-body text-xs uppercase tracking-[0.25em] border border-border px-8 py-3 hover:bg-muted"
+        >
           Update Password
         </button>
       </form>
+
+      <VerifyAddressDialog open={addressOpen} onOpenChange={setAddressOpen} />
+      <VerifyDobDialog open={dobOpen} onOpenChange={setDobOpen} />
+      <EditProfileDialog open={editOpen} onOpenChange={setEditOpen} />
     </div>
   );
 }
 
-
-const Field = ({ label, value, onChange, type = "text", disabled = false }: any) => (
-  <div>
-    <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">{label}</label>
-    <input type={type} value={value} onChange={(e) => onChange(e.target.value)} disabled={disabled}
-      className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary disabled:opacity-60" />
-  </div>
-);
-
-function StatusBadge({ status }: { status: VerificationStatus }) {
-  const map: Record<VerificationStatus, { label: string; className: string; icon: any }> = {
-    not_submitted: { label: "Not submitted", className: "border-border text-muted-foreground", icon: FileText },
-    pending: { label: "Pending review", className: "border-amber-500/40 text-amber-600 bg-amber-500/10", icon: Clock },
-    verified: { label: "Verified", className: "border-emerald-500/40 text-emerald-600 bg-emerald-500/10", icon: CheckCircle2 },
-    rejected: { label: "Rejected", className: "border-destructive/40 text-destructive bg-destructive/10", icon: XCircle },
-  };
-  const cfg = map[status];
-  const Icon = cfg.icon;
+function ProfileRow({ label, value, action }: { label: string; value: string; action?: React.ReactNode }) {
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2 py-1 border font-body text-[10px] uppercase tracking-[0.2em] ${cfg.className}`}>
-      <Icon className="w-3 h-3" /> {cfg.label}
-    </span>
+    <div className="py-4 flex items-start justify-between gap-4">
+      <div className="min-w-0 flex-1">
+        <div className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{label}</div>
+        <div className="font-body text-sm text-foreground break-words">{value}</div>
+      </div>
+      {action && <div className="flex-shrink-0 pt-1">{action}</div>}
+    </div>
   );
 }
 
-function useSignedUrl(path: string | null | undefined) {
-  const [url, setUrl] = useState<string | null>(null);
-  useEffect(() => {
-    let cancelled = false;
-    if (!path) { setUrl(null); return; }
-    supabase.storage.from("kyc-documents").createSignedUrl(path, 300).then(({ data }) => {
-      if (!cancelled) setUrl(data?.signedUrl ?? null);
-    });
-    return () => { cancelled = true; };
-  }, [path]);
-  return url;
-}
+// ─── Verify Address Dialog ─────────────────────────────────────────────────
 
-function AddressVerificationCard() {
+function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const { profile, refreshProfile } = useAuth();
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const status = profile?.address_verification_status ?? "not_submitted";
-  const locked = status === "pending";
-
-
   const [addr, setAddr] = useState({
-    address_line1: profile?.address_line1 ?? "",
-    address_line2: profile?.address_line2 ?? "",
-    address_city: profile?.address_city ?? "",
-    address_region: profile?.address_region ?? "",
-    address_postcode: profile?.address_postcode ?? "",
-    address_country: profile?.address_country ?? profile?.country ?? "",
-    proof_of_address_type: (profile?.proof_of_address_type ?? "") as ProofOfAddressType | "",
-    proof_of_address_issued_on: profile?.proof_of_address_issued_on ?? "",
+    address_line1: "",
+    address_line2: "",
+    address_city: "",
+    address_region: "",
+    address_postcode: "",
+    address_country: "",
+    proof_of_address_type: "" as ProofOfAddressType | "",
+    proof_of_address_issued_on: "",
   });
   const [file, setFile] = useState<File | null>(null);
-  const currentUrl = useSignedUrl(profile?.proof_of_address_path);
+  const [useForAge, setUseForAge] = useState(false);
 
   useEffect(() => {
-    if (!profile) return;
+    if (!open || !profile) return;
     setAddr({
       address_line1: profile.address_line1 ?? "",
       address_line2: profile.address_line2 ?? "",
@@ -218,104 +247,89 @@ function AddressVerificationCard() {
       proof_of_address_type: (profile.proof_of_address_type ?? "") as ProofOfAddressType | "",
       proof_of_address_issued_on: profile.proof_of_address_issued_on ?? "",
     });
-  }, [profile]);
+    setFile(null);
+    setUseForAge(false);
+  }, [open, profile]);
+
+  const ageAlreadyVerified = profile?.age_verification_status === "verified";
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile) return;
     if (!addr.address_line1 || !addr.address_city || !addr.address_postcode || !addr.address_country) {
-      toast({ title: "Missing address", description: "Please fill in all required address fields.", variant: "destructive" });
-      return;
+      return toast({ title: "Missing address", description: "Please complete all required address fields.", variant: "destructive" });
     }
     if (!addr.proof_of_address_type || !addr.proof_of_address_issued_on) {
-      toast({ title: "Missing document details", description: "Select a document type and issue date.", variant: "destructive" });
-      return;
+      return toast({ title: "Missing document details", description: "Select a document type and issue date.", variant: "destructive" });
     }
-    const existingPath = profile.proof_of_address_path;
-    if (!existingPath && !file) {
-      toast({ title: "Upload required", description: "Please attach your proof of address.", variant: "destructive" });
-      return;
+    if (!file && !profile.proof_of_address_path) {
+      return toast({ title: "Upload required", description: "Please attach your proof of address.", variant: "destructive" });
     }
+
     setSaving(true);
-    let path = existingPath;
+    let path = profile.proof_of_address_path;
     if (file) {
       if (!ALLOWED_MIMES.includes(file.type)) {
         setSaving(false);
-        toast({ title: "Unsupported file", description: "Use PDF, JPG, PNG, or WebP.", variant: "destructive" });
-        return;
+        return toast({ title: "Unsupported file", description: "Use PDF, JPG, PNG or WebP.", variant: "destructive" });
       }
       if (file.size > MAX_FILE_MB * 1024 * 1024) {
         setSaving(false);
-        toast({ title: "File too large", description: `Max ${MAX_FILE_MB}MB.`, variant: "destructive" });
-        return;
+        return toast({ title: "File too large", description: `Max ${MAX_FILE_MB}MB.`, variant: "destructive" });
       }
-      setUploading(true);
       const ext = file.name.split(".").pop() || "bin";
       const newPath = `${profile.id}/address-${Date.now()}.${ext}`;
       const { error: upErr } = await supabase.storage.from("kyc-documents").upload(newPath, file, { upsert: false, contentType: file.type });
-      setUploading(false);
       if (upErr) {
         setSaving(false);
-        toast({ title: "Upload failed", description: upErr.message, variant: "destructive" });
-        return;
+        return toast({ title: "Upload failed", description: upErr.message, variant: "destructive" });
       }
       path = newPath;
     }
-    const { error } = await supabase.from("profiles").update({
+
+    const dualUse = useForAge && addr.proof_of_address_type === "driving_licence" && !ageAlreadyVerified;
+    const update: ProfileUpdate = {
       ...addr,
       proof_of_address_path: path,
       proof_of_address_type: addr.proof_of_address_type as ProofOfAddressType,
       address_verification_status: "pending",
-    }).eq("id", profile.id);
-    setSaving(false);
-    if (error) {
-      toast({ title: "Save failed", description: error.message, variant: "destructive" });
-      return;
+    };
+    if (dualUse) {
+      update.proof_of_age_path = path;
+      update.proof_of_age_type = "driving_licence";
+      update.age_verification_status = "pending";
     }
-    setFile(null);
-    toast({ title: "Submitted for review", description: "We'll notify you when your address is verified." });
+
+    const { error } = await supabase.from("profiles").update(update).eq("id", profile.id);
+    setSaving(false);
+    if (error) return toast({ title: "Save failed", description: error.message, variant: "destructive" });
+    toast({
+      title: "Submitted for review",
+      description: "We'll review your documents within 24 hours and let you know by email.",
+    });
     await refreshProfile();
+    onOpenChange(false);
   };
 
   return (
-    <section className="bg-card border border-border p-8 mb-6 space-y-5">
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h2 className="display-heading text-xl">Address Verification</h2>
-          <p className="font-body text-xs text-muted-foreground mt-1">
-            Required before your first purchase. Documents must be issued within the last 3 months.
-          </p>
-        </div>
-        <StatusBadge status={status} />
-      </div>
-
-      {status === "rejected" && profile?.verification_notes && (
-        <div className="border border-destructive/40 bg-destructive/10 text-destructive font-body text-xs p-3">
-          <strong className="uppercase tracking-[0.2em] text-[10px]">Reviewer note:</strong> {profile.verification_notes}
-        </div>
-      )}
-
-      {status === "verified" && (
-        <div className="border border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200 font-body text-xs p-3">
-          Your address is verified. If you move, update the fields below and upload a new proof — it will be sent for review again.
-        </div>
-      )}
-
-
-      <form onSubmit={submit} className="space-y-4">
-        <fieldset disabled={locked} className="space-y-4 disabled:opacity-70">
-          <Field label="Address line 1" value={addr.address_line1} onChange={(v: string) => setAddr({ ...addr, address_line1: v })} />
-          <Field label="Address line 2 (optional)" value={addr.address_line2} onChange={(v: string) => setAddr({ ...addr, address_line2: v })} />
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="display-heading text-2xl">Verify your address</DialogTitle>
+          <DialogDescription>
+            Enter your current address and upload a document issued within the last 3 months.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={submit} className="space-y-4">
+          <TextField label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
+          <TextField label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
           <div className="grid md:grid-cols-2 gap-4">
-            <Field label="City" value={addr.address_city} onChange={(v: string) => setAddr({ ...addr, address_city: v })} />
-            <Field label="Region / State" value={addr.address_region} onChange={(v: string) => setAddr({ ...addr, address_region: v })} />
+            <TextField label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
+            <TextField label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
           </div>
           <div className="grid md:grid-cols-2 gap-4">
-            <Field label="Postcode / ZIP" value={addr.address_postcode} onChange={(v: string) => setAddr({ ...addr, address_postcode: v })} />
-            <CountrySelect
-              value={addr.address_country}
-              onChange={(code) => setAddr({ ...addr, address_country: code })}
-            />
+            <TextField label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
+            <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
           </div>
 
           <div className="pt-4 border-t border-border grid md:grid-cols-2 gap-4">
@@ -324,24 +338,24 @@ function AddressVerificationCard() {
               <select
                 value={addr.proof_of_address_type}
                 onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary disabled:opacity-60"
+                className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
               >
                 <option value="">Select…</option>
-                {ADDRESS_PROOF_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+                {ADDRESS_PROOF_TYPES.map((t) => (
+                  <option key={t.value} value={t.value}>{t.label}</option>
+                ))}
               </select>
             </div>
-            <Field
+            <TextField
               label="Issue date"
               type="date"
               value={addr.proof_of_address_issued_on}
-              onChange={(v: string) => setAddr({ ...addr, proof_of_address_issued_on: v })}
+              onChange={(v) => setAddr({ ...addr, proof_of_address_issued_on: v })}
             />
           </div>
 
           <div>
-            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
-              {profile?.proof_of_address_path ? "Replace document" : "Upload document"}
-            </label>
+            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Upload document</label>
             <input
               type="file"
               accept="application/pdf,image/jpeg,image/png,image/webp"
@@ -349,48 +363,67 @@ function AddressVerificationCard() {
               className="font-body text-sm w-full"
             />
             <p className="font-body text-[11px] text-muted-foreground mt-1">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
-            {currentUrl && (
-              <a href={currentUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 mt-2 text-primary font-body text-xs hover:underline">
-                <FileText className="w-3 h-3" /> View current document
-              </a>
-            )}
           </div>
-        </fieldset>
 
-        {!locked && (
-          <button type="submit" disabled={saving}
-            className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3 hover:opacity-90 disabled:opacity-50">
-            <Upload className="w-4 h-4" />
-            {uploading ? "Uploading…" : saving ? "Submitting…" : status === "verified" ? "Update address" : status === "rejected" ? "Resubmit" : "Submit for review"}
-          </button>
-        )}
+          {addr.proof_of_address_type === "driving_licence" && !ageAlreadyVerified && (
+            <label className="flex items-start gap-2 p-3 border border-border bg-muted/30 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={useForAge}
+                onChange={(e) => setUseForAge(e.target.checked)}
+                className="mt-0.5"
+              />
+              <span className="font-body text-xs text-foreground">
+                Use this driving licence as proof of age as well. You won't need to upload a second document.
+              </span>
+            </label>
+          )}
 
-        {locked && status === "pending" && (
-          <p className="font-body text-xs text-muted-foreground">Under review — you'll be notified once verified.</p>
-        )}
-      </form>
-    </section>
+          <DialogFooter>
+            <button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              className="font-body text-xs uppercase tracking-[0.25em] border border-border px-6 py-3 hover:bg-muted"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-6 py-3 hover:opacity-90 disabled:opacity-50"
+            >
+              <Upload className="w-4 h-4" /> {saving ? "Submitting…" : "Submit for review"}
+            </button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 
-function AgeVerificationCard() {
+// ─── Verify DOB Dialog ─────────────────────────────────────────────────────
+
+function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   const { profile, refreshProfile } = useAuth();
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const status = profile?.age_verification_status ?? "not_submitted";
-  const locked = status === "verified" || status === "pending";
-
-  const [dob, setDob] = useState(profile?.date_of_birth ?? "");
-  const [docType, setDocType] = useState<ProofOfAgeType | "">((profile?.proof_of_age_type ?? "") as ProofOfAgeType | "");
+  const [dob, setDob] = useState("");
+  const [docType, setDocType] = useState<ProofOfAgeType | "">("");
   const [file, setFile] = useState<File | null>(null);
-  const currentUrl = useSignedUrl(profile?.proof_of_age_path);
+  const [useForAddress, setUseForAddress] = useState(false);
+  const [issuedOn, setIssuedOn] = useState("");
 
   useEffect(() => {
-    if (!profile) return;
+    if (!open || !profile) return;
     setDob(profile.date_of_birth ?? "");
     setDocType((profile.proof_of_age_type ?? "") as ProofOfAgeType | "");
-  }, [profile]);
+    setFile(null);
+    setUseForAddress(false);
+    setIssuedOn("");
+  }, [open, profile]);
+
+  const addressAlreadyVerified = profile?.address_verification_status === "verified";
+  const hasAddressOnFile = !!(profile?.address_line1 && profile?.address_postcode);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -399,7 +432,16 @@ function AgeVerificationCard() {
     const age = (Date.now() - new Date(dob).getTime()) / (365.25 * 24 * 3600 * 1000);
     if (age < 18) return toast({ title: "Must be 18+", description: "You must be at least 18 to hold a cask.", variant: "destructive" });
     if (!docType) return toast({ title: "Select a document type", variant: "destructive" });
-    if (!profile.proof_of_age_path && !file) return toast({ title: "Upload required", description: "Attach your ID document.", variant: "destructive" });
+    if (!file && !profile.proof_of_age_path) return toast({ title: "Upload required", description: "Attach your ID document.", variant: "destructive" });
+
+    const dualUse = useForAddress && docType === "driving_licence" && !addressAlreadyVerified;
+    if (dualUse && (!hasAddressOnFile || !issuedOn)) {
+      return toast({
+        title: "Address details needed",
+        description: "To use this licence for address proof, add your address (via Edit) and set the issue date.",
+        variant: "destructive",
+      });
+    }
 
     setSaving(true);
     let path = profile.proof_of_age_path;
@@ -412,63 +454,68 @@ function AgeVerificationCard() {
         setSaving(false);
         return toast({ title: "File too large", description: `Max ${MAX_FILE_MB}MB.`, variant: "destructive" });
       }
-      setUploading(true);
       const ext = file.name.split(".").pop() || "bin";
       const newPath = `${profile.id}/age-${Date.now()}.${ext}`;
       const { error: upErr } = await supabase.storage.from("kyc-documents").upload(newPath, file, { upsert: false, contentType: file.type });
-      setUploading(false);
-      if (upErr) { setSaving(false); return toast({ title: "Upload failed", description: upErr.message, variant: "destructive" }); }
+      if (upErr) {
+        setSaving(false);
+        return toast({ title: "Upload failed", description: upErr.message, variant: "destructive" });
+      }
       path = newPath;
     }
-    const { error } = await supabase.from("profiles").update({
+
+    const update: ProfileUpdate = {
       date_of_birth: dob,
       proof_of_age_type: docType as ProofOfAgeType,
       proof_of_age_path: path,
       age_verification_status: "pending",
-    }).eq("id", profile.id);
+    };
+    if (dualUse) {
+      update.proof_of_address_path = path;
+      update.proof_of_address_type = "driving_licence";
+      update.proof_of_address_issued_on = issuedOn;
+      update.address_verification_status = "pending";
+    }
+
+    const { error } = await supabase.from("profiles").update(update).eq("id", profile.id);
     setSaving(false);
     if (error) return toast({ title: "Save failed", description: error.message, variant: "destructive" });
-    setFile(null);
-    toast({ title: "Submitted for review" });
+    toast({
+      title: "Submitted for review",
+      description: "We'll review your documents within 24 hours and let you know by email.",
+    });
     await refreshProfile();
+    onOpenChange(false);
   };
 
   return (
-    <section className="bg-card border border-border p-8 mb-6 space-y-5">
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h2 className="display-heading text-xl">Date of Birth & ID</h2>
-          <p className="font-body text-xs text-muted-foreground mt-1">
-            Required before your first purchase. If you use a UK driving licence, it can double as proof of address.
-          </p>
-        </div>
-        <StatusBadge status={status} />
-      </div>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="display-heading text-2xl">Verify your date of birth</DialogTitle>
+          <DialogDescription>
+            Confirm your date of birth and upload a government-issued ID.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={submit} className="space-y-4">
+          <TextField label="Date of birth" type="date" value={dob} onChange={setDob} />
 
-      {status === "rejected" && profile?.verification_notes && (
-        <div className="border border-destructive/40 bg-destructive/10 text-destructive font-body text-xs p-3">
-          <strong className="uppercase tracking-[0.2em] text-[10px]">Reviewer note:</strong> {profile.verification_notes}
-        </div>
-      )}
-
-      <form onSubmit={submit} className="space-y-4">
-        <fieldset disabled={locked} className="space-y-4 disabled:opacity-70">
-          <Field label="Date of Birth" type="date" value={dob} onChange={setDob} />
           <div>
             <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Document type</label>
             <select
               value={docType}
               onChange={(e) => setDocType(e.target.value as ProofOfAgeType)}
-              className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary disabled:opacity-60"
+              className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
             >
               <option value="">Select…</option>
-              {AGE_PROOF_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+              {AGE_PROOF_TYPES.map((t) => (
+                <option key={t.value} value={t.value}>{t.label}</option>
+              ))}
             </select>
           </div>
+
           <div>
-            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">
-              {profile?.proof_of_age_path ? "Replace document" : "Upload document"}
-            </label>
+            <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Upload document</label>
             <input
               type="file"
               accept="application/pdf,image/jpeg,image/png,image/webp"
@@ -476,35 +523,309 @@ function AgeVerificationCard() {
               className="font-body text-sm w-full"
             />
             <p className="font-body text-[11px] text-muted-foreground mt-1">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
-            {currentUrl && (
-              <a href={currentUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 mt-2 text-primary font-body text-xs hover:underline">
-                <FileText className="w-3 h-3" /> View current document
-              </a>
-            )}
           </div>
-        </fieldset>
 
-        {!locked && (
-          <button type="submit" disabled={saving}
-            className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-8 py-3 hover:opacity-90 disabled:opacity-50">
-            <Upload className="w-4 h-4" />
-            {uploading ? "Uploading…" : saving ? "Submitting…" : status === "rejected" ? "Resubmit" : "Submit for review"}
-          </button>
+          {docType === "driving_licence" && !addressAlreadyVerified && (
+            <div className="p-3 border border-border bg-muted/30 space-y-3">
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useForAddress}
+                  onChange={(e) => setUseForAddress(e.target.checked)}
+                  className="mt-0.5"
+                />
+                <span className="font-body text-xs text-foreground">
+                  Use this driving licence as proof of address as well {hasAddressOnFile ? "" : "(add your address via Edit first)"}.
+                </span>
+              </label>
+              {useForAddress && hasAddressOnFile && (
+                <TextField label="Licence issue date" type="date" value={issuedOn} onChange={setIssuedOn} />
+              )}
+            </div>
+          )}
+
+          <DialogFooter>
+            <button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              className="font-body text-xs uppercase tracking-[0.25em] border border-border px-6 py-3 hover:bg-muted"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-6 py-3 hover:opacity-90 disabled:opacity-50"
+            >
+              <Upload className="w-4 h-4" /> {saving ? "Submitting…" : "Submit for review"}
+            </button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ─── Edit Profile Dialog (address + phone) ─────────────────────────────────
+
+function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+  const { profile, refreshProfile } = useAuth();
+  const { toast } = useToast();
+  const [tab, setTab] = useState<"phone" | "address">("phone");
+  const [saving, setSaving] = useState(false);
+
+  const [phone, setPhone] = useState("");
+  const [phoneCode, setPhoneCode] = useState("");
+  const [country, setCountry] = useState("");
+
+  const [addr, setAddr] = useState({
+    address_line1: "",
+    address_line2: "",
+    address_city: "",
+    address_region: "",
+    address_postcode: "",
+    address_country: "",
+    proof_of_address_type: "" as ProofOfAddressType | "",
+    proof_of_address_issued_on: "",
+  });
+  const [file, setFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (!open || !profile) return;
+    setTab("phone");
+    setPhone(profile.phone ?? "");
+    setPhoneCode(profile.phone_country_code ?? "");
+    setCountry(profile.country ?? "");
+    setAddr({
+      address_line1: profile.address_line1 ?? "",
+      address_line2: profile.address_line2 ?? "",
+      address_city: profile.address_city ?? "",
+      address_region: profile.address_region ?? "",
+      address_postcode: profile.address_postcode ?? "",
+      address_country: profile.address_country ?? profile.country ?? "",
+      proof_of_address_type: "",
+      proof_of_address_issued_on: "",
+    });
+    setFile(null);
+  }, [open, profile]);
+
+  const phoneChanged = useMemo(() => {
+    if (!profile) return false;
+    return phone !== (profile.phone ?? "") || phoneCode !== (profile.phone_country_code ?? "") || country !== (profile.country ?? "");
+  }, [phone, phoneCode, country, profile]);
+
+  const savePhone = async () => {
+    if (!profile || !phoneChanged) return;
+    setSaving(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ phone, phone_country_code: phoneCode, country })
+      .eq("id", profile.id);
+    setSaving(false);
+    if (error) return toast({ title: "Save failed", description: error.message, variant: "destructive" });
+    toast({ title: "Contact number updated" });
+    await refreshProfile();
+    onOpenChange(false);
+  };
+
+  const saveAddress = async () => {
+    if (!profile) return;
+    if (!addr.address_line1 || !addr.address_city || !addr.address_postcode || !addr.address_country) {
+      return toast({ title: "Missing address", description: "Please complete all required address fields.", variant: "destructive" });
+    }
+    if (!addr.proof_of_address_type || !addr.proof_of_address_issued_on) {
+      return toast({ title: "Missing document details", description: "Select a document type and issue date for your new proof of address.", variant: "destructive" });
+    }
+    if (!file) {
+      return toast({ title: "New proof required", description: "Please upload a new proof of address to re-verify.", variant: "destructive" });
+    }
+    if (!ALLOWED_MIMES.includes(file.type)) {
+      return toast({ title: "Unsupported file", description: "Use PDF, JPG, PNG or WebP.", variant: "destructive" });
+    }
+    if (file.size > MAX_FILE_MB * 1024 * 1024) {
+      return toast({ title: "File too large", description: `Max ${MAX_FILE_MB}MB.`, variant: "destructive" });
+    }
+
+    setSaving(true);
+    const ext = file.name.split(".").pop() || "bin";
+    const newPath = `${profile.id}/address-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage.from("kyc-documents").upload(newPath, file, { upsert: false, contentType: file.type });
+    if (upErr) {
+      setSaving(false);
+      return toast({ title: "Upload failed", description: upErr.message, variant: "destructive" });
+    }
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        ...addr,
+        proof_of_address_path: newPath,
+        proof_of_address_type: addr.proof_of_address_type as ProofOfAddressType,
+        address_verification_status: "pending",
+      })
+      .eq("id", profile.id);
+    setSaving(false);
+    if (error) return toast({ title: "Save failed", description: error.message, variant: "destructive" });
+    toast({
+      title: "Address submitted for re-verification",
+      description: "We'll review your new documents within 24 hours.",
+    });
+    await refreshProfile();
+    onOpenChange(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="display-heading text-2xl">Edit profile</DialogTitle>
+          <DialogDescription>Update your contact number or address. Name, date of birth and email are locked for identity purposes.</DialogDescription>
+        </DialogHeader>
+
+        <div className="flex border-b border-border">
+          <TabButton active={tab === "phone"} onClick={() => setTab("phone")}>Contact number</TabButton>
+          <TabButton active={tab === "address"} onClick={() => setTab("address")}>Address</TabButton>
+        </div>
+
+        {tab === "phone" ? (
+          <div className="space-y-4 pt-2">
+            <CountrySelect value={country} onChange={(code, dialingCode) => { setCountry(code); setPhoneCode(dialingCode); }} />
+            <PhoneField
+              countryCode={phoneCode}
+              onCountryCodeChange={setPhoneCode}
+              phone={phone}
+              onPhoneChange={setPhone}
+            />
+            <DialogFooter>
+              <button
+                type="button"
+                onClick={() => onOpenChange(false)}
+                className="font-body text-xs uppercase tracking-[0.25em] border border-border px-6 py-3 hover:bg-muted"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={savePhone}
+                disabled={saving || !phoneChanged}
+                className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-6 py-3 hover:opacity-90 disabled:opacity-50"
+              >
+                {saving ? "Saving…" : "Save"}
+              </button>
+            </DialogFooter>
+          </div>
+        ) : (
+          <div className="space-y-4 pt-2">
+            <div className="border border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200 p-3 font-body text-xs">
+              Changing your address requires re-verification. Please upload a new proof of address issued within the last 3 months.
+            </div>
+            <TextField label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
+            <TextField label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
+            <div className="grid md:grid-cols-2 gap-4">
+              <TextField label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
+              <TextField label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <TextField label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
+              <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
+            </div>
+            <div className="pt-2 border-t border-border grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Document type</label>
+                <select
+                  value={addr.proof_of_address_type}
+                  onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
+                  className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+                >
+                  <option value="">Select…</option>
+                  {ADDRESS_PROOF_TYPES.map((t) => (
+                    <option key={t.value} value={t.value}>{t.label}</option>
+                  ))}
+                </select>
+              </div>
+              <TextField
+                label="Issue date"
+                type="date"
+                value={addr.proof_of_address_issued_on}
+                onChange={(v) => setAddr({ ...addr, proof_of_address_issued_on: v })}
+              />
+            </div>
+            <div>
+              <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Upload new proof of address</label>
+              <input
+                type="file"
+                accept="application/pdf,image/jpeg,image/png,image/webp"
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                className="font-body text-sm w-full"
+              />
+              <p className="font-body text-[11px] text-muted-foreground mt-1">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
+            </div>
+            <DialogFooter>
+              <button
+                type="button"
+                onClick={() => onOpenChange(false)}
+                className="font-body text-xs uppercase tracking-[0.25em] border border-border px-6 py-3 hover:bg-muted"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={saveAddress}
+                disabled={saving}
+                className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-6 py-3 hover:opacity-90 disabled:opacity-50"
+              >
+                <Upload className="w-4 h-4" /> {saving ? "Submitting…" : "Save & re-verify"}
+              </button>
+            </DialogFooter>
+          </div>
         )}
-        {locked && status === "pending" && (
-          <p className="font-body text-xs text-muted-foreground">Under review — you'll be notified once verified.</p>
-        )}
-      </form>
-    </section>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function TabButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`font-body text-[10px] uppercase tracking-[0.25em] px-4 py-3 border-b-2 -mb-px transition-colors ${
+        active ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function TextField({
+  label,
+  value,
+  onChange,
+  type = "text",
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+}) {
+  return (
+    <div>
+      <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">{label}</label>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full bg-transparent border-b border-border py-2 font-body text-sm focus:outline-none focus:border-primary"
+      />
+    </div>
   );
 }
 
 export function VerificationGateBanner() {
   const { profile } = useAuth();
   if (!profile) return null;
-  const addr = profile.address_verification_status;
-  const age = profile.age_verification_status;
-  const done = addr === "verified" && age === "verified";
+  const done = profile.address_verification_status === "verified" && profile.age_verification_status === "verified";
   if (done) return null;
   return (
     <div className="border border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200 p-4 mb-6">

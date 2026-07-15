@@ -1,73 +1,72 @@
-# KYC: Address & Age Verification
+## Redesign: Portal Account page
 
-Manual admin review, no paid third-party services. All users (UK + international). Verification must be complete before checkout.
+Rebuild `src/pages/portal/Account.tsx` as a single Profile card with inline verification actions and modal-driven flows. No database changes — reuse existing KYC schema, storage bucket, and triggers.
 
-## Data model
+### Layout
 
-Extend `profiles`:
-- `date_of_birth` (date, nullable)
-- `address_line1`, `address_line2`, `address_city`, `address_region`, `address_postcode`, `address_country` (text)
-- `proof_of_address_path` (text) — storage path
-- `proof_of_address_type` (enum: `utility_bill`, `bank_statement`, `driving_licence`, `council_tax`, `other`)
-- `proof_of_address_issued_on` (date) — user attests document date; admin verifies within 3 months
-- `proof_of_age_path` (text)
-- `proof_of_age_type` (enum: `passport`, `driving_licence`, `national_id`)
-- `address_verified_at` (timestamptz, nullable) — set by admin
-- `age_verified_at` (timestamptz, nullable) — set by admin
-- `verification_notes` (text) — admin-only rejection notes
-- `verification_status` (enum: `not_submitted`, `pending`, `verified`, `rejected`) — derived convenience field maintained by trigger
+Single "Profile" card, top-down:
 
-RLS: user can read/update own row (existing `prevent_profile_escalation` trigger already blocks changes to sensitive fields; extend it to also block `address_verified_at`, `age_verified_at`, `verification_status`). Only admins can set verified/rejected fields.
+```text
+┌─ Profile ─────────────────────── [Verified ✓] (only if both approved) ─┐
+│                                                              [Edit]     │
+│  Name              Mr John Smith                                        │
+│  Date of birth     12 March 1985                    [Verify] / Pending  │
+│  Email             john@example.com                                     │
+│  Address           12 High St, London, SW1A 1AA     [Verify] / Pending  │
+│  Contact number    +44 7700 900123                                      │
+└─────────────────────────────────────────────────────────────────────────┘
+```
 
-## Storage
+- Top-right **Verified** badge appears only when `address_verification_status = 'verified'` AND `age_verification_status = 'verified'`.
+- Per-row status control on Date of birth and Address:
+  - `not_submitted` → **Verify** button (opens modal)
+  - `pending` → grey "Pending review" pill
+  - `verified` → green "Verified" pill
+  - `rejected` → red **Resubmit** button + admin note tooltip
+- **Edit** button (top-right, next to badge) opens the Edit modal.
 
-New private bucket `kyc-documents`. Path scheme: `{user_id}/address-{timestamp}.{ext}` and `{user_id}/age-{timestamp}.{ext}`.
+### Modals
 
-RLS on `storage.objects`:
-- Users can INSERT/SELECT/DELETE their own files (path starts with their uid).
-- Admins can SELECT all.
+**1. Verify Address modal**
+- Address fields: line 1, line 2, city, region, postcode, country (`CountrySelect`).
+- Document type dropdown (utility bill, bank statement, driving licence, council tax, other).
+- Issue date picker (attested by user, ≤3 months old).
+- File input (PDF/JPG/PNG/WebP, ≤10MB).
+- On submit: upload to `kyc-documents/{uid}/address-{ts}.{ext}`, update profile fields + `address_verification_status = 'pending'`, close modal, show confirmation toast: "We'll review your documents within 24 hours." Row switches to "Pending review".
 
-## Frontend — Account page (`src/pages/portal/Account.tsx`)
-
-Add two new cards below Profile:
-
-**1. Address**
-- Country selector (reuse `CountrySelect`).
-- Manual address fields for everyone: line 1, line 2, city, region/state, postcode.
-- No postcode-lookup API (free options are unreliable/rate-limited; skip for now — can add later).
-- Proof of address upload: document type dropdown, issue date picker, file input (PDF/JPG/PNG, max 10MB).
-- Status badge: Not submitted / Pending review / Verified / Rejected (with admin note).
-
-**2. Date of Birth & ID**
+**2. Verify Date of Birth modal**
 - DOB date picker (must be 18+).
-- Proof of age upload: document type dropdown, file input.
-- Note beside driving-licence option: "If you upload a UK driving licence here and select it for address proof too, one document covers both."
-- If user picks driving licence for *both*, allow single file upload used for both records.
-- Status badge like above.
+- Document type dropdown (passport, driving licence, national ID).
+- File input.
+- **Dual-use rule kept**: if user picks "Driving licence" AND already uploaded a driving licence for address (or uploads one here), a checkbox appears — "Use this document for address proof too" — which mirrors the file/type/issue-date onto the address record and also flips `address_verification_status` to `pending`. Works the other way too: uploading a driving licence in the Address modal offers "Use for age proof too".
+- Same "within 24 hours" confirmation toast on submit.
 
-Fields become read-only once `verification_status = pending` or `verified`; editable again if `rejected`.
+**3. Edit modal** (only address + phone)
+- Address fields (same as verify modal) + phone (`PhoneField`).
+- Name, title, DOB, email are NOT shown here — they're locked identity fields.
+- Saving address changes resets `address_verification_status` back to `'pending'` AND requires a fresh proof of address upload in the same modal (per your answer: re-verification required). If they only edit the phone number, no re-verification is triggered.
+- Implementation: modal has two tabs/sections — "Contact number" (phone only, saves immediately) and "Address" (fields + required new proof upload, submits as a re-verification).
 
-## Checkout gate
+### Verified banner
 
-In `src/pages/portal/Checkout.tsx`: if `profile.address_verified_at` or `profile.age_verified_at` is null, block submit and show a banner linking to Account with "Complete verification to purchase". No blocking elsewhere in portal.
+When both verifications approved, show a single top-of-page emerald banner:
 
-## Admin — new Verifications page (`src/pages/admin/Verifications.tsx`)
+```text
+✓ Verified account — you're cleared to purchase.
+```
 
-Route: `/admin/verifications`. Added to `AdminLayout` nav.
+Plus the small "Verified" chip in the Profile card header.
 
-- Queue of profiles with `verification_status = pending`.
-- Per-row: name, email, DOB, address, both document previews (signed URLs from `kyc-documents`), document types, issue date.
-- Actions per document: **Approve address**, **Approve age**, **Reject** (with note). Approve buttons stamp `address_verified_at` / `age_verified_at`.
-- Separate tab for already-verified and rejected users for reference.
+### Files touched
 
-## Technical details
+- `src/pages/portal/Account.tsx` — full rewrite around the new single-card layout.
+- New: `src/components/portal/VerifyAddressModal.tsx`
+- New: `src/components/portal/VerifyDobModal.tsx`
+- New: `src/components/portal/EditProfileModal.tsx`
+- No changes to `AuthContext`, admin Verifications page, checkout gate, database schema, RLS, storage bucket, or triggers — the existing `prevent_profile_escalation` trigger already enforces all the locking rules this design relies on.
 
-- Migration adds the columns, enums, storage bucket, RLS policies, and updates `prevent_profile_escalation` trigger.
-- Admin approval writes via service-role (edge function `verify-client-kyc`) so client-side RLS stays tight and we can send an email notification on approve/reject reusing the existing transactional-email infrastructure.
-- New transactional templates: `kyc-approved`, `kyc-rejected` (with reason).
-- Signed URLs for document previews generated on demand in admin page (60s expiry).
+### Out of scope
 
-## Out of scope (for later)
-
-- Automated postcode → address lookup (revisit when you're happy paying for a provider like getAddress.io ~£0.01/lookup).
-- Automated ID verification (Onfido/Stripe Identity etc.).
+- Postcode autocomplete (still deferred until a paid provider is chosen).
+- Automated ID verification.
+- Editing name/DOB/email from the client side (permanently locked once age-verified, per existing trigger).
