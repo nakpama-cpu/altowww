@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import heroImg from "@/assets/hero-mountain.jpg";
+import altoLogo from "@/assets/alto_text_logo.png.asset.json";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 
