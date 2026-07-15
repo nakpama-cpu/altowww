@@ -6,7 +6,6 @@ import {
   Container,
   Head,
   Heading,
-  Hr,
   Html,
   Img,
   Link,
@@ -203,10 +202,6 @@ const Email = ({
           </table>
         </Section>
 
-        <Hr style={hr} />
-        <Text style={footer}>
-          Alto Whisky · <Link href={siteUrl} style={link}>www.altowhisky.com</Link>
-        </Text>
       </Container>
     </Body>
   </Html>
@@ -442,15 +437,3 @@ const sigAddress = {
   lineHeight: '1.5',
 }
 
-const hr = {
-  border: 'none',
-  borderTop: '1px solid hsl(0, 0%, 90%)',
-  margin: '20px 0 12px',
-}
-const footer = {
-  fontFamily: "'Inter', Arial, sans-serif",
-  fontSize: '11px',
-  color: 'hsl(0, 0%, 45%)',
-  lineHeight: '1.5',
-  margin: '0',
-}
