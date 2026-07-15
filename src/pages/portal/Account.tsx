@@ -9,6 +9,7 @@ export default function Account() {
   const { profile, refreshProfile } = useAuth();
   const { toast } = useToast();
   const [form, setForm] = useState({
+    title: profile?.title ?? "",
     first_name: profile?.first_name ?? "",
     last_name: profile?.last_name ?? "",
     phone: profile?.phone ?? "",
