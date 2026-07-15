@@ -108,6 +108,7 @@ const App = () => (
                 <Route path="distilleries" element={<AdminDistilleries />} />
                 <Route path="callbacks" element={<AdminCallbacks />} />
                 <Route path="orders" element={<AdminOrders />} />
+                <Route path="discount-codes" element={<AdminDiscountCodes />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />
