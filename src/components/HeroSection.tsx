@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import heroImg from "@/assets/hero-mountain.jpg";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
@@ -5,11 +6,15 @@ import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 const HeroSection = () => {
   return (
     <>
+      <Helmet>
+        <link rel="preload" as="image" href={heroImg} fetchpriority="high" />
+      </Helmet>
       {/* Fixed hero that stays in place while content scrolls over it */}
       <section
         id="heritage"
         className="fixed inset-x-0 top-0 w-full overflow-hidden z-0 h-[380px]"
       >
+
         <img
           src={heroImg}
           alt="Dramatic mountain landscape at dawn with misty peaks"
