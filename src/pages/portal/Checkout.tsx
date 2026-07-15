@@ -58,8 +58,14 @@ export default function Checkout() {
     setCodeInput("");
   };
 
+  const kycOk = profile?.address_verification_status === "verified" && profile?.age_verification_status === "verified";
+
   const placeOrder = async () => {
     if (!user || items.length === 0) return;
+    if (!kycOk) {
+      toast({ title: "Verification required", description: "Complete address and identity verification in your Account first.", variant: "destructive" });
+      return;
+    }
     setPlacing(true);
     const rows = items.flatMap((i) =>
       Array.from({ length: i.quantity }, () => ({
