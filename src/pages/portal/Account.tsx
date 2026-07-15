@@ -13,6 +13,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import type { TablesUpdate } from "@/integrations/supabase/types";
+
+type ProfileUpdate = TablesUpdate<"profiles">;
 
 const ADDRESS_PROOF_TYPES: { value: ProofOfAddressType; label: string }[] = [
   { value: "utility_bill", label: "Utility Bill" },
