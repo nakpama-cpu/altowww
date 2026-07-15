@@ -288,7 +288,7 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
     }
 
     const dualUse = useForAge && addr.proof_of_address_type === "driving_licence" && !ageAlreadyVerified;
-    const update: Record<string, any> = {
+    const update: ProfileUpdate = {
       ...addr,
       proof_of_address_path: path,
       proof_of_address_type: addr.proof_of_address_type as ProofOfAddressType,
@@ -464,7 +464,7 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
       path = newPath;
     }
 
-    const update: Record<string, any> = {
+    const update: ProfileUpdate = {
       date_of_birth: dob,
       proof_of_age_type: docType as ProofOfAgeType,
       proof_of_age_path: path,
