@@ -243,7 +243,7 @@ export default function Checkout() {
 
           <button
             onClick={placeOrder}
-            disabled={placing}
+            disabled={placing || !kycOk}
             className="w-full mt-6 flex items-center justify-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
           >
             <CheckCircle2 className="w-4 h-4" />
