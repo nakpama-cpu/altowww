@@ -19,7 +19,7 @@ export default function AdminOrders() {
   useEffect(() => {
     (async () => {
       const { data } = await supabase.from("orders")
-        .select("*, profiles(first_name,last_name,email), casks(cask_number)")
+        .select("*, profiles(first_name,last_name,email), casks(cask_number), cask_listings(spirit, distilleries(name))")
         .order("created_at", { ascending: false });
       setRows((data ?? []) as any);
     })();
