@@ -4,7 +4,6 @@ import { useToast } from "@/hooks/use-toast";
 
 type Client = {
   id: string;
-  title: string | null;
   first_name: string;
   last_name: string;
   email: string;
@@ -15,9 +14,6 @@ type Client = {
   client_discount_pct: number;
   created_at: string;
 };
-
-const fullName = (c: Client) =>
-  [c.title, c.first_name, c.last_name].filter(Boolean).join(" ").trim();
 
 export default function AdminClients() {
   const { toast } = useToast();
@@ -80,7 +76,7 @@ export default function AdminClients() {
             {pending.map((c) => (
               <div key={c.id} className="bg-card border border-border p-5 flex flex-col gap-3">
                 <div>
-                  <div className="display-heading text-xl">{fullName(c)}</div>
+                  <div className="display-heading text-xl">{c.first_name} {c.last_name}</div>
                   <div className="font-body text-sm text-muted-foreground">{c.email}</div>
                 </div>
                 <div className="font-body text-xs text-muted-foreground grid grid-cols-2 gap-x-4 gap-y-1">
@@ -119,7 +115,7 @@ export default function AdminClients() {
           <tbody>
             {others.map((c) => (
               <tr key={c.id} className="border-t border-border">
-                <td className="p-3">{fullName(c)}</td>
+                <td className="p-3">{c.first_name} {c.last_name}</td>
                 <td className="p-3">{c.email}</td>
                 <td className="p-3">{c.country ?? "—"}</td>
                 <td className="p-3">{c.phone_country_code ? `${c.phone_country_code} ${c.phone}` : c.phone}</td>

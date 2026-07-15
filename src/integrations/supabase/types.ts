@@ -533,7 +533,6 @@ export type Database = {
           phone: string
           phone_country_code: string | null
           status: Database["public"]["Enums"]["profile_status"]
-          title: string | null
           updated_at: string
         }
         Insert: {
@@ -548,7 +547,6 @@ export type Database = {
           phone?: string
           phone_country_code?: string | null
           status?: Database["public"]["Enums"]["profile_status"]
-          title?: string | null
           updated_at?: string
         }
         Update: {
@@ -563,7 +561,6 @@ export type Database = {
           phone?: string
           phone_country_code?: string | null
           status?: Database["public"]["Enums"]["profile_status"]
-          title?: string | null
           updated_at?: string
         }
         Relationships: []

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
-import { TitleSelect } from "@/components/auth/TitleSelect";
 import { useDetectedCountry } from "@/hooks/useDetectedCountry";
 
 type Props = { open: boolean; onClose: () => void };
@@ -19,7 +18,7 @@ export default function LoginModal({ open, onClose }: Props) {
   const [loading, setLoading] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetSent, setResetSent] = useState(false);
-  const [signupForm, setSignupForm] = useState({ title: "", firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
+  const [signupForm, setSignupForm] = useState({ firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
   const detected = useDetectedCountry();
 
   useEffect(() => {
@@ -73,7 +72,6 @@ export default function LoginModal({ open, onClose }: Props) {
       options: {
         emailRedirectTo: `${window.location.origin}/portal`,
         data: {
-          title: signupForm.title,
           first_name: signupForm.firstName.trim(),
           last_name: signupForm.lastName.trim(),
           phone: signupForm.phone.trim(),
@@ -242,7 +240,6 @@ export default function LoginModal({ open, onClose }: Props) {
             {renderHeader("Client Portal", "Create account", "Your account will be reviewed before portfolio access.")}
 
             <form onSubmit={handleSignup} className="space-y-2">
-              <TitleSelect value={signupForm.title} onChange={(title) => setSignupForm({ ...signupForm, title })} />
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">First Name</label>
