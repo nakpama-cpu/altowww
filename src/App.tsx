@@ -90,7 +90,7 @@ const App = () => (
               } />
 
               {/* Client portal */}
-              <Route path="/portal" element={<ProtectedRoute><PortalLayout /></ProtectedRoute>}>
+              <Route path="/portal" element={<PortalEntry />}>
                 <Route index element={<Dashboard />} />
                 <Route path="my-casks" element={<MyCasks />} />
                 <Route path="available" element={<AvailableStock />} />
