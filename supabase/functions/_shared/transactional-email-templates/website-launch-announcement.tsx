@@ -46,6 +46,7 @@ const Email = ({
   offerExpiry = 'Tuesday 21 July',
 }: Props) => {
   const telHref = (n: string) => `tel:${n.replace(/[^+\d]/g, '')}`
+  const addressText = senderAddress.replace(/([,\s])/g, '$1\u2060')
   return (
   <Html lang="en" dir="ltr">
     <Head />
@@ -169,7 +170,7 @@ const Email = ({
                       www.altowhisky.com
                     </Link>
                   </div>
-                  <div style={sigAddress}>{senderAddress}</div>
+                  <div style={sigAddress}>{addressText}</div>
                 </td>
                 <td style={sigDividerCell} aria-hidden="true"></td>
                 <td style={sigSpacerCell} aria-hidden="true"></td>
