@@ -379,7 +379,7 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
             </label>
           )}
 
-          <DialogFooter>
+          <DialogFooter className="justify-center sm:justify-center">
             <button
               type="submit"
               disabled={saving}
@@ -537,7 +537,7 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
             </div>
           )}
 
-          <DialogFooter>
+          <DialogFooter className="justify-center sm:justify-center">
             <button
               type="submit"
               disabled={saving}
