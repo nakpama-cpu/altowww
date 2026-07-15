@@ -121,11 +121,34 @@ export default function Account() {
 
   const changePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { error } = await supabase.auth.updateUser({ password });
-    if (error) toast({ title: "Could not update", description: error.message, variant: "destructive" });
-    else {
+    if (newPassword.length < 8) {
+      toast({ title: "Password too short", description: "Use at least 8 characters.", variant: "destructive" });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast({ title: "Passwords don't match", description: "Please retype the new password.", variant: "destructive" });
+      return;
+    }
+    setPasswordSubmitting(true);
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: profile.email,
+      password: currentPassword,
+    });
+    if (signInError) {
+      setPasswordSubmitting(false);
+      toast({ title: "Current password is incorrect", variant: "destructive" });
+      return;
+    }
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setPasswordSubmitting(false);
+    if (error) {
+      toast({ title: "Could not update", description: error.message, variant: "destructive" });
+    } else {
       toast({ title: "Password updated" });
-      setPassword("");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setPasswordOpen(false);
     }
   };
 
@@ -180,26 +203,84 @@ export default function Account() {
             {profile.verification_notes}
           </div>
         )}
+
+        <div className="mt-6 pt-6 border-t border-border flex justify-end">
+          <button
+            type="button"
+            onClick={() => setPasswordOpen(true)}
+            className="font-body text-[10px] uppercase tracking-[0.25em] border border-border px-4 py-2 hover:bg-muted"
+          >
+            Change Password
+          </button>
+        </div>
       </section>
 
-      <form onSubmit={changePassword} className="bg-card border border-border p-8 space-y-5">
-        <h2 className="display-heading text-xl mb-4">Change Password</h2>
-        <div>
-          <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">New Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
-          />
-        </div>
-        <button
-          type="submit"
-          className="font-body text-xs uppercase tracking-[0.25em] border border-border px-8 py-3 hover:bg-muted"
-        >
-          Update Password
-        </button>
-      </form>
+      <Dialog open={passwordOpen} onOpenChange={(o) => {
+        setPasswordOpen(o);
+        if (!o) { setCurrentPassword(""); setNewPassword(""); setConfirmPassword(""); }
+      }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="display-heading text-xl">Change Password</DialogTitle>
+            <DialogDescription className="font-body text-xs">
+              Enter your current password, then choose a new one.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={changePassword} className="space-y-4">
+            <div>
+              <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Current Password</label>
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+              />
+            </div>
+            <div>
+              <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">New Password</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+                minLength={8}
+                autoComplete="new-password"
+                className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+              />
+            </div>
+            <div>
+              <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Confirm New Password</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                minLength={8}
+                autoComplete="new-password"
+                className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+              />
+            </div>
+            <DialogFooter className="pt-2">
+              <button
+                type="button"
+                onClick={() => setPasswordOpen(false)}
+                className="font-body text-[10px] uppercase tracking-[0.25em] border border-border px-4 py-2 hover:bg-muted"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={passwordSubmitting}
+                className="font-body text-[10px] uppercase tracking-[0.25em] border border-primary bg-primary text-primary-foreground px-4 py-2 hover:bg-primary/90 disabled:opacity-60 justify-center text-center"
+              >
+                {passwordSubmitting ? "Updating…" : "Update Password"}
+              </button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <VerifyAddressDialog open={addressOpen} onOpenChange={setAddressOpen} />
       <VerifyDobDialog open={dobOpen} onOpenChange={setDobOpen} />
