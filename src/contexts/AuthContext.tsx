@@ -3,6 +3,10 @@ import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { clearPortalVisit } from "@/lib/portalSession";
 
+export type VerificationStatus = "not_submitted" | "pending" | "verified" | "rejected";
+export type ProofOfAddressType = "utility_bill" | "bank_statement" | "driving_licence" | "council_tax" | "other";
+export type ProofOfAgeType = "passport" | "driving_licence" | "national_id";
+
 type Profile = {
   id: string;
   title: string | null;
@@ -14,6 +18,23 @@ type Profile = {
   phone_country_code: string | null;
   status: "pending" | "approved" | "suspended";
   client_discount_pct: number;
+  date_of_birth: string | null;
+  address_line1: string | null;
+  address_line2: string | null;
+  address_city: string | null;
+  address_region: string | null;
+  address_postcode: string | null;
+  address_country: string | null;
+  proof_of_address_path: string | null;
+  proof_of_address_type: ProofOfAddressType | null;
+  proof_of_address_issued_on: string | null;
+  proof_of_age_path: string | null;
+  proof_of_age_type: ProofOfAgeType | null;
+  address_verified_at: string | null;
+  age_verified_at: string | null;
+  address_verification_status: VerificationStatus;
+  age_verification_status: VerificationStatus;
+  verification_notes: string | null;
 };
 
 type AuthContextValue = {

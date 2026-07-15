@@ -5,6 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { VerificationGateBanner } from "./Account";
 
 type AppliedCode = { code: string; percent: number; effective_percent: number };
 
@@ -57,8 +58,14 @@ export default function Checkout() {
     setCodeInput("");
   };
 
+  const kycOk = profile?.address_verification_status === "verified" && profile?.age_verification_status === "verified";
+
   const placeOrder = async () => {
     if (!user || items.length === 0) return;
+    if (!kycOk) {
+      toast({ title: "Verification required", description: "Complete address and identity verification in your Account first.", variant: "destructive" });
+      return;
+    }
     setPlacing(true);
     const rows = items.flatMap((i) =>
       Array.from({ length: i.quantity }, () => ({
@@ -112,6 +119,10 @@ export default function Checkout() {
         Review your selected casks and submit your order request.
         {effectivePct > 0 && <span className="text-primary"> Your {effectivePct}% discount is applied.</span>}
       </p>
+
+      <VerificationGateBanner />
+
+
 
       <div className="grid lg:grid-cols-3 gap-6 min-w-0">
         <div className="lg:col-span-2 space-y-3 min-w-0">
@@ -232,7 +243,7 @@ export default function Checkout() {
 
           <button
             onClick={placeOrder}
-            disabled={placing}
+            disabled={placing || !kycOk}
             className="w-full mt-6 flex items-center justify-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
           >
             <CheckCircle2 className="w-4 h-4" />

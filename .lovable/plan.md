@@ -1,80 +1,73 @@
+# KYC: Address & Age Verification
 
-## Goal
-Replace the "one row per individual cask" model on the Available Stock page with **cask listings** that admins manage in bulk. Individual cask numbers are only recorded later, at certificate upload time.
+Manual admin review, no paid third-party services. All users (UK + international). Verification must be complete before checkout.
 
-## Data model changes
+## Data model
 
-New table `cask_listings` (admin-managed products):
-- distillery_id, spirit, cask_type, fill_date, age_years, abv, ola_litres, rla_litres
-- list_price, currency, description, hero_image_url
-- `stock_qty` (int) — admin-set total available
-- `reserved_qty` (int, default 0) — auto-incremented on order
-- status: `active` | `hidden` | `sold_out`
-- Computed `available_qty = stock_qty - reserved_qty` (view or client-side)
+Extend `profiles`:
+- `date_of_birth` (date, nullable)
+- `address_line1`, `address_line2`, `address_city`, `address_region`, `address_postcode`, `address_country` (text)
+- `proof_of_address_path` (text) — storage path
+- `proof_of_address_type` (enum: `utility_bill`, `bank_statement`, `driving_licence`, `council_tax`, `other`)
+- `proof_of_address_issued_on` (date) — user attests document date; admin verifies within 3 months
+- `proof_of_age_path` (text)
+- `proof_of_age_type` (enum: `passport`, `driving_licence`, `national_id`)
+- `address_verified_at` (timestamptz, nullable) — set by admin
+- `age_verified_at` (timestamptz, nullable) — set by admin
+- `verification_notes` (text) — admin-only rejection notes
+- `verification_status` (enum: `not_submitted`, `pending`, `verified`, `rejected`) — derived convenience field maintained by trigger
 
-Modify existing `casks` table (now represents an **individual, certificated cask**):
-- Add `listing_id` (FK → cask_listings, nullable for legacy)
-- Make `cask_number` nullable (populated at certificate upload)
-- Keep `status`: `reserved` | `held` | `sold` (no more `available` — availability now lives on the listing)
+RLS: user can read/update own row (existing `prevent_profile_escalation` trigger already blocks changes to sensitive fields; extend it to also block `address_verified_at`, `age_verified_at`, `verification_status`). Only admins can set verified/rejected fields.
 
-Modify `orders`:
-- Add `listing_id` (nullable FK) — order is placed against a listing
-- `cask_id` becomes nullable — assigned by admin later when the individual cask + certificate is ready
+## Storage
 
-Wipe existing rows where `casks.status = 'available'` (holdings/sold casks preserved, as they're referenced by `holdings`/`orders`).
+New private bucket `kyc-documents`. Path scheme: `{user_id}/address-{timestamp}.{ext}` and `{user_id}/age-{timestamp}.{ext}`.
 
-Trigger: on order insert against a listing, increment `reserved_qty` and flip listing to `sold_out` when `reserved_qty >= stock_qty`. On order cancel/delete, decrement.
+RLS on `storage.objects`:
+- Users can INSERT/SELECT/DELETE their own files (path starts with their uid).
+- Admins can SELECT all.
 
-## Admin panel changes
+## Frontend — Account page (`src/pages/portal/Account.tsx`)
 
-**New page: `/admin/listings`** (replaces day-to-day use of `/admin/casks`):
-- Table of listings with distillery, spirit, price, `stock_qty`, `reserved_qty`, `available_qty`, status
-- Create/edit form with all listing fields + stock quantity input
-- Stock number is **only visible here** (admin-only)
+Add two new cards below Profile:
 
-**`/admin/holdings` (certificate upload flow) — updated:**
-- "Assign Cask" form now picks: client + **listing** (not cask) + cask number (text input, entered at this point) + purchase price + date + certificate PDF
-- On submit: creates a `casks` row (with the newly-entered cask_number, linked to the listing), creates the `holding`, uploads the certificate, and — if this fulfils a pending order — links the order to the new cask row.
-- New "Pending fulfilment" section: lists orders with `cask_id IS NULL`, so admin knows which listings need a certificated cask assigned.
+**1. Address**
+- Country selector (reuse `CountrySelect`).
+- Manual address fields for everyone: line 1, line 2, city, region/state, postcode.
+- No postcode-lookup API (free options are unreliable/rate-limited; skip for now — can add later).
+- Proof of address upload: document type dropdown, issue date picker, file input (PDF/JPG/PNG, max 10MB).
+- Status badge: Not submitted / Pending review / Verified / Rejected (with admin note).
 
-**`/admin/casks`** kept for editing legacy/individual cask records but de-emphasised in nav.
+**2. Date of Birth & ID**
+- DOB date picker (must be 18+).
+- Proof of age upload: document type dropdown, file input.
+- Note beside driving-licence option: "If you upload a UK driving licence here and select it for address proof too, one document covers both."
+- If user picks driving licence for *both*, allow single file upload used for both records.
+- Status badge like above.
 
-## Client portal changes
+Fields become read-only once `verification_status = pending` or `verified`; editable again if `rejected`.
 
-**`/portal/available`:**
-- Reads from `cask_listings` where `status = 'active'` (i.e. `available_qty > 0`)
-- One card per listing — no quantity, no stock badge, no counts
-- "Add to cart" / "Buy" targets the listing, not an individual cask
+## Checkout gate
 
-**Cart / Checkout:**
-- Cart items reference `listing_id` instead of `cask_id`
-- On order creation, `orders.listing_id` is set; `orders.cask_id` stays null until admin assigns
+In `src/pages/portal/Checkout.tsx`: if `profile.address_verified_at` or `profile.age_verified_at` is null, block submit and show a banner linking to Account with "Complete verification to purchase". No blocking elsewhere in portal.
 
-**`/portal/my-casks`:**
-- Shows the client's `holdings` (unchanged) plus any orders still awaiting cask assignment ("Certificate pending" state).
+## Admin — new Verifications page (`src/pages/admin/Verifications.tsx`)
 
-## Out of scope
-- Changing the holdings/certificate storage bucket structure.
-- Editing marketing pages or the checkout UI beyond swapping the id being sent.
-- Historical `orders` referencing individual casks stay linked to those casks.
+Route: `/admin/verifications`. Added to `AdminLayout` nav.
 
-## Technical section
+- Queue of profiles with `verification_status = pending`.
+- Per-row: name, email, DOB, address, both document previews (signed URLs from `kyc-documents`), document types, issue date.
+- Actions per document: **Approve address**, **Approve age**, **Reject** (with note). Approve buttons stamp `address_verified_at` / `age_verified_at`.
+- Separate tab for already-verified and rejected users for reference.
 
-**Migration order (single migration):**
-1. `CREATE TABLE public.cask_listings (...)` with GRANTs (`authenticated` SELECT, `service_role` ALL), RLS on, policies: anyone signed-in reads active listings; admins full access.
-2. `ALTER TABLE public.casks ADD COLUMN listing_id uuid REFERENCES cask_listings(id)`, `ALTER COLUMN cask_number DROP NOT NULL`.
-3. `ALTER TABLE public.orders ADD COLUMN listing_id uuid REFERENCES cask_listings(id)`, `ALTER COLUMN cask_id DROP NOT NULL`.
-4. Trigger `bump_listing_reserved()` on `orders` insert/delete to keep `reserved_qty` in sync and update `status` to `sold_out` when full.
-5. `DELETE FROM casks WHERE status = 'available'` (safe: `holdings`/`orders` reference only sold/held rows).
-6. Update `enforce_order_amount` trigger to pull `list_price`/`currency` from `cask_listings` when `listing_id` is set (fallback to `casks` for legacy orders).
+## Technical details
 
-**Frontend files touched:**
-- New: `src/pages/admin/Listings.tsx`, route in `App.tsx`, nav entry in `AdminLayout.tsx`.
-- Edit: `src/pages/admin/Holdings.tsx` (new assignment flow + pending fulfilment list).
-- Edit: `src/pages/portal/AvailableStock.tsx` (read from listings, remove stock counts).
-- Edit: `src/contexts/CartContext.tsx` (cart item shape: `listing_id`).
-- Edit: `src/pages/portal/Checkout.tsx` (send `listing_id`).
-- Edit: `src/pages/portal/MyCasks.tsx` (show pending-assignment orders).
-- Regenerated `src/integrations/supabase/types.ts` after migration.
+- Migration adds the columns, enums, storage bucket, RLS policies, and updates `prevent_profile_escalation` trigger.
+- Admin approval writes via service-role (edge function `verify-client-kyc`) so client-side RLS stays tight and we can send an email notification on approve/reject reusing the existing transactional-email infrastructure.
+- New transactional templates: `kyc-approved`, `kyc-rejected` (with reason).
+- Signed URLs for document previews generated on demand in admin page (60s expiry).
 
-**Data wipe:** `DELETE FROM casks WHERE status='available'` runs inside the migration; user has explicitly approved wiping existing available casks.
+## Out of scope (for later)
+
+- Automated postcode → address lookup (revisit when you're happy paying for a provider like getAddress.io ~£0.01/lookup).
+- Automated ID verification (Onfido/Stripe Identity etc.).

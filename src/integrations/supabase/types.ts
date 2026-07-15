@@ -613,9 +613,20 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address_city: string | null
+          address_country: string | null
+          address_line1: string | null
+          address_line2: string | null
+          address_postcode: string | null
+          address_region: string | null
+          address_verification_status: Database["public"]["Enums"]["verification_status"]
+          address_verified_at: string | null
+          age_verification_status: Database["public"]["Enums"]["verification_status"]
+          age_verified_at: string | null
           client_discount_pct: number
           country: string | null
           created_at: string
+          date_of_birth: string | null
           email: string
           first_name: string
           id: string
@@ -623,14 +634,35 @@ export type Database = {
           notes: string | null
           phone: string
           phone_country_code: string | null
+          proof_of_address_issued_on: string | null
+          proof_of_address_path: string | null
+          proof_of_address_type:
+            | Database["public"]["Enums"]["proof_of_address_type"]
+            | null
+          proof_of_age_path: string | null
+          proof_of_age_type:
+            | Database["public"]["Enums"]["proof_of_age_type"]
+            | null
           status: Database["public"]["Enums"]["profile_status"]
           title: string | null
           updated_at: string
+          verification_notes: string | null
         }
         Insert: {
+          address_city?: string | null
+          address_country?: string | null
+          address_line1?: string | null
+          address_line2?: string | null
+          address_postcode?: string | null
+          address_region?: string | null
+          address_verification_status?: Database["public"]["Enums"]["verification_status"]
+          address_verified_at?: string | null
+          age_verification_status?: Database["public"]["Enums"]["verification_status"]
+          age_verified_at?: string | null
           client_discount_pct?: number
           country?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string
           first_name?: string
           id: string
@@ -638,14 +670,35 @@ export type Database = {
           notes?: string | null
           phone?: string
           phone_country_code?: string | null
+          proof_of_address_issued_on?: string | null
+          proof_of_address_path?: string | null
+          proof_of_address_type?:
+            | Database["public"]["Enums"]["proof_of_address_type"]
+            | null
+          proof_of_age_path?: string | null
+          proof_of_age_type?:
+            | Database["public"]["Enums"]["proof_of_age_type"]
+            | null
           status?: Database["public"]["Enums"]["profile_status"]
           title?: string | null
           updated_at?: string
+          verification_notes?: string | null
         }
         Update: {
+          address_city?: string | null
+          address_country?: string | null
+          address_line1?: string | null
+          address_line2?: string | null
+          address_postcode?: string | null
+          address_region?: string | null
+          address_verification_status?: Database["public"]["Enums"]["verification_status"]
+          address_verified_at?: string | null
+          age_verification_status?: Database["public"]["Enums"]["verification_status"]
+          age_verified_at?: string | null
           client_discount_pct?: number
           country?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string
           first_name?: string
           id?: string
@@ -653,9 +706,19 @@ export type Database = {
           notes?: string | null
           phone?: string
           phone_country_code?: string | null
+          proof_of_address_issued_on?: string | null
+          proof_of_address_path?: string | null
+          proof_of_address_type?:
+            | Database["public"]["Enums"]["proof_of_address_type"]
+            | null
+          proof_of_age_path?: string | null
+          proof_of_age_type?:
+            | Database["public"]["Enums"]["proof_of_age_type"]
+            | null
           status?: Database["public"]["Enums"]["profile_status"]
           title?: string | null
           updated_at?: string
+          verification_notes?: string | null
         }
         Relationships: []
       }
@@ -744,6 +807,14 @@ export type Database = {
       listing_status: "active" | "hidden" | "sold_out"
       order_status: "pending" | "paid" | "cancelled" | "refunded"
       profile_status: "pending" | "approved" | "suspended"
+      proof_of_address_type:
+        | "utility_bill"
+        | "bank_statement"
+        | "driving_licence"
+        | "council_tax"
+        | "other"
+      proof_of_age_type: "passport" | "driving_licence" | "national_id"
+      verification_status: "not_submitted" | "pending" | "verified" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -877,6 +948,15 @@ export const Constants = {
       listing_status: ["active", "hidden", "sold_out"],
       order_status: ["pending", "paid", "cancelled", "refunded"],
       profile_status: ["pending", "approved", "suspended"],
+      proof_of_address_type: [
+        "utility_bill",
+        "bank_statement",
+        "driving_licence",
+        "council_tax",
+        "other",
+      ],
+      proof_of_age_type: ["passport", "driving_licence", "national_id"],
+      verification_status: ["not_submitted", "pending", "verified", "rejected"],
     },
   },
 } as const
