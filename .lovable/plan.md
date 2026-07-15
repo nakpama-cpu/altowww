@@ -1,25 +1,80 @@
+
 ## Goal
-Normalize client name and email formatting automatically so records stay consistent regardless of how users type them at signup or when editing their account.
+Replace the "one row per individual cask" model on the Available Stock page with **cask listings** that admins manage in bulk. Individual cask numbers are only recorded later, at certificate upload time.
 
-## Formatting rules
-- **First name / Last name**: Title Case — first letter of each word uppercase, rest lowercase (e.g. `jOHN` → `John`, `mcdonald` → `Mcdonald`, `mary-jane` → `Mary-Jane`). Applied per word split on spaces and hyphens.
-- **Title**: kept as selected from the dropdown (already standardized).
-- **Email**: fully lowercased and trimmed.
+## Data model changes
 
-## Where to apply
-Normalize in **both** places so old and new data are covered:
+New table `cask_listings` (admin-managed products):
+- distillery_id, spirit, cask_type, fill_date, age_years, abv, ola_litres, rla_litres
+- list_price, currency, description, hero_image_url
+- `stock_qty` (int) — admin-set total available
+- `reserved_qty` (int, default 0) — auto-incremented on order
+- status: `active` | `hidden` | `sold_out`
+- Computed `available_qty = stock_qty - reserved_qty` (view or client-side)
 
-1. **Database (source of truth)** — a trigger on `public.profiles` that runs `BEFORE INSERT OR UPDATE` and rewrites `first_name`, `last_name`, and `email` using the rules above. This guarantees consistency no matter how a row is written (signup trigger, Account page, admin edits).
-2. **One-time backfill** — update all existing `profiles` rows so current clients display correctly in the admin Clients list immediately.
-3. **Client-side polish** — trim + normalize in `Signup.tsx` and `Account.tsx` before submitting, so the user sees the tidy version instantly (the DB trigger is the safety net).
+Modify existing `casks` table (now represents an **individual, certificated cask**):
+- Add `listing_id` (FK → cask_listings, nullable for legacy)
+- Make `cask_number` nullable (populated at certificate upload)
+- Keep `status`: `reserved` | `held` | `sold` (no more `available` — availability now lives on the listing)
 
-## Technical detail
-- New SQL function `public.normalize_profile_names()` (SECURITY INVOKER, `search_path = public`) using `initcap()`-style logic that also handles hyphenated names, plus `lower(trim(email))`.
-- Trigger `profiles_normalize_names` runs `BEFORE INSERT OR UPDATE OF first_name, last_name, email`.
-- `handle_new_user()` already inserts into profiles → trigger fires automatically, so no change needed there.
-- Small shared helper `src/lib/formatName.ts` used by Signup and Account forms.
+Modify `orders`:
+- Add `listing_id` (nullable FK) — order is placed against a listing
+- `cask_id` becomes nullable — assigned by admin later when the individual cask + certificate is ready
+
+Wipe existing rows where `casks.status = 'available'` (holdings/sold casks preserved, as they're referenced by `holdings`/`orders`).
+
+Trigger: on order insert against a listing, increment `reserved_qty` and flip listing to `sold_out` when `reserved_qty >= stock_qty`. On order cancel/delete, decrement.
+
+## Admin panel changes
+
+**New page: `/admin/listings`** (replaces day-to-day use of `/admin/casks`):
+- Table of listings with distillery, spirit, price, `stock_qty`, `reserved_qty`, `available_qty`, status
+- Create/edit form with all listing fields + stock quantity input
+- Stock number is **only visible here** (admin-only)
+
+**`/admin/holdings` (certificate upload flow) — updated:**
+- "Assign Cask" form now picks: client + **listing** (not cask) + cask number (text input, entered at this point) + purchase price + date + certificate PDF
+- On submit: creates a `casks` row (with the newly-entered cask_number, linked to the listing), creates the `holding`, uploads the certificate, and — if this fulfils a pending order — links the order to the new cask row.
+- New "Pending fulfilment" section: lists orders with `cask_id IS NULL`, so admin knows which listings need a certificated cask assigned.
+
+**`/admin/casks`** kept for editing legacy/individual cask records but de-emphasised in nav.
+
+## Client portal changes
+
+**`/portal/available`:**
+- Reads from `cask_listings` where `status = 'active'` (i.e. `available_qty > 0`)
+- One card per listing — no quantity, no stock badge, no counts
+- "Add to cart" / "Buy" targets the listing, not an individual cask
+
+**Cart / Checkout:**
+- Cart items reference `listing_id` instead of `cask_id`
+- On order creation, `orders.listing_id` is set; `orders.cask_id` stays null until admin assigns
+
+**`/portal/my-casks`:**
+- Shows the client's `holdings` (unchanged) plus any orders still awaiting cask assignment ("Certificate pending" state).
 
 ## Out of scope
-- Titles list (unchanged).
-- Phone numbers, country, address fields.
-- Historical `orders`, `leads`, `callback_requests` name fields (can be added later if you want).
+- Changing the holdings/certificate storage bucket structure.
+- Editing marketing pages or the checkout UI beyond swapping the id being sent.
+- Historical `orders` referencing individual casks stay linked to those casks.
+
+## Technical section
+
+**Migration order (single migration):**
+1. `CREATE TABLE public.cask_listings (...)` with GRANTs (`authenticated` SELECT, `service_role` ALL), RLS on, policies: anyone signed-in reads active listings; admins full access.
+2. `ALTER TABLE public.casks ADD COLUMN listing_id uuid REFERENCES cask_listings(id)`, `ALTER COLUMN cask_number DROP NOT NULL`.
+3. `ALTER TABLE public.orders ADD COLUMN listing_id uuid REFERENCES cask_listings(id)`, `ALTER COLUMN cask_id DROP NOT NULL`.
+4. Trigger `bump_listing_reserved()` on `orders` insert/delete to keep `reserved_qty` in sync and update `status` to `sold_out` when full.
+5. `DELETE FROM casks WHERE status = 'available'` (safe: `holdings`/`orders` reference only sold/held rows).
+6. Update `enforce_order_amount` trigger to pull `list_price`/`currency` from `cask_listings` when `listing_id` is set (fallback to `casks` for legacy orders).
+
+**Frontend files touched:**
+- New: `src/pages/admin/Listings.tsx`, route in `App.tsx`, nav entry in `AdminLayout.tsx`.
+- Edit: `src/pages/admin/Holdings.tsx` (new assignment flow + pending fulfilment list).
+- Edit: `src/pages/portal/AvailableStock.tsx` (read from listings, remove stock counts).
+- Edit: `src/contexts/CartContext.tsx` (cart item shape: `listing_id`).
+- Edit: `src/pages/portal/Checkout.tsx` (send `listing_id`).
+- Edit: `src/pages/portal/MyCasks.tsx` (show pending-assignment orders).
+- Regenerated `src/integrations/supabase/types.ts` after migration.
+
+**Data wipe:** `DELETE FROM casks WHERE status='available'` runs inside the migration; user has explicitly approved wiping existing available casks.

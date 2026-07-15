@@ -1,9 +1,10 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Users, Wine, FileSpreadsheet, Building2, PhoneCall, ShoppingCart, LogOut, ArrowLeft, Tag } from "lucide-react";
+import { Users, Wine, FileSpreadsheet, Building2, PhoneCall, ShoppingCart, LogOut, ArrowLeft, Tag, Package } from "lucide-react";
 
 const items = [
   { to: "/admin", end: true, label: "Clients", icon: Users },
+  { to: "/admin/listings", label: "Listings", icon: Package },
   { to: "/admin/casks", label: "Casks", icon: Wine },
   { to: "/admin/holdings", label: "Holdings", icon: FileSpreadsheet },
   { to: "/admin/distilleries", label: "Distilleries", icon: Building2 },

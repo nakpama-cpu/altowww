@@ -63,7 +63,7 @@ export default function Checkout() {
     const rows = items.flatMap((i) =>
       Array.from({ length: i.quantity }, () => ({
         buyer_id: user.id,
-        cask_id: i.cask_id,
+        listing_id: i.listing_id,
         amount: Number(i.unit_price.toFixed(2)),
         currency: i.currency,
         status: "pending" as const,
@@ -118,11 +118,11 @@ export default function Checkout() {
           {items.map((i) => {
             const lineTotal = i.unit_price * i.quantity;
             return (
-              <div key={i.cask_id} className="bg-card border border-border p-3 sm:p-4">
+              <div key={i.listing_id} className="bg-card border border-border p-3 sm:p-4">
                 <div className="flex items-start gap-3 sm:gap-4">
                   <div className="w-16 h-16 sm:w-20 sm:h-20 bg-muted flex-shrink-0 overflow-hidden">
                     {i.hero_image_url ? (
-                      <img src={i.hero_image_url} alt={i.cask_number} className="w-full h-full object-cover" />
+                      <img src={i.hero_image_url} alt={i.distillery || i.spirit} className="w-full h-full object-cover" />
                     ) : null}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -135,7 +135,7 @@ export default function Checkout() {
                     </div>
                   </div>
                   <button
-                    onClick={() => remove(i.cask_id)}
+                    onClick={() => remove(i.listing_id)}
                     className="p-2 -mr-2 -mt-1 text-muted-foreground hover:text-destructive transition-colors flex-shrink-0"
                     aria-label="Remove from cart"
                   >
@@ -146,14 +146,14 @@ export default function Checkout() {
                   <div className="flex items-stretch border border-border h-9">
                     <button
                       type="button"
-                      onClick={() => setQuantity(i.cask_id, i.quantity - 1)}
+                      onClick={() => setQuantity(i.listing_id, i.quantity - 1)}
                       className="px-3 bg-muted hover:bg-muted/70 font-body"
                       aria-label="Decrease quantity"
                     >−</button>
                     <span className="px-3 min-w-[2.5rem] flex items-center justify-center font-body text-sm">{i.quantity}</span>
                     <button
                       type="button"
-                      onClick={() => setQuantity(i.cask_id, i.quantity + 1)}
+                      onClick={() => setQuantity(i.listing_id, i.quantity + 1)}
                       className="px-3 bg-muted hover:bg-muted/70 font-body"
                       aria-label="Increase quantity"
                     >+</button>

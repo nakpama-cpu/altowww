@@ -9,7 +9,8 @@ type Order = {
   stripe_session_id: string | null;
   created_at: string;
   profiles: { first_name: string; last_name: string; email: string } | null;
-  casks: { cask_number: string } | null;
+  casks: { cask_number: string | null } | null;
+  cask_listings: { spirit: string; distilleries: { name: string } | null } | null;
 };
 
 export default function AdminOrders() {
@@ -18,7 +19,7 @@ export default function AdminOrders() {
   useEffect(() => {
     (async () => {
       const { data } = await supabase.from("orders")
-        .select("*, profiles(first_name,last_name,email), casks(cask_number)")
+        .select("*, profiles(first_name,last_name,email), casks(cask_number), cask_listings(spirit, distilleries(name))")
         .order("created_at", { ascending: false });
       setRows((data ?? []) as any);
     })();
@@ -40,7 +41,7 @@ export default function AdminOrders() {
               <tr key={o.id} className="border-t border-border">
                 <td className="p-3">{new Date(o.created_at).toLocaleString()}</td>
                 <td className="p-3">{o.profiles?.first_name} {o.profiles?.last_name}<br /><span className="text-xs text-muted-foreground">{o.profiles?.email}</span></td>
-                <td className="p-3 font-mono">{o.casks?.cask_number}</td>
+                <td className="p-3">{o.casks?.cask_number ? <span className="font-mono">{o.casks.cask_number}</span> : <span className="text-muted-foreground text-xs">Pending · {o.cask_listings?.distilleries?.name ?? o.cask_listings?.spirit ?? "—"}</span>}</td>
                 <td className="p-3">{o.currency} {Number(o.amount).toLocaleString()}</td>
                 <td className="p-3">{o.status}</td>
               </tr>
