@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
 import { TitleSelect } from "@/components/auth/TitleSelect";
+import { formatName } from "@/lib/formatName";
 
 export default function Account() {
   const { profile, refreshProfile } = useAuth();
