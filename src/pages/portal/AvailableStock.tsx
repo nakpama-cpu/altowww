@@ -10,10 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 
 type LinkItem = { title?: string; name?: string; url?: string };
 
-
-type Cask = {
+type Listing = {
   id: string;
-  cask_number: string;
   spirit: string;
   cask_type: string | null;
   fill_date: string | null;
@@ -50,10 +48,10 @@ export default function AvailableStock() {
   const { profile } = useAuth();
   const cart = useCart();
   const { toast } = useToast();
-  const [buyCask, setBuyCask] = useState<Cask | null>(null);
+  const [buyListing, setBuyListing] = useState<Listing | null>(null);
   const [buyQty, setBuyQty] = useState<string>("1");
 
-  const [casks, setCasks] = useState<Cask[]>([]);
+  const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -62,7 +60,7 @@ export default function AvailableStock() {
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
   const [sortBy, setSortBy] = useState<string>("");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
-  const [infoCask, setInfoCask] = useState<Cask | null>(null);
+  const [infoListing, setInfoListing] = useState<Listing | null>(null);
   const discount = Number(profile?.client_discount_pct ?? 0);
 
   const suggestions = useMemo(() => {
@@ -79,7 +77,7 @@ export default function AvailableStock() {
       seen.add(key);
       out.push({ label: field, field, value: v });
     };
-    for (const c of casks) {
+    for (const c of listings) {
       add("Distillery", c.distilleries?.name);
       add("Spirit", c.spirit);
       add("Cask Type", c.cask_type);
@@ -87,24 +85,24 @@ export default function AvailableStock() {
       if (out.length > 30) break;
     }
     return out.slice(0, 8);
-  }, [casks, search]);
+  }, [listings, search]);
 
   useEffect(() => {
     (async () => {
       const { data, error } = await supabase
-        .from("casks")
-        .select("id, cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region, country, about, image_url, founded_by, founded_year, famous_for, region_character, annual_production, export_markets, owner, website_url, visitor_centre, news, awards)")
-        .eq("status", "available")
+        .from("cask_listings")
+        .select("id, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region, country, about, image_url, founded_by, founded_year, famous_for, region_character, annual_production, export_markets, owner, website_url, visitor_centre, news, awards)")
+        .eq("status", "active")
         .order("created_at", { ascending: false });
       if (error) toast({ title: "Could not load stock", description: error.message, variant: "destructive" });
-      setCasks((data ?? []) as any);
+      setListings((data ?? []) as any);
       setLoading(false);
     })();
   }, [toast]);
 
   const distilleries = useMemo(
-    () => Array.from(new Set(casks.map((c) => c.distilleries?.name).filter(Boolean))),
-    [casks]
+    () => Array.from(new Set(listings.map((c) => c.distilleries?.name).filter(Boolean))),
+    [listings]
   );
 
   const priceFor = (list: number | null) => {
@@ -112,33 +110,32 @@ export default function AvailableStock() {
     return discount > 0 ? list * (1 - discount / 100) : list;
   };
 
-  const openBuy = (c: Cask) => {
+  const openBuy = (c: Listing) => {
     if (!c.list_price) {
-      toast({ title: "No price set", description: "This cask is not yet priced.", variant: "destructive" });
+      toast({ title: "No price set", description: "This listing is not yet priced.", variant: "destructive" });
       return;
     }
-    setBuyCask(c);
+    setBuyListing(c);
     setBuyQty("1");
   };
 
   const confirmAddToCart = () => {
-    if (!buyCask) return;
+    if (!buyListing) return;
     const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
-    const unit = priceFor(buyCask.list_price);
+    const unit = priceFor(buyListing.list_price);
     if (unit == null) return;
     cart.add({
-      cask_id: buyCask.id,
-      cask_number: buyCask.cask_number,
-      distillery: buyCask.distilleries?.name ?? "",
-      spirit: buyCask.spirit,
-      list_price: Number(buyCask.list_price),
+      listing_id: buyListing.id,
+      distillery: buyListing.distilleries?.name ?? "",
+      spirit: buyListing.spirit,
+      list_price: Number(buyListing.list_price),
       unit_price: Number(unit),
-      currency: buyCask.currency,
-      hero_image_url: buyCask.hero_image_url,
+      currency: buyListing.currency,
+      hero_image_url: buyListing.hero_image_url,
       quantity: qty,
     });
-    toast({ title: "Added to cart", description: `${qty} × ${buyCask.distilleries?.name ?? buyCask.spirit}` });
-    setBuyCask(null);
+    toast({ title: "Added to cart", description: `${qty} × ${buyListing.distilleries?.name ?? buyListing.spirit}` });
+    setBuyListing(null);
   };
 
 
@@ -146,7 +143,7 @@ export default function AvailableStock() {
     const q = search.toLowerCase().trim();
     const min = filterMinPrice ? Number(filterMinPrice) : null;
     const max = filterMaxPrice ? Number(filterMaxPrice) : null;
-    const result = casks.filter((c) => {
+    const result = listings.filter((c) => {
       const d = c.distilleries?.name ?? "";
       const effectivePrice = priceFor(c.list_price);
       const matchesSearch =
@@ -182,7 +179,7 @@ export default function AvailableStock() {
       case "cask_type": sorted.sort((a, b) => (a.cask_type ?? "").localeCompare(b.cask_type ?? "")); break;
     }
     return sorted;
-  }, [casks, search, filterDistillery, filterMinPrice, filterMaxPrice, sortBy]);
+  }, [listings, search, filterDistillery, filterMinPrice, filterMaxPrice, sortBy]);
 
   return (
     <div className="max-w-7xl">
@@ -326,7 +323,7 @@ export default function AvailableStock() {
       ) : filtered.length === 0 ? (
         <div className="bg-card border border-border p-12 text-center">
           <p className="font-body text-sm text-muted-foreground">
-            {casks.length === 0 ? "No casks currently available. Check back soon." : "No casks match your search."}
+            {listings.length === 0 ? "No casks currently available. Check back soon." : "No casks match your search."}
           </p>
         </div>
       ) : viewMode === "cards" ? (
@@ -364,7 +361,7 @@ export default function AvailableStock() {
                   )}
                   <button
                     type="button"
-                    onClick={() => setInfoCask(c)}
+                    onClick={() => setInfoListing(c)}
                     className="self-start mb-4 font-body text-[10px] uppercase tracking-[0.2em] text-primary border border-primary/40 hover:bg-primary hover:text-primary-foreground transition-colors px-3 py-1.5"
                   >
                     More Info
@@ -445,13 +442,13 @@ export default function AvailableStock() {
         </div>
       )}
 
-      <Dialog open={!!infoCask} onOpenChange={(o) => !o && setInfoCask(null)}>
+      <Dialog open={!!infoListing} onOpenChange={(o) => !o && setInfoListing(null)}>
         <DialogContent className="max-w-2xl w-[calc(100%-2rem)] h-[85vh] bg-card border-border p-0 overflow-hidden flex flex-col">
-          {infoCask?.distilleries?.image_url && (
+          {infoListing?.distilleries?.image_url && (
             <div className="basis-1/3 shrink-0 bg-muted overflow-hidden">
               <img
-                src={infoCask.distilleries.image_url}
-                alt={infoCask.distilleries.name}
+                src={infoListing.distilleries.image_url}
+                alt={infoListing.distilleries.name}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -460,24 +457,24 @@ export default function AvailableStock() {
           <div className="px-6 pt-5 pb-6 flex-1 overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="display-heading text-3xl text-foreground text-left">
-                {infoCask?.distilleries?.name ?? "Distillery"}
+                {infoListing?.distilleries?.name ?? "Distillery"}
               </DialogTitle>
               <DialogDescription className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground text-left">
-                {[infoCask?.distilleries?.region, infoCask?.distilleries?.country].filter(Boolean).join(" · ") || "—"}
+                {[infoListing?.distilleries?.region, infoListing?.distilleries?.country].filter(Boolean).join(" · ") || "—"}
               </DialogDescription>
             </DialogHeader>
             <div className="w-12 h-px bg-primary/60 my-3" />
             <div className="space-y-5">
-              {infoCask?.description && (
+              {infoListing?.description && (
                 <InfoSection title="Cask Description">
                   <p className="font-body text-sm text-foreground/90 whitespace-pre-line leading-relaxed">
-                    {infoCask.description}
+                    {infoListing.description}
                   </p>
                 </InfoSection>
               )}
 
-              {infoCask?.distilleries && (() => {
-                const d = infoCask.distilleries;
+              {infoListing?.distilleries && (() => {
+                const d = infoListing.distilleries;
                 const operatingYears = d.founded_year ? new Date().getFullYear() - d.founded_year : null;
                 const facts: [string, React.ReactNode][] = [];
                 if (d.founded_by) facts.push(["Founded by", d.founded_by]);
@@ -508,18 +505,18 @@ export default function AvailableStock() {
                 );
               })()}
 
-              {infoCask?.distilleries?.about && (
+              {infoListing?.distilleries?.about && (
                 <InfoSection title="About">
                   <p className="font-body text-sm text-foreground/90 whitespace-pre-line leading-relaxed">
-                    {infoCask.distilleries.about}
+                    {infoListing.distilleries.about}
                   </p>
                 </InfoSection>
               )}
 
-              {infoCask?.distilleries?.news && infoCask.distilleries.news.length > 0 && (
+              {infoListing?.distilleries?.news && infoListing.distilleries.news.length > 0 && (
                 <InfoSection title="In the news">
                   <ul className="font-body text-sm space-y-1.5 list-disc pl-5">
-                    {infoCask.distilleries.news.map((n, i) => (
+                    {infoListing.distilleries.news.map((n, i) => (
                       <li key={i}>
                         {n.url ? (
                           <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1">
@@ -534,10 +531,10 @@ export default function AvailableStock() {
                 </InfoSection>
               )}
 
-              {infoCask?.distilleries?.awards && infoCask.distilleries.awards.length > 0 && (
+              {infoListing?.distilleries?.awards && infoListing.distilleries.awards.length > 0 && (
                 <InfoSection title="Awards">
                   <ul className="font-body text-sm space-y-1.5 list-disc pl-5">
-                    {infoCask.distilleries.awards.map((a, i) => (
+                    {infoListing.distilleries.awards.map((a, i) => (
                       <li key={i}>
                         {a.url ? (
                           <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline inline-flex items-center gap-1">
@@ -556,23 +553,23 @@ export default function AvailableStock() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={!!buyCask} onOpenChange={(o) => !o && setBuyCask(null)}>
+      <Dialog open={!!buyListing} onOpenChange={(o) => !o && setBuyListing(null)}>
         <DialogContent className="max-w-md w-[calc(100%-2rem)] bg-card border-border">
           <DialogHeader>
             <DialogTitle className="display-heading text-2xl text-foreground text-left">
-              {buyCask?.distilleries?.name ?? buyCask?.spirit}
+              {buyListing?.distilleries?.name ?? buyListing?.spirit}
             </DialogTitle>
           </DialogHeader>
-          {buyCask && (
+          {buyListing && (
             <div className="grid grid-cols-4 gap-3 mt-1">
-              <Mini label="Cask Type" v={buyCask.cask_type ?? "—"} />
-              <Mini label="ABV" v={buyCask.abv ? `${buyCask.abv}%` : "—"} />
-              <Mini label="Age" v={(() => { const a = computeCaskAge(buyCask.fill_date, buyCask.age_years); return a != null ? `${a} yrs` : "—"; })()} />
-              <Mini label="OLA" v={buyCask.ola_litres ? `${buyCask.ola_litres} L` : "—"} />
+              <Mini label="Cask Type" v={buyListing.cask_type ?? "—"} />
+              <Mini label="ABV" v={buyListing.abv ? `${buyListing.abv}%` : "—"} />
+              <Mini label="Age" v={(() => { const a = computeCaskAge(buyListing.fill_date, buyListing.age_years); return a != null ? `${a} yrs` : "—"; })()} />
+              <Mini label="OLA" v={buyListing.ola_litres ? `${buyListing.ola_litres} L` : "—"} />
             </div>
           )}
-          {buyCask && (() => {
-            const unit = priceFor(buyCask.list_price) ?? 0;
+          {buyListing && (() => {
+            const unit = priceFor(buyListing.list_price) ?? 0;
             const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
             const total = unit * qty;
             return (
