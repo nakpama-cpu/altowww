@@ -1,6 +1,5 @@
 import { Helmet } from "react-helmet-async";
 import heroImg from "@/assets/hero-mountain.jpg";
-import altoLogo from "@/assets/alto_text_logo.png.asset.json";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 
@@ -33,13 +32,8 @@ const HeroSection = () => {
         <p className="chapter-marker mb-3 md:mt-24 text-secondary-foreground/70">
           Whisky Cask Investment
         </p>
-        <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground font-bold flex items-center justify-center gap-3 md:gap-4">
-          <img
-            src={altoLogo.url}
-            alt="Alto"
-            className="inline-block h-[1em] w-auto object-contain"
-          />
-          <span>Whisky</span>
+        <h1 className="display-heading text-4xl md:text-6xl lg:text-7xl text-secondary-foreground font-bold">
+          Alto Whisky
         </h1>
         <p
           className="mt-2 font-body text-sm md:text-base lg:text-xl text-secondary-foreground/90 max-w-2xl tracking-wide leading-relaxed font-light"
