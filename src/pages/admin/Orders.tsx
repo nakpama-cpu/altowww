@@ -9,7 +9,8 @@ type Order = {
   stripe_session_id: string | null;
   created_at: string;
   profiles: { first_name: string; last_name: string; email: string } | null;
-  casks: { cask_number: string } | null;
+  casks: { cask_number: string | null } | null;
+  cask_listings: { spirit: string; distilleries: { name: string } | null } | null;
 };
 
 export default function AdminOrders() {
