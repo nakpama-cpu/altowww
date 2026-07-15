@@ -174,12 +174,28 @@ const Email = ({
                 <td style={sigDividerCell} aria-hidden="true"></td>
                 <td style={sigSpacerCell} aria-hidden="true"></td>
                 <td style={sigLogoCell}>
-                  <Img
-                    src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
-                    alt="Alto Whisky"
+                  <table
+                    role="presentation"
+                    cellPadding={0}
+                    cellSpacing={0}
+                    border={0}
                     width="94"
-                    style={{ display: 'block', height: 'auto', margin: '0 auto' }}
-                  />
+                    height="94"
+                    style={{ borderCollapse: 'collapse' as const, backgroundColor: 'hsl(220, 26%, 14%)' }}
+                  >
+                    <tbody>
+                      <tr>
+                        <td align="center" valign="middle" width="94" height="94" style={{ padding: 0 }}>
+                          <Img
+                            src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
+                            alt="Alto Whisky"
+                            width="94"
+                            style={{ display: 'block', height: 'auto', margin: '0 auto' }}
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </td>
               </tr>
             </tbody>
@@ -365,26 +381,20 @@ const sigWrap = {
   margin: '0 0 8px',
 }
 const sigLogoCell = {
-  width: '110px',
-  height: '110px',
-  backgroundColor: 'hsl(220, 26%, 14%)',
   textAlign: 'center' as const,
   verticalAlign: 'middle' as const,
   padding: 0,
 }
 const sigDividerCell = {
   width: '1px',
-  height: '110px',
   borderLeft: '1px solid hsl(24, 72%, 40%)',
   padding: 0,
 }
 const sigSpacerCell = {
   width: '14px',
-  height: '110px',
   padding: 0,
 }
 const sigInfoCell = {
-  height: '110px',
   verticalAlign: 'middle' as const,
   paddingRight: '12px',
   fontFamily: "'Inter', Arial, sans-serif",
