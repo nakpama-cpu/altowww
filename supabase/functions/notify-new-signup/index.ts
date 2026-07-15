@@ -16,6 +16,12 @@ Deno.serve(async (req) => {
       return json({ error: 'email required' }, 400)
     }
 
+    // Always return the same generic response regardless of lookup outcome,
+    // so this public endpoint cannot be used to enumerate which emails have
+    // registered accounts or their approval status. Any failures are logged
+    // server-side only.
+    const generic = () => json({ status: 'ok' }, 202)
+
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
@@ -27,8 +33,7 @@ Deno.serve(async (req) => {
       .eq('email', email.trim().toLowerCase())
       .maybeSingle()
 
-    if (!profile) return json({ status: 'no_profile' }, 202)
-    if (profile.status !== 'pending') return json({ status: 'not_pending' }, 202)
+    if (!profile || profile.status !== 'pending') return generic()
 
     const { data: tokens } = await supabase
       .from('approval_tokens')
@@ -38,7 +43,7 @@ Deno.serve(async (req) => {
 
     const approve = tokens?.find((t) => t.action === 'approve')?.token
     const reject = tokens?.find((t) => t.action === 'reject')?.token
-    if (!approve || !reject) return json({ status: 'no_tokens' }, 202)
+    if (!approve || !reject) return generic()
 
     const projectRef = new URL(Deno.env.get('SUPABASE_URL')!).host.split('.')[0]
     const fnBase = `https://${projectRef}.supabase.co/functions/v1/approve-client`
@@ -65,14 +70,11 @@ Deno.serve(async (req) => {
       },
     })
 
-    if (sendErr) {
-      console.error('notify-new-signup send failed', sendErr)
-      return json({ status: 'send_failed', error: sendErr.message }, 500)
-    }
-    return json({ status: 'ok' }, 200)
+    if (sendErr) console.error('notify-new-signup send failed', sendErr)
+    return generic()
   } catch (e) {
     console.error('notify-new-signup error', e)
-    return json({ error: (e as Error).message }, 500)
+    return json({ status: 'ok' }, 202)
   }
 })
 
