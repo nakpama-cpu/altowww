@@ -3,11 +3,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
+import { TitleSelect } from "@/components/auth/TitleSelect";
 
 export default function Account() {
   const { profile, refreshProfile } = useAuth();
   const { toast } = useToast();
   const [form, setForm] = useState({
+    title: profile?.title ?? "",
     first_name: profile?.first_name ?? "",
     last_name: profile?.last_name ?? "",
     phone: profile?.phone ?? "",
