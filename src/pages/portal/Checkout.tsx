@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Trash2, ShoppingBag, CheckCircle2 } from "lucide-react";
+import { Trash2, ShoppingBag, CheckCircle2, Tag, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+
+type AppliedCode = { code: string; percent: number; effective_percent: number };
 
 export default function Checkout() {
   const { items, remove, setQuantity, clear, subtotal, count } = useCart();
@@ -12,13 +14,52 @@ export default function Checkout() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [placing, setPlacing] = useState(false);
-  const discount = Number(profile?.client_discount_pct ?? 0);
+  const [codeInput, setCodeInput] = useState("");
+  const [applying, setApplying] = useState(false);
+  const [applied, setApplied] = useState<AppliedCode | null>(null);
+  const profileDiscount = Number(profile?.client_discount_pct ?? 0);
   const currency = items[0]?.currency ?? "GBP";
+
+  const effectivePct = applied ? applied.effective_percent : profileDiscount;
+  // items already carry the client-discount price; if a code beats it, reduce further.
+  const total = applied && applied.effective_percent > profileDiscount
+    ? subtotal * (1 - (applied.effective_percent - profileDiscount) / (100 - profileDiscount))
+    : subtotal;
+
+  const applyCode = async () => {
+    if (!codeInput.trim()) return;
+    setApplying(true);
+    const { data, error } = await supabase.rpc("validate_discount_code", { _code: codeInput.trim() });
+    setApplying(false);
+    if (error) {
+      toast({ title: "Could not validate", description: error.message, variant: "destructive" });
+      return;
+    }
+    const res = data as any;
+    if (!res?.valid) {
+      toast({ title: "Code not applied", description: res?.message ?? "Invalid code", variant: "destructive" });
+      setApplied(null);
+      return;
+    }
+    setApplied({ code: res.code, percent: Number(res.percent), effective_percent: Number(res.effective_percent) });
+    if (Number(res.effective_percent) <= profileDiscount) {
+      toast({
+        title: "Code accepted",
+        description: `Your existing ${profileDiscount}% client discount is already equal or better, so no change was applied.`,
+      });
+    } else {
+      toast({ title: `Code applied`, description: `${Number(res.percent)}% off` });
+    }
+  };
+
+  const removeCode = () => {
+    setApplied(null);
+    setCodeInput("");
+  };
 
   const placeOrder = async () => {
     if (!user || items.length === 0) return;
     setPlacing(true);
-    // Expand by quantity — one order row per cask unit
     const rows = items.flatMap((i) =>
       Array.from({ length: i.quantity }, () => ({
         buyer_id: user.id,
@@ -26,6 +67,7 @@ export default function Checkout() {
         amount: Number(i.unit_price.toFixed(2)),
         currency: i.currency,
         status: "pending" as const,
+        discount_code: applied?.code ?? null,
       })),
     );
     const { error } = await supabase.from("orders").insert(rows);
@@ -68,7 +110,7 @@ export default function Checkout() {
       <h1 className="display-heading text-4xl mb-2">Checkout</h1>
       <p className="font-body text-sm text-muted-foreground mb-8">
         Review your selected casks and submit your order request.
-        {discount > 0 && <span className="text-primary"> Your {discount}% client discount is applied.</span>}
+        {effectivePct > 0 && <span className="text-primary"> Your {effectivePct}% discount is applied.</span>}
       </p>
 
       <div className="grid lg:grid-cols-3 gap-6 min-w-0">
@@ -141,9 +183,51 @@ export default function Checkout() {
             <span className="text-muted-foreground">Subtotal</span>
             <span>£{Math.round(subtotal).toLocaleString()}</span>
           </div>
-          <div className="flex justify-between font-body text-base py-3 border-t border-border mt-2">
+
+          <div className="border-t border-border mt-2 pt-4">
+            <label className="block font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-2">
+              Discount Code
+            </label>
+            {applied ? (
+              <div className="flex items-center justify-between gap-2 bg-primary/10 border border-primary/30 px-3 py-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Tag className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-body text-sm tracking-wider truncate">{applied.code}</div>
+                    <div className="font-body text-[11px] text-muted-foreground">
+                      {applied.percent}% off · effective {applied.effective_percent}%
+                    </div>
+                  </div>
+                </div>
+                <button onClick={removeCode} className="p-1 text-muted-foreground hover:text-destructive" aria-label="Remove code">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  value={codeInput}
+                  onChange={(e) => setCodeInput(e.target.value.toUpperCase())}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); applyCode(); } }}
+                  placeholder="Enter code"
+                  maxLength={40}
+                  className="flex-1 min-w-0 bg-transparent border border-border px-3 py-2 font-body text-sm tracking-wider focus:outline-none focus:border-primary"
+                />
+                <button
+                  type="button"
+                  onClick={applyCode}
+                  disabled={applying || !codeInput.trim()}
+                  className="font-body text-[10px] uppercase tracking-[0.2em] border border-primary text-primary px-3 hover:bg-primary hover:text-primary-foreground transition-colors disabled:opacity-50"
+                >
+                  {applying ? "…" : "Apply"}
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-between font-body text-base py-3 border-t border-border mt-4">
             <span>Total ({currency})</span>
-            <span className="display-heading text-2xl text-primary">£{Math.round(subtotal).toLocaleString()}</span>
+            <span className="display-heading text-2xl text-primary">£{Math.round(total).toLocaleString()}</span>
           </div>
 
           <button

@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Users, Wine, FileSpreadsheet, Building2, PhoneCall, ShoppingCart, LogOut, ArrowLeft } from "lucide-react";
+import { Users, Wine, FileSpreadsheet, Building2, PhoneCall, ShoppingCart, LogOut, ArrowLeft, Tag } from "lucide-react";
 
 const items = [
   { to: "/admin", end: true, label: "Clients", icon: Users },
@@ -9,6 +9,7 @@ const items = [
   { to: "/admin/distilleries", label: "Distilleries", icon: Building2 },
   { to: "/admin/callbacks", label: "Callbacks", icon: PhoneCall },
   { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { to: "/admin/discount-codes", label: "Discount Codes", icon: Tag },
 ];
 
 export default function AdminLayout() {

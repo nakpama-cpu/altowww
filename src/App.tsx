@@ -55,6 +55,7 @@ import AdminHoldings from "./pages/admin/Holdings";
 import AdminDistilleries from "./pages/admin/Distilleries";
 import AdminCallbacks from "./pages/admin/Callbacks";
 import AdminOrders from "./pages/admin/Orders";
+import AdminDiscountCodes from "./pages/admin/DiscountCodes";
 
 const queryClient = new QueryClient();
 
@@ -107,6 +108,7 @@ const App = () => (
                 <Route path="distilleries" element={<AdminDistilleries />} />
                 <Route path="callbacks" element={<AdminCallbacks />} />
                 <Route path="orders" element={<AdminOrders />} />
+                <Route path="discount-codes" element={<AdminDiscountCodes />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />
