@@ -158,6 +158,74 @@ export type Database = {
           },
         ]
       }
+      discount_code_clients: {
+        Row: {
+          code_id: string
+          created_at: string
+          id: string
+          redeemed_at: string | null
+          user_id: string
+        }
+        Insert: {
+          code_id: string
+          created_at?: string
+          id?: string
+          redeemed_at?: string | null
+          user_id: string
+        }
+        Update: {
+          code_id?: string
+          created_at?: string
+          id?: string
+          redeemed_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discount_code_clients_code_id_fkey"
+            columns: ["code_id"]
+            isOneToOne: false
+            referencedRelation: "discount_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discount_codes: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          notes: string | null
+          percent: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          notes?: string | null
+          percent: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          notes?: string | null
+          percent?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       distilleries: {
         Row: {
           about: string | null
@@ -402,6 +470,7 @@ export type Database = {
           cask_id: string
           created_at: string
           currency: string
+          discount_code: string | null
           id: string
           status: Database["public"]["Enums"]["order_status"]
           stripe_payment_intent: string | null
@@ -414,6 +483,7 @@ export type Database = {
           cask_id: string
           created_at?: string
           currency?: string
+          discount_code?: string | null
           id?: string
           status?: Database["public"]["Enums"]["order_status"]
           stripe_payment_intent?: string | null
@@ -426,6 +496,7 @@ export type Database = {
           cask_id?: string
           created_at?: string
           currency?: string
+          discount_code?: string | null
           id?: string
           status?: Database["public"]["Enums"]["order_status"]
           stripe_payment_intent?: string | null
@@ -570,6 +641,7 @@ export type Database = {
           read_ct: number
         }[]
       }
+      validate_discount_code: { Args: { _code: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "client"
