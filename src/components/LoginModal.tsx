@@ -19,7 +19,7 @@ export default function LoginModal({ open, onClose }: Props) {
   const [loading, setLoading] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetSent, setResetSent] = useState(false);
-  const [signupForm, setSignupForm] = useState({ firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
+  const [signupForm, setSignupForm] = useState({ title: "", firstName: "", lastName: "", email: "", phone: "", phoneCountryCode: "", country: "", password: "" });
   const detected = useDetectedCountry();
 
   useEffect(() => {
