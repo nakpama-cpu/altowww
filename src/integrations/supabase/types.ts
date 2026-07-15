@@ -90,11 +90,10 @@ export type Database = {
           },
         ]
       }
-      casks: {
+      cask_listings: {
         Row: {
           abv: number | null
           age_years: number | null
-          cask_number: string
           cask_type: string | null
           created_at: string
           currency: string
@@ -105,15 +104,16 @@ export type Database = {
           id: string
           list_price: number | null
           ola_litres: number | null
+          reserved_qty: number
           rla_litres: number | null
           spirit: string
-          status: Database["public"]["Enums"]["cask_status"]
+          status: Database["public"]["Enums"]["listing_status"]
+          stock_qty: number
           updated_at: string
         }
         Insert: {
           abv?: number | null
           age_years?: number | null
-          cask_number: string
           cask_type?: string | null
           created_at?: string
           currency?: string
@@ -124,15 +124,16 @@ export type Database = {
           id?: string
           list_price?: number | null
           ola_litres?: number | null
+          reserved_qty?: number
           rla_litres?: number | null
           spirit?: string
-          status?: Database["public"]["Enums"]["cask_status"]
+          status?: Database["public"]["Enums"]["listing_status"]
+          stock_qty?: number
           updated_at?: string
         }
         Update: {
           abv?: number | null
           age_years?: number | null
-          cask_number?: string
           cask_type?: string | null
           created_at?: string
           currency?: string
@@ -142,6 +143,79 @@ export type Database = {
           hero_image_url?: string | null
           id?: string
           list_price?: number | null
+          ola_litres?: number | null
+          reserved_qty?: number
+          rla_litres?: number | null
+          spirit?: string
+          status?: Database["public"]["Enums"]["listing_status"]
+          stock_qty?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cask_listings_distillery_id_fkey"
+            columns: ["distillery_id"]
+            isOneToOne: false
+            referencedRelation: "distilleries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      casks: {
+        Row: {
+          abv: number | null
+          age_years: number | null
+          cask_number: string | null
+          cask_type: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          distillery_id: string | null
+          fill_date: string | null
+          hero_image_url: string | null
+          id: string
+          list_price: number | null
+          listing_id: string | null
+          ola_litres: number | null
+          rla_litres: number | null
+          spirit: string
+          status: Database["public"]["Enums"]["cask_status"]
+          updated_at: string
+        }
+        Insert: {
+          abv?: number | null
+          age_years?: number | null
+          cask_number?: string | null
+          cask_type?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          distillery_id?: string | null
+          fill_date?: string | null
+          hero_image_url?: string | null
+          id?: string
+          list_price?: number | null
+          listing_id?: string | null
+          ola_litres?: number | null
+          rla_litres?: number | null
+          spirit?: string
+          status?: Database["public"]["Enums"]["cask_status"]
+          updated_at?: string
+        }
+        Update: {
+          abv?: number | null
+          age_years?: number | null
+          cask_number?: string | null
+          cask_type?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          distillery_id?: string | null
+          fill_date?: string | null
+          hero_image_url?: string | null
+          id?: string
+          list_price?: number | null
+          listing_id?: string | null
           ola_litres?: number | null
           rla_litres?: number | null
           spirit?: string
@@ -154,6 +228,13 @@ export type Database = {
             columns: ["distillery_id"]
             isOneToOne: false
             referencedRelation: "distilleries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "casks_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "cask_listings"
             referencedColumns: ["id"]
           },
         ]
@@ -467,11 +548,12 @@ export type Database = {
         Row: {
           amount: number
           buyer_id: string
-          cask_id: string
+          cask_id: string | null
           created_at: string
           currency: string
           discount_code: string | null
           id: string
+          listing_id: string | null
           status: Database["public"]["Enums"]["order_status"]
           stripe_payment_intent: string | null
           stripe_session_id: string | null
@@ -480,11 +562,12 @@ export type Database = {
         Insert: {
           amount: number
           buyer_id: string
-          cask_id: string
+          cask_id?: string | null
           created_at?: string
           currency?: string
           discount_code?: string | null
           id?: string
+          listing_id?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           stripe_payment_intent?: string | null
           stripe_session_id?: string | null
@@ -493,11 +576,12 @@ export type Database = {
         Update: {
           amount?: number
           buyer_id?: string
-          cask_id?: string
+          cask_id?: string | null
           created_at?: string
           currency?: string
           discount_code?: string | null
           id?: string
+          listing_id?: string | null
           status?: Database["public"]["Enums"]["order_status"]
           stripe_payment_intent?: string | null
           stripe_session_id?: string | null
@@ -516,6 +600,13 @@ export type Database = {
             columns: ["cask_id"]
             isOneToOne: false
             referencedRelation: "casks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "cask_listings"
             referencedColumns: ["id"]
           },
         ]
@@ -650,6 +741,7 @@ export type Database = {
       app_role: "admin" | "client"
       callback_status: "new" | "contacted" | "closed"
       cask_status: "available" | "reserved" | "held" | "sold"
+      listing_status: "active" | "hidden" | "sold_out"
       order_status: "pending" | "paid" | "cancelled" | "refunded"
       profile_status: "pending" | "approved" | "suspended"
     }
@@ -782,6 +874,7 @@ export const Constants = {
       app_role: ["admin", "client"],
       callback_status: ["new", "contacted", "closed"],
       cask_status: ["available", "reserved", "held", "sold"],
+      listing_status: ["active", "hidden", "sold_out"],
       order_status: ["pending", "paid", "cancelled", "refunded"],
       profile_status: ["pending", "approved", "suspended"],
     },
