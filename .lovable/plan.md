@@ -1,35 +1,25 @@
 ## Goal
+Normalize client name and email formatting automatically so records stay consistent regardless of how users type them at signup or when editing their account.
 
-Give every page in the sitemap a correct self-referencing canonical, so Google attributes each URL to itself instead of the homepage.
+## Formatting rules
+- **First name / Last name**: Title Case — first letter of each word uppercase, rest lowercase (e.g. `jOHN` → `John`, `mcdonald` → `Mcdonald`, `mary-jane` → `Mary-Jane`). Applied per word split on spaces and hyphens.
+- **Title**: kept as selected from the dropdown (already standardized).
+- **Email**: fully lowercased and trimmed.
 
-## Current state
+## Where to apply
+Normalize in **both** places so old and new data are covered:
 
-- `react-helmet-async` is wired up (`HelmetProvider` in `src/main.tsx`).
-- `src/components/Seo.tsx` already emits `<link rel="canonical">`, `og:url`, and per-route og/twitter title/description.
-- Marketing pages already use `<Seo>`: Index, HowItWorks, WhyWhisky, AboutWhisky, HowWhiskyIsMade, FAQ, Contact, News, ArticlePage.
-- **Missing canonicals**: the four portal auth pages we just added to the sitemap — Login, Signup, ForgotPassword, ResetPassword.
-- **Duplicate canonical bug**: `index.html` still hardcodes `<link rel="canonical" href="https://www.altowhisky.com/" />`. Helmet's per-route `<link>` does not dedupe by `rel`, so on every non-home route two canonicals ship — one pointing to `/` and one to the real URL. Google may pick either; this silently undermines the whole per-page setup.
+1. **Database (source of truth)** — a trigger on `public.profiles` that runs `BEFORE INSERT OR UPDATE` and rewrites `first_name`, `last_name`, and `email` using the rules above. This guarantees consistency no matter how a row is written (signup trigger, Account page, admin edits).
+2. **One-time backfill** — update all existing `profiles` rows so current clients display correctly in the admin Clients list immediately.
+3. **Client-side polish** — trim + normalize in `Signup.tsx` and `Account.tsx` before submitting, so the user sees the tidy version instantly (the DB trigger is the safety net).
 
-## Changes
+## Technical detail
+- New SQL function `public.normalize_profile_names()` (SECURITY INVOKER, `search_path = public`) using `initcap()`-style logic that also handles hyphenated names, plus `lower(trim(email))`.
+- Trigger `profiles_normalize_names` runs `BEFORE INSERT OR UPDATE OF first_name, last_name, email`.
+- `handle_new_user()` already inserts into profiles → trigger fires automatically, so no change needed there.
+- Small shared helper `src/lib/formatName.ts` used by Signup and Account forms.
 
-### 1. `index.html`
-
-Remove the sitewide `<link rel="canonical" href="https://www.altowhisky.com/" />`. The homepage will get its canonical from `<Seo path="/">` in `src/pages/Index.tsx` (already present). Every other route already sets its own via `<Seo>`. Leave the sitewide `og:*` tags in place — they're the fallback for non-JS social crawlers.
-
-### 2. Add `<Seo>` to the four portal auth pages
-
-Each gets a self-referencing canonical, a real title/description, and `og:url` pointing at the page itself. These pages are functional entry points, not marketing content, so descriptions are short and factual.
-
-- `src/pages/portal/Login.tsx` — `path="/portal/login"`, title `Client Sign In | Alto Whisky`, description `Sign in to your Alto Whisky client portal to view your cask portfolio and available stock.`
-- `src/pages/portal/Signup.tsx` — `path="/portal/signup"`, title `Create a Client Account | Alto Whisky`, description `Open an Alto Whisky client account to access cask investment opportunities and portfolio tools.`
-- `src/pages/portal/ForgotPassword.tsx` — `path="/portal/forgot-password"`, title `Reset Your Password | Alto Whisky`, description `Request a password reset link for your Alto Whisky client account.`
-- `src/pages/portal/ResetPassword.tsx` — `path="/portal/reset-password"`, title `Set a New Password | Alto Whisky`, description `Set a new password for your Alto Whisky client account.`
-
-### Out of scope
-
-- Authenticated portal pages (Dashboard, MyCasks, AvailableStock, Checkout, Callback, Account, PendingApproval, PortalNews) and admin pages — not in the sitemap, no canonical needed.
-- `NotFound` — 404s should not have a canonical.
-
-## Verification
-
-After publish: `curl -s https://www.altowhisky.com/portal/login | grep -i canonical` should show a single canonical to `/portal/login`, and the homepage should show only one canonical to `/`. Then re-inspect the four auth URLs in Search Console; canonical should read as `User-declared canonical` matching the URL itself.
+## Out of scope
+- Titles list (unchanged).
+- Phone numbers, country, address fields.
+- Historical `orders`, `leads`, `callback_requests` name fields (can be added later if you want).
