@@ -5,6 +5,7 @@ import { clearPortalVisit } from "@/lib/portalSession";
 
 type Profile = {
   id: string;
+  title: string | null;
   first_name: string;
   last_name: string;
   email: string;
