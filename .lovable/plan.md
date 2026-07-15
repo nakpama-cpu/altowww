@@ -1,12 +1,13 @@
-## Center submit buttons in verify modals
+## Goal
+Centre-align the text inside the submit buttons in the two verification modals.
 
-The shadcn `DialogFooter` defaults to `sm:justify-end`, which right-aligns the submit button on tablet and desktop. That override needs to be removed on both verify modals so the button stays centered at all breakpoints.
+## Where
+- `src/pages/portal/Account.tsx`
+  - `VerifyAddressDialog` submit button (~line 383)
+  - `VerifyDobDialog` submit button (~line 541)
 
-### Changes (src/pages/portal/Account.tsx)
+## How
+Both buttons currently use `inline-flex items-center gap-2`. I will add `justify-center text-center` to their class lists so the text and icon group is centred horizontally and any wrapped text is centre-aligned within the button.
 
-1. **VerifyAddress modal** (line 382): change `<DialogFooter>` to `<DialogFooter className="sm:justify-center justify-center">`.
-2. **VerifyDob modal** (line 540): same change.
-
-Leave the `EditProfile` modal footer (line 685) untouched — the user only asked about the verify modals.
-
-No other markup or logic changes.
+## Out of scope
+No other buttons, dialog footers, or logic will be changed.
