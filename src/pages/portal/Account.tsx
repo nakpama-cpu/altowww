@@ -106,7 +106,11 @@ export default function Account() {
   const [addressOpen, setAddressOpen] = useState(false);
   const [dobOpen, setDobOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [password, setPassword] = useState("");
+  const [passwordOpen, setPasswordOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordSubmitting, setPasswordSubmitting] = useState(false);
 
   if (!profile) return null;
 
