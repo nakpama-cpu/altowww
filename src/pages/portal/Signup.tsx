@@ -67,7 +67,8 @@ export default function PortalSignup() {
       subtitle="Your account will be reviewed by our team before you can access portfolio features."
     >
       <form onSubmit={handleSubmit} className="space-y-2">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-[5rem_1fr_1fr] gap-3">
+          <TitleSelect value={form.title} onChange={(title) => setForm({ ...form, title })} compact />
           <div>
             <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">First Name</label>
             <input required maxLength={100} value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })}
