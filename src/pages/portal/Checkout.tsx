@@ -120,6 +120,10 @@ export default function Checkout() {
         {effectivePct > 0 && <span className="text-primary"> Your {effectivePct}% discount is applied.</span>}
       </p>
 
+      <VerificationGateBanner />
+
+
+
       <div className="grid lg:grid-cols-3 gap-6 min-w-0">
         <div className="lg:col-span-2 space-y-3 min-w-0">
           {items.map((i) => {
