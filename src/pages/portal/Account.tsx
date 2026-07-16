@@ -649,7 +649,6 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
   const [phone, setPhone] = useState("");
   const [phoneCode, setPhoneCode] = useState("");
-  const [country, setCountry] = useState("");
 
   const [addr, setAddr] = useState({
     address_line1: "",
@@ -669,7 +668,6 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
     setPhone(profile.phone ?? "");
     setPhoneCode(profile.phone_country_code ?? "");
     setCountry(profile.country ?? "");
-    setAddr({
       address_line1: profile.address_line1 ?? "",
       address_line2: profile.address_line2 ?? "",
       address_city: profile.address_city ?? "",
@@ -684,7 +682,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
   const phoneChanged = useMemo(() => {
     if (!profile) return false;
-    return phone !== (profile.phone ?? "") || phoneCode !== (profile.phone_country_code ?? "") || country !== (profile.country ?? "");
+    return phone !== (profile.phone ?? "") || phoneCode !== (profile.phone_country_code ?? "") ;
   }, [phone, phoneCode, country, profile]);
 
   const savePhone = async () => {
@@ -692,7 +690,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ phone, phone_country_code: phoneCode, country })
+      .update({ phone, phone_country_code: phoneCode })
       .eq("id", profile.id);
     setSaving(false);
     if (error) return toast({ title: "Save failed", description: error.message, variant: "destructive" });
@@ -764,7 +762,6 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
           <div className="space-y-2.5 pt-1">
             <CountrySelect value={country} onChange={(code, dialingCode) => { setCountry(code); setPhoneCode(dialingCode); }} />
             <PhoneField
-              countryCode={phoneCode}
               onCountryCodeChange={setPhoneCode}
               phone={phone}
               onPhoneChange={setPhone}
