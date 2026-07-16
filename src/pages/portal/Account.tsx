@@ -219,7 +219,7 @@ export default function Account() {
         setPasswordOpen(o);
         if (!o) { setCurrentPassword(""); setNewPassword(""); setConfirmPassword(""); }
       }}>
-        <DialogContent className="max-w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+        <DialogContent className="max-w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6 bg-white">
           <DialogHeader>
             <DialogTitle className="display-heading text-xl">Change Password</DialogTitle>
             <DialogDescription className="font-body text-xs">
@@ -398,77 +398,82 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-4 sm:p-6 gap-3 max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="display-heading text-xl">Verify your address</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[92vh] overflow-y-auto bg-white">
+        <DialogHeader className="space-y-1">
+          <DialogTitle className="display-heading text-lg sm:text-xl">Verify your address</DialogTitle>
+          <DialogDescription className="text-xs sm:text-sm">
             Enter your current address and upload a document issued within the last 3 months.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={submit} className="space-y-2.5">
-          <TextField label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
-          <TextField label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
-          <div className="grid grid-cols-2 gap-3">
-            <TextField label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
-            <TextField label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <TextField label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
-            <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 items-end">
-            <div>
-              <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
-              <select
-                value={addr.proof_of_address_type}
-                onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                className="w-full h-[26px] bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
-              >
-                <option value="">Select…</option>
-                {ADDRESS_PROOF_TYPES.map((t) => (
-                  <option key={t.value} value={t.value}>{t.label}</option>
-                ))}
-              </select>
+        <form onSubmit={submit} className="space-y-2 sm:space-y-4 pt-1">
+          <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
+            <TextField dense label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
+            <TextField dense label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+              <TextField dense label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
+              <TextField dense label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
             </div>
-            <TextField
-              label="Issue date"
-              type="date"
-              value={addr.proof_of_address_issued_on}
-              onChange={(v) => setAddr({ ...addr, proof_of_address_issued_on: v })}
-            />
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+              <TextField dense label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
+              <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
+            </div>
           </div>
 
-          <div>
-            <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Upload document</label>
-            <input
-              type="file"
-              accept="application/pdf,image/jpeg,image/png,image/webp"
-              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              className="font-body text-xs w-full"
-            />
-            <p className="font-body text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
+          <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 items-end">
+              <div>
+                <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 sm:mb-1">Document type</label>
+                <select
+                  value={addr.proof_of_address_type}
+                  onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
+                  className="w-full h-8 sm:h-9 bg-transparent border-b border-border py-0.5 font-body text-xs sm:text-sm focus:outline-none focus:border-primary"
+                >
+                  <option value="">Select…</option>
+                  {ADDRESS_PROOF_TYPES.map((t) => (
+                    <option key={t.value} value={t.value}>{t.label}</option>
+                  ))}
+                </select>
+              </div>
+              <TextField
+                dense
+                label="Issue date"
+                type="date"
+                value={addr.proof_of_address_issued_on}
+                onChange={(v) => setAddr({ ...addr, proof_of_address_issued_on: v })}
+              />
+            </div>
+
+            <div>
+              <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 sm:mb-1">Upload document</label>
+              <input
+                type="file"
+                accept="application/pdf,image/jpeg,image/png,image/webp"
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                className="font-body text-[10px] sm:text-xs w-full file:mr-2 file:py-1 file:px-2 file:text-[10px] sm:file:text-xs"
+              />
+              <p className="font-body text-[9px] sm:text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
+            </div>
           </div>
 
           {addr.proof_of_address_type === "driving_licence" && !ageAlreadyVerified && (
-            <label className="flex items-start gap-2 p-3 border border-border bg-muted/30 cursor-pointer">
+            <label className="flex items-start gap-2 p-2 sm:p-3 border border-amber-500/40 bg-amber-500/10 rounded-md cursor-pointer">
               <input
                 type="checkbox"
                 checked={useForAge}
                 onChange={(e) => setUseForAge(e.target.checked)}
                 className="mt-0.5"
               />
-              <span className="font-body text-xs text-foreground">
+              <span className="font-body text-[10px] sm:text-xs text-amber-900 dark:text-amber-200 leading-snug">
                 Use this driving licence as proof of age as well. You won't need to upload a second document.
               </span>
             </label>
           )}
 
-          <DialogFooter className="justify-center sm:justify-center">
+          <DialogFooter className="flex justify-center sm:justify-center pt-1 sm:pt-0">
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
+              className="w-full sm:w-auto inline-flex items-center justify-center text-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
             >
               <Upload className="w-4 h-4" /> {saving ? "Submitting…" : "Submit for review"}
             </button>
@@ -568,9 +573,9 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-4 sm:p-6 gap-3 max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="display-heading text-xl">Verify your date of birth</DialogTitle>
+      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[92vh] overflow-y-auto bg-white">
+        <DialogHeader className="space-y-1">
+          <DialogTitle className="display-heading text-lg sm:text-xl">Verify your date of birth</DialogTitle>
           <DialogDescription>
             Confirm your date of birth and upload a government-issued ID.
           </DialogDescription>
@@ -746,7 +751,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[92vh] overflow-y-auto bg-white">
         <DialogHeader className="space-y-1">
           <DialogTitle className="display-heading text-lg sm:text-xl">Edit profile</DialogTitle>
           <DialogDescription className="text-xs sm:text-sm">Update your contact number or address. Name, date of birth and email are locked for identity purposes.</DialogDescription>
