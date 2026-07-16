@@ -184,16 +184,16 @@ export default function Account() {
         <dl className="divide-y divide-border">
           <ProfileRow label="Name" value={displayName || "—"} />
           <ProfileRow
+            label="Address"
+            value={formatAddress(profile)}
+            action={<RowStatus status={addrStatus} onVerify={() => setAddressOpen(true)} />}
+          />
+          <ProfileRow
             label="Date of birth"
             value={formatDob(profile.date_of_birth)}
             action={<RowStatus status={ageStatus} onVerify={() => setDobOpen(true)} />}
           />
           <ProfileRow label="Email" value={profile.email} />
-          <ProfileRow
-            label="Address"
-            value={formatAddress(profile)}
-            action={<RowStatus status={addrStatus} onVerify={() => setAddressOpen(true)} />}
-          />
           <ProfileRow label="Contact number" value={formatPhone(profile)} />
         </dl>
 
