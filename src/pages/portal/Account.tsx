@@ -417,7 +417,7 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
             <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
           </div>
 
-          <div className="pt-2 border-t border-border grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 items-end">
             <div>
               <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
               <select
