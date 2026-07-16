@@ -219,7 +219,7 @@ export default function Account() {
         setPasswordOpen(o);
         if (!o) { setCurrentPassword(""); setNewPassword(""); setConfirmPassword(""); }
       }}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle className="display-heading text-xl">Change Password</DialogTitle>
             <DialogDescription className="font-body text-xs">
@@ -398,7 +398,7 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg w-[calc(100vw-1.5rem)] p-4 sm:p-5 gap-3 max-h-[calc(100dvh-1.5rem)] overflow-y-auto">
+      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-4 sm:p-6 gap-3 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="display-heading text-xl">Verify your address</DialogTitle>
           <DialogDescription>
@@ -568,7 +568,7 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg w-[calc(100vw-1.5rem)] p-4 sm:p-5 gap-3 max-h-[calc(100dvh-1.5rem)] overflow-y-auto">
+      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-4 sm:p-6 gap-3 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="display-heading text-xl">Verify your date of birth</DialogTitle>
           <DialogDescription>
@@ -749,7 +749,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg w-[calc(100vw-1.5rem)] p-4 sm:p-5 gap-3 max-h-[calc(100dvh-1.5rem)] overflow-y-auto">
+      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-4 sm:p-6 gap-3 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="display-heading text-xl">Edit profile</DialogTitle>
           <DialogDescription>Update your contact number or address. Name, date of birth and email are locked for identity purposes.</DialogDescription>
@@ -772,16 +772,9 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
             <DialogFooter>
               <button
                 type="button"
-                onClick={() => onOpenChange(false)}
-                className="font-body text-xs uppercase tracking-[0.25em] border border-border px-5 py-2 hover:bg-muted"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
                 onClick={savePhone}
                 disabled={saving || !phoneChanged}
-                className="font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
+                className="w-full sm:w-auto inline-flex items-center justify-center text-center font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
               >
                 {saving ? "Saving…" : "Save"}
               </button>
@@ -802,13 +795,14 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
               <TextField label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
               <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
             </div>
-            <div className="pt-2 border-t border-border grid grid-cols-2 gap-3">
+
+            <div className="grid grid-cols-2 gap-3 items-end">
               <div>
                 <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
                 <select
                   value={addr.proof_of_address_type}
                   onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                  className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+                  className="w-full h-[26px] bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
                 >
                   <option value="">Select…</option>
                   {ADDRESS_PROOF_TYPES.map((t) => (
@@ -833,19 +827,12 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
               />
               <p className="font-body text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
             </div>
-            <DialogFooter>
-              <button
-                type="button"
-                onClick={() => onOpenChange(false)}
-                className="font-body text-xs uppercase tracking-[0.25em] border border-border px-5 py-2 hover:bg-muted"
-              >
-                Cancel
-              </button>
+            <DialogFooter className="justify-center sm:justify-center">
               <button
                 type="button"
                 onClick={saveAddress}
                 disabled={saving}
-                className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
+                className="w-full sm:w-auto inline-flex items-center justify-center text-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 disabled:opacity-50"
               >
                 <Upload className="w-4 h-4" /> {saving ? "Submitting…" : "Save & re-verify"}
               </button>
