@@ -18,7 +18,7 @@ interface CountrySelectProps {
 export function CountrySelect({ value, onChange, required = true, dense = false }: CountrySelectProps) {
   return (
     <div>
-      <label className={`block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground ${dense ? "mb-0.5 sm:mb-1" : "mb-1"}`}>
+      <label className={`block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground ${dense ? "mb-0.5" : "mb-1"}`}>
         Country
       </label>
       <select
@@ -29,7 +29,7 @@ export function CountrySelect({ value, onChange, required = true, dense = false 
           const country = countryByCode.get(code);
           onChange(code, country?.dialingCode ?? "");
         }}
-        className={`w-full bg-transparent border-b border-border font-body text-xs sm:text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer ${dense ? "h-8 sm:h-9 py-0.5" : "py-1"}`}
+        className={`w-full bg-transparent border-b border-border font-body text-xs sm:text-sm leading-none focus:outline-none focus:border-primary appearance-none cursor-pointer ${dense ? "h-8 sm:h-9 py-0.5" : "py-1"}`}
       >
         <option value="" disabled>
           Select country

@@ -422,11 +422,11 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
           <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
             <div className="grid grid-cols-2 gap-2 sm:gap-3 items-end">
               <div>
-                <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 sm:mb-1">Document type</label>
+                <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Document type</label>
                 <select
                   value={addr.proof_of_address_type}
                   onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                  className="w-full h-8 sm:h-9 bg-transparent border-b border-border py-0.5 font-body text-xs sm:text-sm focus:outline-none focus:border-primary"
+                  className="w-full h-8 sm:h-9 bg-transparent border-b border-border py-0.5 font-body text-xs sm:text-sm leading-none focus:outline-none focus:border-primary"
                 >
                   <option value="">Select…</option>
                   {ADDRESS_PROOF_TYPES.map((t) => (
@@ -588,7 +588,7 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
               <select
                 value={docType}
                 onChange={(e) => setDocType(e.target.value as ProofOfAgeType)}
-                className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+                className="w-full bg-transparent border-b border-border py-1 font-body text-sm leading-none focus:outline-none focus:border-primary"
               >
                 <option value="">Select…</option>
                 {AGE_PROOF_TYPES.map((t) => (
@@ -805,11 +805,11 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
             <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
               <div className="grid grid-cols-2 gap-2 sm:gap-3 items-end">
                 <div>
-                  <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 sm:mb-1">Document type</label>
+                  <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Document type</label>
                   <select
                     value={addr.proof_of_address_type}
                     onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                    className="w-full h-8 sm:h-9 bg-transparent border-b border-border py-0.5 font-body text-xs sm:text-sm focus:outline-none focus:border-primary"
+                    className="w-full h-8 sm:h-9 bg-transparent border-b border-border py-0.5 font-body text-xs sm:text-sm leading-none focus:outline-none focus:border-primary"
                   >
                     <option value="">Select…</option>
                     {ADDRESS_PROOF_TYPES.map((t) => (
@@ -887,7 +887,7 @@ function TextField({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full bg-transparent border-b border-border font-body text-xs sm:text-sm focus:outline-none focus:border-primary ${dense ? "h-8 sm:h-9 py-0.5" : "py-1"}`}
+        className={`w-full bg-transparent border-b border-border font-body text-xs sm:text-sm leading-none focus:outline-none focus:border-primary ${dense ? "h-8 sm:h-9 py-0.5" : "py-1"}`}
       />
     </div>
   );
