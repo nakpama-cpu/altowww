@@ -17,7 +17,7 @@ interface CountrySelectProps {
 export function CountrySelect({ value, onChange, required = true }: CountrySelectProps) {
   return (
     <div>
-      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">
+      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">
         Country
       </label>
       <select
@@ -28,7 +28,7 @@ export function CountrySelect({ value, onChange, required = true }: CountrySelec
           const country = countryByCode.get(code);
           onChange(code, country?.dialingCode ?? "");
         }}
-        className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer"
+        className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer"
       >
         <option value="" disabled>
           Select country
@@ -54,7 +54,7 @@ function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer text-transparent [&>option]:text-foreground"
+        className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer text-transparent [&>option]:text-foreground"
       >
         <option value="" disabled>
           Code
