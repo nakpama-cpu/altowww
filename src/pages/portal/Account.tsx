@@ -162,7 +162,7 @@ export default function Account() {
         </div>
       )}
 
-      <section className="bg-card border border-border p-8 mb-6">
+      <section className="bg-muted/20 border border-border p-8 mb-6">
         <div className="flex items-start justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
             <h2 className="display-heading text-xl">Profile</h2>
