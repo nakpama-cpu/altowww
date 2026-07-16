@@ -576,20 +576,21 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-2.5">
-          <TextField label="Date of birth" type="date" value={dob} onChange={setDob} />
-
-          <div>
-            <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
-            <select
-              value={docType}
-              onChange={(e) => setDocType(e.target.value as ProofOfAgeType)}
-              className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
-            >
-              <option value="">Select…</option>
-              {AGE_PROOF_TYPES.map((t) => (
-                <option key={t.value} value={t.value}>{t.label}</option>
-              ))}
-            </select>
+          <div className="grid grid-cols-2 gap-3 items-end">
+            <TextField label="Date of birth" type="date" value={dob} onChange={setDob} />
+            <div>
+              <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
+              <select
+                value={docType}
+                onChange={(e) => setDocType(e.target.value as ProofOfAgeType)}
+                className="w-full h-[26px] bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+              >
+                <option value="">Select…</option>
+                {AGE_PROOF_TYPES.map((t) => (
+                  <option key={t.value} value={t.value}>{t.label}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div>
@@ -602,6 +603,7 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
             />
             <p className="font-body text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
           </div>
+
 
           {docType === "driving_licence" && !addressAlreadyVerified && (
             <div className="p-3 border border-border bg-muted/30 space-y-3">
