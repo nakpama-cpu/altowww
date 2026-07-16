@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
@@ -136,13 +137,11 @@ export default function LoginModal({ open, onClose }: Props) {
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors"
+          className="absolute right-3 top-3 rounded-full bg-black/60 text-white backdrop-blur-sm p-1.5 transition-colors hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
         </button>
-
         {mode === "signin" && (
           <>
             {renderHeader("Client Portal", "Sign in", "Access your portfolio and available stock.")}
