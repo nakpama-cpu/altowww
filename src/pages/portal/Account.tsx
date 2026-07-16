@@ -415,7 +415,7 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
             </div>
             <div className="grid grid-cols-2 gap-2 sm:gap-3">
               <TextField dense label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
-              <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
+              <CountrySelect dense value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
             </div>
           </div>
 
@@ -588,7 +588,7 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
               <select
                 value={docType}
                 onChange={(e) => setDocType(e.target.value as ProofOfAgeType)}
-                className="w-full h-[26px] bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+                className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
               >
                 <option value="">Select…</option>
                 {AGE_PROOF_TYPES.map((t) => (
@@ -798,7 +798,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
               </div>
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <TextField dense label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
-                <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
+                <CountrySelect dense value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
               </div>
             </div>
 
