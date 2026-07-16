@@ -667,7 +667,6 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
     setTab("phone");
     setPhone(profile.phone ?? "");
     setPhoneCode(profile.phone_country_code ?? "");
-    setCountry(profile.country ?? "");
       address_line1: profile.address_line1 ?? "",
       address_line2: profile.address_line2 ?? "",
       address_city: profile.address_city ?? "",
