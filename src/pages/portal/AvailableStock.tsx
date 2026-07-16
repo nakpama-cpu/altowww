@@ -200,10 +200,10 @@ export default function AvailableStock() {
             onChange={(e) => { setSearch(e.target.value); setShowSuggestions(true); }}
             onFocus={() => setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-            className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full"
+            className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
           />
           {showSuggestions && suggestions.length > 0 && (
-            <ul className="absolute z-20 left-0 right-0 top-full mt-1 bg-card border border-border max-h-72 overflow-auto shadow-lg">
+            <ul className="absolute z-20 left-0 right-0 top-full mt-1 bg-muted/20 border border-border max-h-72 overflow-auto shadow-lg">
               {suggestions.map((s, i) => (
                 <li key={i}>
                   <button
@@ -223,7 +223,7 @@ export default function AvailableStock() {
           <select
             value={filterDistillery}
             onChange={(e) => setFilterDistillery(e.target.value)}
-            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="All">Distilleries</option>
             {distilleries.map((d) => (
@@ -236,7 +236,7 @@ export default function AvailableStock() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="">Sort</option>
             <option value="newest">Date Added (Newest)</option>
@@ -271,7 +271,7 @@ export default function AvailableStock() {
               else if (!v.startsWith("-") && Number(v) >= 0) setFilterMinPrice(v);
             }}
             onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
-            className="w-full h-10 rounded-none border-border bg-card font-body text-sm pl-7"
+            className="w-full h-10 rounded-none border-border bg-muted/20 font-body text-sm pl-7"
           />
         </div>
         <div className="relative md:col-span-2 lg:col-span-2 md:order-4 lg:order-none">
@@ -288,12 +288,12 @@ export default function AvailableStock() {
               else if (!v.startsWith("-") && Number(v) >= 0) setFilterMaxPrice(v);
             }}
             onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
-            className="w-full h-10 rounded-none border-border bg-card font-body text-sm pl-7"
+            className="w-full h-10 rounded-none border-border bg-muted/20 font-body text-sm pl-7"
           />
         </div>
         <button
           onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
-          className="md:col-span-2 lg:col-span-2 w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground md:order-6 lg:order-none"
+          className="md:col-span-2 lg:col-span-2 w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-muted/20 font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground md:order-6 lg:order-none"
           title="Clear all filters"
         >
           <RotateCcw className="w-3.5 h-3.5" /> Clear
@@ -301,14 +301,14 @@ export default function AvailableStock() {
         <div className="flex border border-border w-full h-10 md:col-span-2 lg:col-span-2 md:order-7 lg:order-none">
           <button
             onClick={() => setViewMode("cards")}
-            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-muted/20 text-muted-foreground hover:text-foreground"}`}
             title="Card view"
           >
             <LayoutGrid className="w-4 h-4" />
           </button>
           <button
             onClick={() => setViewMode("table")}
-            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-muted/20 text-muted-foreground hover:text-foreground"}`}
             title="Table view"
           >
             <Table2 className="w-4 h-4" />
@@ -321,7 +321,7 @@ export default function AvailableStock() {
       {loading ? (
         <p className="font-body text-sm text-muted-foreground">Loading…</p>
       ) : filtered.length === 0 ? (
-        <div className="bg-card border border-border p-12 text-center">
+        <div className="bg-muted/20 border border-border p-12 text-center">
           <p className="font-body text-sm text-muted-foreground">
             {listings.length === 0 ? "No casks currently available. Check back soon." : "No casks match your search."}
           </p>
@@ -331,7 +331,7 @@ export default function AvailableStock() {
           {filtered.map((c) => {
             const price = priceFor(c.list_price);
             return (
-              <div key={c.id} className="bg-card border border-border overflow-hidden flex flex-col">
+              <div key={c.id} className="bg-muted/20 border border-border overflow-hidden flex flex-col">
                 {c.hero_image_url && (
                   <div className="aspect-[4/3] bg-muted overflow-hidden">
                     <img src={c.hero_image_url} alt={c.distilleries?.name ?? c.spirit} className="w-full h-full object-cover" loading="lazy" />
@@ -394,7 +394,7 @@ export default function AvailableStock() {
           })}
         </div>
       ) : (
-        <div className="border border-border bg-card overflow-auto">
+        <div className="border border-border bg-muted/20 overflow-auto">
           <table className="w-full text-left font-body text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/30">

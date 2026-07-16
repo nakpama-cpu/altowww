@@ -58,11 +58,11 @@ export default function Dashboard() {
       )}
 
       <div className="grid md:grid-cols-2 gap-4">
-        <Link to="/portal/my-casks" className="block bg-card border border-border p-8 hover:border-primary transition-colors">
+        <Link to="/portal/my-casks" className="block bg-muted/20 border border-border p-8 hover:border-primary transition-colors">
           <h3 className="display-heading text-xl mb-2">View My Casks</h3>
           <p className="font-body text-sm text-muted-foreground">Full details, specs, and certificates.</p>
         </Link>
-        <Link to="/portal/available" className="block bg-card border border-border p-8 hover:border-primary transition-colors">
+        <Link to="/portal/available" className="block bg-muted/20 border border-border p-8 hover:border-primary transition-colors">
           <h3 className="display-heading text-xl mb-2">Browse Available Stock</h3>
           <p className="font-body text-sm text-muted-foreground">Curated casks ready for purchase.</p>
         </Link>
@@ -72,7 +72,7 @@ export default function Dashboard() {
 }
 
 const Card = ({ icon: Icon, label, value, sub }: { icon: any; label: string; value: string; sub?: string }) => (
-  <div className="bg-card border border-border p-6">
+  <div className="bg-muted/20 border border-border p-6">
     <Icon className="w-5 h-5 text-primary mb-3" />
     <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">{label}</div>
     <div className="display-heading text-2xl">{value}</div>

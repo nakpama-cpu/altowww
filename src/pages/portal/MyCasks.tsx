@@ -154,10 +154,10 @@ export default function MyCasks() {
             onChange={(e) => { setSearch(e.target.value); setShowSuggestions(true); }}
             onFocus={() => setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-            className="pl-9 h-10 rounded-none border-border bg-card font-body text-sm w-full"
+            className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
           />
           {showSuggestions && suggestions.length > 0 && (
-            <ul className="absolute z-20 left-0 right-0 top-full mt-1 bg-card border border-border max-h-72 overflow-auto shadow-lg">
+            <ul className="absolute z-20 left-0 right-0 top-full mt-1 bg-muted/20 border border-border max-h-72 overflow-auto shadow-lg">
               {suggestions.map((s, i) => (
                 <li key={i}>
                   <button
@@ -177,7 +177,7 @@ export default function MyCasks() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-card font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="">Sort</option>
             <option value="newest">Purchase Date (Newest)</option>
@@ -198,7 +198,7 @@ export default function MyCasks() {
         </div>
         <button
           onClick={() => { setSearch(""); setSortBy(""); }}
-          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-card font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
+          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-muted/20 font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
           title="Clear all filters"
         >
           <RotateCcw className="w-3.5 h-3.5" /> Clear
@@ -206,14 +206,14 @@ export default function MyCasks() {
         <div className="flex border border-border w-full h-10">
           <button
             onClick={() => setViewMode("cards")}
-            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-muted/20 text-muted-foreground hover:text-foreground"}`}
             title="Card view"
           >
             <LayoutGrid className="w-4 h-4" />
           </button>
           <button
             onClick={() => setViewMode("table")}
-            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-muted/20 text-muted-foreground hover:text-foreground"}`}
             title="Table view"
           >
             <Table2 className="w-4 h-4" />
@@ -224,7 +224,7 @@ export default function MyCasks() {
       {loading ? (
         <p className="font-body text-sm text-muted-foreground">Loading…</p>
       ) : filtered.length === 0 ? (
-        <div className="bg-card border border-border p-12 text-center">
+        <div className="bg-muted/20 border border-border p-12 text-center">
           <p className="font-body text-sm text-muted-foreground">
             {rows.length === 0 ? "You don't have any holdings yet." : "No casks match your search."}
           </p>
@@ -233,7 +233,7 @@ export default function MyCasks() {
         viewMode === "cards" ? (
           <div className="space-y-4">
             {filtered.map((r) => (
-              <div key={r.id} className="bg-card border border-border p-6 md:p-8">
+              <div key={r.id} className="bg-muted/20 border border-border p-6 md:p-8">
                 <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
                   <div>
                     <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">Cask #{r.casks.cask_number ?? "TBC"}</div>
@@ -263,7 +263,7 @@ export default function MyCasks() {
             ))}
           </div>
         ) : (
-          <div className="border border-border bg-card overflow-auto">
+          <div className="border border-border bg-muted/20 overflow-auto">
             <table className="w-full text-left font-body text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/30">
@@ -334,7 +334,7 @@ export default function MyCasks() {
               </button>
             </div>
           </div>
-          <div className="flex-1 bg-card border border-border overflow-hidden">
+          <div className="flex-1 bg-muted/20 border border-border overflow-hidden">
             <iframe src={certViewer.url} title="Cask certificate" className="w-full h-full" />
           </div>
         </div>

@@ -50,7 +50,7 @@ export default function RequestCallback() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6 bg-card border border-border p-8">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-muted/20 border border-border p-8">
         <div>
           <label className="block font-body text-xs uppercase tracking-[0.15em] text-muted-foreground mb-2">Reason</label>
           <select required value={reason} onChange={(e) => setReason(e.target.value)}
