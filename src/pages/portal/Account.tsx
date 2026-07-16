@@ -696,7 +696,6 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
     if (error) return toast({ title: "Save failed", description: error.message, variant: "destructive" });
     toast({ title: "Contact number updated" });
     await refreshProfile();
-    onOpenChange(false);
   };
 
   const saveAddress = async () => {
@@ -759,14 +758,16 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
         </div>
 
         {tab === "phone" ? (
-          <div className="space-y-2.5 pt-1">
-            <PhoneField
-              countryCode={phoneCode}
-              onCountryCodeChange={setPhoneCode}
-              phone={phone}
-              onPhoneChange={setPhone}
-            />
-            <DialogFooter>
+          <div className="space-y-4 pt-1">
+            <div className="rounded-lg border border-border/60 bg-muted/20 p-4 sm:p-5">
+              <PhoneField
+                countryCode={phoneCode}
+                onCountryCodeChange={setPhoneCode}
+                phone={phone}
+                onPhoneChange={setPhone}
+              />
+            </div>
+            <DialogFooter className="flex justify-center sm:justify-center">
               <button
                 type="button"
                 onClick={savePhone}
@@ -778,53 +779,58 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
             </DialogFooter>
           </div>
         ) : (
-          <div className="space-y-2.5 pt-1">
-            <div className="border border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200 p-3 font-body text-xs">
+          <div className="space-y-4 pt-1">
+            <div className="border border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200 p-3 rounded-md font-body text-xs">
               Changing your address requires re-verification. Please upload a new proof of address issued within the last 3 months.
             </div>
-            <TextField label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
-            <TextField label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
-            <div className="grid grid-cols-2 gap-3">
-              <TextField label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
-              <TextField label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <TextField label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
-              <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
+
+            <div className="rounded-lg border border-border/60 bg-muted/20 p-4 sm:p-5 space-y-3">
+              <TextField label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
+              <TextField label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
+              <div className="grid grid-cols-2 gap-3">
+                <TextField label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
+                <TextField label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <TextField label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
+                <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 items-end">
-              <div>
-                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
-                <select
-                  value={addr.proof_of_address_type}
-                  onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                  className="w-full h-[26px] bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
-                >
-                  <option value="">Select…</option>
-                  {ADDRESS_PROOF_TYPES.map((t) => (
-                    <option key={t.value} value={t.value}>{t.label}</option>
-                  ))}
-                </select>
+            <div className="rounded-lg border border-border/60 bg-muted/20 p-4 sm:p-5 space-y-3">
+              <div className="grid grid-cols-2 gap-3 items-end">
+                <div>
+                  <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
+                  <select
+                    value={addr.proof_of_address_type}
+                    onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
+                    className="w-full h-[26px] bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+                  >
+                    <option value="">Select…</option>
+                    {ADDRESS_PROOF_TYPES.map((t) => (
+                      <option key={t.value} value={t.value}>{t.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <TextField
+                  label="Issue date"
+                  type="date"
+                  value={addr.proof_of_address_issued_on}
+                  onChange={(v) => setAddr({ ...addr, proof_of_address_issued_on: v })}
+                />
               </div>
-              <TextField
-                label="Issue date"
-                type="date"
-                value={addr.proof_of_address_issued_on}
-                onChange={(v) => setAddr({ ...addr, proof_of_address_issued_on: v })}
-              />
+              <div>
+                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Upload new proof of address</label>
+                <input
+                  type="file"
+                  accept="application/pdf,image/jpeg,image/png,image/webp"
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                  className="font-body text-xs w-full"
+                />
+                <p className="font-body text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
+              </div>
             </div>
-            <div>
-              <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Upload new proof of address</label>
-              <input
-                type="file"
-                accept="application/pdf,image/jpeg,image/png,image/webp"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                className="font-body text-xs w-full"
-              />
-              <p className="font-body text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
-            </div>
-            <DialogFooter className="justify-center sm:justify-center">
+            <DialogFooter className="flex justify-center sm:justify-center">
               <button
                 type="button"
                 onClick={saveAddress}
