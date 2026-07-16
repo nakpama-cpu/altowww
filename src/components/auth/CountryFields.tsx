@@ -54,7 +54,7 @@ function PhoneCountryCodeSelect({ value, onChange }: PhoneCountryCodeSelectProps
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent border-b border-border py-1.5 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer text-transparent [&>option]:text-foreground"
+        className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer text-transparent [&>option]:text-foreground"
       >
         <option value="" disabled>
           Code
