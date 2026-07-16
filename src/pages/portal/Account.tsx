@@ -746,13 +746,13 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-4 sm:p-6 gap-3 max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="display-heading text-xl">Edit profile</DialogTitle>
-          <DialogDescription>Update your contact number or address. Name, date of birth and email are locked for identity purposes.</DialogDescription>
+      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="space-y-1">
+          <DialogTitle className="display-heading text-lg sm:text-xl">Edit profile</DialogTitle>
+          <DialogDescription className="text-xs sm:text-sm">Update your contact number or address. Name, date of birth and email are locked for identity purposes.</DialogDescription>
         </DialogHeader>
 
-        <div className="flex border-b border-border">
+        <div className={`flex border-b border-border ${tab === "address" ? "shrink-0" : ""}`}>
           <TabButton active={tab === "phone"} onClick={() => setTab("phone")}>Contact number</TabButton>
           <TabButton active={tab === "address"} onClick={() => setTab("address")}>Address</TabButton>
         </div>
@@ -779,32 +779,32 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
             </DialogFooter>
           </div>
         ) : (
-          <div className="space-y-4 pt-1">
-            <div className="border border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200 p-3 rounded-md font-body text-xs">
+          <div className="space-y-2 sm:space-y-4 pt-1">
+            <div className="border border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200 p-2 sm:p-3 rounded-md font-body text-[10px] sm:text-xs leading-snug">
               Changing your address requires re-verification. Please upload a new proof of address issued within the last 3 months.
             </div>
 
-            <div className="rounded-lg border border-border/60 bg-muted/20 p-4 sm:p-5 space-y-3">
-              <TextField label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
-              <TextField label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
-              <div className="grid grid-cols-2 gap-3">
-                <TextField label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
-                <TextField label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
+            <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
+              <TextField dense label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
+              <TextField dense label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                <TextField dense label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
+                <TextField dense label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <TextField label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                <TextField dense label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
                 <CountrySelect value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
               </div>
             </div>
 
-            <div className="rounded-lg border border-border/60 bg-muted/20 p-4 sm:p-5 space-y-3">
-              <div className="grid grid-cols-2 gap-3 items-end">
+            <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 items-end">
                 <div>
-                  <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Document type</label>
+                  <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 sm:mb-1">Document type</label>
                   <select
                     value={addr.proof_of_address_type}
                     onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                    className="w-full h-[26px] bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+                    className="w-full h-8 sm:h-9 bg-transparent border-b border-border py-0.5 font-body text-xs sm:text-sm focus:outline-none focus:border-primary"
                   >
                     <option value="">Select…</option>
                     {ADDRESS_PROOF_TYPES.map((t) => (
@@ -813,6 +813,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
                   </select>
                 </div>
                 <TextField
+                  dense
                   label="Issue date"
                   type="date"
                   value={addr.proof_of_address_issued_on}
@@ -820,17 +821,17 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
                 />
               </div>
               <div>
-                <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">Upload new proof of address</label>
+                <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 sm:mb-1">Upload new proof of address</label>
                 <input
                   type="file"
                   accept="application/pdf,image/jpeg,image/png,image/webp"
                   onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                  className="font-body text-xs w-full"
+                  className="font-body text-[10px] sm:text-xs w-full file:mr-2 file:py-1 file:px-2 file:text-[10px] sm:file:text-xs"
                 />
-                <p className="font-body text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
+                <p className="font-body text-[9px] sm:text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
               </div>
             </div>
-            <DialogFooter className="flex justify-center sm:justify-center">
+            <DialogFooter className="flex justify-center sm:justify-center pt-1 sm:pt-0">
               <button
                 type="button"
                 onClick={saveAddress}
@@ -852,7 +853,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
     <button
       type="button"
       onClick={onClick}
-      className={`font-body text-[10px] uppercase tracking-[0.25em] px-4 py-3 border-b-2 -mb-px transition-colors ${
+      className={`font-body text-[10px] uppercase tracking-[0.25em] px-3 sm:px-4 py-2 sm:py-3 border-b-2 -mb-px transition-colors ${
         active ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:text-foreground"
       }`}
     >
@@ -866,20 +867,22 @@ function TextField({
   value,
   onChange,
   type = "text",
+  dense = false,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   type?: string;
+  dense?: boolean;
 }) {
   return (
     <div>
-      <label className="block font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">{label}</label>
+      <label className={`block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground ${dense ? "mb-0.5" : "mb-1"}`}>{label}</label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+        className={`w-full bg-transparent border-b border-border font-body text-xs sm:text-sm focus:outline-none focus:border-primary ${dense ? "h-8 sm:h-9 py-0.5" : "py-1"}`}
       />
     </div>
   );
