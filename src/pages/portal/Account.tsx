@@ -423,7 +423,7 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
               <select
                 value={addr.proof_of_address_type}
                 onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                className="w-full bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
+                className="w-full h-[26px] bg-transparent border-b border-border py-1 font-body text-sm focus:outline-none focus:border-primary"
               >
                 <option value="">Select…</option>
                 {ADDRESS_PROOF_TYPES.map((t) => (
