@@ -667,6 +667,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
     setTab("phone");
     setPhone(profile.phone ?? "");
     setPhoneCode(profile.phone_country_code ?? "");
+    setAddr({
       address_line1: profile.address_line1 ?? "",
       address_line2: profile.address_line2 ?? "",
       address_city: profile.address_city ?? "",
@@ -682,7 +683,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
   const phoneChanged = useMemo(() => {
     if (!profile) return false;
     return phone !== (profile.phone ?? "") || phoneCode !== (profile.phone_country_code ?? "") ;
-  }, [phone, phoneCode, country, profile]);
+  }, [phone, phoneCode, profile]);
 
   const savePhone = async () => {
     if (!profile || !phoneChanged) return;
@@ -759,8 +760,8 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
         {tab === "phone" ? (
           <div className="space-y-2.5 pt-1">
-            <CountrySelect value={country} onChange={(code, dialingCode) => { setCountry(code); setPhoneCode(dialingCode); }} />
             <PhoneField
+              countryCode={phoneCode}
               onCountryCodeChange={setPhoneCode}
               phone={phone}
               onPhoneChange={setPhone}
