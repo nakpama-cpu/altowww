@@ -16,7 +16,7 @@ const FooterSection = ({ hideCta = false, lightCta = false, hideBrochure = false
         <div className="py-20 px-6 text-center border-b border-secondary-foreground/10">
           <div className="max-w-lg mx-auto">
             <h3 className="display-heading text-2xl md:text-3xl text-secondary-foreground mb-4">
-              Ready to invest?
+              Want to know more?
             </h3>
             <p className="font-body text-sm text-secondary-foreground mb-8 leading-relaxed">
               Download our free brochure or speak with one of our expert Portfolio Advisors to get started.
