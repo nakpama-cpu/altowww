@@ -64,7 +64,7 @@ export default function MyCasks() {
     (async () => {
       const { data, error } = await supabase
         .from("holdings")
-        .select("id, purchase_price, purchase_date, certificate_path, notes, casks(cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, distilleries(name))")
+        .select("id, purchase_price, purchase_date, certificate_path, notes, casks(cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, distilleries(name, region))")
         .order("purchase_date", { ascending: false });
       if (error) toast({ title: "Could not load holdings", description: error.message, variant: "destructive" });
       setRows((data ?? []) as any);
