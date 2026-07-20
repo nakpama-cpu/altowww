@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Wine, Store, PhoneCall, ArrowUpRight } from "lucide-react";
+import { Wine, Store, PhoneCall } from "lucide-react";
 import ActivityFeed from "@/components/portal/ActivityFeed";
 
 type HoldingSummary = {
@@ -47,22 +47,16 @@ export default function Dashboard() {
       </div>
 
       {/* Hero portfolio card */}
-      <Link
-        to="/portal/my-casks"
-        className="group block bg-secondary text-secondary-foreground p-8 md:p-10 mb-6 border border-secondary hover:border-primary transition-colors relative overflow-hidden"
-      >
-        <div className="absolute top-6 right-6 flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.25em] text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-          View portfolio <ArrowUpRight className="w-3.5 h-3.5" />
-        </div>
+      <div className="bg-secondary text-secondary-foreground p-8 md:p-10 mb-6 border border-secondary relative overflow-hidden">
         <div className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mb-3">Portfolio Value</div>
-        <div className="display-heading text-5xl md:text-6xl mb-1 text-secondary-foreground">
+        <div className="display-heading text-5xl md:text-6xl mb-4 text-secondary-foreground">
           £{summary.totalValue.toLocaleString()}
         </div>
         <div className="font-body text-sm text-secondary-foreground/70">
           Across {summary.count} {summary.count === 1 ? "cask" : "casks"}
           {summary.latest?.distillery && ` · Latest: ${summary.latest.distillery}`}
         </div>
-      </Link>
+      </div>
 
       {/* Quick actions + Activity */}
       <div className="grid lg:grid-cols-3 gap-6">
