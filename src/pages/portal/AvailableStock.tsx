@@ -112,16 +112,14 @@ export default function AvailableStock() {
   };
 
   const confirmAddToCart = () => {
-    if (!buyListing) return;
+    if (!buyListing || buyListing.list_price == null) return;
     const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
-    const unit = priceFor(buyListing.list_price);
-    if (unit == null) return;
     cart.add({
       listing_id: buyListing.id,
       distillery: buyListing.distilleries?.name ?? "",
       spirit: buyListing.spirit,
       list_price: Number(buyListing.list_price),
-      unit_price: Number(unit),
+      unit_price: Number(buyListing.list_price),
       currency: buyListing.currency,
       hero_image_url: buyListing.hero_image_url,
       quantity: qty,
