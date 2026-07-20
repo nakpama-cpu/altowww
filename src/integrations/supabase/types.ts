@@ -239,6 +239,54 @@ export type Database = {
           },
         ]
       }
+      checkout_sessions: {
+        Row: {
+          cart: Json
+          created_at: string
+          currency: string
+          discount_amount: number
+          discount_code: string | null
+          environment: string
+          id: string
+          status: string
+          stripe_session_id: string
+          subtotal: number
+          total: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cart: Json
+          created_at?: string
+          currency?: string
+          discount_amount?: number
+          discount_code?: string | null
+          environment?: string
+          id?: string
+          status?: string
+          stripe_session_id: string
+          subtotal: number
+          total: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cart?: Json
+          created_at?: string
+          currency?: string
+          discount_amount?: number
+          discount_code?: string | null
+          environment?: string
+          id?: string
+          status?: string
+          stripe_session_id?: string
+          subtotal?: number
+          total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       discount_code_clients: {
         Row: {
           code_id: string
