@@ -106,7 +106,7 @@ export default function Checkout() {
       <h1 className="display-heading text-4xl mb-2">Checkout</h1>
       <p className="font-body text-sm text-muted-foreground mb-8">
         Review your selected casks and submit your order request.
-        {effectivePct > 0 && <span className="text-primary"> Your {effectivePct}% discount is applied.</span>}
+        {applied && <span className="text-primary"> {applied.effective_percent}% discount code applied.</span>}
       </p>
 
       <VerificationGateBanner />
