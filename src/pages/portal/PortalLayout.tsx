@@ -9,6 +9,7 @@ import CheckoutFab from "@/components/CheckoutFab";
 import MobileMenuButton from "@/components/MobileMenuButton";
 import altoLogo from "@/assets/alto-logo-tight.png";
 import { markPortalVisit } from "@/lib/portalSession";
+import SidebarSummary from "@/components/portal/SidebarSummary";
 
 
 
