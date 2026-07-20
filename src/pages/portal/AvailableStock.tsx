@@ -175,7 +175,6 @@ export default function AvailableStock() {
       <h1 className="display-heading text-4xl mb-2">Available Stock</h1>
       <p className="font-body text-sm text-muted-foreground mb-6">
         Curated casks ready for purchase.
-        {discount > 0 && <span className="text-primary"> Your {discount}% client discount is applied.</span>}
       </p>
 
       {/* Filters */}
