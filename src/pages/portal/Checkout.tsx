@@ -39,14 +39,7 @@ export default function Checkout() {
       return;
     }
     setApplied({ code: res.code, percent: Number(res.percent), effective_percent: Number(res.effective_percent) });
-    if (Number(res.effective_percent) <= profileDiscount) {
-      toast({
-        title: "Code accepted",
-        description: `Your existing ${profileDiscount}% client discount is already equal or better, so no change was applied.`,
-      });
-    } else {
-      toast({ title: `Code applied`, description: `${Number(res.percent)}% off` });
-    }
+    toast({ title: "Code applied", description: `${Number(res.percent)}% off` });
   };
 
   const removeCode = () => {
