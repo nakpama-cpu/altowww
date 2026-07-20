@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Newspaper, ShoppingBag } from "lucide-react";
+import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Newspaper, ShoppingBag, ClipboardList } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect } from "react";
 import CheckoutFab from "@/components/CheckoutFab";
@@ -17,6 +17,7 @@ const navItems = [
   { to: "/portal/my-casks", label: "My Casks", icon: Wine },
   { to: "/portal/available", label: "Available Stock", icon: Store },
   { to: "/portal/checkout", label: "Checkout", icon: ShoppingBag },
+  { to: "/portal/orders", label: "Orders", icon: ClipboardList },
   { to: "/portal/news", label: "News", icon: Newspaper },
   { to: "/portal/callback", label: "Request Callback", icon: PhoneCall },
   { to: "/portal/account", label: "Account", icon: UserCog },
