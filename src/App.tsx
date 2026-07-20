@@ -45,6 +45,7 @@ import RequestCallback from "./pages/portal/RequestCallback";
 import Account from "./pages/portal/Account";
 import PortalNews from "./pages/portal/PortalNews";
 import Checkout from "./pages/portal/Checkout";
+import Orders from "./pages/portal/Orders";
 import { CartProvider } from "./contexts/CartContext";
 
 // Admin
@@ -100,6 +101,7 @@ const App = () => (
                 <Route path="news" element={<PortalNews />} />
                 <Route path="checkout" element={<Checkout />} />
                 <Route path="checkout/return" element={<CheckoutReturn />} />
+                <Route path="orders" element={<Orders />} />
                 <Route path="callback" element={<RequestCallback />} />
                 <Route path="account" element={<Account />} />
               </Route>
