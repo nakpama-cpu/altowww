@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Wine, TrendingUp, Calendar } from "lucide-react";
+import { Wine, Store, PhoneCall, ArrowUpRight } from "lucide-react";
+import ActivityFeed from "@/components/portal/ActivityFeed";
 
 type HoldingSummary = {
   count: number;
@@ -35,39 +36,53 @@ export default function Dashboard() {
     })();
   }, []);
 
+  const today = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+
   return (
-    <div className="max-w-5xl">
-      <div className="mb-10">
+    <div className="max-w-6xl">
+      <div className="mb-8">
+        <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mb-2">{today}</p>
         <h1 className="display-heading text-4xl md:text-5xl mb-2">Welcome, {profile?.first_name || "Investor"}.</h1>
         <p className="font-body text-sm text-muted-foreground">Your whisky portfolio at a glance.</p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-4 mb-10">
-        <Card icon={Wine} label="Casks Held" value={summary.count.toString()} />
-        <Card icon={TrendingUp} label="Total Purchase Value" value={`£${summary.totalValue.toLocaleString()}`} />
-        <Card icon={Calendar} label="Most Recent" value={summary.latest ? summary.latest.cask_number : "—"}
-          sub={summary.latest?.distillery ?? ""} />
-      </div>
+      {/* Hero portfolio card */}
+      <Link
+        to="/portal/my-casks"
+        className="group block bg-secondary text-secondary-foreground p-8 md:p-10 mb-6 border border-secondary hover:border-primary transition-colors relative overflow-hidden"
+      >
+        <div className="absolute top-6 right-6 flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.25em] text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+          View portfolio <ArrowUpRight className="w-3.5 h-3.5" />
+        </div>
+        <div className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mb-3">Portfolio Value</div>
+        <div className="display-heading text-5xl md:text-6xl mb-1 text-secondary-foreground">
+          £{summary.totalValue.toLocaleString()}
+        </div>
+        <div className="font-body text-sm text-secondary-foreground/70">
+          Across {summary.count} {summary.count === 1 ? "cask" : "casks"}
+          {summary.latest?.distillery && ` · Latest: ${summary.latest.distillery}`}
+        </div>
+      </Link>
 
-      <div className="grid md:grid-cols-2 gap-4">
-        <Link to="/portal/my-casks" className="block bg-muted/20 border border-border p-8 hover:border-primary transition-colors">
-          <h3 className="display-heading text-xl mb-2">View My Casks</h3>
-          <p className="font-body text-sm text-muted-foreground">Full details, specs, and certificates.</p>
-        </Link>
-        <Link to="/portal/available" className="block bg-muted/20 border border-border p-8 hover:border-primary transition-colors">
-          <h3 className="display-heading text-xl mb-2">Browse Available Stock</h3>
-          <p className="font-body text-sm text-muted-foreground">Curated casks ready for purchase.</p>
-        </Link>
+      {/* Quick actions + Activity */}
+      <div className="grid lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 grid sm:grid-cols-3 gap-4 content-start">
+          <QuickAction to="/portal/my-casks" icon={Wine} label="My Casks" sub="Specs & certificates" />
+          <QuickAction to="/portal/available" icon={Store} label="Available" sub="Curated stock" />
+          <QuickAction to="/portal/callback" icon={PhoneCall} label="Callback" sub="Speak to an advisor" />
+        </div>
+        <ActivityFeed />
       </div>
     </div>
   );
 }
 
-const Card = ({ icon: Icon, label, value, sub }: { icon: any; label: string; value: string; sub?: string }) => (
-  <div className="bg-muted/20 border border-border p-6">
-    <Icon className="w-5 h-5 text-primary mb-3" />
-    <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">{label}</div>
-    <div className="display-heading text-2xl">{value}</div>
-    {sub && <div className="font-body text-xs text-muted-foreground mt-1">{sub}</div>}
-  </div>
+const QuickAction = ({ to, icon: Icon, label, sub }: { to: string; icon: any; label: string; sub: string }) => (
+  <Link to={to} className="group block bg-muted/20 border border-border p-6 hover:border-primary transition-colors">
+    <div className="w-9 h-9 flex items-center justify-center bg-primary/10 border border-primary/20 mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+      <Icon className="w-4 h-4 text-primary group-hover:text-primary-foreground" />
+    </div>
+    <div className="display-heading text-lg mb-0.5">{label}</div>
+    <div className="font-body text-xs text-muted-foreground">{sub}</div>
+  </Link>
 );
