@@ -391,9 +391,7 @@ export default function AvailableStock() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((c) => {
-                const price = priceFor(c.list_price);
-                return (
+              {filtered.map((c) => (
                   <tr key={c.id} className="border-b border-border hover:bg-muted/20 transition-colors">
                     <td className="px-4 py-3 whitespace-nowrap">{c.distilleries?.name ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.spirit}</td>
@@ -404,7 +402,7 @@ export default function AvailableStock() {
                     <td className="px-4 py-3 whitespace-nowrap">{c.ola_litres ? `${c.ola_litres} L` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.rla_litres ? `${c.rla_litres} L` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-primary">
-                      {price ? `£${Math.round(price).toLocaleString()}` : "—"}
+                      {c.list_price ? `£${Math.round(c.list_price).toLocaleString()}` : "—"}
                     </td>
                     <td className="pl-4 pr-6 py-3 whitespace-nowrap">
                       <button
