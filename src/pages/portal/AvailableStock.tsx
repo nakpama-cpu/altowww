@@ -102,11 +102,6 @@ export default function AvailableStock() {
     [listings]
   );
 
-  const priceFor = (list: number | null) => {
-    if (!list) return null;
-    return discount > 0 ? list * (1 - discount / 100) : list;
-  };
-
   const openBuy = (c: Listing) => {
     if (!c.list_price) {
       toast({ title: "No price set", description: "This listing is not yet priced.", variant: "destructive" });
