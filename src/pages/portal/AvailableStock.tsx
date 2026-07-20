@@ -413,8 +413,7 @@ export default function AvailableStock() {
                       </button>
                     </td>
                   </tr>
-                );
-              })}
+              ))}
             </tbody>
           </table>
         </div>
