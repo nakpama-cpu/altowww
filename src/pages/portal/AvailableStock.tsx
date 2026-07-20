@@ -546,7 +546,7 @@ export default function AvailableStock() {
             </div>
           )}
           {buyListing && (() => {
-            const unit = priceFor(buyListing.list_price) ?? 0;
+            const unit = buyListing.list_price ?? 0;
             const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
             const total = unit * qty;
             return (
