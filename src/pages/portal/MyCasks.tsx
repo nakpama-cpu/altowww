@@ -4,6 +4,7 @@ import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2, RotateCcw, 
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { computeCaskAge } from "@/lib/caskAge";
+import { regionColor } from "@/lib/regions";
 
 type Row = {
   id: string;
