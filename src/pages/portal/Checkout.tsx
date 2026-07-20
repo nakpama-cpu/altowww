@@ -18,14 +18,10 @@ export default function Checkout() {
   const [codeInput, setCodeInput] = useState("");
   const [applying, setApplying] = useState(false);
   const [applied, setApplied] = useState<AppliedCode | null>(null);
-  const profileDiscount = Number(profile?.client_discount_pct ?? 0);
   const currency = items[0]?.currency ?? "GBP";
 
-  const effectivePct = applied ? applied.effective_percent : profileDiscount;
-  // items already carry the client-discount price; if a code beats it, reduce further.
-  const total = applied && applied.effective_percent > profileDiscount
-    ? subtotal * (1 - (applied.effective_percent - profileDiscount) / (100 - profileDiscount))
-    : subtotal;
+  // Discount codes are the only discount mechanism now; items are carried at list price.
+  const total = applied ? subtotal * (1 - applied.effective_percent / 100) : subtotal;
 
   const applyCode = async () => {
     if (!codeInput.trim()) return;
