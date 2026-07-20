@@ -36,7 +36,7 @@ export default function ActivityFeed() {
       // Recent orders (buyer scoped by RLS)
       const { data: orders } = await supabase
         .from("orders")
-        .select("id, status, amount, currency, created_at, casks(cask_number, distilleries(name)), cask_listings(spirit, distilleries(name))")
+        .select("id, status, amount, currency, created_at, casks:cask_id(cask_number, distilleries(name)), cask_listings:listing_id(spirit, distilleries(name))")
         .order("created_at", { ascending: false })
         .limit(5);
       for (const o of orders ?? []) {
