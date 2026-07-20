@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink } from "lucide-react";
+import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink, Store, PhoneCall } from "lucide-react";
 import { computeCaskAge } from "@/lib/caskAge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
@@ -309,11 +310,35 @@ export default function AvailableStock() {
       {loading ? (
         <p className="font-body text-sm text-muted-foreground">Loading…</p>
       ) : filtered.length === 0 ? (
-        <div className="bg-muted/20 border border-border p-12 text-center">
-          <p className="font-body text-sm text-muted-foreground">
-            {listings.length === 0 ? "No casks currently available. Check back soon." : "No casks match your search."}
-          </p>
-        </div>
+        listings.length === 0 ? (
+          <div className="bg-muted/20 border border-border p-10 md:p-14 text-center">
+            <div className="w-14 h-14 mx-auto mb-5 flex items-center justify-center bg-primary/10 border border-primary/20">
+              <Store className="w-6 h-6 text-primary" />
+            </div>
+            <h3 className="display-heading text-2xl mb-2">New stock is on the way</h3>
+            <p className="font-body text-sm text-muted-foreground max-w-md mx-auto mb-6">
+              Our specialists are curating the next release of casks. Speak with an advisor to be first in line — or explore your holdings.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <Link
+                to="/portal/callback"
+                className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90"
+              >
+                <PhoneCall className="w-3.5 h-3.5" /> Request a Callback
+              </Link>
+              <Link
+                to="/portal/my-casks"
+                className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.25em] border border-border px-5 py-3 hover:bg-muted"
+              >
+                View My Casks
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-muted/20 border border-border p-12 text-center">
+            <p className="font-body text-sm text-muted-foreground">No casks match your search.</p>
+          </div>
+        )
       ) : viewMode === "cards" ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((c) => {

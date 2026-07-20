@@ -1,57 +1,57 @@
-# Connect Stripe to the Alto Whisky Portal
 
-## 1. Enable Stripe Payments (built-in)
-- Use Lovable's built-in Stripe Payments integration. During enable, you'll be prompted to sign in to Stripe and connect your **existing** Stripe account — nothing new is created, and your existing bank/payout details are used.
-- A test (sandbox) environment is activated immediately so we can test with no real money. Live payments switch on once your Stripe account is verified.
-- Tax handling: because casks are physical goods with storage/delivery, Stripe's full "compliance handling" isn't eligible. We'll enable **Stripe Tax (calculation + collection only)** at +0.5% per transaction. You handle registration, filing and remittance; Stripe alerts you when nearing thresholds. This can be turned off later.
+# Client Portal Polish
 
-## 2. Product & pricing model
-Casks vary in price per listing, so we won't pre-create a Stripe Product per cask. Instead:
-- Checkout creates a Stripe Checkout Session on the fly with **line items priced from `cask_listings.list_price`** (server-side, never trust client prices).
-- Currency taken from the listing (`GBP` default).
-- Physical-goods tax code applied to line items so Stripe Tax calculates correctly.
+Scope is polish-only — no structural changes to pages or features. Same routes, same palette (cream / navy / copper), same fonts (Cormorant Garamond + Inter). One new feature: an activity feed on the Dashboard.
 
-## 3. Checkout edge function (`create-checkout`)
-New Supabase edge function that:
-1. Requires an authenticated, KYC-verified user (address + DOB approved).
-2. Re-reads cart items from `cask_listings` by `listing_id` to get authoritative prices/currency/stock.
-3. If a discount code is supplied, re-runs `validate_discount_code` server-side and applies the **greater of** any allowed discount (matching the existing rule).
-4. Creates a Stripe Checkout Session (`mode: payment`, `automatic_tax: enabled`, `shipping_address_collection` for UK, success/cancel URLs back to the portal).
-5. Inserts a `pending` row into `orders` with the Stripe session id, cart snapshot, applied code, subtotal, discount, total.
-6. Returns the Stripe URL; frontend redirects to Stripe-hosted checkout (your branding, no Lovable branding).
+## 1. Sidebar refinements
 
-## 4. Webhook edge function (`stripe-webhook`)
-Handles `checkout.session.completed` and `payment_intent.payment_failed`:
-- Verifies signature using `STRIPE_WEBHOOK_SECRET`.
-- On success: mark the matching `orders` row `paid`, decrement `cask_listings.available_qty` (via existing reserved/available triggers), mark the discount code as used for that client (one-use-per-client rule).
-- On failure/expiry: mark order `failed` and release any reservation.
-- Deployed with `verify_jwt = false` so Stripe can reach it.
+- Add a compact **portfolio summary block** at the top of the sidebar under the logo: casks held + total value, with a small "Verified" badge if KYC is approved. Static values reused from existing profile/holdings queries — no new backend.
+- Tighten nav item spacing, slightly larger icons, softer hover state (subtle copper underline instead of full background).
+- Move "Signed in / Test Client / Sign out" into a cleaner grouped footer with a small avatar circle (initials).
 
-## 5. Success / cancel pages
-- `/portal/checkout/success?session_id=…` — confirms order, clears cart, links to My Casks.
-- `/portal/checkout/cancelled` — returns to cart with items intact.
+## 2. Dashboard polish
 
-## 6. Frontend changes
-- `Checkout.tsx`: replace the current "Place order" action with "Pay with card", which calls `create-checkout` and redirects to Stripe.
-- Keep the existing discount-code input and verification-gate banner.
-- Add a small "Payments secured by Stripe" note.
+- Replace the three plain metric tiles with a **hero portfolio card** (spans full width): large value, casks held count, most-recent cask as secondary text, subtle copper hairline divider.
+- Convert the two "shortcut" boxes (View My Casks / Browse Available) into a 3-up quick actions row with icons (My Casks, Available Stock, Request Callback).
+- **NEW: Activity feed** on the right (desktop) / stacked below (mobile). Shows the last ~8 events, most recent first:
+  - New order placed / paid
+  - Verification status changes (address, age)
+  - New cask listings that just became available
+  - Admin messages / callback confirmations
+  
+  Backend: read-only aggregation from existing tables (`orders`, `profiles.address_verification_status` + `age_verification_status`, `cask_listings.created_at`, `callback_requests`) via a single client-side query on Dashboard mount. No new tables needed initially — if we later want persistent notifications we can add one, but out of scope here.
 
-## 7. Secrets
-Lovable's built-in Stripe integration manages `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` for you — no manual key pasting.
+## 3. My Casks polish
 
-## 8. Testing checklist (sandbox)
-- Buy 1 cask, no code → order `paid`, stock decrements.
-- Buy 2 casks with valid code assigned to that client → discount applied server-side, one-use flag set.
-- Buy with an unverified account → blocked by verification gate.
-- Card decline (Stripe test card `4000 0000 0000 0002`) → order `failed`, stock unchanged.
-- Refresh after success → no duplicate order (idempotent on `session_id`).
+- Add a slim **coloured left border** per card keyed to distillery region (Speyside, Islay, Highland, Lowland, Campbeltown) to give quick visual differentiation.
+- Add a **maturation micro-bar** under the cask header: fill-date → today → 18yr optimal marker. Not the full timeline feature — a single thin progress line with two dots. Read-only, computed client-side.
+- Tighten label/value spacing in the spec grid; make "View Certificate" a copper outline button aligned right on desktop, full-width on mobile.
 
-## Technical section
-- New files: `supabase/functions/create-checkout/index.ts`, `supabase/functions/stripe-webhook/index.ts`, `src/pages/portal/CheckoutSuccess.tsx`, `src/pages/portal/CheckoutCancelled.tsx`.
-- Migration: add `stripe_session_id text unique`, `stripe_payment_intent text`, `status` enum values (`pending|paid|failed|cancelled`) to `orders` if not present; index on `stripe_session_id`.
-- `config.toml`: `verify_jwt = false` for `stripe-webhook` only.
-- Routes added in `App.tsx` for success/cancelled pages.
+## 4. Available Stock polish
 
-## What I need from you to proceed
-1. Confirm you want to enable Stripe Payments now (you'll be prompted to sign in to your Stripe account during enablement).
-2. Confirm **Stripe Tax (calc + collect only, +0.5%)** is OK, or say "no tax automation" if you'd rather handle it entirely yourself.
+- Redesign the **empty state**: centred illustration (existing whisky/cask line art), heading "No casks available right now", subcopy, and two CTAs — "Notify me when new stock arrives" (drops a row into existing `leads` table with type `stock_alert`) and "Request a callback".
+- Filter bar: unify heights, softer borders, group the view-toggle (grid / table) to the right with a subtle divider.
+
+## 5. Account polish
+
+- Small refinements only (the modals were reworked recently): tighten the Profile card header, standardise badge sizing, ensure the Verified pill in the header matches the sidebar badge style.
+
+## 6. Cross-cutting
+
+- Standardise card radius (`rounded-xl`), shadow (`shadow-sm` at rest, `shadow-md` on interactive hover), and off-white surface (`bg-muted/20`) across all portal pages.
+- Typography: bump body line-height slightly for readability; tighten heading tracking.
+- Add page-transition fade (150ms) between portal routes for polish.
+- Mobile: ensure the new hero portfolio card and activity feed stack cleanly, sidebar drawer keeps the summary block.
+
+## Out of scope (per "polish only")
+
+- No charts, allocation breakdown, or maturation timeline page.
+- No notifications table / read-receipts (activity feed is a live query only).
+- No changes to Checkout, Login, Signup, Admin pages.
+
+## Technical notes
+
+- All colour changes route through `index.css` tokens — no hardcoded hex in components.
+- Activity feed built as `src/components/portal/ActivityFeed.tsx`, consumed by `Dashboard.tsx`.
+- Sidebar summary as `src/components/portal/SidebarSummary.tsx`.
+- Region-colour map in `src/lib/regions.ts` (small lookup keyed off `distilleries.region`).

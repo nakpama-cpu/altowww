@@ -9,6 +9,7 @@ import CheckoutFab from "@/components/CheckoutFab";
 import MobileMenuButton from "@/components/MobileMenuButton";
 import altoLogo from "@/assets/alto-logo-tight.png";
 import { markPortalVisit } from "@/lib/portalSession";
+import SidebarSummary from "@/components/portal/SidebarSummary";
 
 
 
@@ -31,6 +32,7 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { 
         </Link>
         <p className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mt-2">Client Portal</p>
       </div>
+      <SidebarSummary />
 
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {navItems.map(({ to, label, icon: Icon, end }) => (

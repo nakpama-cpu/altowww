@@ -4,6 +4,7 @@ import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2, RotateCcw, 
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { computeCaskAge } from "@/lib/caskAge";
+import { regionColor } from "@/lib/regions";
 
 type Row = {
   id: string;
@@ -20,7 +21,7 @@ type Row = {
     ola_litres: number | null;
     rla_litres: number | null;
     age_years: number | null;
-    distilleries: { name: string } | null;
+    distilleries: { name: string; region: string | null } | null;
   };
 };
 
@@ -63,7 +64,7 @@ export default function MyCasks() {
     (async () => {
       const { data, error } = await supabase
         .from("holdings")
-        .select("id, purchase_price, purchase_date, certificate_path, notes, casks(cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, distilleries(name))")
+        .select("id, purchase_price, purchase_date, certificate_path, notes, casks(cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, distilleries(name, region))")
         .order("purchase_date", { ascending: false });
       if (error) toast({ title: "Could not load holdings", description: error.message, variant: "destructive" });
       setRows((data ?? []) as any);
@@ -233,10 +234,19 @@ export default function MyCasks() {
         viewMode === "cards" ? (
           <div className="space-y-4">
             {filtered.map((r) => (
-              <div key={r.id} className="bg-muted/20 border border-border p-6 md:p-8">
-                <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+              <div
+                key={r.id}
+                className="bg-muted/20 border border-border border-l-4 p-6 md:p-8"
+                style={{ borderLeftColor: regionColor(r.casks.distilleries?.region) }}
+              >
+                <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                   <div>
-                    <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">Cask #{r.casks.cask_number ?? "TBC"}</div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Cask #{r.casks.cask_number ?? "TBC"}</span>
+                      {r.casks.distilleries?.region && (
+                        <span className="font-body text-[9px] uppercase tracking-[0.25em] text-muted-foreground/70">· {r.casks.distilleries.region}</span>
+                      )}
+                    </div>
                     <h3 className="display-heading text-2xl">{r.casks.distilleries?.name ?? "Distillery"}</h3>
                   </div>
                   {r.certificate_path && (
@@ -247,6 +257,25 @@ export default function MyCasks() {
                     </button>
                   )}
                 </div>
+
+                {r.casks.fill_date && (() => {
+                  const filled = new Date(r.casks.fill_date).getTime();
+                  const now = Date.now();
+                  const targetYears = 12;
+                  const elapsedYears = (now - filled) / (365.25 * 24 * 3600 * 1000);
+                  const pct = Math.max(0, Math.min(100, (elapsedYears / targetYears) * 100));
+                  return (
+                    <div className="mb-5">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="font-body text-[9px] uppercase tracking-[0.25em] text-muted-foreground">Maturation</span>
+                        <span className="font-body text-[10px] text-muted-foreground">{elapsedYears.toFixed(1)} / {targetYears} yrs</span>
+                      </div>
+                      <div className="h-1 w-full bg-muted overflow-hidden">
+                        <div className="h-full" style={{ width: `${pct}%`, backgroundColor: regionColor(r.casks.distilleries?.region) }} />
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
                   <Spec label="Spirit" value={r.casks.spirit} />
