@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
+
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
@@ -45,7 +45,6 @@ type Listing = {
 };
 
 export default function AvailableStock() {
-  const { profile } = useAuth();
   const cart = useCart();
   const { toast } = useToast();
   const [buyListing, setBuyListing] = useState<Listing | null>(null);
@@ -61,8 +60,6 @@ export default function AvailableStock() {
   const [sortBy, setSortBy] = useState<string>("");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
   const [infoListing, setInfoListing] = useState<Listing | null>(null);
-  const discount = Number(profile?.client_discount_pct ?? 0);
-
   const suggestions = useMemo(() => {
     const q = search.toLowerCase().trim();
     if (!q) return [] as { label: string; field: string; value: string }[];
@@ -105,11 +102,6 @@ export default function AvailableStock() {
     [listings]
   );
 
-  const priceFor = (list: number | null) => {
-    if (!list) return null;
-    return discount > 0 ? list * (1 - discount / 100) : list;
-  };
-
   const openBuy = (c: Listing) => {
     if (!c.list_price) {
       toast({ title: "No price set", description: "This listing is not yet priced.", variant: "destructive" });
@@ -120,16 +112,14 @@ export default function AvailableStock() {
   };
 
   const confirmAddToCart = () => {
-    if (!buyListing) return;
+    if (!buyListing || buyListing.list_price == null) return;
     const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
-    const unit = priceFor(buyListing.list_price);
-    if (unit == null) return;
     cart.add({
       listing_id: buyListing.id,
       distillery: buyListing.distilleries?.name ?? "",
       spirit: buyListing.spirit,
       list_price: Number(buyListing.list_price),
-      unit_price: Number(unit),
+      unit_price: Number(buyListing.list_price),
       currency: buyListing.currency,
       hero_image_url: buyListing.hero_image_url,
       quantity: qty,
@@ -145,7 +135,6 @@ export default function AvailableStock() {
     const max = filterMaxPrice ? Number(filterMaxPrice) : null;
     const result = listings.filter((c) => {
       const d = c.distilleries?.name ?? "";
-      const effectivePrice = priceFor(c.list_price);
       const matchesSearch =
         !q ||
         d.toLowerCase().includes(q) ||
@@ -153,8 +142,8 @@ export default function AvailableStock() {
         (c.cask_type ?? "").toLowerCase().includes(q) ||
         (c.distilleries?.region ?? "").toLowerCase().includes(q);
       const matchesDistillery = filterDistillery === "All" || d === filterDistillery;
-      const matchesMin = min === null || (effectivePrice !== null && effectivePrice >= min);
-      const matchesMax = max === null || (effectivePrice !== null && effectivePrice <= max);
+      const matchesMin = min === null || (c.list_price !== null && c.list_price >= min);
+      const matchesMax = max === null || (c.list_price !== null && c.list_price <= max);
       return matchesSearch && matchesDistillery && matchesMin && matchesMax;
     });
 
@@ -164,8 +153,8 @@ export default function AvailableStock() {
     switch (sortBy) {
       case "newest": sorted.sort((a, b) => date(b.created_at) - date(a.created_at)); break;
       case "oldest": sorted.sort((a, b) => date(a.created_at) - date(b.created_at)); break;
-      case "price_high": sorted.sort((a, b) => num(priceFor(b.list_price)) - num(priceFor(a.list_price))); break;
-      case "price_low": sorted.sort((a, b) => num(priceFor(a.list_price)) - num(priceFor(b.list_price))); break;
+      case "price_high": sorted.sort((a, b) => num(b.list_price) - num(a.list_price)); break;
+      case "price_low": sorted.sort((a, b) => num(a.list_price) - num(b.list_price)); break;
       case "age_high": sorted.sort((a, b) => num(computeCaskAge(b.fill_date, b.age_years)) - num(computeCaskAge(a.fill_date, a.age_years))); break;
       case "age_low": sorted.sort((a, b) => num(computeCaskAge(a.fill_date, a.age_years)) - num(computeCaskAge(b.fill_date, b.age_years))); break;
       case "abv_high": sorted.sort((a, b) => num(b.abv) - num(a.abv)); break;
@@ -186,7 +175,6 @@ export default function AvailableStock() {
       <h1 className="display-heading text-4xl mb-2">Available Stock</h1>
       <p className="font-body text-sm text-muted-foreground mb-6">
         Curated casks ready for purchase.
-        {discount > 0 && <span className="text-primary"> Your {discount}% client discount is applied.</span>}
       </p>
 
       {/* Filters */}
@@ -329,7 +317,6 @@ export default function AvailableStock() {
       ) : viewMode === "cards" ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((c) => {
-            const price = priceFor(c.list_price);
             return (
               <div key={c.id} className="bg-muted/20 border border-border overflow-hidden flex flex-col">
                 {c.hero_image_url && (
@@ -368,17 +355,10 @@ export default function AvailableStock() {
                   </button>
                   <div className="mt-auto pt-4 border-t border-border flex items-end justify-between">
                     <div>
-                      {price && (
-                        <>
-                          {discount > 0 && c.list_price && (
-                            <div className="font-body text-xs text-muted-foreground line-through">
-                              £{Number(c.list_price).toLocaleString()}
-                            </div>
-                          )}
-                          <div className="display-heading text-2xl text-primary">
-                            £{Math.round(price).toLocaleString()}
-                          </div>
-                        </>
+                      {c.list_price && (
+                        <div className="display-heading text-2xl text-primary">
+                          £{Math.round(c.list_price).toLocaleString()}
+                        </div>
                       )}
                     </div>
                     <button
@@ -411,9 +391,7 @@ export default function AvailableStock() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((c) => {
-                const price = priceFor(c.list_price);
-                return (
+              {filtered.map((c) => (
                   <tr key={c.id} className="border-b border-border hover:bg-muted/20 transition-colors">
                     <td className="px-4 py-3 whitespace-nowrap">{c.distilleries?.name ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.spirit}</td>
@@ -424,7 +402,7 @@ export default function AvailableStock() {
                     <td className="px-4 py-3 whitespace-nowrap">{c.ola_litres ? `${c.ola_litres} L` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.rla_litres ? `${c.rla_litres} L` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-primary">
-                      {price ? `£${Math.round(price).toLocaleString()}` : "—"}
+                      {c.list_price ? `£${Math.round(c.list_price).toLocaleString()}` : "—"}
                     </td>
                     <td className="pl-4 pr-6 py-3 whitespace-nowrap">
                       <button
@@ -435,8 +413,7 @@ export default function AvailableStock() {
                       </button>
                     </td>
                   </tr>
-                );
-              })}
+              ))}
             </tbody>
           </table>
         </div>
@@ -569,7 +546,7 @@ export default function AvailableStock() {
             </div>
           )}
           {buyListing && (() => {
-            const unit = priceFor(buyListing.list_price) ?? 0;
+            const unit = buyListing.list_price ?? 0;
             const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
             const total = unit * qty;
             return (

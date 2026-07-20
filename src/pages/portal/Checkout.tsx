@@ -18,14 +18,10 @@ export default function Checkout() {
   const [codeInput, setCodeInput] = useState("");
   const [applying, setApplying] = useState(false);
   const [applied, setApplied] = useState<AppliedCode | null>(null);
-  const profileDiscount = Number(profile?.client_discount_pct ?? 0);
   const currency = items[0]?.currency ?? "GBP";
 
-  const effectivePct = applied ? applied.effective_percent : profileDiscount;
-  // items already carry the client-discount price; if a code beats it, reduce further.
-  const total = applied && applied.effective_percent > profileDiscount
-    ? subtotal * (1 - (applied.effective_percent - profileDiscount) / (100 - profileDiscount))
-    : subtotal;
+  // Discount codes are the only discount mechanism now; items are carried at list price.
+  const total = applied ? subtotal * (1 - applied.effective_percent / 100) : subtotal;
 
   const applyCode = async () => {
     if (!codeInput.trim()) return;
@@ -43,14 +39,7 @@ export default function Checkout() {
       return;
     }
     setApplied({ code: res.code, percent: Number(res.percent), effective_percent: Number(res.effective_percent) });
-    if (Number(res.effective_percent) <= profileDiscount) {
-      toast({
-        title: "Code accepted",
-        description: `Your existing ${profileDiscount}% client discount is already equal or better, so no change was applied.`,
-      });
-    } else {
-      toast({ title: `Code applied`, description: `${Number(res.percent)}% off` });
-    }
+    toast({ title: "Code applied", description: `${Number(res.percent)}% off` });
   };
 
   const removeCode = () => {
@@ -117,7 +106,7 @@ export default function Checkout() {
       <h1 className="display-heading text-4xl mb-2">Checkout</h1>
       <p className="font-body text-sm text-muted-foreground mb-8">
         Review your selected casks and submit your order request.
-        {effectivePct > 0 && <span className="text-primary"> Your {effectivePct}% discount is applied.</span>}
+        {applied && <span className="text-primary"> {applied.effective_percent}% discount code applied.</span>}
       </p>
 
       <VerificationGateBanner />

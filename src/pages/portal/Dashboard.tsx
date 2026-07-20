@@ -49,14 +49,6 @@ export default function Dashboard() {
           sub={summary.latest?.distillery ?? ""} />
       </div>
 
-      {profile && profile.client_discount_pct > 0 && (
-        <div className="bg-primary/5 border border-primary/30 p-6 mb-10">
-          <div className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-2">Your Discount</div>
-          <p className="display-heading text-2xl">{profile.client_discount_pct}% off list prices</p>
-          <p className="font-body text-sm text-muted-foreground mt-2">Applied automatically to available stock.</p>
-        </div>
-      )}
-
       <div className="grid md:grid-cols-2 gap-4">
         <Link to="/portal/my-casks" className="block bg-muted/20 border border-border p-8 hover:border-primary transition-colors">
           <h3 className="display-heading text-xl mb-2">View My Casks</h3>

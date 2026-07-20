@@ -5,7 +5,7 @@ export type CartItem = {
   distillery: string;
   spirit: string;
   list_price: number;
-  unit_price: number; // after client discount
+  unit_price: number; // price charged per unit (list price or code-discounted)
   currency: string;
   hero_image_url: string | null;
   quantity: number;
