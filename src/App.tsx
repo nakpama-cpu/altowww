@@ -58,6 +58,7 @@ import AdminOrders from "./pages/admin/Orders";
 import AdminDiscountCodes from "./pages/admin/DiscountCodes";
 import AdminListings from "./pages/admin/Listings";
 import AdminVerifications from "./pages/admin/Verifications";
+import CheckoutReturn from "./pages/portal/CheckoutReturn";
 
 const queryClient = new QueryClient();
 
@@ -98,6 +99,7 @@ const App = () => (
                 <Route path="available" element={<AvailableStock />} />
                 <Route path="news" element={<PortalNews />} />
                 <Route path="checkout" element={<Checkout />} />
+                <Route path="checkout/return" element={<CheckoutReturn />} />
                 <Route path="callback" element={<RequestCallback />} />
                 <Route path="account" element={<Account />} />
               </Route>
