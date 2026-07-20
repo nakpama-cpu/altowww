@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Trash2, ShoppingBag, CheckCircle2, Tag, X } from "lucide-react";
+import { Trash2, ShoppingBag, CreditCard, Tag, X } from "lucide-react";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { getStripe, getStripeEnvironment, hasPaymentsConfigured } from "@/lib/stripe";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { VerificationGateBanner } from "./Account";
 
 type AppliedCode = { code: string; percent: number; effective_percent: number };
+
 
 export default function Checkout() {
   const { items, remove, setQuantity, clear, subtotal, count } = useCart();
@@ -18,7 +22,9 @@ export default function Checkout() {
   const [codeInput, setCodeInput] = useState("");
   const [applying, setApplying] = useState(false);
   const [applied, setApplied] = useState<AppliedCode | null>(null);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const currency = items[0]?.currency ?? "GBP";
+
 
   // Discount codes are the only discount mechanism now; items are carried at list price.
   const total = applied ? subtotal * (1 - applied.effective_percent / 100) : subtotal;
@@ -49,36 +55,58 @@ export default function Checkout() {
 
   const kycOk = profile?.address_verification_status === "verified" && profile?.age_verification_status === "verified";
 
-  const placeOrder = async () => {
+  const fetchClientSecret = useCallback(async (): Promise<string> => {
+    const { data, error } = await supabase.functions.invoke("create-checkout", {
+      body: {
+        items: items.map((i) => ({ listing_id: i.listing_id, quantity: i.quantity })),
+        discount_code: applied?.code ?? null,
+        environment: getStripeEnvironment(),
+        return_url: `${window.location.origin}/portal/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+      },
+    });
+    if (error || !data?.clientSecret) {
+      throw new Error((data as any)?.error || error?.message || "Failed to start checkout");
+    }
+    return data.clientSecret as string;
+  }, [items, applied]);
+
+  const beginPayment = async () => {
     if (!user || items.length === 0) return;
     if (!kycOk) {
       toast({ title: "Verification required", description: "Complete address and identity verification in your Account first.", variant: "destructive" });
       return;
     }
-    setPlacing(true);
-    const rows = items.flatMap((i) =>
-      Array.from({ length: i.quantity }, () => ({
-        buyer_id: user.id,
-        listing_id: i.listing_id,
-        amount: Number(i.unit_price.toFixed(2)),
-        currency: i.currency,
-        status: "pending" as const,
-        discount_code: applied?.code ?? null,
-      })),
-    );
-    const { error } = await supabase.from("orders").insert(rows);
-    setPlacing(false);
-    if (error) {
-      toast({ title: "Could not place order", description: error.message, variant: "destructive" });
+    if (!hasPaymentsConfigured()) {
+      toast({ title: "Payments unavailable", description: "Checkout is not yet configured.", variant: "destructive" });
       return;
     }
-    clear();
-    toast({
-      title: "Order request submitted",
-      description: "Our team will be in touch shortly to confirm payment and next steps.",
-    });
-    navigate("/portal");
+    setPlacing(true);
+    setCheckoutOpen(true);
+    setPlacing(false);
   };
+
+  if (checkoutOpen) {
+    return (
+      <div className="max-w-4xl w-full">
+        <PaymentTestModeBanner />
+        <div className="flex items-center justify-between mb-4 mt-4">
+          <h1 className="display-heading text-3xl">Secure Checkout</h1>
+          <button
+            onClick={() => setCheckoutOpen(false)}
+            className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground hover:text-primary"
+          >
+            ← Back to cart
+          </button>
+        </div>
+        <div className="bg-white border border-border">
+          <EmbeddedCheckoutProvider stripe={getStripe()} options={{ fetchClientSecret }}>
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
+        </div>
+      </div>
+    );
+  }
+
 
   if (items.length === 0) {
     return (
@@ -231,15 +259,15 @@ export default function Checkout() {
           </div>
 
           <button
-            onClick={placeOrder}
+            onClick={beginPayment}
             disabled={placing || !kycOk}
             className="w-full mt-6 flex items-center justify-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            <CheckCircle2 className="w-4 h-4" />
-            {placing ? "Submitting…" : "Place Order Request"}
+            <CreditCard className="w-4 h-4" />
+            {placing ? "Loading…" : "Proceed to Payment"}
           </button>
           <p className="font-body text-[11px] text-muted-foreground mt-3 leading-relaxed">
-            Submitting creates a pending order. An advisor will contact you to confirm payment, paperwork and delivery.
+            You will be able to review and pay securely via Stripe. Your order is confirmed once payment succeeds.
           </p>
         </aside>
       </div>
