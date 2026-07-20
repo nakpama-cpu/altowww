@@ -135,7 +135,6 @@ export default function AvailableStock() {
     const max = filterMaxPrice ? Number(filterMaxPrice) : null;
     const result = listings.filter((c) => {
       const d = c.distilleries?.name ?? "";
-      const effectivePrice = priceFor(c.list_price);
       const matchesSearch =
         !q ||
         d.toLowerCase().includes(q) ||
@@ -143,8 +142,8 @@ export default function AvailableStock() {
         (c.cask_type ?? "").toLowerCase().includes(q) ||
         (c.distilleries?.region ?? "").toLowerCase().includes(q);
       const matchesDistillery = filterDistillery === "All" || d === filterDistillery;
-      const matchesMin = min === null || (effectivePrice !== null && effectivePrice >= min);
-      const matchesMax = max === null || (effectivePrice !== null && effectivePrice <= max);
+      const matchesMin = min === null || (c.list_price !== null && c.list_price >= min);
+      const matchesMax = max === null || (c.list_price !== null && c.list_price <= max);
       return matchesSearch && matchesDistillery && matchesMin && matchesMax;
     });
 
@@ -154,8 +153,8 @@ export default function AvailableStock() {
     switch (sortBy) {
       case "newest": sorted.sort((a, b) => date(b.created_at) - date(a.created_at)); break;
       case "oldest": sorted.sort((a, b) => date(a.created_at) - date(b.created_at)); break;
-      case "price_high": sorted.sort((a, b) => num(priceFor(b.list_price)) - num(priceFor(a.list_price))); break;
-      case "price_low": sorted.sort((a, b) => num(priceFor(a.list_price)) - num(priceFor(b.list_price))); break;
+      case "price_high": sorted.sort((a, b) => num(b.list_price) - num(a.list_price)); break;
+      case "price_low": sorted.sort((a, b) => num(a.list_price) - num(b.list_price)); break;
       case "age_high": sorted.sort((a, b) => num(computeCaskAge(b.fill_date, b.age_years)) - num(computeCaskAge(a.fill_date, a.age_years))); break;
       case "age_low": sorted.sort((a, b) => num(computeCaskAge(a.fill_date, a.age_years)) - num(computeCaskAge(b.fill_date, b.age_years))); break;
       case "abv_high": sorted.sort((a, b) => num(b.abv) - num(a.abv)); break;
