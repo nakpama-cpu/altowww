@@ -317,7 +317,6 @@ export default function AvailableStock() {
       ) : viewMode === "cards" ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((c) => {
-            const price = priceFor(c.list_price);
             return (
               <div key={c.id} className="bg-muted/20 border border-border overflow-hidden flex flex-col">
                 {c.hero_image_url && (
@@ -356,17 +355,10 @@ export default function AvailableStock() {
                   </button>
                   <div className="mt-auto pt-4 border-t border-border flex items-end justify-between">
                     <div>
-                      {price && (
-                        <>
-                          {discount > 0 && c.list_price && (
-                            <div className="font-body text-xs text-muted-foreground line-through">
-                              £{Number(c.list_price).toLocaleString()}
-                            </div>
-                          )}
-                          <div className="display-heading text-2xl text-primary">
-                            £{Math.round(price).toLocaleString()}
-                          </div>
-                        </>
+                      {c.list_price && (
+                        <div className="display-heading text-2xl text-primary">
+                          £{Math.round(c.list_price).toLocaleString()}
+                        </div>
                       )}
                     </div>
                     <button
