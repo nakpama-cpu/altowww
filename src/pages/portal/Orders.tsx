@@ -25,7 +25,7 @@ export default function Orders() {
       const { data } = await supabase
         .from("orders")
         .select("id, amount, currency, status, discount_code, created_at, casks(cask_number), cask_listings(spirit, distilleries(name))")
-        .eq("client_id", user.id)
+        .eq("buyer_id", user.id)
         .order("created_at", { ascending: false });
       setRows((data ?? []) as any);
       setLoading(false);
