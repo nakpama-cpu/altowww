@@ -45,7 +45,6 @@ type Listing = {
 };
 
 export default function AvailableStock() {
-  const { profile } = useAuth();
   const cart = useCart();
   const { toast } = useToast();
   const [buyListing, setBuyListing] = useState<Listing | null>(null);
