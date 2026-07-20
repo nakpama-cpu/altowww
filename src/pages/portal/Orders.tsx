@@ -94,15 +94,7 @@ export default function Orders() {
                       )}
                     </td>
                     <td className="p-4">
-                      <span
-                        className={`inline-flex items-center px-2 py-1 rounded-full font-body text-[10px] uppercase tracking-wider ${
-                          o.status === "paid" || o.status === "completed"
-                            ? "bg-green-100 text-green-700"
-                            : o.status === "pending" || o.status === "awaiting_payment"
-                            ? "bg-amber-100 text-amber-700"
-                            : "bg-muted text-muted-foreground"
-                        }`}
-                      >
+                      <span className="inline-flex items-center px-2 py-1 rounded-full font-body text-[10px] uppercase tracking-wider bg-muted text-muted-foreground">
                         {o.status}
                       </span>
                     </td>
