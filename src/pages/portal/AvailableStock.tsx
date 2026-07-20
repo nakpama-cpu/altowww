@@ -60,8 +60,6 @@ export default function AvailableStock() {
   const [sortBy, setSortBy] = useState<string>("");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
   const [infoListing, setInfoListing] = useState<Listing | null>(null);
-  const discount = Number(profile?.client_discount_pct ?? 0);
-
   const suggestions = useMemo(() => {
     const q = search.toLowerCase().trim();
     if (!q) return [] as { label: string; field: string; value: string }[];
