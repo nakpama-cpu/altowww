@@ -21,7 +21,7 @@ type Row = {
     ola_litres: number | null;
     rla_litres: number | null;
     age_years: number | null;
-    distilleries: { name: string } | null;
+    distilleries: { name: string; region: string | null } | null;
   };
 };
 
