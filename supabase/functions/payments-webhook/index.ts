@@ -66,6 +66,11 @@ async function fulfilCheckoutSession(session: any, env: StripeEnv) {
       console.error("Failed to insert orders", insErr);
       throw insErr;
     }
+    // Overwrite the amount enforced by the DB trigger with what the customer actually paid
+    await sb
+      .from("orders")
+      .update({ amount: Number(perUnitPaid.toFixed(2)) })
+      .eq("stripe_session_id", sessionId);
   }
 
   // Redeem discount code (one-use per client)
