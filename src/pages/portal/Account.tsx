@@ -752,7 +752,8 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[92vh] overflow-y-auto bg-white">
+      <DialogContent className="max-w-[95vw] sm:max-w-2xl md:max-w-3xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[95vh] overflow-y-auto sm:overflow-visible bg-white">
+
         <DialogHeader className="space-y-1">
           <DialogTitle className="display-heading text-lg sm:text-xl">Edit profile</DialogTitle>
           <DialogDescription className="text-xs sm:text-sm">Update your contact number or address. Name, date of birth and email are locked for identity purposes.</DialogDescription>
