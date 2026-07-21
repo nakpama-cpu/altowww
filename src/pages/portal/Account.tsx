@@ -84,7 +84,8 @@ function RowStatus({
   status: VerificationStatus;
   onVerify: () => void;
 }) {
-  if (status === "pending" || status === "verified") return <StatusPill status={status} />;
+  if (status === "verified") return null;
+  if (status === "pending") return <StatusPill status={status} />;
   return (
     <button
       type="button"
@@ -156,11 +157,6 @@ export default function Account() {
     <div className="max-w-2xl">
       <h1 className="display-heading text-4xl mb-8">Account</h1>
 
-      {fullyVerified && (
-        <div className="border border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200 p-3 mb-6 flex items-center gap-2 font-body text-xs">
-          <ShieldCheck className="w-4 h-4" /> Verified account — you're cleared to purchase.
-        </div>
-      )}
 
       <section className="bg-muted/20 border border-border p-8 mb-6">
         <div className="flex items-start justify-between gap-4 mb-6">
