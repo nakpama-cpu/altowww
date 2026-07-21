@@ -84,7 +84,8 @@ function RowStatus({
   status: VerificationStatus;
   onVerify: () => void;
 }) {
-  if (status === "pending" || status === "verified") return <StatusPill status={status} />;
+  if (status === "verified") return null;
+  if (status === "pending") return <StatusPill status={status} />;
   return (
     <button
       type="button"
