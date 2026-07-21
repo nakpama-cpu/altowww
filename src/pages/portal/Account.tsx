@@ -752,7 +752,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-2xl md:max-w-3xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[95vh] overflow-y-auto sm:overflow-visible bg-white">
+      <DialogContent className="max-w-[95vw] sm:max-w-lg w-full p-3 gap-2 max-h-[95vh] overflow-y-auto bg-white">
 
         <DialogHeader className="space-y-1">
           <DialogTitle className="display-heading text-lg sm:text-xl">Edit profile</DialogTitle>
@@ -791,55 +791,54 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
               Changing your address requires re-verification. Please upload a new proof of address issued within the last 3 months.
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-              <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-4 space-y-1.5 sm:space-y-2.5">
-                <TextField dense label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
-                <TextField dense label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
-                <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                  <TextField dense label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
-                  <TextField dense label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
-                </div>
-                <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                  <TextField dense label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
-                  <CountrySelect dense value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
-                </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 space-y-1.5">
+              <TextField dense label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
+              <TextField dense label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
+              <div className="grid grid-cols-2 gap-2">
+                <TextField dense label="City" value={addr.address_city} onChange={(v) => setAddr({ ...addr, address_city: v })} />
+                <TextField dense label="Postcode / ZIP" value={addr.address_postcode} onChange={(v) => setAddr({ ...addr, address_postcode: v })} />
               </div>
-
-              <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-4 space-y-1.5 sm:space-y-2.5">
-                <div className="grid grid-cols-2 gap-2 sm:gap-3 items-end">
-                  <div>
-                    <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Document type</label>
-                    <select
-                      value={addr.proof_of_address_type}
-                      onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
-                      className="w-full h-8 sm:h-9 bg-transparent border-b border-border py-0.5 font-body text-xs sm:text-sm leading-none focus:outline-none focus:border-primary"
-                    >
-                      <option value="">Select…</option>
-                      {ADDRESS_PROOF_TYPES.map((t) => (
-                        <option key={t.value} value={t.value}>{t.label}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <TextField
-                    dense
-                    label="Issue date"
-                    type="date"
-                    value={addr.proof_of_address_issued_on}
-                    onChange={(v) => setAddr({ ...addr, proof_of_address_issued_on: v })}
-                  />
-                </div>
-                <div>
-                  <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5 sm:mb-1">Upload new proof of address</label>
-                  <input
-                    type="file"
-                    accept="application/pdf,image/jpeg,image/png,image/webp"
-                    onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                    className="font-body text-[10px] sm:text-xs w-full file:mr-2 file:py-1 file:px-2 file:text-[10px] sm:file:text-xs"
-                  />
-                  <p className="font-body text-[9px] sm:text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
-                </div>
+              <div className="grid grid-cols-2 gap-2">
+                <TextField dense label="Region / State" value={addr.address_region} onChange={(v) => setAddr({ ...addr, address_region: v })} />
+                <CountrySelect dense value={addr.address_country} onChange={(code) => setAddr({ ...addr, address_country: code })} />
               </div>
             </div>
+
+            <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 space-y-1.5">
+              <div className="grid grid-cols-2 gap-2 items-end">
+                <div>
+                  <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Document type</label>
+                  <select
+                    value={addr.proof_of_address_type}
+                    onChange={(e) => setAddr({ ...addr, proof_of_address_type: e.target.value as ProofOfAddressType })}
+                    className="w-full h-8 bg-transparent border-b border-border py-0.5 font-body text-xs leading-none focus:outline-none focus:border-primary"
+                  >
+                    <option value="">Select…</option>
+                    {ADDRESS_PROOF_TYPES.map((t) => (
+                      <option key={t.value} value={t.value}>{t.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <TextField
+                  dense
+                  label="Issue date"
+                  type="date"
+                  value={addr.proof_of_address_issued_on}
+                  onChange={(v) => setAddr({ ...addr, proof_of_address_issued_on: v })}
+                />
+              </div>
+              <div>
+                <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Upload new proof of address</label>
+                <input
+                  type="file"
+                  accept="application/pdf,image/jpeg,image/png,image/webp"
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                  className="font-body text-[10px] sm:text-xs w-full file:mr-2 file:py-1 file:px-2 file:text-[10px] sm:file:text-xs"
+                />
+                <p className="font-body text-[9px] sm:text-[10px] text-muted-foreground mt-0.5">PDF, JPG, PNG or WebP · max {MAX_FILE_MB}MB</p>
+              </div>
+            </div>
+
 
             <DialogFooter className="flex justify-center sm:justify-center pt-1 sm:pt-0">
               <button
