@@ -442,12 +442,11 @@ export default function AvailableStock() {
                   <tr key={c.id} className="border-b border-border hover:bg-muted/20 transition-colors">
                     <td className="px-4 py-3 whitespace-nowrap">{c.distilleries?.name ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.spirit}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{c.cask_type ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{formatCaskSpec(c.cask_type, c.cask_size_litres) ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.fill_date ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{(() => { const a = computeCaskAge(c.fill_date, c.age_years); return a != null ? `${a} yrs` : "—"; })()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.abv ? `${c.abv}%` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{c.ola_litres ? `${c.ola_litres} L` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{c.rla_litres ? `${c.rla_litres} L` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.wood ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-primary">
                       {c.list_price ? `£${Math.round(c.list_price).toLocaleString()}` : "—"}
                     </td>
