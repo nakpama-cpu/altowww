@@ -181,10 +181,8 @@ Deno.serve(async (req) => {
       ui_mode: "embedded_page" as any,
       return_url: returnUrl,
       customer: customerId,
-      customer_update: { address: "auto", name: "auto" },
       billing_address_collection: "required",
       line_items: stripeLineItems,
-      automatic_tax: { enabled: true },
       payment_intent_data: {
         description: `Alto Whisky — ${items.length} cask${items.length > 1 ? "s" : ""}`,
       },
