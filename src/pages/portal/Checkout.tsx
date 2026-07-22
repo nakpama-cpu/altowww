@@ -241,10 +241,16 @@ export default function Checkout() {
             <span className="text-muted-foreground">Subtotal</span>
             <span>£{Math.round(subtotal).toLocaleString()}</span>
           </div>
-          {savings > 0 && (
+          {palletSavings > 0 && (
             <div className="flex justify-between font-body text-sm py-2 text-primary">
-              <span>Discounts</span>
-              <span>−£{Math.round(savings).toLocaleString()}</span>
+              <span>Pallet discount (−{PALLET_DISCOUNT_PCT}% × {palletUnits})</span>
+              <span>−£{Math.round(palletSavings).toLocaleString()}</span>
+            </div>
+          )}
+          {codeSavings > 0 && (
+            <div className="flex justify-between font-body text-sm py-2 text-primary">
+              <span>Code discount{applied ? ` (${applied.code})` : ""}</span>
+              <span>−£{Math.round(codeSavings).toLocaleString()}</span>
             </div>
           )}
 
