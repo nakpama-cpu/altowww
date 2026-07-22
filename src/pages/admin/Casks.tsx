@@ -116,7 +116,7 @@ export default function AdminCasks() {
         <table className="w-full text-sm">
           <thead className="bg-muted">
             <tr className="text-left font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              <th className="p-3">Cask #</th><th className="p-3">Spirit</th><th className="p-3">Type</th>
+              <th className="p-3">Cask #</th><th className="p-3">Spirit</th><th className="p-3">Cask</th><th className="p-3">Wood</th>
               <th className="p-3">ABV</th><th className="p-3">OLA</th>
               <th className="p-3">List</th><th className="p-3">Status</th><th className="p-3"></th>
             </tr>
