@@ -599,11 +599,18 @@ export default function AvailableStock() {
             const pallet = palletApplies(qty, available);
             const unit = pallet ? palletUnitPrice(list) : list;
             const total = unit * qty;
+            const lineSubtotal = list * qty;
+            const palletSavings = pallet ? lineSubtotal - total : 0;
             return (
               <div className="space-y-5 mt-2">
                 <div className="flex items-center justify-between font-body text-sm">
                   <span className="text-muted-foreground">Price per cask</span>
                   <span className="text-primary display-heading text-xl">
+                    {pallet && (
+                      <span className="mr-2 font-body text-sm text-muted-foreground line-through">
+                        £{Math.round(list).toLocaleString()}
+                      </span>
+                    )}
                     £{Math.round(unit).toLocaleString()}
                     {pallet && <span className="ml-2 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">−{PALLET_DISCOUNT_PCT}% pallet</span>}
                   </span>
@@ -647,9 +654,23 @@ export default function AvailableStock() {
                     </button>
                   </div>
                 </div>
-                <div className="border-t border-border pt-4 flex items-end justify-between">
-                  <span className="font-body text-sm text-muted-foreground">Total</span>
-                  <span className="display-heading text-3xl text-primary">£{Math.round(total).toLocaleString()}</span>
+                <div className="border-t border-border pt-4 space-y-2">
+                  <div className="flex items-center justify-between font-body text-sm">
+                    <span className="text-muted-foreground">
+                      £{Math.round(list).toLocaleString()} × {qty} {qty === 1 ? "cask" : "casks"}
+                    </span>
+                    <span>£{Math.round(lineSubtotal).toLocaleString()}</span>
+                  </div>
+                  {pallet && (
+                    <div className="flex items-center justify-between font-body text-sm text-primary">
+                      <span>Pallet discount (−{PALLET_DISCOUNT_PCT}%)</span>
+                      <span>−£{Math.round(palletSavings).toLocaleString()}</span>
+                    </div>
+                  )}
+                  <div className="flex items-end justify-between pt-2 border-t border-border">
+                    <span className="font-body text-sm text-muted-foreground">Total</span>
+                    <span className="display-heading text-3xl text-primary">£{Math.round(total).toLocaleString()}</span>
+                  </div>
                 </div>
                 <button
                   onClick={confirmAddToCart}
