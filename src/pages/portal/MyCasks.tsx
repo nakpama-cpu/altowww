@@ -321,12 +321,12 @@ export default function MyCasks() {
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_number ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.distilleries?.name ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.spirit}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_type ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres) ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.wood ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.fill_date ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return a != null ? `${a} yrs` : "—"; })()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.abv ? `${r.casks.abv}%` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.ola_litres ? `${r.casks.ola_litres} L` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.rla_litres ? `${r.casks.rla_litres} L` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.rla_litres != null ? `${r.casks.rla_litres} L (RLA)` : r.casks.ola_litres != null ? `${r.casks.ola_litres} L (OLA)` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">£{Number(r.purchase_price).toLocaleString()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.purchase_date}</td>
                     <td className="pl-4 pr-6 py-3 whitespace-nowrap">
