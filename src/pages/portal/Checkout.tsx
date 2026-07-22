@@ -155,8 +155,9 @@ export default function Checkout() {
 
       <div className="grid lg:grid-cols-3 gap-6 min-w-0">
         <div className="lg:col-span-2 space-y-3 min-w-0">
-          {items.map((i) => {
-            const lineTotal = i.unit_price * i.quantity;
+          {lineBreakdown.map(({ item: i, unit, lineTotal, palletActive }) => {
+            const list = Number(i.list_price || 0);
+            const discounted = unit < list;
             return (
               <div key={i.listing_id} className="bg-muted/20 border border-border p-3 sm:p-4">
                 <div className="flex items-start gap-3 sm:gap-4">
@@ -170,9 +171,20 @@ export default function Checkout() {
                     <div className="font-body text-xs text-muted-foreground truncate">
                       {i.spirit}
                     </div>
-                    <div className="font-body text-xs text-muted-foreground mt-1">
-                      £{Math.round(i.unit_price).toLocaleString()} each
+                    <div className="font-body text-xs text-muted-foreground mt-1 flex items-center gap-2 flex-wrap">
+                      {discounted && <span className="line-through">£{Math.round(list).toLocaleString()}</span>}
+                      <span className={discounted ? "text-primary" : ""}>£{Math.round(unit).toLocaleString()} each</span>
+                      {palletActive && (
+                        <span className="font-body text-[9px] uppercase tracking-[0.2em] bg-primary/10 border border-primary/30 text-primary px-1.5 py-0.5">
+                          Pallet −{PALLET_DISCOUNT_PCT}%
+                        </span>
+                      )}
                     </div>
+                    {i.pallet_eligible && i.quantity < PALLET_MIN_QTY && (
+                      <div className="font-body text-[11px] text-muted-foreground mt-1">
+                        Add {PALLET_MIN_QTY - i.quantity} more to unlock pallet price
+                      </div>
+                    )}
                   </div>
                   <button
                     onClick={() => remove(i.listing_id)}
