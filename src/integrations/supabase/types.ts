@@ -108,6 +108,7 @@ export type Database = {
           reserved_qty: number
           rla_litres: number | null
           spirit: string
+          spirit_name: string | null
           status: Database["public"]["Enums"]["listing_status"]
           stock_qty: number
           updated_at: string
@@ -130,6 +131,7 @@ export type Database = {
           reserved_qty?: number
           rla_litres?: number | null
           spirit?: string
+          spirit_name?: string | null
           status?: Database["public"]["Enums"]["listing_status"]
           stock_qty?: number
           updated_at?: string
@@ -152,6 +154,7 @@ export type Database = {
           reserved_qty?: number
           rla_litres?: number | null
           spirit?: string
+          spirit_name?: string | null
           status?: Database["public"]["Enums"]["listing_status"]
           stock_qty?: number
           updated_at?: string
@@ -186,6 +189,7 @@ export type Database = {
           ola_litres: number | null
           rla_litres: number | null
           spirit: string
+          spirit_name: string | null
           status: Database["public"]["Enums"]["cask_status"]
           updated_at: string
           wood: string | null
@@ -208,6 +212,7 @@ export type Database = {
           ola_litres?: number | null
           rla_litres?: number | null
           spirit?: string
+          spirit_name?: string | null
           status?: Database["public"]["Enums"]["cask_status"]
           updated_at?: string
           wood?: string | null
@@ -230,6 +235,7 @@ export type Database = {
           ola_litres?: number | null
           rla_litres?: number | null
           spirit?: string
+          spirit_name?: string | null
           status?: Database["public"]["Enums"]["cask_status"]
           updated_at?: string
           wood?: string | null
