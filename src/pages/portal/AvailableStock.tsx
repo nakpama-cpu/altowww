@@ -362,20 +362,17 @@ export default function AvailableStock() {
                   </div>
                 )}
                   <div className="p-4 sm:p-6 flex-1 flex flex-col">
-                  <h3 className="display-heading text-2xl leading-snug mb-3">{c.distilleries?.name ?? c.spirit}</h3>
-                  <div className="grid grid-cols-2 gap-2 mb-4">
-                    <InfoBox label="Region" value={c.distilleries?.region} />
-                    <InfoBox label="Cask" value={formatCaskSpec(c.cask_type, c.cask_size_litres)} />
-                    <InfoBox label="Wood" value={c.wood} />
-                    <InfoBox label="Spirit Name" value={displaySpiritName(c)} />
-                  </div>
+                  <h3 className="display-heading text-2xl leading-snug mb-4">{c.distilleries?.name ?? c.spirit}</h3>
                   {(() => {
                     const a = computeCaskAge(c.fill_date, c.age_years);
                     return (
-                      <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
-                        <Mini label="ABV" v={formatMiniValue(c.abv, "%")} />
-                        <Mini label="Age" v={a != null ? `${a} yrs` : "—"} />
-                        <Mini label="Year" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
+                      <div className="grid grid-cols-2 gap-2 mb-4">
+                        <SpecBox label="Region" value={c.distilleries?.region} />
+                        <SpecBox label="Cask" value={formatCaskSpec(c.cask_type, c.cask_size_litres)} />
+                        <SpecBox label="Wood" value={c.wood} />
+                        <SpecBox label="Spirit Name" value={displaySpiritName(c)} />
+                        <SpecBox label="ABV" value={c.abv != null ? `${c.abv}%` : null} />
+                        <SpecBox label="Age" value={a != null ? `${a} yrs` : null} />
                       </div>
                     );
                   })()}
