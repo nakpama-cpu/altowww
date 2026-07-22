@@ -704,19 +704,15 @@ const formatMiniValue = (value: number | null, suffix: string) => {
   return `${compact}${suffix}`;
 };
 
-const InfoBox = ({ label, value }: { label: string; value?: string | number | null }) => (
-  <div className="border border-border p-3">
-    <div className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{label}</div>
-    <div className="font-body font-medium text-sm truncate" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
+const SpecBox = ({ label, value }: { label: string; value?: string | number | null }) => (
+  <div className="border border-border bg-background/40 px-3 py-2.5 min-h-[64px] flex flex-col justify-center">
+    <div className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1 leading-none">{label}</div>
+    <div className="font-body text-sm text-foreground font-medium truncate" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
   </div>
 );
 
-const Mini = ({ label, v }: { label: string; v: string }) => (
-  <div className="border border-border min-h-16 px-1 text-center min-w-0 w-full flex flex-col items-center justify-center gap-1 overflow-visible">
-    <div className="w-full font-body text-[9px] uppercase tracking-[0.08em] text-muted-foreground leading-none whitespace-nowrap text-center" title={label}>{label}</div>
-    <div className="w-full font-body text-[12px] leading-none whitespace-nowrap text-center" title={v}>{v}</div>
-  </div>
-);
+const InfoBox = SpecBox;
+const Mini = ({ label, v }: { label: string; v: string }) => <SpecBox label={label} value={v} />;
 
 const InfoSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section>
