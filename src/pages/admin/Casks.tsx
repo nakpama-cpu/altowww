@@ -45,7 +45,7 @@ export default function AdminCasks() {
     if (!editing) return;
     const payload: any = { ...editing };
     // Numeric coercion
-    ["abv", "ola_litres", "rla_litres", "age_years", "list_price"].forEach((k) => {
+    ["abv", "ola_litres", "rla_litres", "age_years", "list_price", "cask_size_litres"].forEach((k) => {
       if (payload[k] === "" || payload[k] === null || payload[k] === undefined) payload[k] = null;
       else payload[k] = Number(payload[k]);
     });
