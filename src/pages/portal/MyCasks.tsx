@@ -4,6 +4,7 @@ import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2, RotateCcw, 
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { computeCaskAge } from "@/lib/caskAge";
+import { formatCaskSpec } from "@/lib/pallet";
 import { regionColor } from "@/lib/regions";
 
 type Row = {
@@ -16,6 +17,8 @@ type Row = {
     cask_number: string | null;
     spirit: string;
     cask_type: string | null;
+    wood: string | null;
+    cask_size_litres: number | null;
     fill_date: string | null;
     abv: number | null;
     ola_litres: number | null;
