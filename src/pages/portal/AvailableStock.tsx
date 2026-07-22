@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink, Store, PhoneCall } from "lucide-react";
 import { computeCaskAge } from "@/lib/caskAge";
+import { formatCaskSpec, palletApplies, palletEligible, palletUnitPrice, PALLET_DISCOUNT_PCT, PALLET_MIN_QTY } from "@/lib/pallet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 type LinkItem = { title?: string; name?: string; url?: string };
@@ -15,6 +16,8 @@ type Listing = {
   id: string;
   spirit: string;
   cask_type: string | null;
+  wood: string | null;
+  cask_size_litres: number | null;
   fill_date: string | null;
   abv: number | null;
   ola_litres: number | null;
@@ -24,6 +27,8 @@ type Listing = {
   currency: string;
   description: string | null;
   hero_image_url: string | null;
+  stock_qty: number;
+  reserved_qty: number;
   created_at: string;
   distilleries: {
     name: string;
@@ -89,7 +94,7 @@ export default function AvailableStock() {
     (async () => {
       const { data, error } = await supabase
         .from("cask_listings")
-        .select("id, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region, country, about, image_url, founded_by, founded_year, famous_for, region_character, annual_production, export_markets, owner, website_url, visitor_centre, news, awards)")
+        .select("id, spirit, cask_type, wood, cask_size_litres, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, stock_qty, reserved_qty, created_at, distilleries(name, region, country, about, image_url, founded_by, founded_year, famous_for, region_character, annual_production, export_markets, owner, website_url, visitor_centre, news, awards)")
         .eq("status", "active")
         .order("created_at", { ascending: false });
       if (error) toast({ title: "Could not load stock", description: error.message, variant: "destructive" });
@@ -115,17 +120,22 @@ export default function AvailableStock() {
   const confirmAddToCart = () => {
     if (!buyListing || buyListing.list_price == null) return;
     const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
+    const available = Math.max(0, (buyListing.stock_qty ?? 0) - (buyListing.reserved_qty ?? 0));
+    const eligible = palletEligible(available);
+    const pallet = palletApplies(qty, available);
+    const unit = pallet ? palletUnitPrice(Number(buyListing.list_price)) : Number(buyListing.list_price);
     cart.add({
       listing_id: buyListing.id,
       distillery: buyListing.distilleries?.name ?? "",
       spirit: buyListing.spirit,
       list_price: Number(buyListing.list_price),
-      unit_price: Number(buyListing.list_price),
+      unit_price: unit,
       currency: buyListing.currency,
       hero_image_url: buyListing.hero_image_url,
       quantity: qty,
+      pallet_eligible: eligible,
     });
-    toast({ title: "Added to cart", description: `${qty} × ${buyListing.distilleries?.name ?? buyListing.spirit}` });
+    toast({ title: "Added to cart", description: `${qty} × ${buyListing.distilleries?.name ?? buyListing.spirit}${pallet ? " · Pallet price applied" : ""}` });
     setBuyListing(null);
   };
 
@@ -353,21 +363,26 @@ export default function AvailableStock() {
                   <h3 className="display-heading text-xl leading-snug mb-1 h-[3.25rem] line-clamp-2">{c.distilleries?.name ?? c.spirit}</h3>
                     <div className="font-body text-xs text-muted-foreground mb-4 flex flex-col gap-0.5 min-h-[3rem]">
                       {(() => {
-                        const a = computeCaskAge(c.fill_date, c.age_years);
+                        const spec = formatCaskSpec(c.cask_type, c.cask_size_litres);
                         return (
                           <>
                             <span className="truncate">{c.distilleries?.region ?? "—"}</span>
-                            <span className="truncate">{c.cask_type ?? "—"}</span>
-                            <span className="truncate">{a != null ? `${a} yrs` : "—"}</span>
+                            <span className="truncate">{spec ?? "—"}</span>
+                            <span className="truncate">{c.wood ?? "—"}</span>
                           </>
                         );
                       })()}
                     </div>
-                  <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
-                    <Mini label="ABV" v={formatMiniValue(c.abv, "%")} />
-                    <Mini label="OLA" v={formatMiniValue(c.ola_litres, " L")} />
-                    <Mini label="Filled" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
-                  </div>
+                  {(() => {
+                    const a = computeCaskAge(c.fill_date, c.age_years);
+                    return (
+                      <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
+                        <Mini label="ABV" v={formatMiniValue(c.abv, "%")} />
+                        <Mini label="Age" v={a != null ? `${a} yrs` : "—"} />
+                        <Mini label="Year" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
+                      </div>
+                    );
+                  })()}
                   {c.description && (
                     <p className="font-body text-sm text-muted-foreground mb-3 line-clamp-3">{c.description}</p>
                   )}
@@ -381,9 +396,16 @@ export default function AvailableStock() {
                   <div className="mt-auto pt-4 border-t border-border flex items-end justify-between">
                     <div>
                       {c.list_price && (
-                        <div className="display-heading text-2xl text-primary">
-                          £{Math.round(c.list_price).toLocaleString()}
-                        </div>
+                        <>
+                          <div className="display-heading text-2xl text-primary">
+                            £{Math.round(c.list_price).toLocaleString()}
+                          </div>
+                          {palletEligible(Math.max(0, (c.stock_qty ?? 0) - (c.reserved_qty ?? 0))) && (
+                            <div className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mt-1">
+                              Pallet {PALLET_MIN_QTY}+: £{Math.round(palletUnitPrice(Number(c.list_price))).toLocaleString()} <span className="text-primary">−{PALLET_DISCOUNT_PCT}%</span>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
                     <button
@@ -394,6 +416,7 @@ export default function AvailableStock() {
                     </button>
                   </div>
                 </div>
+
               </div>
             );
           })}
@@ -409,8 +432,7 @@ export default function AvailableStock() {
                 <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Fill Date</th>
                 <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Age</th>
                 <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">ABV</th>
-                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">OLA</th>
-                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">RLA</th>
+                <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Wood</th>
                 <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Price</th>
                 <th className="pl-4 pr-6 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap"></th>
               </tr>
@@ -420,12 +442,11 @@ export default function AvailableStock() {
                   <tr key={c.id} className="border-b border-border hover:bg-muted/20 transition-colors">
                     <td className="px-4 py-3 whitespace-nowrap">{c.distilleries?.name ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.spirit}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{c.cask_type ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{formatCaskSpec(c.cask_type, c.cask_size_litres) ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.fill_date ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{(() => { const a = computeCaskAge(c.fill_date, c.age_years); return a != null ? `${a} yrs` : "—"; })()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{c.abv ? `${c.abv}%` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{c.ola_litres ? `${c.ola_litres} L` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{c.rla_litres ? `${c.rla_litres} L` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{c.wood ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-primary">
                       {c.list_price ? `£${Math.round(c.list_price).toLocaleString()}` : "—"}
                     </td>
@@ -564,22 +585,34 @@ export default function AvailableStock() {
           </DialogHeader>
           {buyListing && (
             <div className="grid grid-cols-4 gap-3 mt-1">
-              <Mini label="Cask Type" v={buyListing.cask_type ?? "—"} />
+              <Mini label="Cask" v={formatCaskSpec(buyListing.cask_type, buyListing.cask_size_litres) ?? "—"} />
+              <Mini label="Wood" v={buyListing.wood ?? "—"} />
               <Mini label="ABV" v={buyListing.abv ? `${buyListing.abv}%` : "—"} />
               <Mini label="Age" v={(() => { const a = computeCaskAge(buyListing.fill_date, buyListing.age_years); return a != null ? `${a} yrs` : "—"; })()} />
-              <Mini label="OLA" v={buyListing.ola_litres ? `${buyListing.ola_litres} L` : "—"} />
             </div>
           )}
           {buyListing && (() => {
-            const unit = buyListing.list_price ?? 0;
+            const list = buyListing.list_price ?? 0;
             const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
+            const available = Math.max(0, (buyListing.stock_qty ?? 0) - (buyListing.reserved_qty ?? 0));
+            const eligible = palletEligible(available);
+            const pallet = palletApplies(qty, available);
+            const unit = pallet ? palletUnitPrice(list) : list;
             const total = unit * qty;
             return (
               <div className="space-y-5 mt-2">
                 <div className="flex items-center justify-between font-body text-sm">
                   <span className="text-muted-foreground">Price per cask</span>
-                  <span className="text-primary display-heading text-xl">£{Math.round(unit).toLocaleString()}</span>
+                  <span className="text-primary display-heading text-xl">
+                    £{Math.round(unit).toLocaleString()}
+                    {pallet && <span className="ml-2 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">−{PALLET_DISCOUNT_PCT}% pallet</span>}
+                  </span>
                 </div>
+                {eligible && !pallet && (
+                  <p className="font-body text-[11px] text-muted-foreground -mt-3">
+                    Order {PALLET_MIN_QTY}+ casks to unlock the pallet price (−{PALLET_DISCOUNT_PCT}% per cask).
+                  </p>
+                )}
                 <div>
                   <label className="block font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">
                     Number of casks

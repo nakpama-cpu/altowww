@@ -8,6 +8,8 @@ type Listing = {
   distillery_id: string | null;
   spirit: string;
   cask_type: string | null;
+  wood: string | null;
+  cask_size_litres: number | null;
   fill_date: string | null;
   abv: number | null;
   ola_litres: number | null;
@@ -45,7 +47,7 @@ export default function AdminListings() {
     if (!editing) return;
     const { distilleries: _d, ...rest } = editing as any;
     const payload: any = { ...rest };
-    ["abv", "ola_litres", "rla_litres", "age_years", "list_price", "stock_qty"].forEach((k) => {
+    ["abv", "ola_litres", "rla_litres", "age_years", "list_price", "stock_qty", "cask_size_litres"].forEach((k) => {
       if (payload[k] === "" || payload[k] === null || payload[k] === undefined) payload[k] = k === "stock_qty" ? 0 : null;
       else payload[k] = Number(payload[k]);
     });
@@ -86,7 +88,9 @@ export default function AdminListings() {
             <FSelect label="Distillery" value={editing.distillery_id ?? ""} onChange={(v) => setEditing({ ...editing, distillery_id: v || null })}
               options={[{ value: "", label: "—" }, ...distilleries.map((d) => ({ value: d.id, label: d.name }))]} />
             <F label="Spirit" value={editing.spirit} onChange={(v) => setEditing({ ...editing, spirit: v })} />
-            <F label="Cask Type" value={editing.cask_type ?? ""} onChange={(v) => setEditing({ ...editing, cask_type: v })} />
+            <F label="Cask Type (Barrel/Hogshead/Butt/Puncheon)" value={editing.cask_type ?? ""} onChange={(v) => setEditing({ ...editing, cask_type: v })} />
+            <F label="Cask Size (L)" type="number" value={editing.cask_size_litres ?? ""} onChange={(v) => setEditing({ ...editing, cask_size_litres: v as any })} />
+            <F label="Wood (e.g. First-fill Bourbon)" value={editing.wood ?? ""} onChange={(v) => setEditing({ ...editing, wood: v })} />
             <F label="Fill Date" type="date" value={editing.fill_date ?? ""} onChange={(v) => setEditing({ ...editing, fill_date: v })} />
             <F label="Age (yrs)" type="number" value={editing.age_years ?? ""} onChange={(v) => setEditing({ ...editing, age_years: v as any })} />
             <F label="ABV %" type="number" value={editing.abv ?? ""} onChange={(v) => setEditing({ ...editing, abv: v as any })} />
@@ -118,7 +122,7 @@ export default function AdminListings() {
         <table className="w-full text-sm">
           <thead className="bg-muted">
             <tr className="text-left font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              <th className="p-3">Distillery</th><th className="p-3">Spirit</th><th className="p-3">Type</th>
+              <th className="p-3">Distillery</th><th className="p-3">Spirit</th><th className="p-3">Cask</th><th className="p-3">Wood</th>
               <th className="p-3">Age</th><th className="p-3">ABV</th>
               <th className="p-3">List</th>
               <th className="p-3">Stock</th><th className="p-3">Reserved</th><th className="p-3">Avail</th>
@@ -132,7 +136,8 @@ export default function AdminListings() {
                 <tr key={l.id} className="border-t border-border">
                   <td className="p-3">{l.distilleries?.name ?? "—"}</td>
                   <td className="p-3">{l.spirit}</td>
-                  <td className="p-3">{l.cask_type}</td>
+                  <td className="p-3">{[l.cask_type, l.cask_size_litres != null ? `${l.cask_size_litres}L` : null].filter(Boolean).join(" ") || "—"}</td>
+                  <td className="p-3">{l.wood ?? "—"}</td>
                   <td className="p-3">{l.age_years ?? "—"}</td>
                   <td className="p-3">{l.abv ? `${l.abv}%` : "—"}</td>
                   <td className="p-3">£{l.list_price?.toLocaleString() ?? "—"}</td>
@@ -147,7 +152,7 @@ export default function AdminListings() {
                 </tr>
               );
             })}
-            {listings.length === 0 && <tr><td colSpan={11} className="p-8 text-center text-muted-foreground font-body">No listings yet.</td></tr>}
+            {listings.length === 0 && <tr><td colSpan={12} className="p-8 text-center text-muted-foreground font-body">No listings yet.</td></tr>}
           </tbody>
         </table>
       </div>

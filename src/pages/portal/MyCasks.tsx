@@ -4,6 +4,7 @@ import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2, RotateCcw, 
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { computeCaskAge } from "@/lib/caskAge";
+import { formatCaskSpec } from "@/lib/pallet";
 import { regionColor } from "@/lib/regions";
 
 type Row = {
@@ -16,6 +17,8 @@ type Row = {
     cask_number: string | null;
     spirit: string;
     cask_type: string | null;
+    wood: string | null;
+    cask_size_litres: number | null;
     fill_date: string | null;
     abv: number | null;
     ola_litres: number | null;
@@ -64,7 +67,7 @@ export default function MyCasks() {
     (async () => {
       const { data, error } = await supabase
         .from("holdings")
-        .select("id, purchase_price, purchase_date, certificate_path, notes, casks(cask_number, spirit, cask_type, fill_date, abv, ola_litres, rla_litres, age_years, distilleries(name, region))")
+        .select("id, purchase_price, purchase_date, certificate_path, notes, casks(cask_number, spirit, cask_type, wood, cask_size_litres, fill_date, abv, ola_litres, rla_litres, age_years, distilleries(name, region))")
         .order("purchase_date", { ascending: false });
       if (error) toast({ title: "Could not load holdings", description: error.message, variant: "destructive" });
       setRows((data ?? []) as any);
@@ -279,12 +282,14 @@ export default function MyCasks() {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
                   <Spec label="Spirit" value={r.casks.spirit} />
-                  <Spec label="Cask Type" value={r.casks.cask_type} />
+                  <Spec label="Cask" value={formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres)} />
+                  <Spec label="Wood" value={r.casks.wood} />
                   <Spec label="Fill Date" value={r.casks.fill_date} />
                   {(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return <Spec label="Age" value={a != null ? `${a} yrs` : null} />; })()}
                   <Spec label="ABV" value={r.casks.abv ? `${r.casks.abv}%` : null} />
-                  <Spec label="OLA" value={r.casks.ola_litres ? `${r.casks.ola_litres} L` : null} />
-                  <Spec label="RLA" value={r.casks.rla_litres ? `${r.casks.rla_litres} L` : null} />
+                  {r.casks.rla_litres != null
+                    ? <Spec label="RLA" value={`${r.casks.rla_litres} L`} />
+                    : <Spec label="OLA" value={r.casks.ola_litres != null ? `${r.casks.ola_litres} L` : null} />}
                   <Spec label="Purchase Price" value={`£${Number(r.purchase_price).toLocaleString()}`} />
                   <Spec label="Purchase Date" value={r.purchase_date} />
                 </div>
@@ -300,11 +305,11 @@ export default function MyCasks() {
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Distillery</th>
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Spirit</th>
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Cask</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Wood</th>
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Fill Date</th>
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Age</th>
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">ABV</th>
-                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">OLA</th>
-                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">RLA</th>
+                  <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Volume</th>
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Price</th>
                   <th className="px-4 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Purchased</th>
                   <th className="pl-4 pr-6 py-3 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground whitespace-nowrap">Certificate</th>
@@ -316,12 +321,12 @@ export default function MyCasks() {
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_number ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.distilleries?.name ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.spirit}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.cask_type ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres) ?? "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.wood ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.fill_date ?? "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return a != null ? `${a} yrs` : "—"; })()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.casks.abv ? `${r.casks.abv}%` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.ola_litres ? `${r.casks.ola_litres} L` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.rla_litres ? `${r.casks.rla_litres} L` : "—"}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{r.casks.rla_litres != null ? `${r.casks.rla_litres} L (RLA)` : r.casks.ola_litres != null ? `${r.casks.ola_litres} L (OLA)` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap">£{Number(r.purchase_price).toLocaleString()}</td>
                     <td className="px-4 py-3 whitespace-nowrap">{r.purchase_date}</td>
                     <td className="pl-4 pr-6 py-3 whitespace-nowrap">

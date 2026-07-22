@@ -9,6 +9,8 @@ type Cask = {
   distillery_id: string | null;
   spirit: string;
   cask_type: string | null;
+  wood: string | null;
+  cask_size_litres: number | null;
   fill_date: string | null;
   abv: number | null;
   ola_litres: number | null;
@@ -43,7 +45,7 @@ export default function AdminCasks() {
     if (!editing) return;
     const payload: any = { ...editing };
     // Numeric coercion
-    ["abv", "ola_litres", "rla_litres", "age_years", "list_price"].forEach((k) => {
+    ["abv", "ola_litres", "rla_litres", "age_years", "list_price", "cask_size_litres"].forEach((k) => {
       if (payload[k] === "" || payload[k] === null || payload[k] === undefined) payload[k] = null;
       else payload[k] = Number(payload[k]);
     });
@@ -80,7 +82,9 @@ export default function AdminCasks() {
             <FSelect label="Distillery" value={editing.distillery_id ?? ""} onChange={(v) => setEditing({ ...editing, distillery_id: v || null })}
               options={[{ value: "", label: "—" }, ...distilleries.map((d) => ({ value: d.id, label: d.name }))]} />
             <F label="Spirit" value={editing.spirit} onChange={(v) => setEditing({ ...editing, spirit: v })} />
-            <F label="Cask Type" value={editing.cask_type ?? ""} onChange={(v) => setEditing({ ...editing, cask_type: v })} />
+            <F label="Cask Type (Barrel/Hogshead/Butt/Puncheon)" value={editing.cask_type ?? ""} onChange={(v) => setEditing({ ...editing, cask_type: v })} />
+            <F label="Cask Size (L)" type="number" value={editing.cask_size_litres ?? ""} onChange={(v) => setEditing({ ...editing, cask_size_litres: v as any })} />
+            <F label="Wood (e.g. First-fill Bourbon)" value={editing.wood ?? ""} onChange={(v) => setEditing({ ...editing, wood: v })} />
             <F label="Fill Date" type="date" value={editing.fill_date ?? ""} onChange={(v) => setEditing({ ...editing, fill_date: v })} />
             <F label="Age (yrs)" type="number" value={editing.age_years ?? ""} onChange={(v) => setEditing({ ...editing, age_years: v as any })} />
             <F label="ABV %" type="number" value={editing.abv ?? ""} onChange={(v) => setEditing({ ...editing, abv: v as any })} />
@@ -112,7 +116,7 @@ export default function AdminCasks() {
         <table className="w-full text-sm">
           <thead className="bg-muted">
             <tr className="text-left font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              <th className="p-3">Cask #</th><th className="p-3">Spirit</th><th className="p-3">Type</th>
+              <th className="p-3">Cask #</th><th className="p-3">Spirit</th><th className="p-3">Cask</th><th className="p-3">Wood</th>
               <th className="p-3">ABV</th><th className="p-3">OLA</th>
               <th className="p-3">List</th><th className="p-3">Status</th><th className="p-3"></th>
             </tr>
@@ -122,7 +126,8 @@ export default function AdminCasks() {
               <tr key={c.id} className="border-t border-border">
                 <td className="p-3 font-mono">{c.cask_number}</td>
                 <td className="p-3">{c.spirit}</td>
-                <td className="p-3">{c.cask_type}</td>
+                <td className="p-3">{[c.cask_type, c.cask_size_litres != null ? `${c.cask_size_litres}L` : null].filter(Boolean).join(" ") || "—"}</td>
+                <td className="p-3">{c.wood ?? "—"}</td>
                 <td className="p-3">{c.abv}%</td>
                 <td className="p-3">{c.ola_litres}</td>
                 <td className="p-3">£{c.list_price?.toLocaleString()}</td>
@@ -133,7 +138,7 @@ export default function AdminCasks() {
                 </td>
               </tr>
             ))}
-            {casks.length === 0 && <tr><td colSpan={8} className="p-8 text-center text-muted-foreground font-body">No casks yet.</td></tr>}
+            {casks.length === 0 && <tr><td colSpan={9} className="p-8 text-center text-muted-foreground font-body">No casks yet.</td></tr>}
           </tbody>
         </table>
       </div>

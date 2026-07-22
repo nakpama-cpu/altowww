@@ -101,6 +101,10 @@ Deno.serve(async (req) => {
       if (i.quantity < 1 || i.quantity > available) throw new Error(`Insufficient stock for ${l.spirit}`);
     }
 
+    // Pallet pricing: 7.5% off per line when qty >= 6 AND the listing has 6+ available.
+    const PALLET_MIN_QTY = 6;
+    const PALLET_PCT = 7.5;
+
     let subtotal = 0;
     for (const i of items) {
       const l: any = listingMap.get(i.listing_id);
@@ -109,7 +113,7 @@ Deno.serve(async (req) => {
     const currency = ((listings[0] as any)?.currency ?? "GBP").toString();
 
     // Validate discount code (do NOT redeem — redeem on payment success)
-    let effectivePercent = 0;
+    let codePercent = 0;
     if (discountCodeRaw) {
       const { data: dc } = await admin
         .from("discount_codes")
@@ -129,19 +133,33 @@ Deno.serve(async (req) => {
       if (!assignment) throw new Error("Discount code not valid for this account");
       if (assignment.redeemed_at) throw new Error("Discount code has already been used");
 
-      effectivePercent = Number(dc.percent);
+      codePercent = Number(dc.percent);
     }
 
-    const discountAmount = Math.round(subtotal * (effectivePercent / 100) * 100) / 100;
-    const total = Math.round((subtotal - discountAmount) * 100) / 100;
+    // Compute effective percent per line: max(code, pallet). Never stacked.
+    const linePcts = items.map((i) => {
+      const l: any = listingMap.get(i.listing_id);
+      const available = Math.max(0, (l.stock_qty ?? 0) - (l.reserved_qty ?? 0));
+      const palletEligible = available >= PALLET_MIN_QTY && i.quantity >= PALLET_MIN_QTY;
+      return Math.max(codePercent, palletEligible ? PALLET_PCT : 0);
+    });
+
+    let total = 0;
+    items.forEach((i, idx) => {
+      const l: any = listingMap.get(i.listing_id);
+      const unit = Number(l.list_price) * (1 - linePcts[idx] / 100);
+      total += Math.round(unit * 100) / 100 * i.quantity;
+    });
+    total = Math.round(total * 100) / 100;
+    const discountAmount = Math.round((subtotal - total) * 100) / 100;
 
     const stripe = createStripeClient(environment);
     const customerId = await resolveOrCreateCustomer(stripe, { email: profile.email, userId: user.id });
 
-    // Build Stripe line_items with dynamic pricing (each unit as its own line)
-    const stripeLineItems = items.map((i) => {
+    // Build Stripe line_items with dynamic pricing (max discount per line)
+    const stripeLineItems = items.map((i, idx) => {
       const l: any = listingMap.get(i.listing_id);
-      const unitAfter = Number(l.list_price) * (1 - effectivePercent / 100);
+      const unitAfter = Number(l.list_price) * (1 - linePcts[idx] / 100);
       const unitCents = Math.round(unitAfter * 100);
       const distilleryName = l.distilleries?.name ?? l.spirit;
       return {
