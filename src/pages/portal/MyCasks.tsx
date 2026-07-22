@@ -282,12 +282,14 @@ export default function MyCasks() {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
                   <Spec label="Spirit" value={r.casks.spirit} />
-                  <Spec label="Cask Type" value={r.casks.cask_type} />
+                  <Spec label="Cask" value={formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres)} />
+                  <Spec label="Wood" value={r.casks.wood} />
                   <Spec label="Fill Date" value={r.casks.fill_date} />
                   {(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return <Spec label="Age" value={a != null ? `${a} yrs` : null} />; })()}
                   <Spec label="ABV" value={r.casks.abv ? `${r.casks.abv}%` : null} />
-                  <Spec label="OLA" value={r.casks.ola_litres ? `${r.casks.ola_litres} L` : null} />
-                  <Spec label="RLA" value={r.casks.rla_litres ? `${r.casks.rla_litres} L` : null} />
+                  {r.casks.rla_litres != null
+                    ? <Spec label="RLA" value={`${r.casks.rla_litres} L`} />
+                    : <Spec label="OLA" value={r.casks.ola_litres != null ? `${r.casks.ola_litres} L` : null} />}
                   <Spec label="Purchase Price" value={`£${Number(r.purchase_price).toLocaleString()}`} />
                   <Spec label="Purchase Date" value={r.purchase_date} />
                 </div>
