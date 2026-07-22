@@ -152,7 +152,7 @@ export default function AdminListings() {
                 </tr>
               );
             })}
-            {listings.length === 0 && <tr><td colSpan={11} className="p-8 text-center text-muted-foreground font-body">No listings yet.</td></tr>}
+            {listings.length === 0 && <tr><td colSpan={12} className="p-8 text-center text-muted-foreground font-body">No listings yet.</td></tr>}
           </tbody>
         </table>
       </div>
