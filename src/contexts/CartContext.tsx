@@ -9,6 +9,9 @@ export type CartItem = {
   currency: string;
   hero_image_url: string | null;
   quantity: number;
+  // True when the listing has enough stock available to qualify for a pallet
+  // (6+ casks). Automatic 7.5% discount applies per-line when qty >= 6.
+  pallet_eligible?: boolean;
 };
 
 type CartContextValue = {
