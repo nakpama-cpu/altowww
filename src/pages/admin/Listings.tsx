@@ -136,7 +136,8 @@ export default function AdminListings() {
                 <tr key={l.id} className="border-t border-border">
                   <td className="p-3">{l.distilleries?.name ?? "—"}</td>
                   <td className="p-3">{l.spirit}</td>
-                  <td className="p-3">{l.cask_type}</td>
+                  <td className="p-3">{[l.cask_type, l.cask_size_litres != null ? `${l.cask_size_litres}L` : null].filter(Boolean).join(" ") || "—"}</td>
+                  <td className="p-3">{l.wood ?? "—"}</td>
                   <td className="p-3">{l.age_years ?? "—"}</td>
                   <td className="p-3">{l.abv ? `${l.abv}%` : "—"}</td>
                   <td className="p-3">£{l.list_price?.toLocaleString() ?? "—"}</td>
