@@ -352,7 +352,7 @@ export default function AvailableStock() {
           </div>
         )
       ) : viewMode === "cards" ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filtered.map((c) => {
             return (
               <div key={c.id} className="bg-muted/20 border border-border overflow-hidden flex flex-col">
@@ -366,7 +366,7 @@ export default function AvailableStock() {
                   {(() => {
                     const a = computeCaskAge(c.fill_date, c.age_years);
                     return (
-                      <div className="grid grid-cols-2 gap-2 mb-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
                         <SpecBox label="Region" value={c.distilleries?.region} />
                         <SpecBox label="Cask" value={formatCaskSpec(c.cask_type, c.cask_size_litres)} />
                         <SpecBox label="Wood" value={c.wood} />
@@ -706,7 +706,7 @@ const formatMiniValue = (value: number | null, suffix: string) => {
 const SpecBox = ({ label, value }: { label: string; value?: string | number | null }) => (
   <div className="border border-border bg-background/40 px-3 py-2.5 min-h-[64px] flex flex-col justify-center">
     <div className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1 leading-none">{label}</div>
-    <div className="font-body text-sm text-foreground font-medium leading-tight break-words" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
+    <div className="font-body text-sm text-foreground font-medium leading-tight break-normal" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
   </div>
 );
 
