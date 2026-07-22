@@ -382,7 +382,7 @@ export default function MyCasks() {
 }
 
 const SpecBox = ({ label, value }: { label: string; value?: string | number | null }) => (
-  <div className="border border-border bg-background/40 px-2.5 py-2 min-h-[64px] flex flex-col justify-start gap-1 min-w-0">
+  <div className="border border-border bg-surface px-2.5 py-2 min-h-[64px] flex flex-col justify-start gap-1 min-w-0 shadow-sm">
     <div className="font-body text-[9px] uppercase tracking-[0.15em] text-muted-foreground leading-tight break-words">{label}</div>
     <div className="font-body text-[13px] text-foreground font-medium leading-snug break-words min-w-0" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
   </div>
