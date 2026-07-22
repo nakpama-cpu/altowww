@@ -363,21 +363,26 @@ export default function AvailableStock() {
                   <h3 className="display-heading text-xl leading-snug mb-1 h-[3.25rem] line-clamp-2">{c.distilleries?.name ?? c.spirit}</h3>
                     <div className="font-body text-xs text-muted-foreground mb-4 flex flex-col gap-0.5 min-h-[3rem]">
                       {(() => {
-                        const a = computeCaskAge(c.fill_date, c.age_years);
+                        const spec = formatCaskSpec(c.cask_type, c.cask_size_litres);
                         return (
                           <>
                             <span className="truncate">{c.distilleries?.region ?? "—"}</span>
-                            <span className="truncate">{c.cask_type ?? "—"}</span>
-                            <span className="truncate">{a != null ? `${a} yrs` : "—"}</span>
+                            <span className="truncate">{spec ?? "—"}</span>
+                            <span className="truncate">{c.wood ?? "—"}</span>
                           </>
                         );
                       })()}
                     </div>
-                  <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
-                    <Mini label="ABV" v={formatMiniValue(c.abv, "%")} />
-                    <Mini label="OLA" v={formatMiniValue(c.ola_litres, " L")} />
-                    <Mini label="Filled" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
-                  </div>
+                  {(() => {
+                    const a = computeCaskAge(c.fill_date, c.age_years);
+                    return (
+                      <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
+                        <Mini label="ABV" v={formatMiniValue(c.abv, "%")} />
+                        <Mini label="Age" v={a != null ? `${a} yrs` : "—"} />
+                        <Mini label="Year" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
+                      </div>
+                    );
+                  })()}
                   {c.description && (
                     <p className="font-body text-sm text-muted-foreground mb-3 line-clamp-3">{c.description}</p>
                   )}
@@ -391,9 +396,16 @@ export default function AvailableStock() {
                   <div className="mt-auto pt-4 border-t border-border flex items-end justify-between">
                     <div>
                       {c.list_price && (
-                        <div className="display-heading text-2xl text-primary">
-                          £{Math.round(c.list_price).toLocaleString()}
-                        </div>
+                        <>
+                          <div className="display-heading text-2xl text-primary">
+                            £{Math.round(c.list_price).toLocaleString()}
+                          </div>
+                          {palletEligible(Math.max(0, (c.stock_qty ?? 0) - (c.reserved_qty ?? 0))) && (
+                            <div className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mt-1">
+                              Pallet {PALLET_MIN_QTY}+: £{Math.round(palletUnitPrice(Number(c.list_price))).toLocaleString()} <span className="text-primary">−{PALLET_DISCOUNT_PCT}%</span>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
                     <button
@@ -404,6 +416,7 @@ export default function AvailableStock() {
                     </button>
                   </div>
                 </div>
+
               </div>
             );
           })}
