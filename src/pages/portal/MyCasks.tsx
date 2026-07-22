@@ -277,25 +277,19 @@ export default function MyCasks() {
                   );
                 })()}
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-5">
-                  <InfoBox label="Region" value={r.casks.distilleries?.region} />
-                  <InfoBox label="Cask" value={formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres)} />
-                  <InfoBox label="Wood" value={r.casks.wood} />
-                  <InfoBox label="Spirit Name" value={displaySpiritName(r.casks)} />
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
-                  <Spec label="Spirit" value={r.casks.spirit} />
-                  <Spec label="Cask" value={formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres)} />
-                  <Spec label="Wood" value={r.casks.wood} />
-                  <Spec label="Fill Date" value={r.casks.fill_date} />
-                  {(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return <Spec label="Age" value={a != null ? `${a} yrs` : null} />; })()}
-                  <Spec label="ABV" value={r.casks.abv ? `${r.casks.abv}%` : null} />
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                  <SpecBox label="Region" value={r.casks.distilleries?.region} />
+                  <SpecBox label="Cask" value={formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres)} />
+                  <SpecBox label="Wood" value={r.casks.wood} />
+                  <SpecBox label="Spirit Name" value={displaySpiritName(r.casks)} />
+                  <SpecBox label="ABV" value={r.casks.abv != null ? `${r.casks.abv}%` : null} />
+                  {(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return <SpecBox label="Age" value={a != null ? `${a} yrs` : null} />; })()}
+                  <SpecBox label="Fill Date" value={r.casks.fill_date} />
                   {r.casks.rla_litres != null
-                    ? <Spec label="RLA" value={`${r.casks.rla_litres} L`} />
-                    : <Spec label="OLA" value={r.casks.ola_litres != null ? `${r.casks.ola_litres} L` : null} />}
-                  <Spec label="Purchase Price" value={`£${Number(r.purchase_price).toLocaleString()}`} />
-                  <Spec label="Purchase Date" value={r.purchase_date} />
+                    ? <SpecBox label="RLA" value={`${r.casks.rla_litres} L`} />
+                    : <SpecBox label="OLA" value={r.casks.ola_litres != null ? `${r.casks.ola_litres} L` : null} />}
+                  <SpecBox label="Purchase Price" value={`£${Number(r.purchase_price).toLocaleString()}`} />
+                  <SpecBox label="Purchase Date" value={r.purchase_date} />
                 </div>
               </div>
             ))}
@@ -387,16 +381,9 @@ export default function MyCasks() {
   );
 }
 
-const InfoBox = ({ label, value }: { label: string; value?: string | number | null }) => (
-  <div className="border border-border p-3">
-    <div className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{label}</div>
-    <div className="font-body font-medium text-sm truncate" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
-  </div>
-);
-
-const Spec = ({ label, value }: { label: string; value: string | number | null | undefined }) => (
-  <div>
-    <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">{label}</div>
-    <div className="font-body text-sm">{value ?? "—"}</div>
+const SpecBox = ({ label, value }: { label: string; value?: string | number | null }) => (
+  <div className="border border-border bg-background/40 px-3 py-2.5 min-h-[64px] flex flex-col justify-center">
+    <div className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1 leading-none">{label}</div>
+    <div className="font-body text-sm text-foreground font-medium leading-tight break-words" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
   </div>
 );

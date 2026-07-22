@@ -362,20 +362,17 @@ export default function AvailableStock() {
                   </div>
                 )}
                   <div className="p-4 sm:p-6 flex-1 flex flex-col">
-                  <h3 className="display-heading text-2xl leading-snug mb-3">{c.distilleries?.name ?? c.spirit}</h3>
-                  <div className="grid grid-cols-2 gap-2 mb-4">
-                    <InfoBox label="Region" value={c.distilleries?.region} />
-                    <InfoBox label="Cask" value={formatCaskSpec(c.cask_type, c.cask_size_litres)} />
-                    <InfoBox label="Wood" value={c.wood} />
-                    <InfoBox label="Spirit Name" value={displaySpiritName(c)} />
-                  </div>
+                  <h3 className="display-heading text-2xl leading-snug mb-4">{c.distilleries?.name ?? c.spirit}</h3>
                   {(() => {
                     const a = computeCaskAge(c.fill_date, c.age_years);
                     return (
-                      <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
-                        <Mini label="ABV" v={formatMiniValue(c.abv, "%")} />
-                        <Mini label="Age" v={a != null ? `${a} yrs` : "—"} />
-                        <Mini label="Year" v={c.fill_date ? c.fill_date.slice(0, 4) : "—"} />
+                      <div className="grid grid-cols-2 gap-2 mb-4">
+                        <SpecBox label="Region" value={c.distilleries?.region} />
+                        <SpecBox label="Cask" value={formatCaskSpec(c.cask_type, c.cask_size_litres)} />
+                        <SpecBox label="Wood" value={c.wood} />
+                        <SpecBox label="Spirit Name" value={displaySpiritName(c)} />
+                        <SpecBox label="ABV" value={c.abv != null ? `${c.abv}%` : null} />
+                        <SpecBox label="Age" value={a != null ? `${a} yrs` : null} />
                       </div>
                     );
                   })()}
@@ -486,19 +483,18 @@ export default function AvailableStock() {
             <div className="space-y-5">
               {infoListing && (
                 <InfoSection title="Cask Specification">
-                  <div className="grid grid-cols-2 gap-2 mb-4">
-                    <InfoBox label="Region" value={infoListing.distilleries?.region} />
-                    <InfoBox label="Cask" value={formatCaskSpec(infoListing.cask_type, infoListing.cask_size_litres)} />
-                    <InfoBox label="Wood" value={infoListing.wood} />
-                    <InfoBox label="Spirit Name" value={displaySpiritName(infoListing)} />
-                  </div>
-                  <div className="grid grid-cols-3 gap-2 text-xs">
-                    <Mini label="ABV" v={formatMiniValue(infoListing.abv, "%")} />
-                    <Mini label="Age" v={(() => { const a = computeCaskAge(infoListing.fill_date, infoListing.age_years); return a != null ? `${a} yrs` : "—"; })()} />
-                    <Mini
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    <SpecBox label="Region" value={infoListing.distilleries?.region} />
+                    <SpecBox label="Cask" value={formatCaskSpec(infoListing.cask_type, infoListing.cask_size_litres)} />
+                    <SpecBox label="Wood" value={infoListing.wood} />
+                    <SpecBox label="Spirit Name" value={displaySpiritName(infoListing)} />
+                    <SpecBox label="ABV" value={infoListing.abv != null ? `${infoListing.abv}%` : null} />
+                    <SpecBox label="Age" value={(() => { const a = computeCaskAge(infoListing.fill_date, infoListing.age_years); return a != null ? `${a} yrs` : null; })()} />
+                    <SpecBox
                       label={infoListing.rla_litres != null ? "RLA" : "OLA"}
-                      v={infoListing.rla_litres != null ? `${infoListing.rla_litres} L` : infoListing.ola_litres != null ? `${infoListing.ola_litres} L` : "—"}
+                      value={infoListing.rla_litres != null ? `${infoListing.rla_litres} L` : infoListing.ola_litres != null ? `${infoListing.ola_litres} L` : null}
                     />
+                    <SpecBox label="Fill Date" value={infoListing.fill_date} />
                   </div>
                 </InfoSection>
               )}
@@ -598,11 +594,11 @@ export default function AvailableStock() {
             </DialogTitle>
           </DialogHeader>
           {buyListing && (
-            <div className="grid grid-cols-4 gap-3 mt-1">
-              <Mini label="Cask" v={formatCaskSpec(buyListing.cask_type, buyListing.cask_size_litres) ?? "—"} />
-              <Mini label="Wood" v={buyListing.wood ?? "—"} />
-              <Mini label="ABV" v={buyListing.abv ? `${buyListing.abv}%` : "—"} />
-              <Mini label="Age" v={(() => { const a = computeCaskAge(buyListing.fill_date, buyListing.age_years); return a != null ? `${a} yrs` : "—"; })()} />
+            <div className="grid grid-cols-2 gap-2 mt-1">
+              <SpecBox label="Cask" value={formatCaskSpec(buyListing.cask_type, buyListing.cask_size_litres)} />
+              <SpecBox label="Wood" value={buyListing.wood} />
+              <SpecBox label="ABV" value={buyListing.abv != null ? `${buyListing.abv}%` : null} />
+              <SpecBox label="Age" value={(() => { const a = computeCaskAge(buyListing.fill_date, buyListing.age_years); return a != null ? `${a} yrs` : null; })()} />
             </div>
           )}
           {buyListing && (() => {
@@ -707,19 +703,15 @@ const formatMiniValue = (value: number | null, suffix: string) => {
   return `${compact}${suffix}`;
 };
 
-const InfoBox = ({ label, value }: { label: string; value?: string | number | null }) => (
-  <div className="border border-border p-3">
-    <div className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{label}</div>
-    <div className="font-body font-medium text-sm truncate" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
+const SpecBox = ({ label, value }: { label: string; value?: string | number | null }) => (
+  <div className="border border-border bg-background/40 px-3 py-2.5 min-h-[64px] flex flex-col justify-center">
+    <div className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1 leading-none">{label}</div>
+    <div className="font-body text-sm text-foreground font-medium leading-tight break-words" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
   </div>
 );
 
-const Mini = ({ label, v }: { label: string; v: string }) => (
-  <div className="border border-border min-h-16 px-1 text-center min-w-0 w-full flex flex-col items-center justify-center gap-1 overflow-visible">
-    <div className="w-full font-body text-[9px] uppercase tracking-[0.08em] text-muted-foreground leading-none whitespace-nowrap text-center" title={label}>{label}</div>
-    <div className="w-full font-body text-[12px] leading-none whitespace-nowrap text-center" title={v}>{v}</div>
-  </div>
-);
+const InfoBox = SpecBox;
+const Mini = ({ label, v }: { label: string; v: string }) => <SpecBox label={label} value={v} />;
 
 const InfoSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section>
