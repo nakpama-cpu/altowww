@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getStripe, getStripeEnvironment, hasPaymentsConfigured } from "@/lib/stripe";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { VerificationGateBanner } from "./Account";
+import { palletApplies, palletUnitPrice, PALLET_DISCOUNT_PCT, PALLET_MIN_QTY } from "@/lib/pallet";
 
 type AppliedCode = { code: string; percent: number; effective_percent: number };
 
