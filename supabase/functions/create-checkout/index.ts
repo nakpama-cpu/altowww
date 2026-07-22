@@ -181,6 +181,7 @@ Deno.serve(async (req) => {
       return_url: returnUrl,
       customer: customerId,
       billing_address_collection: "required",
+      payment_method_types: ["card"],
       line_items: stripeLineItems,
       payment_intent_data: {
         description: `Alto Whisky — ${items.length} cask${items.length > 1 ? "s" : ""}`,
