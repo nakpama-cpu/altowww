@@ -126,7 +126,8 @@ export default function AdminCasks() {
               <tr key={c.id} className="border-t border-border">
                 <td className="p-3 font-mono">{c.cask_number}</td>
                 <td className="p-3">{c.spirit}</td>
-                <td className="p-3">{c.cask_type}</td>
+                <td className="p-3">{[c.cask_type, c.cask_size_litres != null ? `${c.cask_size_litres}L` : null].filter(Boolean).join(" ") || "—"}</td>
+                <td className="p-3">{c.wood ?? "—"}</td>
                 <td className="p-3">{c.abv}%</td>
                 <td className="p-3">{c.ola_litres}</td>
                 <td className="p-3">£{c.list_price?.toLocaleString()}</td>
