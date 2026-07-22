@@ -235,6 +235,12 @@ export default function Checkout() {
             <span className="text-muted-foreground">Subtotal</span>
             <span>£{Math.round(subtotal).toLocaleString()}</span>
           </div>
+          {savings > 0 && (
+            <div className="flex justify-between font-body text-sm py-2 text-primary">
+              <span>Discounts</span>
+              <span>−£{Math.round(savings).toLocaleString()}</span>
+            </div>
+          )}
 
           <div className="border-t border-border mt-2 pt-4">
             <label className="block font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-2">
