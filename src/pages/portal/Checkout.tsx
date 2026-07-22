@@ -15,7 +15,7 @@ type AppliedCode = { code: string; percent: number; effective_percent: number };
 
 
 export default function Checkout() {
-  const { items, remove, setQuantity, clear, subtotal, count } = useCart();
+  const { items, remove, setQuantity, clear, count } = useCart();
   const { user, profile } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -26,9 +26,20 @@ export default function Checkout() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const currency = items[0]?.currency ?? "GBP";
 
-
-  // Discount codes are the only discount mechanism now; items are carried at list price.
-  const total = applied ? subtotal * (1 - applied.effective_percent / 100) : subtotal;
+  // Per line: automatic pallet discount (7.5% when qty >= 6 on eligible listings)
+  // or the applied discount code — whichever is greater, never stacked.
+  const codePct = applied?.effective_percent ?? 0;
+  const lineBreakdown = items.map((i) => {
+    const list = Number(i.list_price || 0);
+    const pallet = palletApplies(i.quantity, i.pallet_eligible ? Infinity : 0);
+    const palletPct = pallet ? PALLET_DISCOUNT_PCT : 0;
+    const pct = Math.max(codePct, palletPct);
+    const unit = Math.round(list * (1 - pct / 100) * 100) / 100;
+    return { item: i, pct, unit, palletActive: palletPct > 0 && palletPct >= codePct, lineTotal: unit * i.quantity };
+  });
+  const subtotal = items.reduce((s, i) => s + Number(i.list_price || 0) * i.quantity, 0);
+  const total = lineBreakdown.reduce((s, l) => s + l.lineTotal, 0);
+  const savings = subtotal - total;
 
   const applyCode = async () => {
     if (!codeInput.trim()) return;
