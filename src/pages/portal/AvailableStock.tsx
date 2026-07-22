@@ -352,7 +352,7 @@ export default function AvailableStock() {
           </div>
         )
       ) : viewMode === "cards" ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filtered.map((c) => {
             return (
               <div key={c.id} className="bg-muted/20 border border-border overflow-hidden flex flex-col">
