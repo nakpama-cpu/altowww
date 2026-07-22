@@ -94,6 +94,7 @@ export type Database = {
         Row: {
           abv: number | null
           age_years: number | null
+          cask_size_litres: number | null
           cask_type: string | null
           created_at: string
           currency: string
@@ -110,10 +111,12 @@ export type Database = {
           status: Database["public"]["Enums"]["listing_status"]
           stock_qty: number
           updated_at: string
+          wood: string | null
         }
         Insert: {
           abv?: number | null
           age_years?: number | null
+          cask_size_litres?: number | null
           cask_type?: string | null
           created_at?: string
           currency?: string
@@ -130,10 +133,12 @@ export type Database = {
           status?: Database["public"]["Enums"]["listing_status"]
           stock_qty?: number
           updated_at?: string
+          wood?: string | null
         }
         Update: {
           abv?: number | null
           age_years?: number | null
+          cask_size_litres?: number | null
           cask_type?: string | null
           created_at?: string
           currency?: string
@@ -150,6 +155,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["listing_status"]
           stock_qty?: number
           updated_at?: string
+          wood?: string | null
         }
         Relationships: [
           {
@@ -166,6 +172,7 @@ export type Database = {
           abv: number | null
           age_years: number | null
           cask_number: string | null
+          cask_size_litres: number | null
           cask_type: string | null
           created_at: string
           currency: string
@@ -181,11 +188,13 @@ export type Database = {
           spirit: string
           status: Database["public"]["Enums"]["cask_status"]
           updated_at: string
+          wood: string | null
         }
         Insert: {
           abv?: number | null
           age_years?: number | null
           cask_number?: string | null
+          cask_size_litres?: number | null
           cask_type?: string | null
           created_at?: string
           currency?: string
@@ -201,11 +210,13 @@ export type Database = {
           spirit?: string
           status?: Database["public"]["Enums"]["cask_status"]
           updated_at?: string
+          wood?: string | null
         }
         Update: {
           abv?: number | null
           age_years?: number | null
           cask_number?: string | null
+          cask_size_litres?: number | null
           cask_type?: string | null
           created_at?: string
           currency?: string
@@ -221,6 +232,7 @@ export type Database = {
           spirit?: string
           status?: Database["public"]["Enums"]["cask_status"]
           updated_at?: string
+          wood?: string | null
         }
         Relationships: [
           {
