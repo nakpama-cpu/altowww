@@ -8,6 +8,7 @@ type Cask = {
   cask_number: string;
   distillery_id: string | null;
   spirit: string;
+  spirit_name?: string | null;
   cask_type: string | null;
   wood: string | null;
   cask_size_litres: number | null;
@@ -82,6 +83,7 @@ export default function AdminCasks() {
             <FSelect label="Distillery" value={editing.distillery_id ?? ""} onChange={(v) => setEditing({ ...editing, distillery_id: v || null })}
               options={[{ value: "", label: "—" }, ...distilleries.map((d) => ({ value: d.id, label: d.name }))]} />
             <F label="Spirit" value={editing.spirit} onChange={(v) => setEditing({ ...editing, spirit: v })} />
+            <F label="Spirit Name (defaults to distillery)" value={editing.spirit_name ?? ""} onChange={(v) => setEditing({ ...editing, spirit_name: v })} />
             <F label="Cask Type (Barrel/Hogshead/Butt/Puncheon)" value={editing.cask_type ?? ""} onChange={(v) => setEditing({ ...editing, cask_type: v })} />
             <F label="Cask Size (L)" type="number" value={editing.cask_size_litres ?? ""} onChange={(v) => setEditing({ ...editing, cask_size_litres: v as any })} />
             <F label="Wood (e.g. First-fill Bourbon)" value={editing.wood ?? ""} onChange={(v) => setEditing({ ...editing, wood: v })} />

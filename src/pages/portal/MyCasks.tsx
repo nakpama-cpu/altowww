@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { computeCaskAge } from "@/lib/caskAge";
 import { formatCaskSpec } from "@/lib/pallet";
 import { regionColor } from "@/lib/regions";
+import { displaySpiritName } from "@/lib/utils";
 
 type Row = {
   id: string;
@@ -16,6 +17,7 @@ type Row = {
   casks: {
     cask_number: string | null;
     spirit: string;
+    spirit_name?: string | null;
     cask_type: string | null;
     wood: string | null;
     cask_size_litres: number | null;
@@ -67,7 +69,7 @@ export default function MyCasks() {
     (async () => {
       const { data, error } = await supabase
         .from("holdings")
-        .select("id, purchase_price, purchase_date, certificate_path, notes, casks(cask_number, spirit, cask_type, wood, cask_size_litres, fill_date, abv, ola_litres, rla_litres, age_years, distilleries(name, region))")
+        .select("id, purchase_price, purchase_date, certificate_path, notes, casks(cask_number, spirit, spirit_name, cask_type, wood, cask_size_litres, fill_date, abv, ola_litres, rla_litres, age_years, distilleries(name, region))")
         .order("purchase_date", { ascending: false });
       if (error) toast({ title: "Could not load holdings", description: error.message, variant: "destructive" });
       setRows((data ?? []) as any);
@@ -244,13 +246,8 @@ export default function MyCasks() {
               >
                 <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Cask #{r.casks.cask_number ?? "TBC"}</span>
-                      {r.casks.distilleries?.region && (
-                        <span className="font-body text-[9px] uppercase tracking-[0.25em] text-muted-foreground/70">· {r.casks.distilleries.region}</span>
-                      )}
-                    </div>
-                    <h3 className="display-heading text-2xl">{r.casks.distilleries?.name ?? "Distillery"}</h3>
+                    <span className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Cask #{r.casks.cask_number ?? "TBC"}</span>
+                    <h3 className="display-heading text-2xl mt-1">{r.casks.distilleries?.name ?? "Distillery"}</h3>
                   </div>
                   {r.certificate_path && (
                     <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
@@ -279,6 +276,13 @@ export default function MyCasks() {
                     </div>
                   );
                 })()}
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-5">
+                  <InfoBox label="Region" value={r.casks.distilleries?.region} />
+                  <InfoBox label="Cask" value={formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres)} />
+                  <InfoBox label="Wood" value={r.casks.wood} />
+                  <InfoBox label="Spirit Name" value={displaySpiritName(r.casks)} />
+                </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-4">
                   <Spec label="Spirit" value={r.casks.spirit} />
@@ -382,6 +386,13 @@ export default function MyCasks() {
     </div>
   );
 }
+
+const InfoBox = ({ label, value }: { label: string; value?: string | number | null }) => (
+  <div className="border border-border p-3">
+    <div className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{label}</div>
+    <div className="font-body font-medium text-sm truncate" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
+  </div>
+);
 
 const Spec = ({ label, value }: { label: string; value: string | number | null | undefined }) => (
   <div>

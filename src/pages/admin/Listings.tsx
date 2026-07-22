@@ -7,6 +7,7 @@ type Listing = {
   id: string;
   distillery_id: string | null;
   spirit: string;
+  spirit_name?: string | null;
   cask_type: string | null;
   wood: string | null;
   cask_size_litres: number | null;
@@ -88,6 +89,7 @@ export default function AdminListings() {
             <FSelect label="Distillery" value={editing.distillery_id ?? ""} onChange={(v) => setEditing({ ...editing, distillery_id: v || null })}
               options={[{ value: "", label: "—" }, ...distilleries.map((d) => ({ value: d.id, label: d.name }))]} />
             <F label="Spirit" value={editing.spirit} onChange={(v) => setEditing({ ...editing, spirit: v })} />
+            <F label="Spirit Name (defaults to distillery)" value={editing.spirit_name ?? ""} onChange={(v) => setEditing({ ...editing, spirit_name: v })} />
             <F label="Cask Type (Barrel/Hogshead/Butt/Puncheon)" value={editing.cask_type ?? ""} onChange={(v) => setEditing({ ...editing, cask_type: v })} />
             <F label="Cask Size (L)" type="number" value={editing.cask_size_litres ?? ""} onChange={(v) => setEditing({ ...editing, cask_size_litres: v as any })} />
             <F label="Wood (e.g. First-fill Bourbon)" value={editing.wood ?? ""} onChange={(v) => setEditing({ ...editing, wood: v })} />
@@ -122,7 +124,7 @@ export default function AdminListings() {
         <table className="w-full text-sm">
           <thead className="bg-muted">
             <tr className="text-left font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              <th className="p-3">Distillery</th><th className="p-3">Spirit</th><th className="p-3">Cask</th><th className="p-3">Wood</th>
+              <th className="p-3">Distillery</th><th className="p-3">Spirit</th><th className="p-3">Spirit Name</th><th className="p-3">Cask</th><th className="p-3">Wood</th>
               <th className="p-3">Age</th><th className="p-3">ABV</th>
               <th className="p-3">List</th>
               <th className="p-3">Stock</th><th className="p-3">Reserved</th><th className="p-3">Avail</th>
@@ -136,6 +138,7 @@ export default function AdminListings() {
                 <tr key={l.id} className="border-t border-border">
                   <td className="p-3">{l.distilleries?.name ?? "—"}</td>
                   <td className="p-3">{l.spirit}</td>
+                  <td className="p-3">{l.spirit_name?.trim() || l.distilleries?.name || "—"}</td>
                   <td className="p-3">{[l.cask_type, l.cask_size_litres != null ? `${l.cask_size_litres}L` : null].filter(Boolean).join(" ") || "—"}</td>
                   <td className="p-3">{l.wood ?? "—"}</td>
                   <td className="p-3">{l.age_years ?? "—"}</td>
@@ -152,7 +155,7 @@ export default function AdminListings() {
                 </tr>
               );
             })}
-            {listings.length === 0 && <tr><td colSpan={12} className="p-8 text-center text-muted-foreground font-body">No listings yet.</td></tr>}
+            {listings.length === 0 && <tr><td colSpan={13} className="p-8 text-center text-muted-foreground font-body">No listings yet.</td></tr>}
           </tbody>
         </table>
       </div>
