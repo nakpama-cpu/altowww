@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink, Store, PhoneCall } from "lucide-react";
 import { computeCaskAge } from "@/lib/caskAge";
+import { formatCaskSpec, palletApplies, palletEligible, palletUnitPrice, PALLET_DISCOUNT_PCT, PALLET_MIN_QTY } from "@/lib/pallet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 type LinkItem = { title?: string; name?: string; url?: string };
@@ -15,6 +16,8 @@ type Listing = {
   id: string;
   spirit: string;
   cask_type: string | null;
+  wood: string | null;
+  cask_size_litres: number | null;
   fill_date: string | null;
   abv: number | null;
   ola_litres: number | null;
@@ -24,6 +27,8 @@ type Listing = {
   currency: string;
   description: string | null;
   hero_image_url: string | null;
+  stock_qty: number;
+  reserved_qty: number;
   created_at: string;
   distilleries: {
     name: string;
