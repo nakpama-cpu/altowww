@@ -585,22 +585,34 @@ export default function AvailableStock() {
           </DialogHeader>
           {buyListing && (
             <div className="grid grid-cols-4 gap-3 mt-1">
-              <Mini label="Cask Type" v={buyListing.cask_type ?? "—"} />
+              <Mini label="Cask" v={formatCaskSpec(buyListing.cask_type, buyListing.cask_size_litres) ?? "—"} />
+              <Mini label="Wood" v={buyListing.wood ?? "—"} />
               <Mini label="ABV" v={buyListing.abv ? `${buyListing.abv}%` : "—"} />
               <Mini label="Age" v={(() => { const a = computeCaskAge(buyListing.fill_date, buyListing.age_years); return a != null ? `${a} yrs` : "—"; })()} />
-              <Mini label="OLA" v={buyListing.ola_litres ? `${buyListing.ola_litres} L` : "—"} />
             </div>
           )}
           {buyListing && (() => {
-            const unit = buyListing.list_price ?? 0;
+            const list = buyListing.list_price ?? 0;
             const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
+            const available = Math.max(0, (buyListing.stock_qty ?? 0) - (buyListing.reserved_qty ?? 0));
+            const eligible = palletEligible(available);
+            const pallet = palletApplies(qty, available);
+            const unit = pallet ? palletUnitPrice(list) : list;
             const total = unit * qty;
             return (
               <div className="space-y-5 mt-2">
                 <div className="flex items-center justify-between font-body text-sm">
                   <span className="text-muted-foreground">Price per cask</span>
-                  <span className="text-primary display-heading text-xl">£{Math.round(unit).toLocaleString()}</span>
+                  <span className="text-primary display-heading text-xl">
+                    £{Math.round(unit).toLocaleString()}
+                    {pallet && <span className="ml-2 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">−{PALLET_DISCOUNT_PCT}% pallet</span>}
+                  </span>
                 </div>
+                {eligible && !pallet && (
+                  <p className="font-body text-[11px] text-muted-foreground -mt-3">
+                    Order {PALLET_MIN_QTY}+ casks to unlock the pallet price (−{PALLET_DISCOUNT_PCT}% per cask).
+                  </p>
+                )}
                 <div>
                   <label className="block font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-2">
                     Number of casks
