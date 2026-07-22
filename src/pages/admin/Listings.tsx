@@ -47,7 +47,7 @@ export default function AdminListings() {
     if (!editing) return;
     const { distilleries: _d, ...rest } = editing as any;
     const payload: any = { ...rest };
-    ["abv", "ola_litres", "rla_litres", "age_years", "list_price", "stock_qty"].forEach((k) => {
+    ["abv", "ola_litres", "rla_litres", "age_years", "list_price", "stock_qty", "cask_size_litres"].forEach((k) => {
       if (payload[k] === "" || payload[k] === null || payload[k] === undefined) payload[k] = k === "stock_qty" ? 0 : null;
       else payload[k] = Number(payload[k]);
     });
