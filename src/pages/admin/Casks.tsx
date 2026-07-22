@@ -9,6 +9,8 @@ type Cask = {
   distillery_id: string | null;
   spirit: string;
   cask_type: string | null;
+  wood: string | null;
+  cask_size_litres: number | null;
   fill_date: string | null;
   abv: number | null;
   ola_litres: number | null;
