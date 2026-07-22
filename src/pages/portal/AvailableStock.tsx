@@ -9,12 +9,14 @@ import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink, Store
 import { computeCaskAge } from "@/lib/caskAge";
 import { formatCaskSpec, palletApplies, palletEligible, palletUnitPrice, PALLET_DISCOUNT_PCT, PALLET_MIN_QTY } from "@/lib/pallet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { displaySpiritName } from "@/lib/utils";
 
 type LinkItem = { title?: string; name?: string; url?: string };
 
 type Listing = {
   id: string;
   spirit: string;
+  spirit_name?: string | null;
   cask_type: string | null;
   wood: string | null;
   cask_size_litres: number | null;
@@ -94,7 +96,7 @@ export default function AvailableStock() {
     (async () => {
       const { data, error } = await supabase
         .from("cask_listings")
-        .select("id, spirit, cask_type, wood, cask_size_litres, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, stock_qty, reserved_qty, created_at, distilleries(name, region, country, about, image_url, founded_by, founded_year, famous_for, region_character, annual_production, export_markets, owner, website_url, visitor_centre, news, awards)")
+        .select("id, spirit, spirit_name, cask_type, wood, cask_size_litres, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, stock_qty, reserved_qty, created_at, distilleries(name, region, country, about, image_url, founded_by, founded_year, famous_for, region_character, annual_production, export_markets, owner, website_url, visitor_centre, news, awards)")
         .eq("status", "active")
         .order("created_at", { ascending: false });
       if (error) toast({ title: "Could not load stock", description: error.message, variant: "destructive" });
@@ -360,19 +362,13 @@ export default function AvailableStock() {
                   </div>
                 )}
                   <div className="p-4 sm:p-6 flex-1 flex flex-col">
-                  <h3 className="display-heading text-xl leading-snug mb-1 h-[3.25rem] line-clamp-2">{c.distilleries?.name ?? c.spirit}</h3>
-                    <div className="font-body text-xs text-muted-foreground mb-4 flex flex-col gap-0.5 min-h-[3rem]">
-                      {(() => {
-                        const spec = formatCaskSpec(c.cask_type, c.cask_size_litres);
-                        return (
-                          <>
-                            <span className="truncate">{c.distilleries?.region ?? "—"}</span>
-                            <span className="truncate">{spec ?? "—"}</span>
-                            <span className="truncate">{c.wood ?? "—"}</span>
-                          </>
-                        );
-                      })()}
-                    </div>
+                  <h3 className="display-heading text-2xl leading-snug mb-3">{c.distilleries?.name ?? c.spirit}</h3>
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <InfoBox label="Region" value={c.distilleries?.region} />
+                    <InfoBox label="Cask" value={formatCaskSpec(c.cask_type, c.cask_size_litres)} />
+                    <InfoBox label="Wood" value={c.wood} />
+                    <InfoBox label="Spirit Name" value={displaySpiritName(c)} />
+                  </div>
                   {(() => {
                     const a = computeCaskAge(c.fill_date, c.age_years);
                     return (
@@ -488,6 +484,24 @@ export default function AvailableStock() {
             </DialogHeader>
             <div className="w-12 h-px bg-primary/60 my-3" />
             <div className="space-y-5">
+              {infoListing && (
+                <InfoSection title="Cask Specification">
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <InfoBox label="Region" value={infoListing.distilleries?.region} />
+                    <InfoBox label="Cask" value={formatCaskSpec(infoListing.cask_type, infoListing.cask_size_litres)} />
+                    <InfoBox label="Wood" value={infoListing.wood} />
+                    <InfoBox label="Spirit Name" value={displaySpiritName(infoListing)} />
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-xs">
+                    <Mini label="ABV" v={formatMiniValue(infoListing.abv, "%")} />
+                    <Mini label="Age" v={(() => { const a = computeCaskAge(infoListing.fill_date, infoListing.age_years); return a != null ? `${a} yrs` : "—"; })()} />
+                    <Mini
+                      label={infoListing.rla_litres != null ? "RLA" : "OLA"}
+                      v={infoListing.rla_litres != null ? `${infoListing.rla_litres} L` : infoListing.ola_litres != null ? `${infoListing.ola_litres} L` : "—"}
+                    />
+                  </div>
+                </InfoSection>
+              )}
               {infoListing?.description && (
                 <InfoSection title="Cask Description">
                   <p className="font-body text-sm text-foreground/90 whitespace-pre-line leading-relaxed">
@@ -692,6 +706,13 @@ const formatMiniValue = (value: number | null, suffix: string) => {
   const compact = Number.isInteger(value) ? String(value) : value.toFixed(1).replace(/\.0$/, "");
   return `${compact}${suffix}`;
 };
+
+const InfoBox = ({ label, value }: { label: string; value?: string | number | null }) => (
+  <div className="border border-border p-3">
+    <div className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{label}</div>
+    <div className="font-body font-medium text-sm truncate" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
+  </div>
+);
 
 const Mini = ({ label, v }: { label: string; v: string }) => (
   <div className="border border-border min-h-16 px-1 text-center min-w-0 w-full flex flex-col items-center justify-center gap-1 overflow-visible">
