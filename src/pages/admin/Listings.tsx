@@ -122,7 +122,7 @@ export default function AdminListings() {
         <table className="w-full text-sm">
           <thead className="bg-muted">
             <tr className="text-left font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              <th className="p-3">Distillery</th><th className="p-3">Spirit</th><th className="p-3">Type</th>
+              <th className="p-3">Distillery</th><th className="p-3">Spirit</th><th className="p-3">Cask</th><th className="p-3">Wood</th>
               <th className="p-3">Age</th><th className="p-3">ABV</th>
               <th className="p-3">List</th>
               <th className="p-3">Stock</th><th className="p-3">Reserved</th><th className="p-3">Avail</th>
