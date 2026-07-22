@@ -366,7 +366,7 @@ export default function AvailableStock() {
                   {(() => {
                     const a = computeCaskAge(c.fill_date, c.age_years);
                     return (
-                      <div className="grid grid-cols-2 gap-2 mb-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
                         <SpecBox label="Region" value={c.distilleries?.region} />
                         <SpecBox label="Cask" value={formatCaskSpec(c.cask_type, c.cask_size_litres)} />
                         <SpecBox label="Wood" value={c.wood} />
