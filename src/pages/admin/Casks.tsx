@@ -82,7 +82,9 @@ export default function AdminCasks() {
             <FSelect label="Distillery" value={editing.distillery_id ?? ""} onChange={(v) => setEditing({ ...editing, distillery_id: v || null })}
               options={[{ value: "", label: "—" }, ...distilleries.map((d) => ({ value: d.id, label: d.name }))]} />
             <F label="Spirit" value={editing.spirit} onChange={(v) => setEditing({ ...editing, spirit: v })} />
-            <F label="Cask Type" value={editing.cask_type ?? ""} onChange={(v) => setEditing({ ...editing, cask_type: v })} />
+            <F label="Cask Type (Barrel/Hogshead/Butt/Puncheon)" value={editing.cask_type ?? ""} onChange={(v) => setEditing({ ...editing, cask_type: v })} />
+            <F label="Cask Size (L)" type="number" value={editing.cask_size_litres ?? ""} onChange={(v) => setEditing({ ...editing, cask_size_litres: v as any })} />
+            <F label="Wood (e.g. First-fill Bourbon)" value={editing.wood ?? ""} onChange={(v) => setEditing({ ...editing, wood: v })} />
             <F label="Fill Date" type="date" value={editing.fill_date ?? ""} onChange={(v) => setEditing({ ...editing, fill_date: v })} />
             <F label="Age (yrs)" type="number" value={editing.age_years ?? ""} onChange={(v) => setEditing({ ...editing, age_years: v as any })} />
             <F label="ABV %" type="number" value={editing.abv ?? ""} onChange={(v) => setEditing({ ...editing, abv: v as any })} />
