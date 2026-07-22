@@ -40,6 +40,12 @@ export default function Checkout() {
   const subtotal = items.reduce((s, i) => s + Number(i.list_price || 0) * i.quantity, 0);
   const total = lineBreakdown.reduce((s, l) => s + l.lineTotal, 0);
   const savings = subtotal - total;
+  const palletSavings = lineBreakdown.reduce(
+    (s, l) => s + (l.palletActive ? (Number(l.item.list_price || 0) - l.unit) * l.item.quantity : 0),
+    0,
+  );
+  const codeSavings = Math.max(0, savings - palletSavings);
+  const palletUnits = lineBreakdown.reduce((s, l) => s + (l.palletActive ? l.item.quantity : 0), 0);
 
   const applyCode = async () => {
     if (!codeInput.trim()) return;
