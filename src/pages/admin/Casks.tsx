@@ -138,7 +138,7 @@ export default function AdminCasks() {
                 </td>
               </tr>
             ))}
-            {casks.length === 0 && <tr><td colSpan={8} className="p-8 text-center text-muted-foreground font-body">No casks yet.</td></tr>}
+            {casks.length === 0 && <tr><td colSpan={9} className="p-8 text-center text-muted-foreground font-body">No casks yet.</td></tr>}
           </tbody>
         </table>
       </div>
