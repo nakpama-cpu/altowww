@@ -170,7 +170,6 @@ Deno.serve(async (req) => {
             description: l.spirit,
           },
           unit_amount: unitCents,
-          tax_behavior: "exclusive" as const,
         },
         quantity: i.quantity,
       };
