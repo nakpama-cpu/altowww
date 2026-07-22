@@ -594,11 +594,11 @@ export default function AvailableStock() {
             </DialogTitle>
           </DialogHeader>
           {buyListing && (
-            <div className="grid grid-cols-4 gap-3 mt-1">
-              <Mini label="Cask" v={formatCaskSpec(buyListing.cask_type, buyListing.cask_size_litres) ?? "—"} />
-              <Mini label="Wood" v={buyListing.wood ?? "—"} />
-              <Mini label="ABV" v={buyListing.abv ? `${buyListing.abv}%` : "—"} />
-              <Mini label="Age" v={(() => { const a = computeCaskAge(buyListing.fill_date, buyListing.age_years); return a != null ? `${a} yrs` : "—"; })()} />
+            <div className="grid grid-cols-2 gap-2 mt-1">
+              <SpecBox label="Cask" value={formatCaskSpec(buyListing.cask_type, buyListing.cask_size_litres)} />
+              <SpecBox label="Wood" value={buyListing.wood} />
+              <SpecBox label="ABV" value={buyListing.abv != null ? `${buyListing.abv}%` : null} />
+              <SpecBox label="Age" value={(() => { const a = computeCaskAge(buyListing.fill_date, buyListing.age_years); return a != null ? `${a} yrs` : null; })()} />
             </div>
           )}
           {buyListing && (() => {
