@@ -120,17 +120,22 @@ export default function AvailableStock() {
   const confirmAddToCart = () => {
     if (!buyListing || buyListing.list_price == null) return;
     const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
+    const available = Math.max(0, (buyListing.stock_qty ?? 0) - (buyListing.reserved_qty ?? 0));
+    const eligible = palletEligible(available);
+    const pallet = palletApplies(qty, available);
+    const unit = pallet ? palletUnitPrice(Number(buyListing.list_price)) : Number(buyListing.list_price);
     cart.add({
       listing_id: buyListing.id,
       distillery: buyListing.distilleries?.name ?? "",
       spirit: buyListing.spirit,
       list_price: Number(buyListing.list_price),
-      unit_price: Number(buyListing.list_price),
+      unit_price: unit,
       currency: buyListing.currency,
       hero_image_url: buyListing.hero_image_url,
       quantity: qty,
+      pallet_eligible: eligible,
     });
-    toast({ title: "Added to cart", description: `${qty} × ${buyListing.distilleries?.name ?? buyListing.spirit}` });
+    toast({ title: "Added to cart", description: `${qty} × ${buyListing.distilleries?.name ?? buyListing.spirit}${pallet ? " · Pallet price applied" : ""}` });
     setBuyListing(null);
   };
 
