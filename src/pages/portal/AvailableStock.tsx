@@ -483,19 +483,18 @@ export default function AvailableStock() {
             <div className="space-y-5">
               {infoListing && (
                 <InfoSection title="Cask Specification">
-                  <div className="grid grid-cols-2 gap-2 mb-4">
-                    <InfoBox label="Region" value={infoListing.distilleries?.region} />
-                    <InfoBox label="Cask" value={formatCaskSpec(infoListing.cask_type, infoListing.cask_size_litres)} />
-                    <InfoBox label="Wood" value={infoListing.wood} />
-                    <InfoBox label="Spirit Name" value={displaySpiritName(infoListing)} />
-                  </div>
-                  <div className="grid grid-cols-3 gap-2 text-xs">
-                    <Mini label="ABV" v={formatMiniValue(infoListing.abv, "%")} />
-                    <Mini label="Age" v={(() => { const a = computeCaskAge(infoListing.fill_date, infoListing.age_years); return a != null ? `${a} yrs` : "—"; })()} />
-                    <Mini
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    <SpecBox label="Region" value={infoListing.distilleries?.region} />
+                    <SpecBox label="Cask" value={formatCaskSpec(infoListing.cask_type, infoListing.cask_size_litres)} />
+                    <SpecBox label="Wood" value={infoListing.wood} />
+                    <SpecBox label="Spirit Name" value={displaySpiritName(infoListing)} />
+                    <SpecBox label="ABV" value={infoListing.abv != null ? `${infoListing.abv}%` : null} />
+                    <SpecBox label="Age" value={(() => { const a = computeCaskAge(infoListing.fill_date, infoListing.age_years); return a != null ? `${a} yrs` : null; })()} />
+                    <SpecBox
                       label={infoListing.rla_litres != null ? "RLA" : "OLA"}
-                      v={infoListing.rla_litres != null ? `${infoListing.rla_litres} L` : infoListing.ola_litres != null ? `${infoListing.ola_litres} L` : "—"}
+                      value={infoListing.rla_litres != null ? `${infoListing.rla_litres} L` : infoListing.ola_litres != null ? `${infoListing.ola_litres} L` : null}
                     />
+                    <SpecBox label="Fill Date" value={infoListing.fill_date} />
                   </div>
                 </InfoSection>
               )}
