@@ -577,6 +577,144 @@ export type Database = {
           },
         ]
       }
+      invoice_items: {
+        Row: {
+          abv: number | null
+          cask_type: string | null
+          created_at: string
+          distillery: string | null
+          id: string
+          invoice_id: string
+          line_total: number
+          list_price: number
+          listing_id: string | null
+          quantity: number
+          spirit: string | null
+          spirit_name: string | null
+          unit_price: number
+          vintage_year: number | null
+          wood: string | null
+        }
+        Insert: {
+          abv?: number | null
+          cask_type?: string | null
+          created_at?: string
+          distillery?: string | null
+          id?: string
+          invoice_id: string
+          line_total?: number
+          list_price?: number
+          listing_id?: string | null
+          quantity?: number
+          spirit?: string | null
+          spirit_name?: string | null
+          unit_price?: number
+          vintage_year?: number | null
+          wood?: string | null
+        }
+        Update: {
+          abv?: number | null
+          cask_type?: string | null
+          created_at?: string
+          distillery?: string | null
+          id?: string
+          invoice_id?: string
+          line_total?: number
+          list_price?: number
+          listing_id?: string | null
+          quantity?: number
+          spirit?: string | null
+          spirit_name?: string | null
+          unit_price?: number
+          vintage_year?: number | null
+          wood?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_items_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "cask_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          bill_to: Json
+          cancelled_at: string | null
+          client_confirmed_at: string | null
+          client_note: string | null
+          confirmation_token: string
+          created_at: string
+          currency: string
+          discount_amount: number
+          discount_code: string | null
+          due_at: string
+          id: string
+          invoice_number: string
+          issued_at: string
+          paid_at: string | null
+          payment_reference: string
+          status: Database["public"]["Enums"]["invoice_status"]
+          subtotal: number
+          total: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bill_to?: Json
+          cancelled_at?: string | null
+          client_confirmed_at?: string | null
+          client_note?: string | null
+          confirmation_token?: string
+          created_at?: string
+          currency?: string
+          discount_amount?: number
+          discount_code?: string | null
+          due_at?: string
+          id?: string
+          invoice_number: string
+          issued_at?: string
+          paid_at?: string | null
+          payment_reference: string
+          status?: Database["public"]["Enums"]["invoice_status"]
+          subtotal?: number
+          total?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bill_to?: Json
+          cancelled_at?: string | null
+          client_confirmed_at?: string | null
+          client_note?: string | null
+          confirmation_token?: string
+          created_at?: string
+          currency?: string
+          discount_amount?: number
+          discount_code?: string | null
+          due_at?: string
+          id?: string
+          invoice_number?: string
+          issued_at?: string
+          paid_at?: string | null
+          payment_reference?: string
+          status?: Database["public"]["Enums"]["invoice_status"]
+          subtotal?: number
+          total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           created_at: string
@@ -838,6 +976,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cancel_invoice: { Args: { _invoice_id: string }; Returns: undefined }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
@@ -847,6 +986,8 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      expire_stale_invoices: { Args: never; Returns: undefined }
+      mark_invoice_paid: { Args: { _invoice_id: string }; Returns: undefined }
       move_to_dlq: {
         Args: {
           dlq_name: string
@@ -856,6 +997,7 @@ export type Database = {
         }
         Returns: number
       }
+      next_invoice_number: { Args: never; Returns: string }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }
         Returns: {
@@ -864,12 +1006,26 @@ export type Database = {
           read_ct: number
         }[]
       }
+      release_invoice_reservation: {
+        Args: { _invoice_id: string }
+        Returns: undefined
+      }
+      reserve_listing_qty: {
+        Args: { _listing_id: string; _qty: number }
+        Returns: undefined
+      }
       validate_discount_code: { Args: { _code: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "client"
       callback_status: "new" | "contacted" | "closed"
       cask_status: "available" | "reserved" | "held" | "sold"
+      invoice_status:
+        | "awaiting_payment"
+        | "client_confirmed"
+        | "paid"
+        | "cancelled"
+        | "expired"
       listing_status: "active" | "hidden" | "sold_out"
       order_status: "pending" | "paid" | "cancelled" | "refunded"
       profile_status: "pending" | "approved" | "suspended"
@@ -1011,6 +1167,13 @@ export const Constants = {
       app_role: ["admin", "client"],
       callback_status: ["new", "contacted", "closed"],
       cask_status: ["available", "reserved", "held", "sold"],
+      invoice_status: [
+        "awaiting_payment",
+        "client_confirmed",
+        "paid",
+        "cancelled",
+        "expired",
+      ],
       listing_status: ["active", "hidden", "sold_out"],
       order_status: ["pending", "paid", "cancelled", "refunded"],
       profile_status: ["pending", "approved", "suspended"],
