@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Receipt, Download, Banknote, CreditCard } from "lucide-react";
+import { Receipt, Banknote, CreditCard, ChevronDown } from "lucide-react";
+import InvoiceLoader from "@/components/invoice/InvoiceLoader";
 
-const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invoice-access`;
 
 type InvoiceItem = {
   id: string;
