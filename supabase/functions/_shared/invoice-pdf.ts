@@ -255,7 +255,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
 
   // Footer
   page.drawText(
-    `${COMPANY.registeredName} · ${COMPANY.website} · Cask whisky is an unregulated asset; values can fall as well as rise.`,
+    `${COMPANY.tradingName} · ${COMPANY.website} · Cask whisky is an unregulated asset; values can fall as well as rise.`,
     { x: M, y: 36, size: 6.8, font: regular, color: grey },
   );
   page.drawRectangle({ x: 0, y: 0, width: W, height: 6, color: copper });
