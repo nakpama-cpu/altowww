@@ -300,17 +300,45 @@ export default function Checkout() {
             <span className="display-heading text-2xl text-primary">£{Math.round(total).toLocaleString()}</span>
           </div>
 
+          <div className="mt-5">
+            <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-2">
+              Payment Method
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {([
+                { key: "card", label: "Card", icon: CreditCard },
+                { key: "bank", label: "Bank Transfer", icon: Landmark },
+              ] as const).map(({ key, label, icon: Icon }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setMethod(key)}
+                  className={`flex items-center justify-center gap-2 font-body text-[10px] uppercase tracking-[0.15em] px-3 py-3 border transition-colors ${
+                    method === key
+                      ? "border-primary text-primary bg-primary/10"
+                      : "border-border text-muted-foreground hover:border-primary"
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" /> {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <button
-            onClick={beginPayment}
+            onClick={method === "card" ? beginPayment : createInvoice}
             disabled={placing || !kycOk}
-            className="w-full mt-6 flex items-center justify-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="w-full mt-4 flex items-center justify-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            <CreditCard className="w-4 h-4" />
-            {placing ? "Loading…" : "Proceed to Payment"}
+            {method === "card" ? <CreditCard className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
+            {placing ? "Loading…" : method === "card" ? "Proceed to Payment" : "Generate Invoice"}
           </button>
           <p className="font-body text-[11px] text-muted-foreground mt-3 leading-relaxed">
-            You will be able to review and pay securely via Stripe. Your order is confirmed once payment succeeds.
+            {method === "card"
+              ? "You will be able to review and pay securely via Stripe. Your order is confirmed once payment succeeds."
+              : "We'll reserve your casks for 3 days, email you a branded invoice with our bank details, and give you a link to confirm once you've sent the transfer."}
           </p>
+
         </aside>
       </div>
     </div>
