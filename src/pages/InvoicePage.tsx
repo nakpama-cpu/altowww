@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams, Link } from "react-router-dom";
-import { Download, CheckCircle2, Landmark, Loader2 } from "lucide-react";
+import { Download, CheckCircle2, Landmark, Loader2, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
@@ -283,7 +283,15 @@ export default function InvoicePage() {
           </div>
         </div>
 
-        <div className="text-center mt-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-6">
+          {!confirmed && invoice.status !== "paid" && invoice.status !== "cancelled" && (
+            <Link
+              to="/portal/checkout"
+              className="inline-flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground hover:text-primary"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> Back to checkout
+            </Link>
+          )}
           <Link
             to="/portal"
             className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground hover:text-primary"
@@ -291,6 +299,7 @@ export default function InvoicePage() {
             Back to portal
           </Link>
         </div>
+
       </div>
     </div>
   );
