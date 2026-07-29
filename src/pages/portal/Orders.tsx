@@ -50,7 +50,9 @@ const statusClass = (s: string) =>
 export default function Orders() {
   const { user } = useAuth();
   const [rows, setRows] = useState<Order[]>([]);
+  const [openId, setOpenId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     if (!user) return;
