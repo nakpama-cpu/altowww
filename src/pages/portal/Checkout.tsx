@@ -90,7 +90,33 @@ export default function Checkout() {
     return data.clientSecret as string;
   }, [items, applied]);
 
+  const createInvoice = async () => {
+    if (!user || items.length === 0) return;
+    if (!kycOk) {
+      toast({ title: "Verification required", description: "Complete address and identity verification in your Account first.", variant: "destructive" });
+      return;
+    }
+    setPlacing(true);
+    const { data, error } = await supabase.functions.invoke("create-invoice", {
+      body: {
+        items: items.map((i) => ({ listing_id: i.listing_id, quantity: i.quantity })),
+        discount_code: applied?.code ?? null,
+      },
+    });
+    setPlacing(false);
+    if (error || !data?.token) {
+      toast({
+        title: "Could not create invoice",
+        description: (data as any)?.error || error?.message || "Please try again",
+        variant: "destructive",
+      });
+      return;
+    }
+    navigate(`/invoice/${data.token}?new=1`);
+  };
+
   const beginPayment = async () => {
+
     if (!user || items.length === 0) return;
     if (!kycOk) {
       toast({ title: "Verification required", description: "Complete address and identity verification in your Account first.", variant: "destructive" });
