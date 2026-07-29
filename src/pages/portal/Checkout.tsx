@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Trash2, ShoppingBag, CreditCard, Tag, X, Landmark, FileText } from "lucide-react";
+import { Trash2, ShoppingBag, CreditCard, Tag, X, Landmark, FileText, ArrowLeft, Loader2 } from "lucide-react";
+import InvoiceView, { useInvoice } from "@/components/invoice/InvoiceView";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
