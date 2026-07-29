@@ -54,6 +54,16 @@ export default function Orders() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const [search, setSearch] = useState("");
+  const [filterCaskDetail, setFilterCaskDetail] = useState("");
+  const [filterPaymentMethod, setFilterPaymentMethod] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterDateFrom, setFilterDateFrom] = useState("");
+  const [filterDateTo, setFilterDateTo] = useState("");
+  const [filterMinAmount, setFilterMinAmount] = useState("");
+  const [filterMaxAmount, setFilterMaxAmount] = useState("");
+  const [sortBy, setSortBy] = useState<"newest" | "oldest">("newest");
+
 
   useEffect(() => {
     if (!user) return;
