@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Receipt, Download, Banknote, CreditCard } from "lucide-react";
+import { Receipt, Banknote, CreditCard, ChevronDown } from "lucide-react";
+import InvoiceLoader from "@/components/invoice/InvoiceLoader";
 
-const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invoice-access`;
 
 type InvoiceItem = {
   id: string;
@@ -50,7 +50,9 @@ const statusClass = (s: string) =>
 export default function Orders() {
   const { user } = useAuth();
   const [rows, setRows] = useState<Order[]>([]);
+  const [openId, setOpenId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     if (!user) return;
@@ -90,7 +92,11 @@ export default function Orders() {
         <div className="space-y-4">
           {rows.map((o) => (
             <div key={o.id} className="border border-border rounded-sm bg-muted/20 overflow-hidden">
-              <div className="flex flex-wrap items-center justify-between gap-3 p-4 border-b border-border bg-muted/40">
+              <button
+                type="button"
+                onClick={() => setOpenId(openId === o.id ? null : o.id)}
+                className="w-full text-left flex flex-wrap items-center justify-between gap-3 p-4 border-b border-border bg-muted/40 hover:bg-muted/60 transition-colors"
+              >
                 <div>
                   <div className="font-mono text-sm">{o.invoice_number}</div>
                   <div className="font-body text-xs text-muted-foreground">
@@ -117,8 +123,11 @@ export default function Orders() {
                   >
                     {statusLabel(o.status)}
                   </span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-muted-foreground transition-transform ${openId === o.id ? "rotate-180" : ""}`}
+                  />
                 </div>
-              </div>
+              </button>
 
               <div className="p-4 space-y-2">
                 {o.invoice_items?.map((it) => (
@@ -145,13 +154,21 @@ export default function Orders() {
                     </span>
                   )}
                 </div>
-                <a
-                  href={`${FN_URL}?token=${o.confirmation_token}&pdf=1`}
+                <button
+                  type="button"
+                  onClick={() => setOpenId(openId === o.id ? null : o.id)}
                   className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded-sm font-body text-xs uppercase tracking-wider hover:bg-muted transition-colors"
                 >
-                  <Download className="w-3.5 h-3.5" /> Invoice PDF
-                </a>
+                  <Receipt className="w-3.5 h-3.5" />
+                  {openId === o.id ? "Hide invoice" : "View invoice"}
+                </button>
               </div>
+
+              {openId === o.id && (
+                <div className="border-t border-border bg-background p-4">
+                  <InvoiceLoader token={o.confirmation_token} />
+                </div>
+              )}
             </div>
           ))}
         </div>
