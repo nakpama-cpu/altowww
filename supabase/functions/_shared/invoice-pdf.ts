@@ -115,7 +115,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   // Company / invoice meta
   const rightX = W / 2 + 20;
   let ly = y;
-  page.drawText(COMPANY.registeredName, { x: M, y: ly, size: 9.5, font: bold, color: navy });
+  page.drawText(COMPANY.tradingName, { x: M, y: ly, size: 9.5, font: bold, color: navy });
   ly -= 13;
   for (const l of COMPANY.addressLines) {
     page.drawText(l, { x: M, y: ly, size: 8.5, font: regular, color: grey });
@@ -255,7 +255,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
 
   // Footer
   page.drawText(
-    `${COMPANY.registeredName} · ${COMPANY.website} · Cask whisky is an unregulated asset; values can fall as well as rise.`,
+    `${COMPANY.tradingName} · ${COMPANY.website} · Cask whisky is an unregulated asset; values can fall as well as rise.`,
     { x: M, y: 36, size: 6.8, font: regular, color: grey },
   );
   page.drawRectangle({ x: 0, y: 0, width: W, height: 6, color: copper });
