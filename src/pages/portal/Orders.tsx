@@ -81,6 +81,55 @@ export default function Orders() {
     })();
   }, [user]);
 
+  const effectiveDate = (o: Order) => new Date(o.paid_at ?? o.client_confirmed_at ?? o.issued_at);
+
+  const filteredRows = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    const caskQ = filterCaskDetail.toLowerCase().trim();
+    const minAmount = filterMinAmount ? Number(filterMinAmount) : null;
+    const maxAmount = filterMaxAmount ? Number(filterMaxAmount) : null;
+    const fromDate = filterDateFrom ? new Date(filterDateFrom) : null;
+    const toDate = filterDateTo ? new Date(filterDateTo) : null;
+
+    const result = rows.filter((o) => {
+      const orderDate = effectiveDate(o);
+      const orderDateStr = orderDate.toISOString().split("T")[0];
+
+      const searchMatch =
+        !q ||
+        o.invoice_number.toLowerCase().includes(q) ||
+        o.payment_reference.toLowerCase().includes(q) ||
+        o.invoice_items.some((it) =>
+          [it.distillery, it.spirit, it.cask_type, it.wood, it.abv ? `${it.abv}%` : null, it.vintage_year ? String(it.vintage_year) : null]
+            .filter(Boolean)
+            .some((v) => v!.toLowerCase().includes(q))
+        );
+
+      const caskMatch =
+        !caskQ ||
+        o.invoice_items.some((it) =>
+          [it.distillery, it.spirit, it.cask_type, it.wood]
+            .filter(Boolean)
+            .some((v) => v!.toLowerCase().includes(caskQ))
+        );
+
+      const paymentMatch = filterPaymentMethod === "all" || o.payment_method === filterPaymentMethod;
+      const statusMatch = filterStatus === "all" || o.status === filterStatus;
+      const minMatch = minAmount === null || o.total >= minAmount;
+      const maxMatch = maxAmount === null || o.total <= maxAmount;
+      const fromMatch = fromDate === null || orderDateStr >= filterDateFrom;
+      const toMatch = toDate === null || orderDateStr <= filterDateTo;
+
+      return searchMatch && caskMatch && paymentMatch && statusMatch && minMatch && maxMatch && fromMatch && toMatch;
+    });
+
+    return [...result].sort((a, b) => {
+      const da = effectiveDate(a).getTime();
+      const db = effectiveDate(b).getTime();
+      return sortBy === "newest" ? db - da : da - db;
+    });
+  }, [rows, search, filterCaskDetail, filterPaymentMethod, filterStatus, filterDateFrom, filterDateTo, filterMinAmount, filterMaxAmount, sortBy]);
+
   return (
     <div className="max-w-4xl">
       <h1 className="display-heading text-3xl md:text-4xl mb-2">My Orders</h1>
