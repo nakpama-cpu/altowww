@@ -25,6 +25,7 @@ export default function Checkout() {
   const [applied, setApplied] = useState<AppliedCode | null>(null);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [method, setMethod] = useState<"card" | "bank">("card");
+  const [invoiceToken, setInvoiceToken] = useState<string | null>(null);
 
   const currency = items[0]?.currency ?? "GBP";
 
