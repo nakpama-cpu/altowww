@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Receipt, Banknote, CreditCard, ChevronDown } from "lucide-react";
+import { Receipt, Banknote, CreditCard, ChevronDown, Search, RotateCcw, Calendar } from "lucide-react";
 import InvoiceLoader from "@/components/invoice/InvoiceLoader";
+import { Input } from "@/components/ui/input";
 
 
 type InvoiceItem = {
