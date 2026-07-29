@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Trash2, ShoppingBag, CreditCard, Tag, X, Landmark, FileText } from "lucide-react";
+import { Trash2, ShoppingBag, CreditCard, Tag, X, Landmark, FileText, ArrowLeft, Loader2 } from "lucide-react";
+import InvoiceView, { useInvoice } from "@/components/invoice/InvoiceView";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -12,6 +13,27 @@ import { VerificationGateBanner } from "./Account";
 import { palletApplies, palletUnitPrice, PALLET_DISCOUNT_PCT, PALLET_MIN_QTY } from "@/lib/pallet";
 
 type AppliedCode = { code: string; percent: number; effective_percent: number };
+
+function CheckoutInvoicePanel({ token }: { token: string }) {
+  const { loading, invoice, items, bank, error, reload } = useInvoice(token);
+
+  if (loading) {
+    return (
+      <div className="border border-border p-12 flex items-center justify-center bg-surface">
+        <Loader2 className="w-5 h-5 animate-spin text-primary" />
+      </div>
+    );
+  }
+  if (error || !invoice) {
+    return (
+      <div className="border border-border p-8 bg-surface font-body text-sm text-muted-foreground">
+        {error || "Invoice not found."}
+      </div>
+    );
+  }
+  return <InvoiceView token={token} invoice={invoice} items={items} bank={bank} onConfirmed={reload} />;
+}
+
 
 
 export default function Checkout() {
@@ -25,6 +47,7 @@ export default function Checkout() {
   const [applied, setApplied] = useState<AppliedCode | null>(null);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [method, setMethod] = useState<"card" | "bank">("card");
+  const [invoiceToken, setInvoiceToken] = useState<string | null>(null);
 
   const currency = items[0]?.currency ?? "GBP";
 
@@ -112,7 +135,7 @@ export default function Checkout() {
       });
       return;
     }
-    navigate(`/invoice/${data.token}?new=1`);
+    setInvoiceToken(data.token as string);
   };
 
   const beginPayment = async () => {
@@ -152,6 +175,50 @@ export default function Checkout() {
       </div>
     );
   }
+
+  if (invoiceToken) {
+    return (
+      <div className="max-w-6xl w-full min-w-0">
+        <button
+          onClick={() => setInvoiceToken(null)}
+          className="inline-flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground hover:text-primary mb-6"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to checkout
+        </button>
+
+        <div className="grid lg:grid-cols-5 gap-6 min-w-0 items-start">
+          <aside className="lg:col-span-2 bg-muted/20 border border-border p-6 min-w-0">
+            <h2 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-4">Your order</h2>
+            <div className="space-y-3">
+              {lineBreakdown.map(({ item: i, unit, lineTotal }) => (
+                <div key={i.listing_id} className="flex items-start justify-between gap-3 border-b border-border pb-3">
+                  <div className="min-w-0">
+                    <div className="display-heading text-base truncate">{i.distillery || i.spirit}</div>
+                    <div className="font-body text-xs text-muted-foreground">
+                      £{Math.round(unit).toLocaleString()} × {i.quantity}
+                    </div>
+                  </div>
+                  <div className="font-body text-sm whitespace-nowrap">£{Math.round(lineTotal).toLocaleString()}</div>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between items-baseline pt-4">
+              <span className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Total</span>
+              <span className="display-heading text-2xl text-primary">£{Math.round(total).toLocaleString()}</span>
+            </div>
+            <p className="font-body text-[11px] text-muted-foreground mt-4 leading-relaxed">
+              Your cart is kept until payment is confirmed — go back to checkout at any time to change your order or pay by card instead.
+            </p>
+          </aside>
+
+          <div className="lg:col-span-3 min-w-0">
+            <CheckoutInvoicePanel token={invoiceToken} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
 
   if (items.length === 0) {
