@@ -184,6 +184,7 @@ export type Database = {
           fill_date: string | null
           hero_image_url: string | null
           id: string
+          invoice_item_id: string | null
           list_price: number | null
           listing_id: string | null
           ola_litres: number | null
@@ -191,6 +192,7 @@ export type Database = {
           spirit: string
           spirit_name: string | null
           status: Database["public"]["Enums"]["cask_status"]
+          unit_index: number | null
           updated_at: string
           wood: string | null
         }
@@ -207,6 +209,7 @@ export type Database = {
           fill_date?: string | null
           hero_image_url?: string | null
           id?: string
+          invoice_item_id?: string | null
           list_price?: number | null
           listing_id?: string | null
           ola_litres?: number | null
@@ -214,6 +217,7 @@ export type Database = {
           spirit?: string
           spirit_name?: string | null
           status?: Database["public"]["Enums"]["cask_status"]
+          unit_index?: number | null
           updated_at?: string
           wood?: string | null
         }
@@ -230,6 +234,7 @@ export type Database = {
           fill_date?: string | null
           hero_image_url?: string | null
           id?: string
+          invoice_item_id?: string | null
           list_price?: number | null
           listing_id?: string | null
           ola_litres?: number | null
@@ -237,6 +242,7 @@ export type Database = {
           spirit?: string
           spirit_name?: string | null
           status?: Database["public"]["Enums"]["cask_status"]
+          unit_index?: number | null
           updated_at?: string
           wood?: string | null
         }
@@ -246,6 +252,13 @@ export type Database = {
             columns: ["distillery_id"]
             isOneToOne: false
             referencedRelation: "distilleries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "casks_invoice_item_id_fkey"
+            columns: ["invoice_item_id"]
+            isOneToOne: false
+            referencedRelation: "invoice_items"
             referencedColumns: ["id"]
           },
           {
@@ -994,6 +1007,10 @@ export type Database = {
       }
       expire_stale_invoices: { Args: never; Returns: undefined }
       mark_invoice_paid: { Args: { _invoice_id: string }; Returns: undefined }
+      materialise_invoice_holdings: {
+        Args: { _invoice_id: string }
+        Returns: undefined
+      }
       move_to_dlq: {
         Args: {
           dlq_name: string
