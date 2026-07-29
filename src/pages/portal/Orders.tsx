@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Receipt, Banknote, CreditCard, ChevronDown } from "lucide-react";
+import { Receipt, Banknote, CreditCard, ChevronDown, Search, RotateCcw, Calendar } from "lucide-react";
 import InvoiceLoader from "@/components/invoice/InvoiceLoader";
+import { Input } from "@/components/ui/input";
 
 
 type InvoiceItem = {
@@ -53,6 +54,16 @@ export default function Orders() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const [search, setSearch] = useState("");
+  const [filterCaskDetail, setFilterCaskDetail] = useState("");
+  const [filterPaymentMethod, setFilterPaymentMethod] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterDateFrom, setFilterDateFrom] = useState("");
+  const [filterDateTo, setFilterDateTo] = useState("");
+  const [filterMinAmount, setFilterMinAmount] = useState("");
+  const [filterMaxAmount, setFilterMaxAmount] = useState("");
+  const [sortBy, setSortBy] = useState<"newest" | "oldest">("newest");
+
 
   useEffect(() => {
     if (!user) return;
@@ -70,6 +81,55 @@ export default function Orders() {
     })();
   }, [user]);
 
+  const effectiveDate = (o: Order) => new Date(o.paid_at ?? o.client_confirmed_at ?? o.issued_at);
+
+  const filteredRows = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    const caskQ = filterCaskDetail.toLowerCase().trim();
+    const minAmount = filterMinAmount ? Number(filterMinAmount) : null;
+    const maxAmount = filterMaxAmount ? Number(filterMaxAmount) : null;
+    const fromDate = filterDateFrom ? new Date(filterDateFrom) : null;
+    const toDate = filterDateTo ? new Date(filterDateTo) : null;
+
+    const result = rows.filter((o) => {
+      const orderDate = effectiveDate(o);
+      const orderDateStr = orderDate.toISOString().split("T")[0];
+
+      const searchMatch =
+        !q ||
+        o.invoice_number.toLowerCase().includes(q) ||
+        o.payment_reference.toLowerCase().includes(q) ||
+        o.invoice_items.some((it) =>
+          [it.distillery, it.spirit, it.cask_type, it.wood, it.abv ? `${it.abv}%` : null, it.vintage_year ? String(it.vintage_year) : null]
+            .filter(Boolean)
+            .some((v) => v!.toLowerCase().includes(q))
+        );
+
+      const caskMatch =
+        !caskQ ||
+        o.invoice_items.some((it) =>
+          [it.distillery, it.spirit, it.cask_type, it.wood]
+            .filter(Boolean)
+            .some((v) => v!.toLowerCase().includes(caskQ))
+        );
+
+      const paymentMatch = filterPaymentMethod === "all" || o.payment_method === filterPaymentMethod;
+      const statusMatch = filterStatus === "all" || o.status === filterStatus;
+      const minMatch = minAmount === null || o.total >= minAmount;
+      const maxMatch = maxAmount === null || o.total <= maxAmount;
+      const fromMatch = fromDate === null || orderDateStr >= filterDateFrom;
+      const toMatch = toDate === null || orderDateStr <= filterDateTo;
+
+      return searchMatch && caskMatch && paymentMatch && statusMatch && minMatch && maxMatch && fromMatch && toMatch;
+    });
+
+    return [...result].sort((a, b) => {
+      const da = effectiveDate(a).getTime();
+      const db = effectiveDate(b).getTime();
+      return sortBy === "newest" ? db - da : da - db;
+    });
+  }, [rows, search, filterCaskDetail, filterPaymentMethod, filterStatus, filterDateFrom, filterDateTo, filterMinAmount, filterMaxAmount, sortBy]);
+
   return (
     <div className="max-w-4xl">
       <h1 className="display-heading text-3xl md:text-4xl mb-2">My Orders</h1>
@@ -77,9 +137,139 @@ export default function Orders() {
         Confirmed purchases, with a copy of the invoice for each order.
       </p>
 
+      {/* Filters */}
+      {!loading && rows.length > 0 && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+          <div className="relative col-span-2 md:col-span-4">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
+            <Input
+              type="text"
+              placeholder="Search invoice number or cask details…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
+            />
+          </div>
+          <div className="relative">
+            <select
+              value={filterPaymentMethod}
+              onChange={(e) => setFilterPaymentMethod(e.target.value)}
+              className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            >
+              <option value="all">All payment methods</option>
+              <option value="card">Card</option>
+              <option value="bank_transfer">Bank transfer</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          </div>
+          <div className="relative">
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            >
+              <option value="all">All statuses</option>
+              <option value="paid">Paid</option>
+              <option value="client_confirmed">Payment confirmed</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          </div>
+          <div className="relative">
+            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
+            <Input
+              type="date"
+              placeholder="From"
+              value={filterDateFrom}
+              onChange={(e) => setFilterDateFrom(e.target.value)}
+              className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
+            />
+          </div>
+          <div className="relative">
+            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
+            <Input
+              type="date"
+              placeholder="To"
+              value={filterDateTo}
+              onChange={(e) => setFilterDateTo(e.target.value)}
+              className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
+            />
+          </div>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground pointer-events-none z-10">£</span>
+            <Input
+              type="number"
+              min="0"
+              step="500"
+              placeholder="Min amount"
+              value={filterMinAmount}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v === "" || (!v.startsWith("-") && Number(v) >= 0)) setFilterMinAmount(v);
+              }}
+              onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
+              className="w-full h-10 rounded-none border-border bg-muted/20 font-body text-sm pl-7"
+            />
+          </div>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground pointer-events-none z-10">£</span>
+            <Input
+              type="number"
+              min="0"
+              step="500"
+              placeholder="Max amount"
+              value={filterMaxAmount}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v === "" || (!v.startsWith("-") && Number(v) >= 0)) setFilterMaxAmount(v);
+              }}
+              onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
+              className="w-full h-10 rounded-none border-border bg-muted/20 font-body text-sm pl-7"
+            />
+          </div>
+          <div className="relative col-span-2">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
+            <Input
+              type="text"
+              placeholder="Filter by cask detail (distillery, spirit, type…)"
+              value={filterCaskDetail}
+              onChange={(e) => setFilterCaskDetail(e.target.value)}
+              className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
+            />
+          </div>
+          <div className="relative">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as "newest" | "oldest")}
+              className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            >
+              <option value="newest">Most recent first</option>
+              <option value="oldest">Oldest first</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          </div>
+          <button
+            onClick={() => {
+              setSearch("");
+              setFilterCaskDetail("");
+              setFilterPaymentMethod("all");
+              setFilterStatus("all");
+              setFilterDateFrom("");
+              setFilterDateTo("");
+              setFilterMinAmount("");
+              setFilterMaxAmount("");
+              setSortBy("newest");
+            }}
+            className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-muted/20 font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
+            title="Clear all filters"
+          >
+            <RotateCcw className="w-3.5 h-3.5" /> Clear
+          </button>
+        </div>
+      )}
+
       {loading ? (
         <div className="p-8 text-center text-muted-foreground font-body border border-border rounded-sm">
-          Loading orders...
+          Loading orders…
         </div>
       ) : rows.length === 0 ? (
         <div className="p-12 text-center border border-border rounded-sm bg-muted/20">
@@ -88,9 +278,32 @@ export default function Orders() {
             <p className="text-muted-foreground font-body">No orders yet.</p>
           </div>
         </div>
+      ) : filteredRows.length === 0 ? (
+        <div className="p-12 text-center border border-border rounded-sm bg-muted/20">
+          <div className="flex flex-col items-center gap-3">
+            <Search className="w-8 h-8 text-muted-foreground/50" />
+            <p className="text-muted-foreground font-body">No orders match your search or filters.</p>
+            <button
+              onClick={() => {
+                setSearch("");
+                setFilterCaskDetail("");
+                setFilterPaymentMethod("all");
+                setFilterStatus("all");
+                setFilterDateFrom("");
+                setFilterDateTo("");
+                setFilterMinAmount("");
+                setFilterMaxAmount("");
+                setSortBy("newest");
+              }}
+              className="inline-flex items-center gap-1.5 font-body text-xs uppercase tracking-[0.15em] text-primary hover:underline"
+            >
+              <RotateCcw className="w-3.5 h-3.5" /> Clear filters
+            </button>
+          </div>
+        </div>
       ) : (
         <div className="space-y-4">
-          {rows.map((o) => (
+          {filteredRows.map((o) => (
             <div key={o.id} className="border border-border rounded-sm bg-muted/20 overflow-hidden">
               <button
                 type="button"
