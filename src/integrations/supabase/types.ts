@@ -665,6 +665,7 @@ export type Database = {
           payment_method: string
           payment_reference: string
           status: Database["public"]["Enums"]["invoice_status"]
+          stripe_session_id: string | null
           subtotal: number
           total: number
           updated_at: string
@@ -688,6 +689,7 @@ export type Database = {
           payment_method?: string
           payment_reference: string
           status?: Database["public"]["Enums"]["invoice_status"]
+          stripe_session_id?: string | null
           subtotal?: number
           total?: number
           updated_at?: string
@@ -711,6 +713,7 @@ export type Database = {
           payment_method?: string
           payment_reference?: string
           status?: Database["public"]["Enums"]["invoice_status"]
+          stripe_session_id?: string | null
           subtotal?: number
           total?: number
           updated_at?: string
