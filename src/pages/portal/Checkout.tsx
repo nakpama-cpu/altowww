@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Trash2, ShoppingBag, CreditCard, Tag, X } from "lucide-react";
+import { Trash2, ShoppingBag, CreditCard, Tag, X, Landmark, FileText } from "lucide-react";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -24,6 +24,8 @@ export default function Checkout() {
   const [applying, setApplying] = useState(false);
   const [applied, setApplied] = useState<AppliedCode | null>(null);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [method, setMethod] = useState<"card" | "bank">("card");
+
   const currency = items[0]?.currency ?? "GBP";
 
   // Per line: automatic pallet discount (7.5% when qty >= 6 on eligible listings)
