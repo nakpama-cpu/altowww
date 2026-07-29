@@ -1,18 +1,51 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Receipt } from "lucide-react";
+import { Receipt, Download, Banknote, CreditCard } from "lucide-react";
+
+const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invoice-access`;
+
+type InvoiceItem = {
+  id: string;
+  distillery: string | null;
+  spirit: string | null;
+  cask_type: string | null;
+  wood: string | null;
+  abv: number | null;
+  vintage_year: number | null;
+  quantity: number;
+  line_total: number;
+};
 
 type Order = {
   id: string;
-  amount: number;
-  currency: string;
+  invoice_number: string;
+  payment_reference: string;
+  payment_method: string;
   status: string;
+  currency: string;
+  total: number;
   discount_code: string | null;
-  created_at: string;
-  casks: { cask_number: string | null } | null;
-  cask_listings: { spirit: string; distilleries: { name: string } | null } | null;
+  issued_at: string;
+  paid_at: string | null;
+  client_confirmed_at: string | null;
+  confirmation_token: string;
+  invoice_items: InvoiceItem[];
 };
+
+const money = (currency: string, n: number) =>
+  `${currency === "GBP" ? "£" : `${currency} `}${Number(n).toLocaleString("en-GB", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+
+const statusLabel = (s: string) =>
+  s === "paid" ? "Paid" : s === "client_confirmed" ? "Payment confirmed" : s.replace(/_/g, " ");
+
+const statusClass = (s: string) =>
+  s === "paid"
+    ? "bg-primary/10 border-primary/30 text-primary"
+    : "bg-amber-500/10 border-amber-500/30 text-amber-700";
 
 export default function Orders() {
   const { user } = useAuth();
@@ -23,11 +56,14 @@ export default function Orders() {
     if (!user) return;
     (async () => {
       const { data } = await supabase
-        .from("orders")
-        .select("id, amount, currency, status, discount_code, created_at, casks(cask_number), cask_listings(spirit, distilleries(name))")
-        .eq("buyer_id", user.id)
+        .from("invoices")
+        .select(
+          "id, invoice_number, payment_reference, payment_method, status, currency, total, discount_code, issued_at, paid_at, client_confirmed_at, confirmation_token, invoice_items(id, distillery, spirit, cask_type, wood, abv, vintage_year, quantity, line_total)",
+        )
+        .eq("user_id", user.id)
+        .in("status", ["client_confirmed", "paid"])
         .order("created_at", { ascending: false });
-      setRows((data ?? []) as any);
+      setRows((data ?? []) as unknown as Order[]);
       setLoading(false);
     })();
   }, [user]);
@@ -36,75 +72,90 @@ export default function Orders() {
     <div className="max-w-4xl">
       <h1 className="display-heading text-3xl md:text-4xl mb-2">My Orders</h1>
       <p className="font-body text-sm text-muted-foreground mb-8">
-        View your cask purchases and their current status.
+        Confirmed purchases, with a copy of the invoice for each order.
       </p>
 
-      <div className="bg-muted/20 border border-border rounded-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/40">
-              <tr className="text-left font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                <th className="p-4">Date</th>
-                <th className="p-4">Cask</th>
-                <th className="p-4">Amount</th>
-                <th className="p-4">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan={4} className="p-8 text-center text-muted-foreground font-body">
-                    Loading orders...
-                  </td>
-                </tr>
-              ) : rows.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="p-12 text-center">
-                    <div className="flex flex-col items-center gap-3">
-                      <Receipt className="w-8 h-8 text-muted-foreground/50" />
-                      <p className="text-muted-foreground font-body">No orders yet.</p>
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                rows.map((o) => (
-                  <tr key={o.id} className="border-t border-border">
-                    <td className="p-4 font-body">
-                      {new Date(o.created_at).toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </td>
-                    <td className="p-4">
-                      {o.casks?.cask_number ? (
-                        <span className="font-mono">{o.casks.cask_number}</span>
-                      ) : (
-                        <span className="text-muted-foreground text-xs">
-                          Pending · {o.cask_listings?.distilleries?.name ?? o.cask_listings?.spirit ?? "—"}
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-4 font-body">
-                      {o.currency} {Number(o.amount).toLocaleString()}
-                      {o.discount_code && (
-                        <div className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">
-                          Code: {o.discount_code}
-                        </div>
-                      )}
-                    </td>
-                    <td className="p-4">
-                      <span className="inline-flex items-center px-2 py-1 rounded-full font-body text-[10px] uppercase tracking-wider bg-muted text-muted-foreground">
-                        {o.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+      {loading ? (
+        <div className="p-8 text-center text-muted-foreground font-body border border-border rounded-sm">
+          Loading orders...
         </div>
-      </div>
+      ) : rows.length === 0 ? (
+        <div className="p-12 text-center border border-border rounded-sm bg-muted/20">
+          <div className="flex flex-col items-center gap-3">
+            <Receipt className="w-8 h-8 text-muted-foreground/50" />
+            <p className="text-muted-foreground font-body">No orders yet.</p>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {rows.map((o) => (
+            <div key={o.id} className="border border-border rounded-sm bg-muted/20 overflow-hidden">
+              <div className="flex flex-wrap items-center justify-between gap-3 p-4 border-b border-border bg-muted/40">
+                <div>
+                  <div className="font-mono text-sm">{o.invoice_number}</div>
+                  <div className="font-body text-xs text-muted-foreground">
+                    {new Date(o.paid_at ?? o.client_confirmed_at ?? o.issued_at).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                    {" · Ref "}
+                    {o.payment_reference}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full border border-border bg-background font-body text-[10px] uppercase tracking-wider text-muted-foreground">
+                    {o.payment_method === "card" ? (
+                      <CreditCard className="w-3 h-3" />
+                    ) : (
+                      <Banknote className="w-3 h-3" />
+                    )}
+                    {o.payment_method === "card" ? "Card" : "Bank transfer"}
+                  </span>
+                  <span
+                    className={`inline-flex items-center px-2 py-1 rounded-full border font-body text-[10px] uppercase tracking-wider ${statusClass(o.status)}`}
+                  >
+                    {statusLabel(o.status)}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-4 space-y-2">
+                {o.invoice_items?.map((it) => (
+                  <div key={it.id} className="flex justify-between gap-4 font-body text-sm">
+                    <span>
+                      {it.quantity} × {it.distillery || it.spirit || "Cask"}
+                      <span className="block text-xs text-muted-foreground">
+                        {[it.cask_type, it.wood, it.abv ? `${it.abv}% ABV` : null, it.vintage_year]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </span>
+                    </span>
+                    <span>{money(o.currency, it.line_total)}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-3 p-4 border-t border-border">
+                <div className="font-body text-sm">
+                  Total <span className="font-semibold">{money(o.currency, o.total)}</span>
+                  {o.discount_code && (
+                    <span className="ml-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+                      Code: {o.discount_code}
+                    </span>
+                  )}
+                </div>
+                <a
+                  href={`${FN_URL}?token=${o.confirmation_token}&pdf=1`}
+                  className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded-sm font-body text-xs uppercase tracking-wider hover:bg-muted transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" /> Invoice PDF
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

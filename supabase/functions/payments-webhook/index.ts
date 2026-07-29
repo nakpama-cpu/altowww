@@ -90,6 +90,102 @@ async function fulfilCheckoutSession(session: any, env: StripeEnv) {
     }
   }
 
+  // Create a paid invoice record so card purchases appear alongside bank transfers
+  try {
+    const { data: existing } = await sb
+      .from("invoices")
+      .select("id")
+      .eq("stripe_session_id", sessionId)
+      .maybeSingle();
+
+    if (!existing) {
+      const { data: profile } = await sb
+        .from("profiles")
+        .select("email, title, first_name, last_name, address_line1, address_line2, address_city, address_region, address_postcode, address_country")
+        .eq("id", cs.user_id)
+        .maybeSingle();
+
+      const listingIds = [...new Set(cart.map((i) => i.listing_id))];
+      const { data: listings } = await sb
+        .from("cask_listings")
+        .select("id, list_price, spirit, spirit_name, cask_type, wood, abv, fill_date, distilleries(name)")
+        .in("id", listingIds);
+      const listingMap = new Map((listings ?? []).map((l: any) => [l.id, l]));
+
+      const totalUnits = cart.reduce((s, i) => s + i.quantity, 0);
+      const subtotal = cart.reduce((s, i) => {
+        const l: any = listingMap.get(i.listing_id);
+        return s + Number(l?.list_price ?? 0) * i.quantity;
+      }, 0);
+      const total = Number(cs.total);
+      const discountAmount = Math.max(0, Math.round((subtotal - total) * 100) / 100);
+
+      const { data: numberData } = await sb.rpc("next_invoice_number");
+      const invoiceNumber = (numberData as string) ?? `AW-CARD-${sessionId.slice(-8)}`;
+      const paymentReference = invoiceNumber.replace(/^AW-(\d{2})(\d{2})-(\d+)$/, "AW$2$3");
+      const nowIso = new Date().toISOString();
+
+      const { data: invoice } = await sb
+        .from("invoices")
+        .insert({
+          user_id: cs.user_id,
+          invoice_number: invoiceNumber,
+          payment_reference: paymentReference,
+          currency: cs.currency,
+          subtotal: Math.round(subtotal * 100) / 100,
+          discount_amount: discountAmount,
+          total,
+          discount_code: cs.discount_code ?? null,
+          payment_method: "card",
+          status: "paid",
+          paid_at: nowIso,
+          client_confirmed_at: nowIso,
+          due_at: nowIso,
+          stripe_session_id: sessionId,
+          bill_to: {
+            name: [profile?.title, profile?.first_name, profile?.last_name].filter(Boolean).join(" "),
+            email: profile?.email,
+            lines: [
+              profile?.address_line1,
+              profile?.address_line2,
+              profile?.address_city,
+              profile?.address_region,
+              profile?.address_postcode,
+              profile?.address_country,
+            ].filter(Boolean),
+          },
+        })
+        .select("id")
+        .single();
+
+      if (invoice) {
+        const unitPaid = totalUnits > 0 ? Math.round((total / totalUnits) * 100) / 100 : 0;
+        await sb.from("invoice_items").insert(
+          cart.map((i) => {
+            const l: any = listingMap.get(i.listing_id);
+            return {
+              invoice_id: invoice.id,
+              listing_id: i.listing_id,
+              distillery: l?.distilleries?.name ?? null,
+              spirit: l?.spirit ?? null,
+              spirit_name: l?.spirit_name ?? null,
+              cask_type: l?.cask_type ?? null,
+              wood: l?.wood ?? null,
+              abv: l?.abv ?? null,
+              vintage_year: l?.fill_date ? new Date(l.fill_date).getFullYear() : null,
+              quantity: i.quantity,
+              list_price: Number(l?.list_price ?? 0),
+              unit_price: unitPaid,
+              line_total: Math.round(unitPaid * i.quantity * 100) / 100,
+            };
+          }),
+        );
+      }
+    }
+  } catch (e) {
+    console.error("card invoice creation failed", e);
+  }
+
   await sb
     .from("checkout_sessions")
     .update({ status: "completed" })
