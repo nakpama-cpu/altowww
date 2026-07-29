@@ -112,7 +112,7 @@ export default function Checkout() {
       });
       return;
     }
-    navigate(`/invoice/${data.token}?new=1`);
+    setInvoiceToken(data.token as string);
   };
 
   const beginPayment = async () => {
