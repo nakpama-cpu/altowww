@@ -14,6 +14,27 @@ import { palletApplies, palletUnitPrice, PALLET_DISCOUNT_PCT, PALLET_MIN_QTY } f
 
 type AppliedCode = { code: string; percent: number; effective_percent: number };
 
+function CheckoutInvoicePanel({ token }: { token: string }) {
+  const { loading, invoice, items, bank, error, reload } = useInvoice(token);
+
+  if (loading) {
+    return (
+      <div className="border border-border p-12 flex items-center justify-center bg-surface">
+        <Loader2 className="w-5 h-5 animate-spin text-primary" />
+      </div>
+    );
+  }
+  if (error || !invoice) {
+    return (
+      <div className="border border-border p-8 bg-surface font-body text-sm text-muted-foreground">
+        {error || "Invoice not found."}
+      </div>
+    );
+  }
+  return <InvoiceView token={token} invoice={invoice} items={items} bank={bank} onConfirmed={reload} />;
+}
+
+
 
 export default function Checkout() {
   const { items, remove, setQuantity, clear, count } = useCart();
