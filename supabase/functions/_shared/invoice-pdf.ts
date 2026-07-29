@@ -115,7 +115,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   // Company / invoice meta
   const rightX = W / 2 + 20;
   let ly = y;
-  page.drawText(COMPANY.registeredName, { x: M, y: ly, size: 9.5, font: bold, color: navy });
+  page.drawText(COMPANY.tradingName, { x: M, y: ly, size: 9.5, font: bold, color: navy });
   ly -= 13;
   for (const l of COMPANY.addressLines) {
     page.drawText(l, { x: M, y: ly, size: 8.5, font: regular, color: grey });
