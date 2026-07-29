@@ -260,7 +260,6 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   );
   page.drawRectangle({ x: 0, y: 0, width: W, height: 6, color: copper });
 
-  );
 
   return await pdf.save();
 }
