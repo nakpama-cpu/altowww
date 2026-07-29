@@ -181,10 +181,11 @@ export default function Checkout() {
       <div className="max-w-6xl w-full min-w-0">
         <button
           onClick={() => setInvoiceToken(null)}
-          className="inline-flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground hover:text-primary mb-6"
+          className="inline-flex items-center justify-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity disabled:opacity-50 mb-6"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to checkout
+          <ArrowLeft className="w-4 h-4" /> Back to checkout
         </button>
+
 
         <div className="grid lg:grid-cols-5 gap-6 min-w-0 items-start">
           <aside className="lg:col-span-2 bg-muted/20 border border-border p-6 min-w-0">
