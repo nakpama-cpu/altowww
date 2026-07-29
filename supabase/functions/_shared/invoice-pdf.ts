@@ -41,14 +41,29 @@ const money = (n: number, currency: string) => {
 const dateStr = (iso: string) =>
   new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 
+const LOGO_URL =
+  "https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png";
+
+async function fetchLogo(): Promise<Uint8Array | null> {
+  try {
+    const res = await fetch(LOGO_URL);
+    if (!res.ok) return null;
+    return new Uint8Array(await res.arrayBuffer());
+  } catch (_e) {
+    return null;
+  }
+}
+
 export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
   const page = pdf.addPage([595.28, 841.89]); // A4
   const regular = await pdf.embedFont(StandardFonts.Helvetica);
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
 
+  // Brand palette (matches the website): deep navy, copper accent, warm cream
   const navy = rgb(0.106, 0.145, 0.208);
   const copper = rgb(0.706, 0.353, 0.114);
+  const cream = rgb(0.965, 0.957, 0.941);
   const grey = rgb(0.42, 0.42, 0.42);
   const line = rgb(0.85, 0.85, 0.85);
 
@@ -56,18 +71,46 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const W = 595.28;
   let y = 841.89;
 
-  // Header band
-  page.drawRectangle({ x: 0, y: y - 92, width: W, height: 92, color: navy });
-  page.drawText("ALTO WHISKY", {
-    x: M, y: y - 50, size: 22, font: bold, color: rgb(1, 1, 1),
+  // Header band with logo
+  const bandH = 110;
+  page.drawRectangle({ x: 0, y: y - bandH, width: W, height: bandH, color: navy });
+  // copper hairline under the band
+  page.drawRectangle({ x: 0, y: y - bandH - 3, width: W, height: 3, color: copper });
+
+  const logoBytes = await fetchLogo();
+  let logoDrawn = false;
+  if (logoBytes) {
+    try {
+      const img = await pdf.embedPng(logoBytes);
+      const logoW = 104;
+      const logoH = (img.height / img.width) * logoW;
+      page.drawImage(img, {
+        x: M,
+        y: y - bandH / 2 - logoH / 2,
+        width: logoW,
+        height: logoH,
+      });
+      logoDrawn = true;
+    } catch (_e) {
+      logoDrawn = false;
+    }
+  }
+  if (!logoDrawn) {
+    page.drawText("ALTO WHISKY", { x: M, y: y - 58, size: 22, font: bold, color: rgb(1, 1, 1) });
+    page.drawText("CASK WHISKY PORTFOLIOS", {
+      x: M, y: y - 76, size: 7.5, font: regular, color: rgb(0.78, 0.78, 0.78),
+    });
+  }
+
+  page.drawText("INVOICE", {
+    x: W - M - bold.widthOfTextAtSize("INVOICE", 20), y: y - 56, size: 20, font: bold, color: copper,
   });
   page.drawText("CASK WHISKY PORTFOLIOS", {
-    x: M, y: y - 68, size: 7.5, font: regular, color: rgb(0.78, 0.78, 0.78),
+    x: W - M - regular.widthOfTextAtSize("CASK WHISKY PORTFOLIOS", 7),
+    y: y - 70, size: 7, font: regular, color: rgb(0.72, 0.72, 0.72),
   });
-  page.drawText("INVOICE", {
-    x: W - M - bold.widthOfTextAtSize("INVOICE", 20), y: y - 50, size: 20, font: bold, color: copper,
-  });
-  y -= 122;
+  y -= bandH + 32;
+
 
   // Company / invoice meta
   const rightX = W / 2 + 20;
@@ -115,7 +158,9 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
 
   // Items table
   const cols = { desc: M, qty: 340, unit: 395, total: W - M };
-  page.drawRectangle({ x: M, y: y - 6, width: W - M * 2, height: 20, color: rgb(0.96, 0.95, 0.93) });
+  page.drawRectangle({ x: M, y: y - 6, width: W - M * 2, height: 20, color: cream });
+  page.drawRectangle({ x: M, y: y - 6, width: 3, height: 20, color: copper });
+
   page.drawText("DESCRIPTION", { x: cols.desc + 6, y, size: 7, font: bold, color: navy });
   page.drawText("QTY", { x: cols.qty, y, size: 7, font: bold, color: navy });
   page.drawText("UNIT PRICE", { x: cols.unit, y, size: 7, font: bold, color: navy });
@@ -178,7 +223,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   // Bank details block
   y -= 6;
   const boxH = 108;
-  page.drawRectangle({ x: M, y: y - boxH, width: W - M * 2, height: boxH, color: rgb(0.97, 0.965, 0.95) });
+  page.drawRectangle({ x: M, y: y - boxH, width: W - M * 2, height: boxH, color: cream });
   page.drawRectangle({ x: M, y: y - boxH, width: 3, height: boxH, color: copper });
   let by = y - 20;
   page.drawText("PAYMENT BY BANK TRANSFER", { x: M + 16, y: by, size: 8, font: bold, color: copper });
@@ -213,6 +258,8 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     `${COMPANY.registeredName} · ${COMPANY.website} · Cask whisky is an unregulated asset; values can fall as well as rise.`,
     { x: M, y: 36, size: 6.8, font: regular, color: grey },
   );
+  page.drawRectangle({ x: 0, y: 0, width: W, height: 6, color: copper });
+
 
   return await pdf.save();
 }
