@@ -158,7 +158,9 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
 
   // Items table
   const cols = { desc: M, qty: 340, unit: 395, total: W - M };
-  page.drawRectangle({ x: M, y: y - 6, width: W - M * 2, height: 20, color: rgb(0.96, 0.95, 0.93) });
+  page.drawRectangle({ x: M, y: y - 6, width: W - M * 2, height: 20, color: cream });
+  page.drawRectangle({ x: M, y: y - 6, width: 3, height: 20, color: copper });
+
   page.drawText("DESCRIPTION", { x: cols.desc + 6, y, size: 7, font: bold, color: navy });
   page.drawText("QTY", { x: cols.qty, y, size: 7, font: bold, color: navy });
   page.drawText("UNIT PRICE", { x: cols.unit, y, size: 7, font: bold, color: navy });
@@ -221,7 +223,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   // Bank details block
   y -= 6;
   const boxH = 108;
-  page.drawRectangle({ x: M, y: y - boxH, width: W - M * 2, height: boxH, color: rgb(0.97, 0.965, 0.95) });
+  page.drawRectangle({ x: M, y: y - boxH, width: W - M * 2, height: boxH, color: cream });
   page.drawRectangle({ x: M, y: y - boxH, width: 3, height: boxH, color: copper });
   let by = y - 20;
   page.drawText("PAYMENT BY BANK TRANSFER", { x: M + 16, y: by, size: 8, font: bold, color: copper });
@@ -255,6 +257,9 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   page.drawText(
     `${COMPANY.registeredName} · ${COMPANY.website} · Cask whisky is an unregulated asset; values can fall as well as rise.`,
     { x: M, y: 36, size: 6.8, font: regular, color: grey },
+  );
+  page.drawRectangle({ x: 0, y: 0, width: W, height: 6, color: copper });
+
   );
 
   return await pdf.save();
