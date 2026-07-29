@@ -21,3 +21,7 @@ project_id = "feyyzyzgtcxsuyganmkn"
     verify_jwt = false
   [functions.payments-webhook]
     verify_jwt = false
+  [functions.create-invoice]
+    verify_jwt = false
+  [functions.invoice-access]
+    verify_jwt = false

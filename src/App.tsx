@@ -60,6 +60,8 @@ import AdminDiscountCodes from "./pages/admin/DiscountCodes";
 import AdminListings from "./pages/admin/Listings";
 import AdminVerifications from "./pages/admin/Verifications";
 import CheckoutReturn from "./pages/portal/CheckoutReturn";
+import AdminInvoices from "./pages/admin/Invoices";
+import InvoicePage from "./pages/InvoicePage";
 
 const queryClient = new QueryClient();
 
@@ -92,6 +94,7 @@ const App = () => (
               <Route path="/portal/forgot-password" element={<ForgotPassword />} />
               <Route path="/portal/reset-password" element={<ResetPassword />} />
               <Route path="/portal/pending" element={<PendingApprovalGuard />} />
+              <Route path="/invoice/:token" element={<InvoicePage />} />
 
               {/* Client portal */}
               <Route path="/portal" element={<PortalEntry />}>
@@ -117,6 +120,7 @@ const App = () => (
                 <Route path="callbacks" element={<AdminCallbacks />} />
                 <Route path="orders" element={<AdminOrders />} />
                 <Route path="discount-codes" element={<AdminDiscountCodes />} />
+                <Route path="invoices" element={<AdminInvoices />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />

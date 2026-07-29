@@ -1,0 +1,218 @@
+import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
+import { COMPANY, BANK } from "./invoice-config.ts";
+
+export type InvoiceLine = {
+  distillery?: string | null;
+  spirit?: string | null;
+  spirit_name?: string | null;
+  cask_type?: string | null;
+  wood?: string | null;
+  abv?: number | null;
+  vintage_year?: number | null;
+  quantity: number;
+  list_price: number;
+  unit_price: number;
+  line_total: number;
+};
+
+export type InvoiceData = {
+  invoice_number: string;
+  payment_reference: string;
+  issued_at: string;
+  due_at: string;
+  currency: string;
+  subtotal: number;
+  discount_amount: number;
+  total: number;
+  discount_code?: string | null;
+  bill_to: {
+    name?: string;
+    email?: string;
+    lines?: string[];
+  };
+  items: InvoiceLine[];
+};
+
+const money = (n: number, currency: string) => {
+  const symbol = currency?.toUpperCase() === "GBP" ? "GBP " : `${currency?.toUpperCase()} `;
+  return `${symbol}${n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+};
+
+const dateStr = (iso: string) =>
+  new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+
+export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
+  const pdf = await PDFDocument.create();
+  const page = pdf.addPage([595.28, 841.89]); // A4
+  const regular = await pdf.embedFont(StandardFonts.Helvetica);
+  const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+
+  const navy = rgb(0.106, 0.145, 0.208);
+  const copper = rgb(0.706, 0.353, 0.114);
+  const grey = rgb(0.42, 0.42, 0.42);
+  const line = rgb(0.85, 0.85, 0.85);
+
+  const M = 44;
+  const W = 595.28;
+  let y = 841.89;
+
+  // Header band
+  page.drawRectangle({ x: 0, y: y - 92, width: W, height: 92, color: navy });
+  page.drawText("ALTO WHISKY", {
+    x: M, y: y - 50, size: 22, font: bold, color: rgb(1, 1, 1),
+  });
+  page.drawText("CASK WHISKY PORTFOLIOS", {
+    x: M, y: y - 68, size: 7.5, font: regular, color: rgb(0.78, 0.78, 0.78),
+  });
+  page.drawText("INVOICE", {
+    x: W - M - bold.widthOfTextAtSize("INVOICE", 20), y: y - 50, size: 20, font: bold, color: copper,
+  });
+  y -= 122;
+
+  // Company / invoice meta
+  const rightX = W / 2 + 20;
+  let ly = y;
+  page.drawText(COMPANY.registeredName, { x: M, y: ly, size: 9.5, font: bold, color: navy });
+  ly -= 13;
+  for (const l of COMPANY.addressLines) {
+    page.drawText(l, { x: M, y: ly, size: 8.5, font: regular, color: grey });
+    ly -= 11;
+  }
+  page.drawText(`Company no. ${COMPANY.companyNumber}`, { x: M, y: ly, size: 8.5, font: regular, color: grey });
+  ly -= 11;
+  page.drawText(COMPANY.email, { x: M, y: ly, size: 8.5, font: regular, color: grey });
+
+  let ry = y;
+  const meta: [string, string][] = [
+    ["Invoice number", inv.invoice_number],
+    ["Invoice date", dateStr(inv.issued_at)],
+    ["Payment due", dateStr(inv.due_at)],
+    ["Payment reference", inv.payment_reference],
+  ];
+  for (const [k, v] of meta) {
+    page.drawText(k.toUpperCase(), { x: rightX, y: ry, size: 7, font: regular, color: grey });
+    page.drawText(v, { x: rightX + 110, y: ry, size: 9, font: bold, color: navy });
+    ry -= 15;
+  }
+
+  y = Math.min(ly, ry) - 30;
+
+  // Bill to
+  page.drawText("INVOICE TO", { x: M, y, size: 7, font: bold, color: copper });
+  y -= 14;
+  page.drawText(inv.bill_to?.name || "", { x: M, y, size: 10, font: bold, color: navy });
+  y -= 12;
+  for (const l of (inv.bill_to?.lines ?? []).filter(Boolean)) {
+    page.drawText(l, { x: M, y, size: 8.5, font: regular, color: grey });
+    y -= 11;
+  }
+  if (inv.bill_to?.email) {
+    page.drawText(inv.bill_to.email, { x: M, y, size: 8.5, font: regular, color: grey });
+    y -= 11;
+  }
+
+  y -= 18;
+
+  // Items table
+  const cols = { desc: M, qty: 340, unit: 395, total: W - M };
+  page.drawRectangle({ x: M, y: y - 6, width: W - M * 2, height: 20, color: rgb(0.96, 0.95, 0.93) });
+  page.drawText("DESCRIPTION", { x: cols.desc + 6, y, size: 7, font: bold, color: navy });
+  page.drawText("QTY", { x: cols.qty, y, size: 7, font: bold, color: navy });
+  page.drawText("UNIT PRICE", { x: cols.unit, y, size: 7, font: bold, color: navy });
+  const tHdr = "AMOUNT";
+  page.drawText(tHdr, { x: cols.total - bold.widthOfTextAtSize(tHdr, 7) - 6, y, size: 7, font: bold, color: navy });
+  y -= 24;
+
+  for (const it of inv.items) {
+    const title = [it.distillery, it.spirit_name && it.spirit_name !== it.distillery ? `“${it.spirit_name}”` : null]
+      .filter(Boolean)
+      .join(" ");
+    const specs = [
+      it.cask_type,
+      it.wood,
+      it.abv ? `${it.abv}% ABV` : null,
+      it.vintage_year ? `${it.vintage_year}` : null,
+    ].filter(Boolean).join("  ·  ");
+
+    page.drawText(title || it.spirit || "Cask", { x: cols.desc + 6, y, size: 9.5, font: bold, color: navy });
+    page.drawText(String(it.quantity), { x: cols.qty, y, size: 9, font: regular, color: navy });
+    page.drawText(money(it.unit_price, inv.currency), { x: cols.unit, y, size: 9, font: regular, color: navy });
+    const amt = money(it.line_total, inv.currency);
+    page.drawText(amt, { x: cols.total - regular.widthOfTextAtSize(amt, 9) - 6, y, size: 9, font: regular, color: navy });
+    y -= 12;
+    if (specs) {
+      page.drawText(specs, { x: cols.desc + 6, y, size: 8, font: regular, color: grey });
+      y -= 12;
+    }
+    if (it.unit_price < it.list_price) {
+      page.drawText(
+        `List ${money(it.list_price, inv.currency)} — discount applied`,
+        { x: cols.desc + 6, y, size: 7.5, font: regular, color: copper },
+      );
+      y -= 12;
+    }
+    page.drawLine({ start: { x: M, y: y + 2 }, end: { x: W - M, y: y + 2 }, thickness: 0.5, color: line });
+    y -= 12;
+  }
+
+  // Totals
+  y -= 6;
+  const totalRow = (label: string, value: string, strong = false) => {
+    const f = strong ? bold : regular;
+    const s = strong ? 12 : 9.5;
+    page.drawText(label, { x: cols.unit - 40, y, size: s, font: f, color: strong ? navy : grey });
+    page.drawText(value, {
+      x: cols.total - f.widthOfTextAtSize(value, s) - 6,
+      y, size: s, font: f, color: strong ? copper : navy,
+    });
+    y -= strong ? 22 : 16;
+  };
+  totalRow("Subtotal", money(inv.subtotal, inv.currency));
+  if (inv.discount_amount > 0) {
+    totalRow(inv.discount_code ? `Discount (${inv.discount_code})` : "Discount", `-${money(inv.discount_amount, inv.currency)}`);
+  }
+  page.drawLine({ start: { x: cols.unit - 46, y: y + 8 }, end: { x: W - M, y: y + 8 }, thickness: 0.8, color: line });
+  y -= 6;
+  totalRow("Total due", money(inv.total, inv.currency), true);
+
+  // Bank details block
+  y -= 6;
+  const boxH = 108;
+  page.drawRectangle({ x: M, y: y - boxH, width: W - M * 2, height: boxH, color: rgb(0.97, 0.965, 0.95) });
+  page.drawRectangle({ x: M, y: y - boxH, width: 3, height: boxH, color: copper });
+  let by = y - 20;
+  page.drawText("PAYMENT BY BANK TRANSFER", { x: M + 16, y: by, size: 8, font: bold, color: copper });
+  by -= 16;
+  const bankRows: [string, string][] = [
+    ["Account name", BANK.accountName],
+    ["Bank", BANK.bankName],
+    ["Sort code", BANK.sortCode],
+    ["Account number", BANK.accountNumber],
+    ["IBAN / BIC", `${BANK.iban}  /  ${BANK.bic}`],
+    ["Payment reference", inv.payment_reference],
+  ];
+  for (const [k, v] of bankRows) {
+    page.drawText(k, { x: M + 16, y: by, size: 8, font: regular, color: grey });
+    page.drawText(v, { x: M + 130, y: by, size: 8.5, font: bold, color: navy });
+    by -= 13;
+  }
+  y -= boxH + 18;
+
+  page.drawText(
+    `Please quote reference ${inv.payment_reference} on your transfer. Casks are reserved until ${dateStr(inv.due_at)}.`,
+    { x: M, y, size: 8, font: regular, color: grey },
+  );
+  y -= 12;
+  page.drawText(
+    "Cask whisky held in bonded warehouse is not subject to VAT while under bond.",
+    { x: M, y, size: 8, font: regular, color: grey },
+  );
+
+  // Footer
+  page.drawText(
+    `${COMPANY.registeredName} · ${COMPANY.website} · Cask whisky is an unregulated asset; values can fall as well as rise.`,
+    { x: M, y: 36, size: 6.8, font: regular, color: grey },
+  );
+
+  return await pdf.save();
+}

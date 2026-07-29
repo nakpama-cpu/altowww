@@ -1,71 +1,58 @@
 ## Goal
 
-Standardise how cask specs display across the portal (Available Stock cards, cask detail dialog, My Casks) and add automatic pallet pricing.
+Let clients choose **Pay by card (Stripe)** or **Pay by bank transfer** at checkout. Bank transfer generates a branded invoice they can download immediately, emails it to them as a PDF attachment, and includes a "I've made the payment" confirmation link that notifies your admin inbox.
 
-## Schema changes (casks + cask_listings)
+## Checkout flow
 
-Add two new columns to both `public.casks` and `public.cask_listings`:
-
-- `wood` text — e.g. "Ex-Bourbon", "Oloroso Sherry", "PX Sherry", "Virgin Oak"
-- `cask_size_litres` numeric(6,1) — e.g. 200, 250, 500
-
-Keep existing `cask_type` but repurpose it to hold the shape only: "Barrel", "Hogshead", "Butt", "Puncheon". A one-off data migration parses current values (e.g. "First-fill Bourbon Barrel" → wood="Ex-Bourbon", cask_type="Barrel", size inferred from shape defaults: Barrel 200, Hogshead 250, Butt 500).
-
-`fill_date` and `age_years` stay — Year is derived from `fill_date` (year part), Age is the existing `computeCaskAge` helper.
-
-## Display rules
-
-Standard spec block used on Available Stock cards, cask detail dialog, and My Casks cards:
-
-```
-Spirit            Distillery
-Cask Type         Wood
-ABV               Year
-Age               [OLA or RLA — see below]
+```text
+Cart -> Choose payment method
+         |-- Card  -> existing Stripe embedded checkout (unchanged)
+         |-- Bank  -> invoice created + casks reserved (3 day hold)
+                       -> Download PDF on screen
+                       -> Branded email with PDF attached
+                       -> "Confirm payment sent" page
+                       -> Admin notification email
 ```
 
-- **Cask Type** renders as `{cask_type} {cask_size_litres}L` (e.g. "Barrel 200L").
-- **Year** = year portion of `fill_date`.
-- **Age** = `computeCaskAge(fill_date)` in whole years.
-- **OLA / RLA rule**: if `rla_litres` is set, show "RLA — 148L"; otherwise show "OLA — 200L". Never both.
-- **Available Stock**: hide OLA/RLA entirely (as today) — those are per-cask and only meaningful once a certificate is issued.
-- **My Casks**: show the RLA-or-OLA row per the rule above.
+## What gets built
 
-Admin panels (`Listings.tsx`, `Casks.tsx`, `Holdings.tsx`) get the new inputs: Wood dropdown, Cask Type dropdown (Barrel/Hogshead/Butt/Puncheon), Size (L) number field.
+**1. Invoices in the database**
+- New `invoices` table: invoice number, client, line items snapshot, subtotal/discount/total, currency, payment reference, status (`awaiting_payment`, `client_confirmed`, `paid`, `cancelled`, `expired`), due date, confirmation token.
+- Sequential invoice numbers in the format `AW-2026-0001` (year-based, resets annually).
+- Payment reference for the transfer derived from the invoice number (e.g. `AW260001`) so you can match transfers on your bank statement.
+- Casks reserved on invoice creation; due date set to **3 days**. A scheduled job releases the reservation and marks the invoice `expired` if not confirmed/paid.
+- Access rules: clients see only their own invoices; admins see all.
 
-## Pallet pricing (7.5% off when 6+ of the same listing)
+**2. Checkout UI**
+- A payment-method selector on the checkout summary: *Card* or *Bank transfer*.
+- Bank transfer creates the invoice, then shows a confirmation screen with: invoice number, amount, bank details, payment reference, due date, a **Download invoice (PDF)** button, and a **I've made the payment** button.
+- Existing KYC gate, discount codes and pallet pricing apply identically to both methods.
 
-Applies **per listing**, not across the cart. When a client has 6 or more units of the same `listing_id` in their cart, the unit price on that line is reduced by 7.5%.
+**3. Branded invoice PDF**
+- Alto Whisky branded layout: wordmark, company registered name/address/company number, invoice number and dates, client name and verified address, per-cask line items (distillery, spirit, cask type, wood, ABV, year, qty, unit price, line total), discounts, total, bank details block and payment reference, plus your standard footer disclaimers.
+- Generated server-side so the same PDF is used for both download and email attachment.
 
-UI:
+**4. Emails**
+- New branded transactional template **"Invoice — bank transfer"** sent to the client with the PDF attached, showing purchase details, bank details, reference, due date, and a prominent button linking to the payment-confirmation page.
+- New template **"Bank transfer confirmed by client"** sent to your admin address with invoice number, client name/email, amount, reference, and cask list.
 
-- Available Stock card: for any listing with `stock_qty >= 6`, show a small "Pallet price — £X,XXX ea. for 6+" line under the list price.
-- Cask detail dialog: same badge plus a note ("Automatically applied when 6+ purchased").
-- Checkout: line items show reduced unit price and a "Pallet price applied (−7.5%)" tag when qty ≥ 6.
+**5. Payment confirmation page**
+- Public route reached from the email link, validated by the invoice's one-time token (works even if the client isn't signed in).
+- Client confirms with an optional reference/date note; invoice moves to `client_confirmed` and the admin email fires.
 
-Interaction with discount codes: **greater of the two wins**, matching the existing "no stacking" rule. Backend enforcement lives in `enforce_order_amount`:
+**6. Admin panel**
+- New **Invoices** section: list with status filters, view/download the PDF, and actions to mark **Paid** (converts to a confirmed order, same as a successful Stripe payment) or **Cancel** (releases reserved stock).
 
-- Compute pallet discount% = 7.5 if that line's quantity ≥ 6 else 0.
-- Compute code discount% as today.
-- Effective discount = `GREATEST(pallet_pct, code_pct)`.
-- Apply to `list_price` when writing `amount`.
+## Technical notes
 
-Because orders currently store one `listing_id` per order row, quantity is inferred from the number of order rows created for the same checkout/listing combination. The trigger will look up sibling order rows in the same `checkout_session_id` for that `listing_id` to decide whether the ≥6 threshold is met.
+- New tables `invoices` and `invoice_items` with RLS + grants; invoice numbering via a Postgres sequence and a generation function.
+- New edge functions: `create-invoice` (auth'd, mirrors `create-checkout` validation and pricing logic exactly), `invoice-pdf` (renders PDF), `confirm-invoice-payment` (public, token-gated), plus an `expire-invoices` cron job.
+- PDF rendered in Deno with a lightweight PDF library; email attachment routed through the existing `send-transactional-email` infrastructure on `notify.altowhisky.com`.
+- Discount code redemption for bank transfer is deferred until the invoice is marked **Paid**, matching current Stripe behaviour.
 
-## Files touched
+## Needed from you before it can go live
 
-- Migration: add `wood`, `cask_size_litres` to `casks` and `cask_listings`; backfill from existing `cask_type`; update `enforce_order_amount` for pallet pricing.
-- `src/pages/portal/AvailableStock.tsx` — new spec layout, pallet price badge, hide OLA/RLA.
-- `src/pages/portal/MyCasks.tsx` — new spec layout, RLA-replaces-OLA rule.
-- `src/pages/portal/Checkout.tsx` + `src/contexts/CartContext.tsx` — per-listing quantity-aware unit price, pallet tag.
-- `src/pages/admin/Listings.tsx`, `src/pages/admin/Casks.tsx`, `src/pages/admin/Holdings.tsx` — Wood / Cask Type / Size inputs.
-- `src/integrations/supabase/types.ts` — regenerated after migration.
+- Company bank details (account name, sort code, account number, IBAN/BIC, bank name).
+- Registered company name, address and company number for the invoice header.
 
-## Delivery
-
-Use a subagent to draft the full edits in parallel across the six frontend files against the new schema, then apply the migration first and the code changes after types regenerate.
-
-## Out of scope
-
-- No change to certificates, KYC, or Stripe flow.
-- No change to how discount codes are assigned or validated (only how the effective % is combined with pallet pricing).
+I'll build with clearly-marked placeholders and swap in the real values as soon as you send them.
