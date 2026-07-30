@@ -415,7 +415,7 @@ export default function AvailableStock() {
           })}
         </div>
       ) : (
-        <div className="border border-border bg-muted/20 overflow-auto">
+        <div className="glass-card overflow-auto">
           <table className="w-full text-left font-body text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/30">
