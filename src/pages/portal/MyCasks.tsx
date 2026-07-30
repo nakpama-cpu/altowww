@@ -562,7 +562,7 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
       </div>
 
 
-      <div className="relative z-10 -mt-px flex items-center justify-between gap-3 bg-surface/80 backdrop-blur-sm border border-t-0 border-border border-l-4 px-4 py-2.5"
+      <div className="relative z-10 -mt-px flex items-center justify-between gap-3 bg-surface/60 backdrop-blur-md border border-t-0 border-border/70 px-4 py-2.5 shadow-[0_16px_32px_-24px_rgba(0,0,0,0.2)]"
         style={{ borderLeftColor: accent }}>
         <button
           type="button"
