@@ -361,27 +361,43 @@ export default function MyCasks() {
 }
 
 const SpecBox = ({ label, value }: { label: string; value?: string | number | null }) => (
-  <div className="border border-border bg-surface px-2.5 py-2 min-h-[64px] flex flex-col justify-start gap-1 min-w-0 shadow-sm">
-    <div className="font-body text-[9px] uppercase tracking-[0.15em] text-muted-foreground leading-tight break-words">{label}</div>
+  <div className="group/spec border border-border/60 bg-surface/60 backdrop-blur-sm px-3 py-2.5 min-h-[64px] flex flex-col justify-start gap-1 min-w-0 transition-all duration-200 hover:bg-surface/90 hover:border-border hover:-translate-y-[1px]">
+    <div className="font-body text-[9px] uppercase tracking-[0.2em] text-muted-foreground/70 leading-tight break-words">{label}</div>
     <div className="font-body text-[13px] text-foreground font-medium leading-snug break-words min-w-0" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
   </div>
 );
 
 function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: string, title: string) => void; loadingCert: boolean }) {
+  const accent = regionColor(r.casks.distilleries?.region);
   return (
     <div
-      className="bg-muted/20 border border-border border-l-4 p-6 md:p-8"
-      style={{ borderLeftColor: regionColor(r.casks.distilleries?.region) }}
+      className="relative overflow-hidden border border-border/70 bg-surface/70 backdrop-blur-md p-6 md:p-8 shadow-[0_16px_40px_-20px_rgba(0,0,0,0.18)]"
     >
-      <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-        <div>
-          <span className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Cask #{r.casks.cask_number ?? "TBC"}</span>
-          <h3 className="display-heading text-2xl mt-1">{r.casks.distilleries?.name ?? "Distillery"}</h3>
+      {/* Region gradient edge */}
+      <div
+        aria-hidden
+        className="absolute left-0 top-0 bottom-0 w-1 pointer-events-none"
+        style={{ background: `linear-gradient(to bottom, ${accent}, transparent)` }}
+      />
+      {/* Soft region glow */}
+      <div
+        aria-hidden
+        className="absolute -left-16 -top-16 w-52 h-52 rounded-full pointer-events-none opacity-[0.09] blur-2xl"
+        style={{ backgroundColor: accent }}
+      />
+
+      <div className="relative flex flex-wrap items-start justify-between gap-4 mb-5">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2.5">
+            <span className="font-body text-[10px] uppercase tracking-[0.28em] text-primary">Cask #{r.casks.cask_number ?? "TBC"}</span>
+            <span aria-hidden className="h-px w-8 bg-border" />
+          </div>
+          <h3 className="display-heading text-2xl md:text-[1.75rem] leading-tight mt-1.5">{r.casks.distilleries?.name ?? "Distillery"}</h3>
         </div>
         {r.certificate_path && (
           <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
             disabled={loadingCert}
-            className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-4 py-2 hover:bg-muted disabled:opacity-50">
+            className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] border border-border/70 bg-surface/50 backdrop-blur-sm text-muted-foreground px-4 py-2.5 transition-all duration-200 hover:text-primary hover:border-primary/40 hover:bg-surface disabled:opacity-50">
             <FileText className="w-3 h-3" /> View Certificate
           </button>
         )}
@@ -394,19 +410,26 @@ function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: strin
         const elapsedYears = (now - filled) / (365.25 * 24 * 3600 * 1000);
         const pct = Math.max(0, Math.min(100, (elapsedYears / targetYears) * 100));
         return (
-          <div className="mb-5">
+          <div className="relative mb-5">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="font-body text-[9px] uppercase tracking-[0.25em] text-muted-foreground">Maturation</span>
-              <span className="font-body text-[10px] text-muted-foreground">{elapsedYears.toFixed(1)} / {targetYears} yrs</span>
+              <span className="font-body text-[9px] uppercase tracking-[0.25em] text-muted-foreground/70">Maturation</span>
+              <span className="font-body text-[10px] text-muted-foreground tabular-nums">{elapsedYears.toFixed(1)} / {targetYears} yrs</span>
             </div>
-            <div className="h-1 w-full bg-muted overflow-hidden">
-              <div className="h-full" style={{ width: `${pct}%`, backgroundColor: regionColor(r.casks.distilleries?.region) }} />
+            <div className="h-[3px] w-full bg-muted/50 overflow-hidden">
+              <div
+                className="h-full transition-all duration-500"
+                style={{
+                  width: `${pct}%`,
+                  background: `linear-gradient(to right, ${accent}, hsl(var(--primary)))`,
+                  boxShadow: `0 0 8px 0 hsl(var(--primary) / 0.5)`,
+                }}
+              />
             </div>
           </div>
         );
       })()}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+      <div className="relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
         <SpecBox label="Region" value={r.casks.distilleries?.region} />
         <SpecBox label="Cask" value={formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres)} />
         <SpecBox label="Wood" value={r.casks.wood} />
@@ -423,6 +446,7 @@ function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: strin
     </div>
   );
 }
+
 
 function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[]; initialIndex: number; openCert: (path: string, title: string) => void; loadingCert: boolean }) {
   const [index, setIndex] = useState(initialIndex);
@@ -538,7 +562,7 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
       </div>
 
 
-      <div className="relative z-10 -mt-px flex items-center justify-between gap-3 bg-surface/80 backdrop-blur-sm border border-t-0 border-border border-l-4 px-4 py-2.5"
+      <div className="relative z-10 -mt-px flex items-center justify-between gap-3 bg-surface/60 backdrop-blur-md border border-t-0 border-border/70 px-4 py-2.5 shadow-[0_16px_32px_-24px_rgba(0,0,0,0.2)]"
         style={{ borderLeftColor: accent }}>
         <button
           type="button"
