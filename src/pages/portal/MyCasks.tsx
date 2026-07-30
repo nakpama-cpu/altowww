@@ -367,7 +367,7 @@ const SpecBox = ({ label, value }: { label: string; value?: string | number | nu
   </div>
 );
 
-function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: string, title: string) => void; loadingCert: boolean }) {
+function CaskCard({ r, openCert, loadingCert, stackNav }: { r: Row; openCert: (path: string, title: string) => void; loadingCert: boolean; stackNav?: React.ReactNode }) {
   const accent = regionColor(r.casks.distilleries?.region);
   return (
     <div
@@ -394,13 +394,16 @@ function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: strin
           </div>
           <h3 className="display-heading text-2xl md:text-[1.75rem] leading-tight mt-1.5">{r.casks.distilleries?.name ?? "Distillery"}</h3>
         </div>
-        {r.certificate_path && (
-          <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
-            disabled={loadingCert}
-            className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] border border-border/70 bg-surface/50 backdrop-blur-sm text-muted-foreground px-4 py-2.5 transition-all duration-200 hover:text-primary hover:border-primary/40 hover:bg-surface disabled:opacity-50">
-            <FileText className="w-3 h-3" /> View Certificate
-          </button>
-        )}
+        <div className="flex flex-col items-end gap-2">
+          {stackNav}
+          {r.certificate_path && (
+            <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
+              disabled={loadingCert}
+              className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] border border-border/70 bg-surface/50 backdrop-blur-sm text-muted-foreground px-4 py-2.5 transition-all duration-200 hover:text-primary hover:border-primary/40 hover:bg-surface disabled:opacity-50">
+              <FileText className="w-3 h-3" /> View Certificate
+            </button>
+          )}
+        </div>
       </div>
 
       {r.casks.fill_date && (() => {
