@@ -47,7 +47,7 @@ export default function Dashboard() {
       </div>
 
       {/* Hero portfolio card */}
-      <div className="bg-secondary text-secondary-foreground p-8 md:p-10 mb-6 border border-secondary relative overflow-hidden">
+      <div className="glass-card-dark p-8 md:p-10 mb-6 relative overflow-hidden">
         <div className="font-body text-[10px] uppercase tracking-[0.3em] text-primary mb-3">Portfolio Value</div>
         <div className="display-heading text-5xl md:text-6xl mb-4 text-secondary-foreground">
           £{summary.totalValue.toLocaleString()}
@@ -72,7 +72,7 @@ export default function Dashboard() {
 }
 
 const QuickAction = ({ to, icon: Icon, label, sub }: { to: string; icon: any; label: string; sub: string }) => (
-  <Link to={to} className="group block bg-muted/20 border border-border p-6 hover:border-primary transition-colors">
+  <Link to={to} className="group block glass-card-sm p-6 hover:border-primary transition-colors">
     <div className="w-9 h-9 flex items-center justify-center bg-primary/10 border border-primary/20 mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
       <Icon className="w-4 h-4 text-primary group-hover:text-primary-foreground" />
     </div>
