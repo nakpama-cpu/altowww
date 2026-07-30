@@ -188,7 +188,7 @@ export default function Checkout() {
 
 
         <div className="grid lg:grid-cols-5 gap-6 min-w-0 items-start">
-          <aside className="lg:col-span-2 bg-muted/20 border border-border p-6 min-w-0">
+          <aside className="lg:col-span-2 glass-card p-6 min-w-0">
             <h2 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-4">Your order</h2>
             <div className="space-y-3">
               {lineBreakdown.map(({ item: i, unit, lineTotal }) => (
@@ -227,7 +227,7 @@ export default function Checkout() {
       <div className="max-w-3xl">
         <h1 className="display-heading text-4xl mb-2">Checkout</h1>
         <p className="font-body text-sm text-muted-foreground mb-8">Your cart is currently empty.</p>
-        <div className="bg-muted/20 border border-border p-12 text-center">
+        <div className="glass-card p-12 text-center">
           <ShoppingBag className="w-10 h-10 mx-auto text-muted-foreground mb-4" />
           <p className="font-body text-sm text-muted-foreground mb-6">
             Browse available casks and add them to your cart to begin checkout.
@@ -261,7 +261,7 @@ export default function Checkout() {
             const list = Number(i.list_price || 0);
             const discounted = unit < list;
             return (
-              <div key={i.listing_id} className="bg-muted/20 border border-border p-3 sm:p-4">
+              <div key={i.listing_id} className="glass-card p-3 sm:p-4">
                 <div className="flex items-start gap-3 sm:gap-4">
                   <div className="w-16 h-16 sm:w-20 sm:h-20 bg-muted flex-shrink-0 overflow-hidden">
                     {i.hero_image_url ? (
@@ -327,7 +327,7 @@ export default function Checkout() {
           </button>
         </div>
 
-        <aside className="bg-muted/20 border border-border p-6 h-fit min-w-0">
+        <aside className="glass-card p-6 h-fit min-w-0">
           <h2 className="font-body text-[10px] uppercase tracking-[0.25em] text-primary mb-4">Order Summary</h2>
           <div className="flex justify-between font-body text-sm py-2">
             <span className="text-muted-foreground">Casks</span>
