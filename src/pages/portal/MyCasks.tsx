@@ -387,3 +387,172 @@ const SpecBox = ({ label, value }: { label: string; value?: string | number | nu
     <div className="font-body text-[13px] text-foreground font-medium leading-snug break-words min-w-0" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
   </div>
 );
+
+function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: string, title: string) => void; loadingCert: boolean }) {
+  return (
+    <div
+      className="bg-muted/20 border border-border border-l-4 p-6 md:p-8"
+      style={{ borderLeftColor: regionColor(r.casks.distilleries?.region) }}
+    >
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+        <div>
+          <span className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Cask #{r.casks.cask_number ?? "TBC"}</span>
+          <h3 className="display-heading text-2xl mt-1">{r.casks.distilleries?.name ?? "Distillery"}</h3>
+        </div>
+        {r.certificate_path && (
+          <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
+            disabled={loadingCert}
+            className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-4 py-2 hover:bg-muted disabled:opacity-50">
+            <FileText className="w-3 h-3" /> View Certificate
+          </button>
+        )}
+      </div>
+
+      {r.casks.fill_date && (() => {
+        const filled = new Date(r.casks.fill_date).getTime();
+        const now = Date.now();
+        const targetYears = 12;
+        const elapsedYears = (now - filled) / (365.25 * 24 * 3600 * 1000);
+        const pct = Math.max(0, Math.min(100, (elapsedYears / targetYears) * 100));
+        return (
+          <div className="mb-5">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="font-body text-[9px] uppercase tracking-[0.25em] text-muted-foreground">Maturation</span>
+              <span className="font-body text-[10px] text-muted-foreground">{elapsedYears.toFixed(1)} / {targetYears} yrs</span>
+            </div>
+            <div className="h-1 w-full bg-muted overflow-hidden">
+              <div className="h-full" style={{ width: `${pct}%`, backgroundColor: regionColor(r.casks.distilleries?.region) }} />
+            </div>
+          </div>
+        );
+      })()}
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+        <SpecBox label="Region" value={r.casks.distilleries?.region} />
+        <SpecBox label="Cask" value={formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres)} />
+        <SpecBox label="Wood" value={r.casks.wood} />
+        <SpecBox label="Spirit Name" value={displaySpiritName(r.casks)} />
+        <SpecBox label="ABV" value={r.casks.abv != null ? `${r.casks.abv}%` : null} />
+        {(() => { const a = computeCaskAge(r.casks.fill_date, r.casks.age_years); return <SpecBox label="Age" value={a != null ? `${a} yrs` : null} />; })()}
+        <SpecBox label="Fill Date" value={r.casks.fill_date} />
+        {r.casks.rla_litres != null
+          ? <SpecBox label="RLA" value={`${r.casks.rla_litres} L`} />
+          : <SpecBox label="OLA" value={r.casks.ola_litres != null ? `${r.casks.ola_litres} L` : null} />}
+        <SpecBox label="Purchase Price" value={`£${Number(r.purchase_price).toLocaleString()}`} />
+        <SpecBox label="Purchase Date" value={r.purchase_date} />
+      </div>
+    </div>
+  );
+}
+
+function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[]; initialIndex: number; openCert: (path: string, title: string) => void; loadingCert: boolean }) {
+  const [index, setIndex] = useState(initialIndex);
+  const [turning, setTurning] = useState<null | "next" | "prev">(null);
+
+  useEffect(() => { setIndex(initialIndex); }, [initialIndex, units.length]);
+
+  const total = units.length;
+  const safeIndex = Math.min(index, total - 1);
+  const current = units[safeIndex];
+  const accent = regionColor(current.casks.distilleries?.region);
+
+  if (total === 1) {
+    return <CaskCard r={current} openCert={openCert} loadingCert={loadingCert} />;
+  }
+
+  const reduced = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+  const go = (dir: "next" | "prev") => {
+    if (turning) return;
+    const next = dir === "next" ? (safeIndex + 1) % total : (safeIndex - 1 + total) % total;
+    if (reduced) { setIndex(next); return; }
+    setTurning(dir);
+    window.setTimeout(() => { setIndex(next); setTurning(null); }, 260);
+  };
+
+  const edges = Math.min(total - 1, 3);
+
+  return (
+    <div
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "ArrowRight") { e.preventDefault(); go("next"); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); go("prev"); }
+      }}
+      className="relative focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      style={{ marginBottom: edges * 6 }}
+    >
+      {/* Stack edges (pages behind) */}
+      {Array.from({ length: edges }).map((_, i) => {
+        const depth = edges - i;
+        return (
+          <div
+            key={i}
+            aria-hidden
+            className="absolute inset-x-0 top-0 bottom-0 bg-muted/20 border border-border border-l-4 pointer-events-none"
+            style={{
+              borderLeftColor: accent,
+              transform: `translate(${depth * 4}px, ${depth * 6}px) scale(${1 - depth * 0.012})`,
+              opacity: 1 - depth * 0.22,
+              zIndex: 0,
+            }}
+          />
+        );
+      })}
+
+      <div
+        className="relative z-10 origin-left transition-all duration-300 ease-out"
+        style={
+          turning
+            ? {
+                transform: turning === "next" ? "translateX(-2%) rotate(-1.2deg) scale(0.98)" : "translateX(2%) rotate(1.2deg) scale(0.98)",
+                opacity: 0,
+              }
+            : { transform: "none", opacity: 1 }
+        }
+      >
+        <CaskCard r={current} openCert={openCert} loadingCert={loadingCert} />
+      </div>
+
+      <div className="relative z-10 -mt-px flex items-center justify-between gap-3 bg-muted/20 border border-t-0 border-border border-l-4 px-4 py-2.5"
+        style={{ borderLeftColor: accent }}>
+        <button
+          type="button"
+          onClick={() => go("prev")}
+          className="flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground"
+          aria-label="Previous cask"
+        >
+          <ChevronLeft className="w-4 h-4" /> Prev
+        </button>
+
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-1.5">
+            {units.map((u, i) => (
+              <button
+                key={u.id}
+                type="button"
+                aria-label={`Cask ${i + 1}`}
+                onClick={() => setIndex(i)}
+                className="w-1.5 h-1.5 rounded-full transition-opacity"
+                style={{ backgroundColor: accent, opacity: i === safeIndex ? 1 : 0.3 }}
+              />
+            ))}
+          </div>
+          <span className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground tabular-nums">
+            {safeIndex + 1} / {total} Casks
+          </span>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => go("next")}
+          className="flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground"
+          aria-label="Next cask"
+        >
+          Next <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
