@@ -1,21 +1,32 @@
-# Stacked "book pages" cask cards in My Casks
+Implement the selected "Premium Glass Stack" transition for duplicate casks in `src/pages/portal/MyCasks.tsx`, adapting the frosted-glass depth language to the portal's existing light cream / navy / copper palette.
 
-## Goal
-In the portal's My Casks card view, casks that are identical except for their cask number appear as a stack of individual cards — rendered like pages in a book, one on top of the other — with navigation to flick through each record.
+## What will change
 
-## Behaviour
-- Casks with matching details (distillery, spirit/spirit name, cask type, size, wood, fill date, ABV, age, RLA/OLA, purchase price, purchase date) form a stack. Each cask keeps its own full card — nothing is merged into a combined card.
-- Visual: the front card sits flush; the cards behind it peek out slightly (a few px offset down and to the side, scaled down, reduced opacity) so the stack reads as a pile of pages. Depth is capped at ~3 visible edges regardless of stack size.
-- Turning a page: prev/next arrow buttons sit at the bottom of the front card, with a `2 / 5` counter and small dot indicators. Left/right arrow keys work when the stack is focused.
-- Page-turn animation: the outgoing card lifts and slides off with a slight rotation while the next card scales up into place (~300ms, respects `prefers-reduced-motion` by cross-fading instead).
-- Each card retains its own cask number, certificate button, maturation bar, and full spec grid, exactly as today.
-- Single casks render as a plain card with no stack edges, counter, or arrows.
-- Search and sort still operate on individual holdings; stacks are formed after filtering/sorting and positioned at their first matching member. Searching a specific cask number opens that stack on the matching card.
-- Table view is unchanged (one row per cask).
+1. **Stack depth edges** — Replace the current flat offset rectangles behind the front card with translucent, frosted-glass-style layers:
+   - Back-most edge: soft blur, muted border, lower opacity, larger Y offset and scale.
+   - Middle edge: light backdrop-blur, thin border, moderate opacity, smaller offset.
+   - Front card stays crisp and opaque with a subtle shadow.
 
-## Technical notes
-- All changes stay in `src/pages/portal/MyCasks.tsx`; no backend or database changes.
-- Extract the existing card markup into a `CaskCard` component in the same file (props: the holding row, `openCert`, `loadingCert`) so it can be reused for each page of a stack.
-- Add a `stacks` memo over `filtered` that keys holdings by a normalised signature of the shared spec fields and returns `{ key, units: Row[] }`.
-- Add a new `CaskStack` component holding the active index state, arrows, counter, dots, and the absolutely-positioned background card edges.
-- Use Tailwind transforms/transitions for the offset and page-turn; no new dependencies.
+2. **Page-turn / swipe transition** — Keep the existing swipe, arrow, and keyboard navigation, but refine the motion:
+   - Use a cubic-bezier `[0.23, 1, 0.32, 1]` ease-out curve.
+   - Add a slight lift (`translateY`) and scale change during the drag so the card feels physically separated from the stack.
+   - Fade the outgoing card with a soft rotation rather than the current linear slide.
+
+3. **Swipe hint** — Add a small dot/page indicator under the stack that matches the existing card's regional accent color (copper tones), consistent with the current navigation bar but lighter.
+
+4. **Color adaptation** — Use the portal's existing semantic tokens (`bg-muted/20`, `border-border`, `bg-surface`, `text-muted-foreground`, regional accent) so the glass effect works in light mode and stays consistent with the rest of the site.
+
+5. **Accessibility** — Maintain `prefers-reduced-motion` cross-fade fallback and keep keyboard arrow navigation.
+
+## What will NOT change
+- Card content, spec grid, certificate button, maturation bar, or single-cask behavior.
+- Table view.
+- Search/sort/filter logic or stack grouping.
+
+## Verification
+- Open the portal My Casks page for the test user.
+- Confirm stacked casks show the new frosted depth edges and refined swipe/turn animation.
+- Confirm single casks remain a plain card with no stack UI.
+- Confirm reduced-motion still cross-fades cleanly.
+
+Only `src/pages/portal/MyCasks.tsx` will be edited.
