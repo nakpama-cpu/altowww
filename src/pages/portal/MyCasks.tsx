@@ -559,13 +559,12 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
               : { transform: "none", opacity: 1 }
         }
       >
-        <div className="shadow-[0_12px_32px_-12px_rgba(0,0,0,0.08)]">
           <CaskCard
             r={current}
             openCert={openCert}
             loadingCert={loadingCert}
             stackNav={
-              <div className="flex items-center gap-3 bg-surface/60 backdrop-blur-md border border-border/70 px-3 py-1.5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.08)]">
+              <div className="flex items-center gap-3 glass-card px-3 py-1.5">
                 <button
                   type="button"
                   onClick={() => go("prev")}
