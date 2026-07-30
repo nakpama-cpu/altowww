@@ -577,7 +577,7 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-2 sm:space-y-4 pt-1">
-          <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
+          <div className="rounded-lg glass-card-sm p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
             <div className="grid grid-cols-2 gap-2 sm:gap-3 items-end">
               <TextField dense label="Date of birth" type="date" value={dob} onChange={setDob} />
               <div>
@@ -762,7 +762,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
         {tab === "phone" ? (
           <div className="space-y-4 pt-1">
-            <div className="rounded-lg border border-border/60 bg-muted/20 p-4 sm:p-5">
+            <div className="rounded-lg glass-card-sm p-4 sm:p-5">
               <PhoneField
                 countryCode={phoneCode}
                 onCountryCodeChange={setPhoneCode}
@@ -787,7 +787,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
               Changing your address requires re-verification. Please upload a new proof of address issued within the last 3 months.
             </div>
 
-            <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 space-y-1.5">
+            <div className="rounded-lg glass-card-sm p-2.5 space-y-1.5">
               <TextField dense label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
               <TextField dense label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
               <div className="grid grid-cols-2 gap-2">
@@ -800,7 +800,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
               </div>
             </div>
 
-            <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 space-y-1.5">
+            <div className="rounded-lg glass-card-sm p-2.5 space-y-1.5">
               <div className="grid grid-cols-2 gap-2 items-end">
                 <div>
                   <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Document type</label>
