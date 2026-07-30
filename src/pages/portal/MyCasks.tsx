@@ -446,7 +446,7 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
     const next = dir === "next" ? (safeIndex + 1) % total : (safeIndex - 1 + total) % total;
     if (reduced) { setIndex(next); return; }
     setTurning(dir);
-    window.setTimeout(() => { setIndex(next); setTurning(null); }, 260);
+    window.setTimeout(() => { setIndex(next); setTurning(null); }, 320);
   };
 
   const edges = Math.min(total - 1, 3);
@@ -483,58 +483,67 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
         if (e.key === "ArrowRight") { e.preventDefault(); go("next"); }
         if (e.key === "ArrowLeft") { e.preventDefault(); go("prev"); }
       }}
-      className="relative focus:outline-none focus-visible:ring-2 focus-visible:ring-ring touch-pan-y select-none"
-      style={{ marginBottom: edges * 6 }}
+      className="relative focus:outline-none focus-visible:ring-2 focus-visible:ring-ring touch-pan-y select-none group"
+      style={{ marginBottom: edges * 8 }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={endDrag}
       onPointerCancel={endDrag}
       onPointerLeave={endDrag}
     >
-      {/* Stack edges (pages behind) */}
+      {/* Frosted-glass stack edges (pages behind) */}
       {Array.from({ length: edges }).map((_, i) => {
-        const depth = edges - i;
+        const depth = edges - i; // 1 is nearest to front, larger is further back
+        const isBack = depth === edges;
         return (
           <div
             key={i}
             aria-hidden
-            className="absolute inset-x-0 top-0 bottom-0 bg-muted/20 border border-border border-l-4 pointer-events-none"
+            className={`
+              absolute inset-x-0 top-0 bottom-0 pointer-events-none border border-border border-l-4
+              ${isBack ? "bg-muted/10 backdrop-blur-[1px]" : "bg-surface/40 backdrop-blur-sm"}
+            `}
             style={{
               borderLeftColor: accent,
-              transform: `translate(${depth * 4}px, ${depth * 6}px) scale(${1 - depth * 0.012})`,
-              opacity: 1 - depth * 0.22,
+              transform: `translate(${depth * 3}px, ${depth * 8}px) scale(${1 - depth * 0.015})`,
+              opacity: isBack ? 0.35 : 0.65,
               zIndex: 0,
+              boxShadow: isBack ? "0 12px 28px -12px rgba(0,0,0,0.08)" : "0 8px 20px -8px rgba(0,0,0,0.06)",
             }}
           />
         );
       })}
 
       <div
-        className={`relative z-10 origin-left ${drag ? "" : "transition-all duration-300 ease-out"}`}
+        className={`relative z-10 origin-left ${drag ? "" : "transition-[transform,opacity] duration-[320ms] ease-[cubic-bezier(0.23,1,0.32,1)]"}`}
         style={
           turning
             ? {
-                transform: turning === "next" ? "translateX(-2%) rotate(-1.2deg) scale(0.98)" : "translateX(2%) rotate(1.2deg) scale(0.98)",
+                transform: turning === "next"
+                  ? "translateX(-6%) translateY(-12px) rotate(-3deg) scale(0.97)"
+                  : "translateX(6%) translateY(-12px) rotate(3deg) scale(0.97)",
                 opacity: 0,
               }
             : drag
               ? {
-                  transform: `translateX(${drag * 0.5}px) rotate(${drag * 0.012}deg)`,
-                  opacity: Math.max(0.5, 1 - Math.abs(drag) / 400),
+                  transform: `translateX(${drag * 0.5}px) translateY(${-Math.min(Math.abs(drag) * 0.08, 10)}px) rotate(${drag * 0.015}deg) scale(${1 - Math.min(Math.abs(drag) * 0.00015, 0.03)})`,
+                  opacity: Math.max(0.45, 1 - Math.abs(drag) / 360),
                 }
               : { transform: "none", opacity: 1 }
         }
       >
-        <CaskCard r={current} openCert={openCert} loadingCert={loadingCert} />
+        <div className="shadow-[0_12px_32px_-12px_rgba(0,0,0,0.08)]">
+          <CaskCard r={current} openCert={openCert} loadingCert={loadingCert} />
+        </div>
       </div>
 
 
-      <div className="relative z-10 -mt-px flex items-center justify-between gap-3 bg-muted/20 border border-t-0 border-border border-l-4 px-4 py-2.5"
+      <div className="relative z-10 -mt-px flex items-center justify-between gap-3 bg-surface/80 backdrop-blur-sm border border-t-0 border-border border-l-4 px-4 py-2.5"
         style={{ borderLeftColor: accent }}>
         <button
           type="button"
           onClick={() => go("prev")}
-          className="flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
           aria-label="Previous cask"
         >
           <ChevronLeft className="w-4 h-4" /> Prev
@@ -548,8 +557,12 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
                 type="button"
                 aria-label={`Cask ${i + 1}`}
                 onClick={() => setIndex(i)}
-                className="w-1.5 h-1.5 rounded-full transition-opacity"
-                style={{ backgroundColor: accent, opacity: i === safeIndex ? 1 : 0.3 }}
+                className="w-1.5 h-1.5 rounded-full transition-all duration-200"
+                style={{
+                  backgroundColor: i === safeIndex ? accent : "hsl(var(--muted-foreground))",
+                  opacity: i === safeIndex ? 1 : 0.25,
+                  transform: i === safeIndex ? "scale(1.3)" : "scale(1)",
+                }}
               />
             ))}
           </div>
@@ -561,11 +574,21 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
         <button
           type="button"
           onClick={() => go("next")}
-          className="flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
           aria-label="Next cask"
         >
           Next <ChevronRight className="w-4 h-4" />
         </button>
+      </div>
+
+      {/* Swipe hint */}
+      <div
+        className="absolute left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] font-body uppercase tracking-[0.2em] text-muted-foreground/60 transition-opacity duration-300 opacity-0 group-hover:opacity-100 pointer-events-none"
+        style={{ top: "calc(100% + 8px)" }}
+      >
+        <ChevronLeft className="w-3 h-3" />
+        <span>Swipe or drag to flip</span>
+        <ChevronRight className="w-3 h-3" />
       </div>
     </div>
   );
