@@ -367,7 +367,7 @@ const SpecBox = ({ label, value }: { label: string; value?: string | number | nu
   </div>
 );
 
-function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: string, title: string) => void; loadingCert: boolean }) {
+function CaskCard({ r, openCert, loadingCert, stackNav }: { r: Row; openCert: (path: string, title: string) => void; loadingCert: boolean; stackNav?: React.ReactNode }) {
   const accent = regionColor(r.casks.distilleries?.region);
   return (
     <div
@@ -394,13 +394,16 @@ function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: strin
           </div>
           <h3 className="display-heading text-2xl md:text-[1.75rem] leading-tight mt-1.5">{r.casks.distilleries?.name ?? "Distillery"}</h3>
         </div>
-        {r.certificate_path && (
-          <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
-            disabled={loadingCert}
-            className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] border border-border/70 bg-surface/50 backdrop-blur-sm text-muted-foreground px-4 py-2.5 transition-all duration-200 hover:text-primary hover:border-primary/40 hover:bg-surface disabled:opacity-50">
-            <FileText className="w-3 h-3" /> View Certificate
-          </button>
-        )}
+        <div className="flex flex-col items-end gap-2">
+          {stackNav}
+          {r.certificate_path && (
+            <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
+              disabled={loadingCert}
+              className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] border border-border/70 bg-surface/50 backdrop-blur-sm text-muted-foreground px-4 py-2.5 transition-all duration-200 hover:text-primary hover:border-primary/40 hover:bg-surface disabled:opacity-50">
+              <FileText className="w-3 h-3" /> View Certificate
+            </button>
+          )}
+        </div>
       </div>
 
       {r.casks.fill_date && (() => {
@@ -557,52 +560,53 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
         }
       >
         <div className="shadow-[0_12px_32px_-12px_rgba(0,0,0,0.08)]">
-          <CaskCard r={current} openCert={openCert} loadingCert={loadingCert} />
+          <CaskCard
+            r={current}
+            openCert={openCert}
+            loadingCert={loadingCert}
+            stackNav={
+              <div className="flex items-center gap-3 bg-surface/60 backdrop-blur-md border border-border/70 px-3 py-1.5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.08)]">
+                <button
+                  type="button"
+                  onClick={() => go("prev")}
+                  className="flex items-center gap-0.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Previous cask"
+                >
+                  <ChevronLeft className="w-4 h-4" /> Prev
+                </button>
+
+                <div className="flex items-center gap-1.5">
+                  {units.map((u, i) => (
+                    <button
+                      key={u.id}
+                      type="button"
+                      aria-label={`Cask ${i + 1}`}
+                      onClick={() => setIndex(i)}
+                      className="w-1.5 h-1.5 rounded-full transition-all duration-200"
+                      style={{
+                        backgroundColor: i === safeIndex ? accent : "hsl(var(--muted-foreground))",
+                        opacity: i === safeIndex ? 1 : 0.25,
+                        transform: i === safeIndex ? "scale(1.3)" : "scale(1)",
+                      }}
+                    />
+                  ))}
+                </div>
+                <span className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground tabular-nums">
+                  {safeIndex + 1} / {total} Casks
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => go("next")}
+                  className="flex items-center gap-0.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Next cask"
+                >
+                  Next <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            }
+          />
         </div>
-      </div>
-
-
-      <div className="relative z-10 -mt-px flex items-center justify-between gap-3 bg-surface/60 backdrop-blur-md border border-t-0 border-border/70 px-4 py-2.5 shadow-[0_16px_32px_-24px_rgba(0,0,0,0.2)]"
-        style={{ borderLeftColor: accent }}>
-        <button
-          type="button"
-          onClick={() => go("prev")}
-          className="flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Previous cask"
-        >
-          <ChevronLeft className="w-4 h-4" /> Prev
-        </button>
-
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-1.5">
-            {units.map((u, i) => (
-              <button
-                key={u.id}
-                type="button"
-                aria-label={`Cask ${i + 1}`}
-                onClick={() => setIndex(i)}
-                className="w-1.5 h-1.5 rounded-full transition-all duration-200"
-                style={{
-                  backgroundColor: i === safeIndex ? accent : "hsl(var(--muted-foreground))",
-                  opacity: i === safeIndex ? 1 : 0.25,
-                  transform: i === safeIndex ? "scale(1.3)" : "scale(1)",
-                }}
-              />
-            ))}
-          </div>
-          <span className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground tabular-nums">
-            {safeIndex + 1} / {total} Casks
-          </span>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => go("next")}
-          className="flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Next cask"
-        >
-          Next <ChevronRight className="w-4 h-4" />
-        </button>
       </div>
 
       {/* Swipe hint */}
