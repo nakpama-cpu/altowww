@@ -294,7 +294,7 @@ export default function AvailableStock() {
         </div>
         <button
           onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
-          className="md:col-span-2 lg:col-span-2 w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-muted/20 font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground md:order-6 lg:order-none"
+          className="md:col-span-2 lg:col-span-2 w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border glass-card-sm font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground md:order-6 lg:order-none"
           title="Clear all filters"
         >
           <RotateCcw className="w-3.5 h-3.5" /> Clear
