@@ -1,30 +1,37 @@
-## Goal
-Apply the "Premium Glass Stack" visual language (already used for the stack edges and page-turn) to the cask card itself, so single cards and stacked cards share one refined aesthetic.
+Plan: Unify the client portal around a frosted-glass card system
 
-## Scope
-Presentation only in `src/pages/portal/MyCasks.tsx` (`CaskCard`, `SpecBox`, and the stack navigation bar). No data, query, or logic changes.
+### Summary
+Take the glass treatment already used in My Casks and make it the standard surface language for all portal pages. The goal is a consistent, premium feel without changing any content, layout, typography, or interactions.
 
-## Card surface
-- Replace the flat `bg-muted/20` panel with a frosted-glass surface: layered translucent background (`bg-surface/70` + `backdrop-blur-md`), hairline border, and a soft elevated shadow.
-- Keep the region-coloured left rule but soften it into a gradient edge that fades down the card, plus a faint region-tinted glow in the top-left corner.
-- Slightly larger corner treatment consistent with the portal (subtle, still squared-off — no rounded pill look).
+### What will change
 
-## Header
-- Cask number as small copper-tinted uppercase eyebrow with a thin divider.
-- Distillery name in Cormorant display at a larger size, tighter leading.
-- "View Certificate" becomes a ghost glass button (translucent background, hairline border, copper text on hover) aligned right.
+1. Create a reusable glass-card system in `src/index.css`
+   - Add a new component layer with three classes:
+     - `.glass-card` — translucent white surface, medium blur, soft border, and a tokenized shadow.
+     - `.glass-card-sm` — lighter variant for nested panels, filter inputs, and form sections.
+     - `.glass-card-dark` — dark translucent variant for the Dashboard hero / portfolio-value card.
+   - Shadows will use semantic tokens (`--foreground` / `--secondary-foreground`) instead of hardcoded black.
 
-## Maturation bar
-- Track becomes a translucent inset rail; fill gets a subtle gradient from the region colour to copper with a soft glow at the leading edge.
-- Label row keeps the same copy and percentages.
+2. Set the portal backdrop in `src/pages/portal/PortalLayout.tsx`
+   - Switch the main content area from `bg-white` to `bg-background` (warm cream).
+   - This makes the glass translucency visible and aligns the portal with the brand palette.
 
-## Spec grid
-- `SpecBox` restyled as frosted glass tiles: translucent background, hairline border, no heavy shadow, hover lift with slightly brighter surface.
-- Labels in finer letterspaced micro-caps at reduced opacity; values in medium weight.
-- Same fields and same 2/3/4-column responsive grid, uniform min-height retained.
+3. Apply glass cards to each portal page
+   - `src/pages/portal/MyCasks.tsx` — refactor existing inline frosted classes to use `.glass-card` / `.glass-card-sm` for the main card, SpecBox tiles, and certificate button. Keep the region gradient edge and glow.
+   - `src/pages/portal/Dashboard.tsx` — hero card uses `.glass-card-dark`; QuickAction cards use `.glass-card-sm`; `ActivityFeed` uses `.glass-card`.
+   - `src/components/portal/ActivityFeed.tsx` — root aside uses `.glass-card`.
+   - `src/pages/portal/AvailableStock.tsx` — listing cards, table container, empty states, and filter inputs use `.glass-card` / `.glass-card-sm`.
+   - `src/pages/portal/Account.tsx` — profile section, verification dialog content, and dialog form panels use `.glass-card` / `.glass-card-sm`.
+   - `src/pages/portal/Orders.tsx` — order cards, filter bar, and empty states use `.glass-card` / `.glass-card-sm`.
+   - `src/pages/portal/Checkout.tsx` — cart items, order summary, empty cart, invoice loading/error panels, and order-review aside use `.glass-card` / `.glass-card-sm`.
+   - `src/pages/portal/RequestCallback.tsx` — callback form uses `.glass-card`.
 
-## Stack chrome
-- Navigation bar under the card adopts the same glass treatment so it reads as part of the card, with copper active dot indicators and the existing counter/hint text.
+4. Leave these unchanged
+   - The dark sidebar (solid anchor), mobile header, and Stripe Embedded Checkout iframe container.
+   - Marketing-site pages, public header, and footer.
+   - All content, copy, spacing, responsive layout, and click/keyboard behavior.
 
-## Verification
-Screenshot `/portal/my-casks` (single card and a stacked group) at desktop and mobile widths to confirm alignment, contrast, and that the flip animation still reads cleanly against the new surface.
+### Verification
+- Run the type check after edits.
+- Capture screenshots of Dashboard, My Casks, Available Stock, Account, Orders, Checkout, and Request Callback at desktop and mobile widths.
+- Check that text contrast remains readable on both light and dark glass surfaces.

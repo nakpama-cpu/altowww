@@ -147,14 +147,14 @@ export default function Orders() {
               placeholder="Search invoice number or cask details…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
+              className="pl-9 h-10 rounded-none border-border glass-card-sm font-body text-sm w-full"
             />
           </div>
           <div className="relative">
             <select
               value={filterPaymentMethod}
               onChange={(e) => setFilterPaymentMethod(e.target.value)}
-              className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="appearance-none w-full h-10 pl-3 pr-9 border border-border glass-card-sm font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               <option value="all">All payment methods</option>
               <option value="card">Card</option>
@@ -166,7 +166,7 @@ export default function Orders() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="appearance-none w-full h-10 pl-3 pr-9 border border-border glass-card-sm font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               <option value="all">All statuses</option>
               <option value="paid">Paid</option>
@@ -181,7 +181,7 @@ export default function Orders() {
               placeholder="From"
               value={filterDateFrom}
               onChange={(e) => setFilterDateFrom(e.target.value)}
-              className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
+              className="pl-9 h-10 rounded-none border-border glass-card-sm font-body text-sm w-full"
             />
           </div>
           <div className="relative">
@@ -191,7 +191,7 @@ export default function Orders() {
               placeholder="To"
               value={filterDateTo}
               onChange={(e) => setFilterDateTo(e.target.value)}
-              className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
+              className="pl-9 h-10 rounded-none border-border glass-card-sm font-body text-sm w-full"
             />
           </div>
           <div className="relative">
@@ -207,7 +207,7 @@ export default function Orders() {
                 if (v === "" || (!v.startsWith("-") && Number(v) >= 0)) setFilterMinAmount(v);
               }}
               onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
-              className="w-full h-10 rounded-none border-border bg-muted/20 font-body text-sm pl-7"
+              className="w-full h-10 rounded-none border-border glass-card-sm font-body text-sm pl-7"
             />
           </div>
           <div className="relative">
@@ -223,7 +223,7 @@ export default function Orders() {
                 if (v === "" || (!v.startsWith("-") && Number(v) >= 0)) setFilterMaxAmount(v);
               }}
               onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
-              className="w-full h-10 rounded-none border-border bg-muted/20 font-body text-sm pl-7"
+              className="w-full h-10 rounded-none border-border glass-card-sm font-body text-sm pl-7"
             />
           </div>
           <div className="relative col-span-2">
@@ -233,14 +233,14 @@ export default function Orders() {
               placeholder="Filter by cask detail (distillery, spirit, type…)"
               value={filterCaskDetail}
               onChange={(e) => setFilterCaskDetail(e.target.value)}
-              className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
+              className="pl-9 h-10 rounded-none border-border glass-card-sm font-body text-sm w-full"
             />
           </div>
           <div className="relative">
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as "newest" | "oldest")}
-              className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="appearance-none w-full h-10 pl-3 pr-9 border border-border glass-card-sm font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               <option value="newest">Most recent first</option>
               <option value="oldest">Oldest first</option>
@@ -259,7 +259,7 @@ export default function Orders() {
               setFilterMaxAmount("");
               setSortBy("newest");
             }}
-            className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-muted/20 font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
+            className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border glass-card-sm font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
             title="Clear all filters"
           >
             <RotateCcw className="w-3.5 h-3.5" /> Clear
@@ -272,14 +272,14 @@ export default function Orders() {
           Loading orders…
         </div>
       ) : rows.length === 0 ? (
-        <div className="p-12 text-center border border-border rounded-sm bg-muted/20">
+        <div className="p-12 text-center rounded-sm glass-card">
           <div className="flex flex-col items-center gap-3">
             <Receipt className="w-8 h-8 text-muted-foreground/50" />
             <p className="text-muted-foreground font-body">No orders yet.</p>
           </div>
         </div>
       ) : filteredRows.length === 0 ? (
-        <div className="p-12 text-center border border-border rounded-sm bg-muted/20">
+        <div className="p-12 text-center rounded-sm glass-card">
           <div className="flex flex-col items-center gap-3">
             <Search className="w-8 h-8 text-muted-foreground/50" />
             <p className="text-muted-foreground font-body">No orders match your search or filters.</p>
@@ -304,7 +304,7 @@ export default function Orders() {
       ) : (
         <div className="space-y-4">
           {filteredRows.map((o) => (
-            <div key={o.id} className="border border-border rounded-sm bg-muted/20 overflow-hidden">
+            <div key={o.id} className="rounded-sm glass-card overflow-hidden">
               <button
                 type="button"
                 onClick={() => setOpenId(openId === o.id ? null : o.id)}

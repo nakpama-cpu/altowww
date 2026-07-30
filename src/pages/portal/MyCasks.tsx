@@ -190,10 +190,10 @@ export default function MyCasks() {
             onChange={(e) => { setSearch(e.target.value); setShowSuggestions(true); }}
             onFocus={() => setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-            className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
+            className="pl-9 h-10 rounded-none border-border glass-card-sm font-body text-sm w-full"
           />
           {showSuggestions && suggestions.length > 0 && (
-            <ul className="absolute z-20 left-0 right-0 top-full mt-1 bg-muted/20 border border-border max-h-72 overflow-auto shadow-lg">
+            <ul className="absolute z-20 left-0 right-0 top-full mt-1 glass-card max-h-72 overflow-auto">
               {suggestions.map((s, i) => (
                 <li key={i}>
                   <button
@@ -213,7 +213,7 @@ export default function MyCasks() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="appearance-none w-full h-10 pl-3 pr-9 border border-border glass-card-sm font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="">Sort</option>
             <option value="newest">Purchase Date (Newest)</option>
@@ -234,22 +234,22 @@ export default function MyCasks() {
         </div>
         <button
           onClick={() => { setSearch(""); setSortBy(""); }}
-          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-muted/20 font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
+          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border glass-card-sm font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
           title="Clear all filters"
         >
           <RotateCcw className="w-3.5 h-3.5" /> Clear
         </button>
-        <div className="flex border border-border w-full h-10">
+        <div className="flex glass-card-sm w-full h-10">
           <button
             onClick={() => setViewMode("cards")}
-            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-muted/20 text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
             title="Card view"
           >
             <LayoutGrid className="w-4 h-4" />
           </button>
           <button
             onClick={() => setViewMode("table")}
-            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-muted/20 text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
             title="Table view"
           >
             <Table2 className="w-4 h-4" />
@@ -260,7 +260,7 @@ export default function MyCasks() {
       {loading ? (
         <p className="font-body text-sm text-muted-foreground">Loading…</p>
       ) : filtered.length === 0 ? (
-        <div className="bg-muted/20 border border-border p-12 text-center">
+        <div className="glass-card p-12 text-center">
           <p className="font-body text-sm text-muted-foreground">
             {rows.length === 0 ? "You don't have any holdings yet." : "No casks match your search."}
           </p>
@@ -274,7 +274,7 @@ export default function MyCasks() {
           </div>
 
         ) : (
-          <div className="border border-border bg-muted/20 overflow-auto">
+          <div className="glass-card overflow-auto">
             <table className="w-full text-left font-body text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/30">
@@ -345,7 +345,7 @@ export default function MyCasks() {
               </button>
             </div>
           </div>
-          <div className="flex-1 bg-muted/20 border border-border overflow-hidden">
+          <div className="flex-1 glass-card-dark overflow-hidden">
             <iframe src={certViewer.url} title="Cask certificate" className="w-full h-full" />
           </div>
         </div>
@@ -361,7 +361,7 @@ export default function MyCasks() {
 }
 
 const SpecBox = ({ label, value }: { label: string; value?: string | number | null }) => (
-  <div className="group/spec border border-border/60 bg-surface/60 backdrop-blur-sm px-3 py-2.5 min-h-[64px] flex flex-col justify-start gap-1 min-w-0 transition-all duration-200 hover:bg-surface/90 hover:border-border hover:-translate-y-[1px]">
+  <div className="group/spec glass-card-sm px-3 py-2.5 min-h-[64px] flex flex-col justify-start gap-1 min-w-0 transition-all duration-200 hover:bg-surface/90 hover:border-border hover:-translate-y-[1px]">
     <div className="font-body text-[9px] uppercase tracking-[0.2em] text-muted-foreground/70 leading-tight break-words">{label}</div>
     <div className="font-body text-[13px] text-foreground font-medium leading-snug break-words min-w-0" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
   </div>
@@ -371,7 +371,7 @@ function CaskCard({ r, openCert, loadingCert, stackNav }: { r: Row; openCert: (p
   const accent = regionColor(r.casks.distilleries?.region);
   return (
     <div
-      className="relative overflow-hidden border border-border/70 bg-surface/70 backdrop-blur-md p-6 md:p-8 shadow-[0_16px_40px_-20px_rgba(0,0,0,0.18)]"
+      className="relative overflow-hidden glass-card p-6 md:p-8"
     >
       {/* Region gradient edge */}
       <div
@@ -399,7 +399,7 @@ function CaskCard({ r, openCert, loadingCert, stackNav }: { r: Row; openCert: (p
           {r.certificate_path && (
             <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
               disabled={loadingCert}
-              className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] border border-border/70 bg-surface/50 backdrop-blur-sm text-muted-foreground px-4 py-2.5 transition-all duration-200 hover:text-primary hover:border-primary/40 hover:bg-surface disabled:opacity-50">
+              className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] glass-card-sm text-muted-foreground px-4 py-2.5 transition-all duration-200 hover:text-primary hover:border-primary/40 hover:bg-surface disabled:opacity-50">
               <FileText className="w-3 h-3" /> View Certificate
             </button>
           )}
@@ -559,13 +559,12 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
               : { transform: "none", opacity: 1 }
         }
       >
-        <div className="shadow-[0_12px_32px_-12px_rgba(0,0,0,0.08)]">
           <CaskCard
             r={current}
             openCert={openCert}
             loadingCert={loadingCert}
             stackNav={
-              <div className="flex items-center gap-3 bg-surface/60 backdrop-blur-md border border-border/70 px-3 py-1.5 shadow-[0_4px_12px_-4px_rgba(0,0,0,0.08)]">
+              <div className="flex items-center gap-3 glass-card px-3 py-1.5">
                 <button
                   type="button"
                   onClick={() => go("prev")}
@@ -606,7 +605,6 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
               </div>
             }
           />
-        </div>
       </div>
 
       {/* Swipe hint */}
