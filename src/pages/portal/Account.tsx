@@ -158,7 +158,7 @@ export default function Account() {
       <h1 className="display-heading text-4xl mb-8">Account</h1>
 
 
-      <section className="bg-muted/20 border border-border p-8 mb-6">
+      <section className="glass-card p-8 mb-6">
         <div className="flex items-start justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
             <h2 className="display-heading text-xl">Profile</h2>
@@ -215,7 +215,7 @@ export default function Account() {
         setPasswordOpen(o);
         if (!o) { setCurrentPassword(""); setNewPassword(""); setConfirmPassword(""); }
       }}>
-        <DialogContent className="max-w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6 bg-white">
+        <DialogContent className="max-w-[95vw] sm:max-w-md max-h-[90vh] overflow-y-auto p-4 sm:p-6 glass-card">
           <DialogHeader>
             <DialogTitle className="display-heading text-xl">Change Password</DialogTitle>
             <DialogDescription className="font-body text-xs">
@@ -394,7 +394,7 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[92vh] overflow-y-auto bg-white">
+      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[92vh] overflow-y-auto glass-card">
         <DialogHeader className="space-y-1">
           <DialogTitle className="display-heading text-lg sm:text-xl">Verify your address</DialogTitle>
           <DialogDescription className="text-xs sm:text-sm">
@@ -402,7 +402,7 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-2 sm:space-y-4 pt-1">
-          <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
+          <div className="rounded-lg glass-card-sm p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
             <TextField dense label="Address line 1" value={addr.address_line1} onChange={(v) => setAddr({ ...addr, address_line1: v })} />
             <TextField dense label="Address line 2 (optional)" value={addr.address_line2} onChange={(v) => setAddr({ ...addr, address_line2: v })} />
             <div className="grid grid-cols-2 gap-2 sm:gap-3">
@@ -415,7 +415,7 @@ function VerifyAddressDialog({ open, onOpenChange }: { open: boolean; onOpenChan
             </div>
           </div>
 
-          <div className="rounded-lg border border-border/60 bg-muted/20 p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
+          <div className="rounded-lg glass-card-sm p-2.5 sm:p-5 space-y-1.5 sm:space-y-3">
             <div className="grid grid-cols-2 gap-2 sm:gap-3 items-end">
               <div>
                 <label className="block font-body text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-0.5">Document type</label>
@@ -569,7 +569,7 @@ function VerifyDobDialog({ open, onOpenChange }: { open: boolean; onOpenChange: 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[92vh] overflow-y-auto bg-white">
+      <DialogContent className="max-w-[95vw] sm:max-w-lg md:max-w-2xl w-full p-3 sm:p-6 gap-2 sm:gap-3 max-h-[92vh] overflow-y-auto glass-card">
         <DialogHeader className="space-y-1">
           <DialogTitle className="display-heading text-lg sm:text-xl">Verify your date of birth</DialogTitle>
           <DialogDescription className="text-xs sm:text-sm">
