@@ -112,6 +112,36 @@ export default function MyCasks() {
     return sorted;
   }, [rows, search, sortBy]);
 
+  // Group holdings that are identical except for cask number into a "book" stack.
+  const stacks = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    const sig = (r: Row) => {
+      const c = r.casks;
+      return [
+        c.distilleries?.name ?? "", c.distilleries?.region ?? "", c.spirit ?? "", c.spirit_name ?? "",
+        c.cask_type ?? "", c.cask_size_litres ?? "", c.wood ?? "", c.fill_date ?? "",
+        c.abv ?? "", c.age_years ?? "", c.ola_litres ?? "", c.rla_litres ?? "",
+        r.purchase_price ?? "", r.purchase_date ?? "",
+      ].join("|");
+    };
+    const map = new Map<string, Row[]>();
+    const order: string[] = [];
+    for (const r of filtered) {
+      const k = sig(r);
+      if (!map.has(k)) { map.set(k, []); order.push(k); }
+      map.get(k)!.push(r);
+    }
+    return order.map((k) => {
+      const units = map.get(k)!;
+      let initialIndex = 0;
+      if (q) {
+        const i = units.findIndex((u) => (u.casks.cask_number ?? "").toLowerCase().includes(q));
+        if (i >= 0) initialIndex = i;
+      }
+      return { key: k, units, initialIndex };
+    });
+  }, [filtered, search]);
+
   const openCert = async (path: string, title: string) => {
     setLoadingCert(true);
     const filename = path.split("/").pop() || "certificate.pdf";
