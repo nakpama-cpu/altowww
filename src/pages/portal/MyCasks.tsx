@@ -605,7 +605,6 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
               </div>
             }
           />
-        </div>
       </div>
 
       {/* Swipe hint */}
