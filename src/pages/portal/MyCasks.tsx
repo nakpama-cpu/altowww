@@ -399,7 +399,7 @@ function CaskCard({ r, openCert, loadingCert, stackNav }: { r: Row; openCert: (p
           {r.certificate_path && (
             <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
               disabled={loadingCert}
-              className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] border border-border/70 bg-surface/50 backdrop-blur-sm text-muted-foreground px-4 py-2.5 transition-all duration-200 hover:text-primary hover:border-primary/40 hover:bg-surface disabled:opacity-50">
+              className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] glass-card-sm text-muted-foreground px-4 py-2.5 transition-all duration-200 hover:text-primary hover:border-primary/40 hover:bg-surface disabled:opacity-50">
               <FileText className="w-3 h-3" /> View Certificate
             </button>
           )}
