@@ -299,17 +299,17 @@ export default function AvailableStock() {
         >
           <RotateCcw className="w-3.5 h-3.5" /> Clear
         </button>
-        <div className="flex border border-border w-full h-10 md:col-span-2 lg:col-span-2 md:order-7 lg:order-none">
+        <div className="flex glass-card-sm w-full h-10 md:col-span-2 lg:col-span-2 md:order-7 lg:order-none">
           <button
             onClick={() => setViewMode("cards")}
-            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-muted/20 text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
             title="Card view"
           >
             <LayoutGrid className="w-4 h-4" />
           </button>
           <button
             onClick={() => setViewMode("table")}
-            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-muted/20 text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
             title="Table view"
           >
             <Table2 className="w-4 h-4" />
