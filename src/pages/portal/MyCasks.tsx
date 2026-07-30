@@ -345,7 +345,7 @@ export default function MyCasks() {
               </button>
             </div>
           </div>
-          <div className="flex-1 bg-muted/20 border border-border overflow-hidden">
+          <div className="flex-1 glass-card-dark overflow-hidden">
             <iframe src={certViewer.url} title="Cask certificate" className="w-full h-full" />
           </div>
         </div>
