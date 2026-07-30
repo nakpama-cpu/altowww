@@ -323,7 +323,7 @@ export default function AvailableStock() {
         <p className="font-body text-sm text-muted-foreground">Loading…</p>
       ) : filtered.length === 0 ? (
         listings.length === 0 ? (
-          <div className="bg-muted/20 border border-border p-10 md:p-14 text-center">
+          <div className="glass-card p-10 md:p-14 text-center">
             <div className="w-14 h-14 mx-auto mb-5 flex items-center justify-center bg-primary/10 border border-primary/20">
               <Store className="w-6 h-6 text-primary" />
             </div>
@@ -347,7 +347,7 @@ export default function AvailableStock() {
             </div>
           </div>
         ) : (
-          <div className="bg-muted/20 border border-border p-12 text-center">
+          <div className="glass-card p-12 text-center">
             <p className="font-body text-sm text-muted-foreground">No casks match your search.</p>
           </div>
         )
@@ -355,7 +355,7 @@ export default function AvailableStock() {
         <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
           {filtered.map((c) => {
             return (
-              <div key={c.id} className="bg-muted/20 border border-border overflow-hidden flex flex-col">
+              <div key={c.id} className="glass-card overflow-hidden flex flex-col">
                 {c.hero_image_url && (
                   <div className="aspect-[4/3] bg-muted overflow-hidden">
                     <img src={c.hero_image_url} alt={c.distilleries?.name ?? c.spirit} className="w-full h-full object-cover" loading="lazy" />
