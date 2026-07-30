@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Download, Search, X, FileText, Loader2, LayoutGrid, Table2, RotateCcw, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -451,6 +451,31 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
 
   const edges = Math.min(total - 1, 3);
 
+  // Swipe / drag to flip pages
+  const dragStart = useRef<{ x: number; y: number } | null>(null);
+  const [drag, setDrag] = useState(0);
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (turning) return;
+    const target = e.target as HTMLElement;
+    if (target.closest("button, a, input, textarea, select")) return;
+    dragStart.current = { x: e.clientX, y: e.clientY };
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!dragStart.current) return;
+    const dx = e.clientX - dragStart.current.x;
+    const dy = e.clientY - dragStart.current.y;
+    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 12) { dragStart.current = null; setDrag(0); return; }
+    setDrag(dx);
+  };
+  const endDrag = () => {
+    if (!dragStart.current) return;
+    const dx = drag;
+    dragStart.current = null;
+    setDrag(0);
+    if (Math.abs(dx) > 60) go(dx < 0 ? "next" : "prev");
+  };
+
   return (
     <div
       tabIndex={0}
@@ -458,8 +483,13 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
         if (e.key === "ArrowRight") { e.preventDefault(); go("next"); }
         if (e.key === "ArrowLeft") { e.preventDefault(); go("prev"); }
       }}
-      className="relative focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="relative focus:outline-none focus-visible:ring-2 focus-visible:ring-ring touch-pan-y select-none"
       style={{ marginBottom: edges * 6 }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+      onPointerLeave={endDrag}
     >
       {/* Stack edges (pages behind) */}
       {Array.from({ length: edges }).map((_, i) => {
@@ -480,18 +510,24 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
       })}
 
       <div
-        className="relative z-10 origin-left transition-all duration-300 ease-out"
+        className={`relative z-10 origin-left ${drag ? "" : "transition-all duration-300 ease-out"}`}
         style={
           turning
             ? {
                 transform: turning === "next" ? "translateX(-2%) rotate(-1.2deg) scale(0.98)" : "translateX(2%) rotate(1.2deg) scale(0.98)",
                 opacity: 0,
               }
-            : { transform: "none", opacity: 1 }
+            : drag
+              ? {
+                  transform: `translateX(${drag * 0.5}px) rotate(${drag * 0.012}deg)`,
+                  opacity: Math.max(0.5, 1 - Math.abs(drag) / 400),
+                }
+              : { transform: "none", opacity: 1 }
         }
       >
         <CaskCard r={current} openCert={openCert} loadingCert={loadingCert} />
       </div>
+
 
       <div className="relative z-10 -mt-px flex items-center justify-between gap-3 bg-muted/20 border border-t-0 border-border border-l-4 px-4 py-2.5"
         style={{ borderLeftColor: accent }}>
