@@ -201,10 +201,10 @@ export default function AvailableStock() {
             onChange={(e) => { setSearch(e.target.value); setShowSuggestions(true); }}
             onFocus={() => setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-            className="pl-9 h-10 rounded-none border-border glass-card-sm font-body text-sm w-full"
+            className="pl-9 h-10 rounded-none border-border bg-surface border border-border font-body text-sm w-full"
           />
           {showSuggestions && suggestions.length > 0 && (
-            <ul className="absolute z-20 left-0 right-0 top-full mt-1 glass-card max-h-72 overflow-auto">
+            <ul className="absolute z-20 left-0 right-0 top-full mt-1 bg-surface border border-border shadow-sm rounded-sm max-h-72 overflow-auto">
               {suggestions.map((s, i) => (
                 <li key={i}>
                   <button
@@ -224,7 +224,7 @@ export default function AvailableStock() {
           <select
             value={filterDistillery}
             onChange={(e) => setFilterDistillery(e.target.value)}
-            className="appearance-none w-full h-10 pl-3 pr-9 border border-border glass-card-sm font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-surface border border-border font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="All">Distilleries</option>
             {distilleries.map((d) => (
@@ -237,7 +237,7 @@ export default function AvailableStock() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="appearance-none w-full h-10 pl-3 pr-9 border border-border glass-card-sm font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-surface border border-border font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="">Sort</option>
             <option value="newest">Date Added (Newest)</option>
@@ -272,7 +272,7 @@ export default function AvailableStock() {
               else if (!v.startsWith("-") && Number(v) >= 0) setFilterMinPrice(v);
             }}
             onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
-            className="w-full h-10 rounded-none border-border glass-card-sm font-body text-sm pl-7"
+            className="w-full h-10 rounded-none border-border bg-surface border border-border font-body text-sm pl-7"
           />
         </div>
         <div className="relative md:col-span-2 lg:col-span-2 md:order-4 lg:order-none">
@@ -289,17 +289,17 @@ export default function AvailableStock() {
               else if (!v.startsWith("-") && Number(v) >= 0) setFilterMaxPrice(v);
             }}
             onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
-            className="w-full h-10 rounded-none border-border glass-card-sm font-body text-sm pl-7"
+            className="w-full h-10 rounded-none border-border bg-surface border border-border font-body text-sm pl-7"
           />
         </div>
         <button
           onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
-          className="md:col-span-2 lg:col-span-2 w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border glass-card-sm font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground md:order-6 lg:order-none"
+          className="md:col-span-2 lg:col-span-2 w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-surface border border-border font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground md:order-6 lg:order-none"
           title="Clear all filters"
         >
           <RotateCcw className="w-3.5 h-3.5" /> Clear
         </button>
-        <div className="flex glass-card-sm w-full h-10 md:col-span-2 lg:col-span-2 md:order-7 lg:order-none">
+        <div className="flex bg-surface border border-border w-full h-10 md:col-span-2 lg:col-span-2 md:order-7 lg:order-none">
           <button
             onClick={() => setViewMode("cards")}
             className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
@@ -323,7 +323,7 @@ export default function AvailableStock() {
         <p className="font-body text-sm text-muted-foreground">Loading…</p>
       ) : filtered.length === 0 ? (
         listings.length === 0 ? (
-          <div className="glass-card p-10 md:p-14 text-center">
+          <div className="bg-surface border border-border shadow-sm rounded-sm p-10 md:p-14 text-center">
             <div className="w-14 h-14 mx-auto mb-5 flex items-center justify-center bg-primary/10 border border-primary/20">
               <Store className="w-6 h-6 text-primary" />
             </div>
@@ -347,7 +347,7 @@ export default function AvailableStock() {
             </div>
           </div>
         ) : (
-          <div className="glass-card p-12 text-center">
+          <div className="bg-surface border border-border shadow-sm rounded-sm p-12 text-center">
             <p className="font-body text-sm text-muted-foreground">No casks match your search.</p>
           </div>
         )
@@ -355,7 +355,7 @@ export default function AvailableStock() {
         <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
           {filtered.map((c) => {
             return (
-              <div key={c.id} className="glass-card overflow-hidden flex flex-col">
+              <div key={c.id} className="bg-surface border border-border shadow-sm rounded-sm overflow-hidden flex flex-col">
                 {c.hero_image_url && (
                   <div className="aspect-[4/3] bg-muted overflow-hidden">
                     <img src={c.hero_image_url} alt={c.distilleries?.name ?? c.spirit} className="w-full h-full object-cover" loading="lazy" />
@@ -415,7 +415,7 @@ export default function AvailableStock() {
           })}
         </div>
       ) : (
-        <div className="glass-card overflow-auto">
+        <div className="bg-surface border border-border shadow-sm rounded-sm overflow-auto">
           <table className="w-full text-left font-body text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/30">

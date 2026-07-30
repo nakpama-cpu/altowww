@@ -133,30 +133,6 @@
     filter: blur(0px);
   }
 
-  .glass-card {
-    background-color: hsl(var(--surface) / 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid hsl(var(--border) / 0.7);
-    box-shadow: 0 16px 40px -20px hsl(var(--foreground) / 0.18);
-  }
-
-  .glass-card-sm {
-    background-color: hsl(var(--surface) / 0.6);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid hsl(var(--border) / 0.6);
-    box-shadow: 0 8px 24px -12px hsl(var(--foreground) / 0.12);
-  }
-
-  .glass-card-dark {
-    background-color: hsl(var(--secondary) / 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid hsl(var(--secondary-foreground) / 0.1);
-    color: hsl(var(--secondary-foreground));
-    box-shadow: 0 16px 40px -20px hsl(var(--foreground) / 0.35);
-  }
 }
 
 /* Smooth scrolling */
