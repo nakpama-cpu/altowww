@@ -371,7 +371,7 @@ function CaskCard({ r, openCert, loadingCert, stackNav }: { r: Row; openCert: (p
   const accent = regionColor(r.casks.distilleries?.region);
   return (
     <div
-      className="relative overflow-hidden border border-border/70 bg-surface/70 backdrop-blur-md p-6 md:p-8 shadow-[0_16px_40px_-20px_rgba(0,0,0,0.18)]"
+      className="relative overflow-hidden glass-card p-6 md:p-8"
     >
       {/* Region gradient edge */}
       <div
