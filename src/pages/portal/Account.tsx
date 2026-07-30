@@ -748,7 +748,7 @@ function EditProfileDialog({ open, onOpenChange }: { open: boolean; onOpenChange
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-lg w-full p-3 gap-2 max-h-[95vh] overflow-y-auto bg-white">
+      <DialogContent className="max-w-[95vw] sm:max-w-lg w-full p-3 gap-2 max-h-[95vh] overflow-y-auto glass-card">
 
         <DialogHeader className="space-y-1">
           <DialogTitle className="display-heading text-lg sm:text-xl">Edit profile</DialogTitle>
