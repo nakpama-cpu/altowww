@@ -19,8 +19,6 @@ type Listing = {
   cask_type: string | null;
   list_price: number | null;
   currency: string;
-  stock_qty: number;
-  reserved_qty: number;
   distilleries: { name: string } | null;
 };
 
