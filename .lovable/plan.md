@@ -1,37 +1,25 @@
-Plan: Unify the client portal around a frosted-glass card system
+# One-off paid invoice PDF — Mr Huw Owen
 
-### Summary
-Take the glass treatment already used in My Casks and make it the standard surface language for all portal pages. The goal is a consistent, premium feel without changing any content, layout, typography, or interactions.
+Generate a single invoice PDF, identical in branding to the portal invoices, delivered here as a downloadable file. Nothing is emailed, no client portal record is created, and no database rows are added.
 
-### What will change
+## Invoice content
 
-1. Create a reusable glass-card system in `src/index.css`
-   - Add a new component layer with three classes:
-     - `.glass-card` — translucent white surface, medium blur, soft border, and a tokenized shadow.
-     - `.glass-card-sm` — lighter variant for nested panels, filter inputs, and form sections.
-     - `.glass-card-dark` — dark translucent variant for the Dashboard hero / portfolio-value card.
-   - Shadows will use semantic tokens (`--foreground` / `--secondary-foreground`) instead of hardcoded black.
+- Invoice number: AW-2026-0052
+- Payment reference: AW260052
+- Invoice date: 31 July 2026 — marked PAID (paid 31 July 2026 by bank transfer)
+- Bill to: Mr Huw Owen, Tan Y Bryn, Pwllheli, Gwynedd, LL53 8NB
+- Line item: Glen Ord — Hogshead, Ex-Macallan Sherry, 62.0% ABV, 2026 — quantity 6
+- List price GBP 3,300.00 per cask, subtotal GBP 19,800.00
+- Pallet discount −GBP 2,700.00, total GBP 17,100.00
+- Because the invoice is settled, the bank-transfer block is replaced with a PAID stamp and a "Paid by bank transfer, 31 July 2026" confirmation line; the payment reference is still shown for the client's records.
 
-2. Set the portal backdrop in `src/pages/portal/PortalLayout.tsx`
-   - Switch the main content area from `bg-white` to `bg-background` (warm cream).
-   - This makes the glass translucency visible and aligns the portal with the brand palette.
+## Notes to confirm on delivery
 
-3. Apply glass cards to each portal page
-   - `src/pages/portal/MyCasks.tsx` — refactor existing inline frosted classes to use `.glass-card` / `.glass-card-sm` for the main card, SpecBox tiles, and certificate button. Keep the region gradient edge and glow.
-   - `src/pages/portal/Dashboard.tsx` — hero card uses `.glass-card-dark`; QuickAction cards use `.glass-card-sm`; `ActivityFeed` uses `.glass-card`.
-   - `src/components/portal/ActivityFeed.tsx` — root aside uses `.glass-card`.
-   - `src/pages/portal/AvailableStock.tsx` — listing cards, table container, empty states, and filter inputs use `.glass-card` / `.glass-card-sm`.
-   - `src/pages/portal/Account.tsx` — profile section, verification dialog content, and dialog form panels use `.glass-card` / `.glass-card-sm`.
-   - `src/pages/portal/Orders.tsx` — order cards, filter bar, and empty states use `.glass-card` / `.glass-card-sm`.
-   - `src/pages/portal/Checkout.tsx` — cart items, order summary, empty cart, invoice loading/error panels, and order-review aside use `.glass-card` / `.glass-card-sm`.
-   - `src/pages/portal/RequestCallback.tsx` — callback form uses `.glass-card`.
+- Huw's email address wasn't supplied, so the bill-to block will show his name and postal address only. If you want his email printed, tell me and I'll regenerate.
+- The company bank details in the invoice template are still placeholders. On a PAID invoice these aren't needed, so I'll omit that block entirely rather than print placeholders.
 
-4. Leave these unchanged
-   - The dark sidebar (solid anchor), mobile header, and Stripe Embedded Checkout iframe container.
-   - Marketing-site pages, public header, and footer.
-   - All content, copy, spacing, responsive layout, and click/keyboard behavior.
+## Technical approach
 
-### Verification
-- Run the type check after edits.
-- Capture screenshots of Dashboard, My Casks, Available Stock, Account, Orders, Checkout, and Request Callback at desktop and mobile widths.
-- Check that text contrast remains readable on both light and dark glass surfaces.
+Run a throwaway script (not added to the project) that reuses the same layout, typography, navy/copper palette and Alto Whisky logo as `supabase/functions/_shared/invoice-pdf.ts`, with a PAID variant of the payment block. Output written to `/mnt/documents/AW-2026-0052-huw-owen.pdf` and surfaced as a downloadable artifact. Each page will be rendered to an image and visually checked before delivery.
+
+No changes to project source, database, or the email system.
