@@ -14,7 +14,7 @@ export default function CheckoutReturn() {
 
   return (
     <div className="max-w-2xl">
-      <div className="bg-surface border border-border shadow-sm rounded-sm p-10 text-center">
+      <div className="bg-muted/20 border border-border p-10 text-center">
         <CheckCircle2 className="w-12 h-12 mx-auto text-primary mb-4" />
         <h1 className="display-heading text-3xl mb-3">Thank you</h1>
         <p className="font-body text-sm text-muted-foreground mb-2">

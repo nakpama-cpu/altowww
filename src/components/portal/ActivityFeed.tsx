@@ -120,7 +120,7 @@ export default function ActivityFeed() {
   }, [profile?.address_verified_at, profile?.age_verified_at]);
 
   return (
-    <aside className="bg-surface border border-border shadow-sm rounded-sm p-6">
+    <aside className="bg-muted/20 border border-border p-6">
       <div className="flex items-center gap-2 mb-5">
         <Clock className="w-3.5 h-3.5 text-primary" />
         <h3 className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Recent Activity</h3>
