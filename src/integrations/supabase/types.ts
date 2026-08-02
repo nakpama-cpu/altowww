@@ -268,6 +268,13 @@ export type Database = {
             referencedRelation: "cask_listings"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "casks_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "cask_listings_client"
+            referencedColumns: ["id"]
+          },
         ]
       }
       checkout_sessions: {
@@ -657,6 +664,13 @@ export type Database = {
             referencedRelation: "cask_listings"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "invoice_items_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "cask_listings_client"
+            referencedColumns: ["id"]
+          },
         ]
       }
       invoices: {
@@ -832,6 +846,13 @@ export type Database = {
             referencedRelation: "cask_listings"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "orders_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "cask_listings_client"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profiles: {
@@ -992,7 +1013,83 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      cask_listings_client: {
+        Row: {
+          abv: number | null
+          age_years: number | null
+          available_qty: number | null
+          cask_size_litres: number | null
+          cask_type: string | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          distillery_id: string | null
+          fill_date: string | null
+          hero_image_url: string | null
+          id: string | null
+          list_price: number | null
+          ola_litres: number | null
+          rla_litres: number | null
+          spirit: string | null
+          spirit_name: string | null
+          status: Database["public"]["Enums"]["listing_status"] | null
+          updated_at: string | null
+          wood: string | null
+        }
+        Insert: {
+          abv?: number | null
+          age_years?: number | null
+          available_qty?: never
+          cask_size_litres?: number | null
+          cask_type?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          distillery_id?: string | null
+          fill_date?: string | null
+          hero_image_url?: string | null
+          id?: string | null
+          list_price?: number | null
+          ola_litres?: number | null
+          rla_litres?: number | null
+          spirit?: string | null
+          spirit_name?: string | null
+          status?: Database["public"]["Enums"]["listing_status"] | null
+          updated_at?: string | null
+          wood?: string | null
+        }
+        Update: {
+          abv?: number | null
+          age_years?: number | null
+          available_qty?: never
+          cask_size_litres?: number | null
+          cask_type?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          distillery_id?: string | null
+          fill_date?: string | null
+          hero_image_url?: string | null
+          id?: string | null
+          list_price?: number | null
+          ola_litres?: number | null
+          rla_litres?: number | null
+          spirit?: string | null
+          spirit_name?: string | null
+          status?: Database["public"]["Enums"]["listing_status"] | null
+          updated_at?: string | null
+          wood?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cask_listings_distillery_id_fkey"
+            columns: ["distillery_id"]
+            isOneToOne: false
+            referencedRelation: "distilleries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       cancel_invoice: { Args: { _invoice_id: string }; Returns: undefined }
