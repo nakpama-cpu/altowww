@@ -29,8 +29,7 @@ type Listing = {
   currency: string;
   description: string | null;
   hero_image_url: string | null;
-  stock_qty: number;
-  reserved_qty: number;
+  available_qty: number;
   created_at: string;
   distilleries: {
     name: string;
@@ -96,11 +95,13 @@ export default function AvailableStock() {
     (async () => {
       const { data, error } = await supabase
         .from("cask_listings")
-        .select("id, spirit, spirit_name, cask_type, wood, cask_size_litres, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, stock_qty, reserved_qty, created_at, distilleries(name, region, country, about, image_url, founded_by, founded_year, famous_for, region_character, annual_production, export_markets, owner, website_url, visitor_centre, news, awards)")
+        .select("id, spirit, spirit_name, cask_type, wood, cask_size_litres, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, description, hero_image_url, created_at, distilleries(name, region, country, about, image_url, founded_by, founded_year, famous_for, region_character, annual_production, export_markets, owner, website_url, visitor_centre, news, awards)")
         .eq("status", "active")
         .order("created_at", { ascending: false });
       if (error) toast({ title: "Could not load stock", description: error.message, variant: "destructive" });
-      setListings((data ?? []) as any);
+      const { data: avail } = await supabase.rpc("listing_availability");
+      const availMap = new Map((avail ?? []).map((a: any) => [a.listing_id, a.available_qty]));
+      setListings(((data ?? []) as any[]).map((l) => ({ ...l, available_qty: availMap.get(l.id) ?? 0 })) as any);
       setLoading(false);
     })();
   }, [toast]);
@@ -122,7 +123,7 @@ export default function AvailableStock() {
   const confirmAddToCart = () => {
     if (!buyListing || buyListing.list_price == null) return;
     const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
-    const available = Math.max(0, (buyListing.stock_qty ?? 0) - (buyListing.reserved_qty ?? 0));
+    const available = Math.max(0, buyListing.available_qty ?? 0);
     const eligible = palletEligible(available);
     const pallet = palletApplies(qty, available);
     const unit = pallet ? palletUnitPrice(Number(buyListing.list_price)) : Number(buyListing.list_price);
@@ -393,7 +394,7 @@ export default function AvailableStock() {
                           <div className="display-heading text-2xl text-primary">
                             £{Math.round(c.list_price).toLocaleString()}
                           </div>
-                          {palletEligible(Math.max(0, (c.stock_qty ?? 0) - (c.reserved_qty ?? 0))) && (
+                          {palletEligible(Math.max(0, c.available_qty ?? 0)) && (
                             <div className="font-body text-[10px] uppercase tracking-[0.15em] text-muted-foreground mt-1">
                               Pallet {PALLET_MIN_QTY}+: £{Math.round(palletUnitPrice(Number(c.list_price))).toLocaleString()} <span className="text-primary">−{PALLET_DISCOUNT_PCT}%</span>
                             </div>
@@ -604,7 +605,7 @@ export default function AvailableStock() {
           {buyListing && (() => {
             const list = buyListing.list_price ?? 0;
             const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
-            const available = Math.max(0, (buyListing.stock_qty ?? 0) - (buyListing.reserved_qty ?? 0));
+            const available = Math.max(0, buyListing.available_qty ?? 0);
             const eligible = palletEligible(available);
             const pallet = palletApplies(qty, available);
             const unit = pallet ? palletUnitPrice(list) : list;

@@ -36,10 +36,16 @@ export default function AdminListings() {
 
   const load = async () => {
     const [{ data: l }, { data: d }] = await Promise.all([
-      supabase.from("cask_listings").select("*, distilleries(name)").order("created_at", { ascending: false }),
+      supabase.from("cask_listings").select("id, distillery_id, spirit, spirit_name, cask_type, wood, cask_size_litres, fill_date, abv, ola_litres, rla_litres, age_years, list_price, currency, status, description, hero_image_url, created_at, distilleries(name)").order("created_at", { ascending: false }),
       supabase.from("distilleries").select("id,name,region").order("name"),
     ]);
-    setListings((l ?? []) as Listing[]);
+    const { data: stock } = await supabase.rpc("admin_listing_stock");
+    const stockMap = new Map((stock ?? []).map((s: any) => [s.listing_id, s]));
+    setListings(((l ?? []) as any[]).map((row) => ({
+      ...row,
+      stock_qty: stockMap.get(row.id)?.stock_qty ?? 0,
+      reserved_qty: stockMap.get(row.id)?.reserved_qty ?? 0,
+    })) as Listing[]);
     setDistilleries((d ?? []) as Distillery[]);
   };
   useEffect(() => { load(); }, []);

@@ -995,6 +995,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_listing_stock: {
+        Args: never
+        Returns: {
+          listing_id: string
+          reserved_qty: number
+          stock_qty: number
+        }[]
+      }
       cancel_invoice: { Args: { _invoice_id: string }; Returns: undefined }
       delete_email: {
         Args: { message_id: number; queue_name: string }
@@ -1006,6 +1014,13 @@ export type Database = {
         Returns: number
       }
       expire_stale_invoices: { Args: never; Returns: undefined }
+      listing_availability: {
+        Args: never
+        Returns: {
+          available_qty: number
+          listing_id: string
+        }[]
+      }
       mark_invoice_paid: { Args: { _invoice_id: string }; Returns: undefined }
       materialise_invoice_holdings: {
         Args: { _invoice_id: string }
