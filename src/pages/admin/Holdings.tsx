@@ -56,7 +56,7 @@ export default function AdminHoldings() {
     const [{ data: h }, { data: cl }, { data: ls }, { data: po }] = await Promise.all([
       supabase.from("holdings").select("*, profiles(first_name,last_name,email), casks(cask_number, distilleries(name))").order("purchase_date", { ascending: false }),
       supabase.from("profiles").select("id,first_name,last_name,email").eq("status", "approved").order("last_name"),
-      supabase.from("cask_listings").select("id, spirit, cask_type, list_price, currency, stock_qty, reserved_qty, distilleries(name)").order("created_at", { ascending: false }),
+      supabase.from("cask_listings").select("id, spirit, cask_type, list_price, currency, distilleries(name)").order("created_at", { ascending: false }),
       supabase.from("orders").select("id, buyer_id, listing_id, amount, created_at, profiles!orders_buyer_id_fkey(first_name,last_name,email), cask_listings(spirit, distilleries(name))").is("cask_id", null).order("created_at", { ascending: true }),
     ]);
     setHoldings((h ?? []) as any);
