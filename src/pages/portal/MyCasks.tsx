@@ -190,10 +190,10 @@ export default function MyCasks() {
             onChange={(e) => { setSearch(e.target.value); setShowSuggestions(true); }}
             onFocus={() => setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-            className="pl-9 h-10 rounded-none border-border bg-muted/20 font-body text-sm w-full"
+            className="pl-9 h-10 rounded-none border-border glass-card-sm font-body text-sm w-full"
           />
           {showSuggestions && suggestions.length > 0 && (
-            <ul className="absolute z-20 left-0 right-0 top-full mt-1 bg-muted/20 border border-border max-h-72 overflow-auto shadow-lg">
+            <ul className="absolute z-20 left-0 right-0 top-full mt-1 glass-card max-h-72 overflow-auto">
               {suggestions.map((s, i) => (
                 <li key={i}>
                   <button
@@ -213,7 +213,7 @@ export default function MyCasks() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="appearance-none w-full h-10 pl-3 pr-9 border border-border bg-muted/20 font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="appearance-none w-full h-10 pl-3 pr-9 border border-border glass-card-sm font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="">Sort</option>
             <option value="newest">Purchase Date (Newest)</option>
@@ -234,22 +234,22 @@ export default function MyCasks() {
         </div>
         <button
           onClick={() => { setSearch(""); setSortBy(""); }}
-          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border bg-muted/20 font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
+          className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border glass-card-sm font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
           title="Clear all filters"
         >
           <RotateCcw className="w-3.5 h-3.5" /> Clear
         </button>
-        <div className="flex border border-border w-full h-10">
+        <div className="flex glass-card-sm w-full h-10">
           <button
             onClick={() => setViewMode("cards")}
-            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "bg-muted/20 text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
             title="Card view"
           >
             <LayoutGrid className="w-4 h-4" />
           </button>
           <button
             onClick={() => setViewMode("table")}
-            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "bg-muted/20 text-muted-foreground hover:text-foreground"}`}
+            className={`flex-1 flex items-center justify-center h-full ${viewMode === "table" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
             title="Table view"
           >
             <Table2 className="w-4 h-4" />
@@ -260,7 +260,7 @@ export default function MyCasks() {
       {loading ? (
         <p className="font-body text-sm text-muted-foreground">Loading…</p>
       ) : filtered.length === 0 ? (
-        <div className="bg-muted/20 border border-border p-12 text-center">
+        <div className="glass-card p-12 text-center">
           <p className="font-body text-sm text-muted-foreground">
             {rows.length === 0 ? "You don't have any holdings yet." : "No casks match your search."}
           </p>
@@ -274,7 +274,7 @@ export default function MyCasks() {
           </div>
 
         ) : (
-          <div className="border border-border bg-muted/20 overflow-auto">
+          <div className="glass-card overflow-auto">
             <table className="w-full text-left font-body text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/30">
@@ -345,7 +345,7 @@ export default function MyCasks() {
               </button>
             </div>
           </div>
-          <div className="flex-1 bg-muted/20 border border-border overflow-hidden">
+          <div className="flex-1 glass-card-dark overflow-hidden">
             <iframe src={certViewer.url} title="Cask certificate" className="w-full h-full" />
           </div>
         </div>
@@ -361,30 +361,49 @@ export default function MyCasks() {
 }
 
 const SpecBox = ({ label, value }: { label: string; value?: string | number | null }) => (
-  <div className="border border-border bg-surface px-2.5 py-2 min-h-[64px] flex flex-col justify-start gap-1 min-w-0 shadow-sm">
-    <div className="font-body text-[9px] uppercase tracking-[0.15em] text-muted-foreground leading-tight break-words">{label}</div>
+  <div className="group/spec glass-card-sm px-3 py-2.5 min-h-[64px] flex flex-col justify-start gap-1 min-w-0 transition-all duration-200 hover:bg-surface/90 hover:border-border hover:-translate-y-[1px]">
+    <div className="font-body text-[9px] uppercase tracking-[0.2em] text-muted-foreground/70 leading-tight break-words">{label}</div>
     <div className="font-body text-[13px] text-foreground font-medium leading-snug break-words min-w-0" title={value != null ? String(value) : undefined}>{value ?? "—"}</div>
   </div>
 );
 
-function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: string, title: string) => void; loadingCert: boolean }) {
+function CaskCard({ r, openCert, loadingCert, stackNav }: { r: Row; openCert: (path: string, title: string) => void; loadingCert: boolean; stackNav?: React.ReactNode }) {
+  const accent = regionColor(r.casks.distilleries?.region);
   return (
     <div
-      className="bg-muted/20 border border-border border-l-4 p-6 md:p-8"
-      style={{ borderLeftColor: regionColor(r.casks.distilleries?.region) }}
+      className="relative overflow-hidden glass-card p-6 md:p-8"
     >
-      <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-        <div>
-          <span className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Cask #{r.casks.cask_number ?? "TBC"}</span>
-          <h3 className="display-heading text-2xl mt-1">{r.casks.distilleries?.name ?? "Distillery"}</h3>
+      {/* Region gradient edge */}
+      <div
+        aria-hidden
+        className="absolute left-0 top-0 bottom-0 w-1 pointer-events-none"
+        style={{ background: `linear-gradient(to bottom, ${accent}, transparent)` }}
+      />
+      {/* Soft region glow */}
+      <div
+        aria-hidden
+        className="absolute -left-16 -top-16 w-52 h-52 rounded-full pointer-events-none opacity-[0.09] blur-2xl"
+        style={{ backgroundColor: accent }}
+      />
+
+      <div className="relative flex flex-wrap items-start justify-between gap-4 mb-5">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2.5">
+            <span className="font-body text-[10px] uppercase tracking-[0.28em] text-primary">Cask #{r.casks.cask_number ?? "TBC"}</span>
+            <span aria-hidden className="h-px w-8 bg-border" />
+          </div>
+          <h3 className="display-heading text-2xl md:text-[1.75rem] leading-tight mt-1.5">{r.casks.distilleries?.name ?? "Distillery"}</h3>
         </div>
-        {r.certificate_path && (
-          <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
-            disabled={loadingCert}
-            className="flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-4 py-2 hover:bg-muted disabled:opacity-50">
-            <FileText className="w-3 h-3" /> View Certificate
-          </button>
-        )}
+        <div className="flex flex-col items-end gap-2">
+          {stackNav}
+          {r.certificate_path && (
+            <button onClick={() => openCert(r.certificate_path!, `${r.casks.distilleries?.name ?? "Cask"} — ${r.casks.cask_number ?? "TBC"}`)}
+              disabled={loadingCert}
+              className="flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] glass-card-sm text-muted-foreground px-4 py-2.5 transition-all duration-200 hover:text-primary hover:border-primary/40 hover:bg-surface disabled:opacity-50">
+              <FileText className="w-3 h-3" /> View Certificate
+            </button>
+          )}
+        </div>
       </div>
 
       {r.casks.fill_date && (() => {
@@ -394,19 +413,26 @@ function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: strin
         const elapsedYears = (now - filled) / (365.25 * 24 * 3600 * 1000);
         const pct = Math.max(0, Math.min(100, (elapsedYears / targetYears) * 100));
         return (
-          <div className="mb-5">
+          <div className="relative mb-5">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="font-body text-[9px] uppercase tracking-[0.25em] text-muted-foreground">Maturation</span>
-              <span className="font-body text-[10px] text-muted-foreground">{elapsedYears.toFixed(1)} / {targetYears} yrs</span>
+              <span className="font-body text-[9px] uppercase tracking-[0.25em] text-muted-foreground/70">Maturation</span>
+              <span className="font-body text-[10px] text-muted-foreground tabular-nums">{elapsedYears.toFixed(1)} / {targetYears} yrs</span>
             </div>
-            <div className="h-1 w-full bg-muted overflow-hidden">
-              <div className="h-full" style={{ width: `${pct}%`, backgroundColor: regionColor(r.casks.distilleries?.region) }} />
+            <div className="h-[3px] w-full bg-muted/50 overflow-hidden">
+              <div
+                className="h-full transition-all duration-500"
+                style={{
+                  width: `${pct}%`,
+                  background: `linear-gradient(to right, ${accent}, hsl(var(--primary)))`,
+                  boxShadow: `0 0 8px 0 hsl(var(--primary) / 0.5)`,
+                }}
+              />
             </div>
           </div>
         );
       })()}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+      <div className="relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
         <SpecBox label="Region" value={r.casks.distilleries?.region} />
         <SpecBox label="Cask" value={formatCaskSpec(r.casks.cask_type, r.casks.cask_size_litres)} />
         <SpecBox label="Wood" value={r.casks.wood} />
@@ -423,6 +449,7 @@ function CaskCard({ r, openCert, loadingCert }: { r: Row; openCert: (path: strin
     </div>
   );
 }
+
 
 function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[]; initialIndex: number; openCert: (path: string, title: string) => void; loadingCert: boolean }) {
   const [index, setIndex] = useState(initialIndex);
@@ -532,53 +559,52 @@ function CaskStack({ units, initialIndex, openCert, loadingCert }: { units: Row[
               : { transform: "none", opacity: 1 }
         }
       >
-        <div className="shadow-[0_12px_32px_-12px_rgba(0,0,0,0.08)]">
-          <CaskCard r={current} openCert={openCert} loadingCert={loadingCert} />
-        </div>
-      </div>
+          <CaskCard
+            r={current}
+            openCert={openCert}
+            loadingCert={loadingCert}
+            stackNav={
+              <div className="flex items-center gap-3 glass-card px-3 py-1.5">
+                <button
+                  type="button"
+                  onClick={() => go("prev")}
+                  className="flex items-center gap-0.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Previous cask"
+                >
+                  <ChevronLeft className="w-4 h-4" /> Prev
+                </button>
 
+                <div className="flex items-center gap-1.5">
+                  {units.map((u, i) => (
+                    <button
+                      key={u.id}
+                      type="button"
+                      aria-label={`Cask ${i + 1}`}
+                      onClick={() => setIndex(i)}
+                      className="w-1.5 h-1.5 rounded-full transition-all duration-200"
+                      style={{
+                        backgroundColor: i === safeIndex ? accent : "hsl(var(--muted-foreground))",
+                        opacity: i === safeIndex ? 1 : 0.25,
+                        transform: i === safeIndex ? "scale(1.3)" : "scale(1)",
+                      }}
+                    />
+                  ))}
+                </div>
+                <span className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground tabular-nums">
+                  {safeIndex + 1} / {total} Casks
+                </span>
 
-      <div className="relative z-10 -mt-px flex items-center justify-between gap-3 bg-surface/80 backdrop-blur-sm border border-t-0 border-border border-l-4 px-4 py-2.5"
-        style={{ borderLeftColor: accent }}>
-        <button
-          type="button"
-          onClick={() => go("prev")}
-          className="flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Previous cask"
-        >
-          <ChevronLeft className="w-4 h-4" /> Prev
-        </button>
-
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-1.5">
-            {units.map((u, i) => (
-              <button
-                key={u.id}
-                type="button"
-                aria-label={`Cask ${i + 1}`}
-                onClick={() => setIndex(i)}
-                className="w-1.5 h-1.5 rounded-full transition-all duration-200"
-                style={{
-                  backgroundColor: i === safeIndex ? accent : "hsl(var(--muted-foreground))",
-                  opacity: i === safeIndex ? 1 : 0.25,
-                  transform: i === safeIndex ? "scale(1.3)" : "scale(1)",
-                }}
-              />
-            ))}
-          </div>
-          <span className="font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground tabular-nums">
-            {safeIndex + 1} / {total} Casks
-          </span>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => go("next")}
-          className="flex items-center gap-1.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Next cask"
-        >
-          Next <ChevronRight className="w-4 h-4" />
-        </button>
+                <button
+                  type="button"
+                  onClick={() => go("next")}
+                  className="flex items-center gap-0.5 font-body text-[10px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Next cask"
+                >
+                  Next <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            }
+          />
       </div>
 
       {/* Swipe hint */}

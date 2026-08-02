@@ -1,32 +1,37 @@
-Implement the selected "Premium Glass Stack" transition for duplicate casks in `src/pages/portal/MyCasks.tsx`, adapting the frosted-glass depth language to the portal's existing light cream / navy / copper palette.
+Plan: Unify the client portal around a frosted-glass card system
 
-## What will change
+### Summary
+Take the glass treatment already used in My Casks and make it the standard surface language for all portal pages. The goal is a consistent, premium feel without changing any content, layout, typography, or interactions.
 
-1. **Stack depth edges** — Replace the current flat offset rectangles behind the front card with translucent, frosted-glass-style layers:
-   - Back-most edge: soft blur, muted border, lower opacity, larger Y offset and scale.
-   - Middle edge: light backdrop-blur, thin border, moderate opacity, smaller offset.
-   - Front card stays crisp and opaque with a subtle shadow.
+### What will change
 
-2. **Page-turn / swipe transition** — Keep the existing swipe, arrow, and keyboard navigation, but refine the motion:
-   - Use a cubic-bezier `[0.23, 1, 0.32, 1]` ease-out curve.
-   - Add a slight lift (`translateY`) and scale change during the drag so the card feels physically separated from the stack.
-   - Fade the outgoing card with a soft rotation rather than the current linear slide.
+1. Create a reusable glass-card system in `src/index.css`
+   - Add a new component layer with three classes:
+     - `.glass-card` — translucent white surface, medium blur, soft border, and a tokenized shadow.
+     - `.glass-card-sm` — lighter variant for nested panels, filter inputs, and form sections.
+     - `.glass-card-dark` — dark translucent variant for the Dashboard hero / portfolio-value card.
+   - Shadows will use semantic tokens (`--foreground` / `--secondary-foreground`) instead of hardcoded black.
 
-3. **Swipe hint** — Add a small dot/page indicator under the stack that matches the existing card's regional accent color (copper tones), consistent with the current navigation bar but lighter.
+2. Set the portal backdrop in `src/pages/portal/PortalLayout.tsx`
+   - Switch the main content area from `bg-white` to `bg-background` (warm cream).
+   - This makes the glass translucency visible and aligns the portal with the brand palette.
 
-4. **Color adaptation** — Use the portal's existing semantic tokens (`bg-muted/20`, `border-border`, `bg-surface`, `text-muted-foreground`, regional accent) so the glass effect works in light mode and stays consistent with the rest of the site.
+3. Apply glass cards to each portal page
+   - `src/pages/portal/MyCasks.tsx` — refactor existing inline frosted classes to use `.glass-card` / `.glass-card-sm` for the main card, SpecBox tiles, and certificate button. Keep the region gradient edge and glow.
+   - `src/pages/portal/Dashboard.tsx` — hero card uses `.glass-card-dark`; QuickAction cards use `.glass-card-sm`; `ActivityFeed` uses `.glass-card`.
+   - `src/components/portal/ActivityFeed.tsx` — root aside uses `.glass-card`.
+   - `src/pages/portal/AvailableStock.tsx` — listing cards, table container, empty states, and filter inputs use `.glass-card` / `.glass-card-sm`.
+   - `src/pages/portal/Account.tsx` — profile section, verification dialog content, and dialog form panels use `.glass-card` / `.glass-card-sm`.
+   - `src/pages/portal/Orders.tsx` — order cards, filter bar, and empty states use `.glass-card` / `.glass-card-sm`.
+   - `src/pages/portal/Checkout.tsx` — cart items, order summary, empty cart, invoice loading/error panels, and order-review aside use `.glass-card` / `.glass-card-sm`.
+   - `src/pages/portal/RequestCallback.tsx` — callback form uses `.glass-card`.
 
-5. **Accessibility** — Maintain `prefers-reduced-motion` cross-fade fallback and keep keyboard arrow navigation.
+4. Leave these unchanged
+   - The dark sidebar (solid anchor), mobile header, and Stripe Embedded Checkout iframe container.
+   - Marketing-site pages, public header, and footer.
+   - All content, copy, spacing, responsive layout, and click/keyboard behavior.
 
-## What will NOT change
-- Card content, spec grid, certificate button, maturation bar, or single-cask behavior.
-- Table view.
-- Search/sort/filter logic or stack grouping.
-
-## Verification
-- Open the portal My Casks page for the test user.
-- Confirm stacked casks show the new frosted depth edges and refined swipe/turn animation.
-- Confirm single casks remain a plain card with no stack UI.
-- Confirm reduced-motion still cross-fades cleanly.
-
-Only `src/pages/portal/MyCasks.tsx` will be edited.
+### Verification
+- Run the type check after edits.
+- Capture screenshots of Dashboard, My Casks, Available Stock, Account, Orders, Checkout, and Request Callback at desktop and mobile widths.
+- Check that text contrast remains readable on both light and dark glass surfaces.
