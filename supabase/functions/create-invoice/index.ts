@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
     const listingIds = [...new Set(items.map((i) => i.listing_id))];
     const { data: listings, error: listErr } = await admin
       .from("cask_listings")
-      .select("id, list_price, currency, spirit, spirit_name, cask_type, wood, abv, fill_date, status, stock_qty, reserved_qty, distilleries(name)")
+      .select("id, list_price, currency, spirit, spirit_name, cask_type, cask_size_litres, wood, abv, fill_date, status, stock_qty, reserved_qty, distilleries(name)")
       .in("id", listingIds);
     if (listErr || !listings) throw new Error("Could not load listings");
 
@@ -109,7 +109,7 @@ Deno.serve(async (req) => {
         distillery: l.distilleries?.name ?? null,
         spirit: l.spirit,
         spirit_name: l.spirit_name,
-        cask_type: l.cask_type,
+        cask_type: [l.cask_type, l.cask_size_litres ? `${Number(l.cask_size_litres)}L` : null].filter(Boolean).join(" ") || null,
         wood: l.wood,
         abv: l.abv,
         vintage_year: l.fill_date ? new Date(l.fill_date).getFullYear() : null,
