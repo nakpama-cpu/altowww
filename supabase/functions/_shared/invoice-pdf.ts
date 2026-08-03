@@ -148,7 +148,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   if (logoBytes) {
     try {
       const img = await pdf.embedPng(logoBytes);
-      const logoW = 112;
+      const logoW = 98;
       const logoH = (img.height / img.width) * logoW;
       page.drawImage(img, {
         x: M,
@@ -276,7 +276,9 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     const listTotal = Math.round(it.list_price * it.quantity * 100) / 100;
 
     const titleLines = wrapText(title || it.spirit || "Cask", serif, 12, descMaxW);
-    const specLines = specs ? wrapText(specs, regular, 8, descMaxW) : [];
+    const specLines = specs
+      ? specs.split("\n").flatMap((s) => wrapText(s, regular, 8, descMaxW))
+      : [];
 
     const titleTop = y;
     let ty = y;
@@ -409,7 +411,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
 
   // Closing line
   page.drawText(
-    "Thank you for your purchase. Your ownership certificates will follow.",
+    "Thank you for your purchase; your ownership certificates will follow.",
     { x: M, y, size: 8, font: regular, color: grey },
   );
 
