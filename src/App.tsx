@@ -58,6 +58,7 @@ import AdminCallbacks from "./pages/admin/Callbacks";
 import AdminOrders from "./pages/admin/Orders";
 import AdminDiscountCodes from "./pages/admin/DiscountCodes";
 import AdminListings from "./pages/admin/Listings";
+import AdminStockAlerts from "./pages/admin/StockAlerts";
 import AdminVerifications from "./pages/admin/Verifications";
 import CheckoutReturn from "./pages/portal/CheckoutReturn";
 import AdminInvoices from "./pages/admin/Invoices";
