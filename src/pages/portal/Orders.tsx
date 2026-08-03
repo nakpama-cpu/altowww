@@ -345,20 +345,25 @@ export default function Orders() {
               </button>
 
               <div className="p-4 space-y-2">
-                {o.invoice_items?.map((it) => (
-                  <div key={it.id} className="flex justify-between gap-4 font-body text-sm">
-                    <span>
-                      {it.quantity} × {it.distillery || it.spirit || "Cask"}
-                      <span className="block text-xs text-muted-foreground">
-                        {[it.cask_type, it.wood, it.abv ? `${it.abv}% ABV` : null, it.vintage_year]
-                          .filter(Boolean)
-                          .join(" · ")}
+                {o.invoice_items?.map((it) => {
+                  const { title, specLine, distilledLine } = formatInvoiceLine(it);
+                  return (
+                    <div key={it.id} className="flex justify-between gap-4 font-body text-sm">
+                      <span>
+                        {it.quantity} × {title}
+                        {specLine && (
+                          <span className="block text-xs text-muted-foreground">{specLine}</span>
+                        )}
+                        {distilledLine && (
+                          <span className="block text-xs text-muted-foreground">{distilledLine}</span>
+                        )}
                       </span>
-                    </span>
-                    <span>{money(o.currency, it.line_total)}</span>
-                  </div>
-                ))}
+                      <span>{money(o.currency, it.line_total)}</span>
+                    </div>
+                  );
+                })}
               </div>
+
 
               <div className="flex flex-wrap items-center justify-between gap-3 p-4 border-t border-border">
                 <div className="font-body text-sm">
