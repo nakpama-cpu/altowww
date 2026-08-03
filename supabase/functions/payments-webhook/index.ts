@@ -108,7 +108,7 @@ async function fulfilCheckoutSession(session: any, env: StripeEnv) {
       const listingIds = [...new Set(cart.map((i) => i.listing_id))];
       const { data: listings } = await sb
         .from("cask_listings")
-        .select("id, list_price, spirit, spirit_name, cask_type, wood, abv, fill_date, distilleries(name)")
+        .select("id, list_price, spirit, spirit_name, cask_type, cask_size_litres, wood, abv, fill_date, distilleries(name)")
         .in("id", listingIds);
       const listingMap = new Map((listings ?? []).map((l: any) => [l.id, l]));
 
@@ -169,7 +169,7 @@ async function fulfilCheckoutSession(session: any, env: StripeEnv) {
               distillery: l?.distilleries?.name ?? null,
               spirit: l?.spirit ?? null,
               spirit_name: l?.spirit_name ?? null,
-              cask_type: l?.cask_type ?? null,
+              cask_type: [l?.cask_type, l?.cask_size_litres ? `${Number(l.cask_size_litres)}L` : null].filter(Boolean).join(" ") || null,
               wood: l?.wood ?? null,
               abv: l?.abv ?? null,
               vintage_year: l?.fill_date ? new Date(l.fill_date).getFullYear() : null,
