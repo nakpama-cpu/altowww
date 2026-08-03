@@ -157,7 +157,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   y -= 18;
 
   // Items table
-  const cols = { desc: M, qty: 340, unit: 395, total: W - M };
+  const cols = { desc: M, qty: 316, unit: 372, total: W - M };
   page.drawRectangle({ x: M, y: y - 6, width: W - M * 2, height: 20, color: cream });
   page.drawRectangle({ x: M, y: y - 6, width: 3, height: 20, color: copper });
 
@@ -179,23 +179,59 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
       it.vintage_year ? `${it.vintage_year}` : null,
     ].filter(Boolean).join("  ·  ");
 
+    const discounted = it.unit_price < it.list_price;
+    const listTotal = Math.round(it.list_price * it.quantity * 100) / 100;
+
     page.drawText(title || it.spirit || "Cask", { x: cols.desc + 6, y, size: 9.5, font: bold, color: navy });
     page.drawText(String(it.quantity), { x: cols.qty, y, size: 9, font: regular, color: navy });
-    page.drawText(money(it.unit_price, inv.currency), { x: cols.unit, y, size: 9, font: regular, color: navy });
-    const amt = money(it.line_total, inv.currency);
-    page.drawText(amt, { x: cols.total - regular.widthOfTextAtSize(amt, 9) - 6, y, size: 9, font: regular, color: navy });
-    y -= 12;
-    if (specs) {
-      page.drawText(specs, { x: cols.desc + 6, y, size: 8, font: regular, color: grey });
+
+    if (discounted) {
+      // Full price, struck through, on the first line
+      const listUnitTxt = money(it.list_price, inv.currency);
+      page.drawText(listUnitTxt, { x: cols.unit, y, size: 8.5, font: regular, color: grey });
+      page.drawLine({
+        start: { x: cols.unit, y: y + 3 },
+        end: { x: cols.unit + regular.widthOfTextAtSize(listUnitTxt, 8.5), y: y + 3 },
+        thickness: 0.6, color: grey,
+      });
+      const listAmtTxt = money(listTotal, inv.currency);
+      page.drawText(listAmtTxt, {
+        x: cols.total - regular.widthOfTextAtSize(listAmtTxt, 8.5) - 6, y, size: 8.5, font: regular, color: grey,
+      });
+      page.drawLine({
+        start: { x: cols.total - regular.widthOfTextAtSize(listAmtTxt, 8.5) - 6, y: y + 3 },
+        end: { x: cols.total - 6, y: y + 3 },
+        thickness: 0.6, color: grey,
+      });
       y -= 12;
-    }
-    if (it.unit_price < it.list_price) {
+      // Discounted price underneath
+      const unitTxt = money(it.unit_price, inv.currency);
+      page.drawText(unitTxt, { x: cols.unit, y, size: 9.5, font: bold, color: copper });
+      const amtTxt = money(it.line_total, inv.currency);
+      page.drawText(amtTxt, {
+        x: cols.total - bold.widthOfTextAtSize(amtTxt, 9.5) - 6, y, size: 9.5, font: bold, color: copper,
+      });
+      if (specs) {
+        page.drawText(specs, { x: cols.desc + 6, y, size: 8, font: regular, color: grey });
+      }
+      y -= 12;
+      const saving = Math.round((listTotal - it.line_total) * 100) / 100;
       page.drawText(
-        `List ${money(it.list_price, inv.currency)} — discount applied`,
+        `Discount applied — you save ${money(saving, inv.currency)}`,
         { x: cols.desc + 6, y, size: 7.5, font: regular, color: copper },
       );
       y -= 12;
+    } else {
+      page.drawText(money(it.unit_price, inv.currency), { x: cols.unit, y, size: 9, font: regular, color: navy });
+      const amt = money(it.line_total, inv.currency);
+      page.drawText(amt, { x: cols.total - regular.widthOfTextAtSize(amt, 9) - 6, y, size: 9, font: regular, color: navy });
+      y -= 12;
+      if (specs) {
+        page.drawText(specs, { x: cols.desc + 6, y, size: 8, font: regular, color: grey });
+        y -= 12;
+      }
     }
+
     page.drawLine({ start: { x: M, y: y + 2 }, end: { x: W - M, y: y + 2 }, thickness: 0.5, color: line });
     y -= 12;
   }
