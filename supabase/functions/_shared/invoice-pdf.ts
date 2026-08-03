@@ -262,15 +262,20 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   };
 
   for (const it of inv.items) {
-    const title = [it.distillery, it.spirit_name && it.spirit_name !== it.distillery ? `“${it.spirit_name}”` : null]
+    const title = [it.distillery, it.spirit_name && it.spirit_name !== it.distillery ? it.spirit_name : it.spirit]
       .filter(Boolean)
       .join(" ");
-    const specs = [
+    const specLine = [
+      it.vintage_year ? `${it.vintage_year}` : null,
       it.cask_type,
       it.wood,
-      it.abv ? `${it.abv}% ABV` : null,
-      it.vintage_year ? `${it.vintage_year}` : null,
+      it.abv ? `ABV ${it.abv}% Approx` : null,
     ].filter(Boolean).join("  ·  ");
+    const distilledLine = it.distillery
+      ? `Distilled at ${/distillery/i.test(it.distillery) ? it.distillery : `${it.distillery} Distillery`}`
+      : null;
+    const specs = [specLine, distilledLine].filter(Boolean).join("\n");
+
 
     const discounted = it.unit_price < it.list_price;
     const listTotal = Math.round(it.list_price * it.quantity * 100) / 100;
