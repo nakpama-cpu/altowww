@@ -25,6 +25,8 @@ export type InvoiceData = {
   discount_amount: number;
   total: number;
   discount_code?: string | null;
+  status?: "pending" | "paid" | "client_confirmed" | "cancelled" | "expired";
+  paid_at?: string;
   bill_to: {
     name?: string;
     email?: string;
@@ -76,7 +78,6 @@ export function drawLetterheadFooter(
       COMPANY.email,
       COMPANY.companyNumber ? `Company no. ${COMPANY.companyNumber}` : null,
     ].filter(Boolean).join("  ·  "),
-    "Cask whisky is an unregulated asset; values can fall as well as rise.",
   ];
 
   const size = 6.8;
@@ -180,7 +181,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const meta: [string, string][] = [
     ["Invoice number", inv.invoice_number],
     ["Invoice date", dateStr(inv.issued_at)],
-    ["Payment due", dateStr(inv.due_at)],
+    inv.status === "paid" ? ["Payment status", "PAID"] : ["Payment due", dateStr(inv.due_at)],
     ["Payment reference", inv.payment_reference],
   ];
   for (const [k, v] of meta) {
@@ -268,7 +269,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
       y -= 12;
       const saving = Math.round((listTotal - it.line_total) * 100) / 100;
       page.drawText(
-        `Discount applied — you save ${money(saving, inv.currency)}`,
+        `${inv.discount_code || "Pallet discount"} applied — you save ${money(saving, inv.currency)}`,
         { x: cols.desc + 6, y, size: 7.5, font: regular, color: copper },
       );
       y -= 12;
@@ -305,33 +306,56 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   }
   page.drawLine({ start: { x: cols.unit - 46, y: y + 8 }, end: { x: W - M, y: y + 8 }, thickness: 0.8, color: line });
   y -= 6;
-  totalRow("Total due", money(inv.total, inv.currency), true);
+  totalRow(inv.status === "paid" ? "Total paid" : "Total due", money(inv.total, inv.currency), true);
 
-  // Bank details block
+  // Payment block
   y -= 6;
   const boxH = 108;
   page.drawRectangle({ x: M, y: y - boxH, width: W - M * 2, height: boxH, color: cream });
   page.drawRectangle({ x: M, y: y - boxH, width: 3, height: boxH, color: copper });
   let by = y - 20;
-  page.drawText("PAYMENT BY BANK TRANSFER", { x: M + 16, y: by, size: 8, font: bold, color: copper });
-  by -= 16;
-  const bankRows: [string, string][] = [
-    ["Account name", BANK.accountName],
-    ["Bank", BANK.bankName],
-    ["Sort code", BANK.sortCode],
-    ["Account number", BANK.accountNumber],
-    ["IBAN / BIC", `${BANK.iban}  /  ${BANK.bic}`],
-    ["Payment reference", inv.payment_reference],
-  ];
-  for (const [k, v] of bankRows) {
-    page.drawText(k, { x: M + 16, y: by, size: 8, font: regular, color: grey });
-    page.drawText(v, { x: M + 130, y: by, size: 8.5, font: bold, color: navy });
-    by -= 13;
+
+  if (inv.status === "paid") {
+    page.drawText("PAID IN FULL", { x: M + 16, y: by, size: 11, font: bold, color: copper });
+    by -= 16;
+    page.drawText(
+      `Paid by bank transfer on ${dateStr(inv.paid_at || inv.issued_at)}. No further payment is due.`,
+      { x: M + 16, y: by, size: 8, font: regular, color: grey },
+    );
+    by -= 14;
+    page.drawText(
+      `Payment reference: ${inv.payment_reference}`,
+      { x: M + 16, y: by, size: 8, font: regular, color: grey },
+    );
+  } else {
+    page.drawText("PAYMENT BY BANK TRANSFER", { x: M + 16, y: by, size: 8, font: bold, color: copper });
+    by -= 16;
+    const bankRows: [string, string][] = [
+      ["Account name", BANK.accountName],
+      ["Bank", BANK.bankName],
+      ["Sort code", BANK.sortCode],
+      ["Account number", BANK.accountNumber],
+      ["IBAN / BIC", `${BANK.iban}  /  ${BANK.bic}`],
+      ["Payment reference", inv.payment_reference],
+    ];
+    for (const [k, v] of bankRows) {
+      page.drawText(k, { x: M + 16, y: by, size: 8, font: regular, color: grey });
+      page.drawText(v, { x: M + 130, y: by, size: 8.5, font: bold, color: navy });
+      by -= 13;
+    }
   }
   y -= boxH + 18;
 
+  if (inv.status !== "paid") {
+    page.drawText(
+      `Please quote reference ${inv.payment_reference} on your transfer. Casks are reserved until ${dateStr(inv.due_at)}.`,
+      { x: M, y, size: 8, font: regular, color: grey },
+    );
+  }
+
+  // Closing line
   page.drawText(
-    `Please quote reference ${inv.payment_reference} on your transfer. Casks are reserved until ${dateStr(inv.due_at)}.`,
+    "Thank you for your purchase. Your ownership certificates will follow.",
     { x: M, y, size: 8, font: regular, color: grey },
   );
 

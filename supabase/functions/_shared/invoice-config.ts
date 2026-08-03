@@ -9,7 +9,7 @@ export const COMPANY = {
     "WC2H 9JQ",
   ],
   companyNumber: "",
-  telephone: "",
+  telephone: "0330 822 4189",
   email: "accounts@altowhisky.com",
   website: "www.altowhisky.com",
 };
