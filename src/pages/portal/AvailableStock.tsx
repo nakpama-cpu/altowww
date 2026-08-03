@@ -683,12 +683,19 @@ export default function AvailableStock() {
                     <span className="display-heading text-3xl text-primary">£{Math.round(total).toLocaleString()}</span>
                   </div>
                 </div>
+                {available > 0 && available <= LOW_STOCK_THRESHOLD && (
+                  <p className="font-body text-[11px] text-primary">
+                    Only {available} {available === 1 ? "cask" : "casks"} remaining at this listing.
+                  </p>
+                )}
                 <button
                   onClick={confirmAddToCart}
-                  className="w-full font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity"
+                  disabled={available === 0}
+                  className="w-full font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  Add to Cart
+                  {available === 0 ? "Fully Reserved" : "Add to Cart"}
                 </button>
+
               </div>
             );
           })()}
