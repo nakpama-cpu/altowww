@@ -76,9 +76,9 @@ export function drawLetterheadFooter(
       COMPANY.website,
       COMPANY.telephone ? `Tel ${COMPANY.telephone}` : null,
       COMPANY.email,
-      COMPANY.companyNumber ? `Company no. ${COMPANY.companyNumber}` : null,
     ].filter(Boolean).join("  ·  "),
-  ];
+    COMPANY.legalLine,
+  ].filter(Boolean) as string[];
 
   const size = 6.8;
   const lineH = 10;
