@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink, Store, PhoneCall } from "lucide-react";
 import { computeCaskAge } from "@/lib/caskAge";
 import { formatCaskSpec, palletApplies, palletEligible, palletUnitPrice, PALLET_DISCOUNT_PCT, PALLET_MIN_QTY } from "@/lib/pallet";
+import { LOW_STOCK_THRESHOLD } from "@/lib/stock";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { displaySpiritName } from "@/lib/utils";
 
