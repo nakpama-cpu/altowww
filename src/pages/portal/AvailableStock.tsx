@@ -646,23 +646,28 @@ export default function AvailableStock() {
                     <Input
                       type="number"
                       min="1"
+                      max={available || 1}
                       step="1"
                       value={buyQty}
                       onChange={(e) => {
                         const v = e.target.value;
                         if (v === "") setBuyQty("");
-                        else if (!v.startsWith("-") && Number(v) >= 0) setBuyQty(v);
+                        else if (!v.startsWith("-") && Number(v) >= 0) {
+                          setBuyQty(available > 0 ? String(Math.min(Number(v), available)) : v);
+                        }
                       }}
                       onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
                       className="flex-1 h-12 rounded-none border-0 text-center font-body text-base"
                     />
                     <button
                       type="button"
-                      onClick={() => setBuyQty(String(qty + 1))}
-                      className="px-4 bg-muted hover:bg-muted/70 font-body text-lg"
+                      onClick={() => setBuyQty(String(available > 0 ? Math.min(qty + 1, available) : qty + 1))}
+                      disabled={available > 0 && qty >= available}
+                      className="px-4 bg-muted hover:bg-muted/70 font-body text-lg disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       +
                     </button>
+
                   </div>
                 </div>
                 <div className="border-t border-border pt-4 space-y-2">
