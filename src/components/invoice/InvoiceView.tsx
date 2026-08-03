@@ -178,29 +178,49 @@ export default function InvoiceView({ token, invoice, items, bank, onConfirmed }
 
         <div className="mt-6 border border-border">
           <div
-            className="grid grid-cols-[1fr_auto] gap-4 px-4 py-2.5 font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground"
+            className="grid grid-cols-[1fr_48px_96px_104px] gap-3 px-4 py-2.5 font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground"
             style={{ backgroundColor: CREAM }}
           >
             <span>Description</span>
-            <span>Amount</span>
+            <span>Qty</span>
+            <span>Unit price</span>
+            <span className="text-right">Amount</span>
           </div>
-          {items.map((it) => (
-            <div key={it.id} className="flex items-start justify-between gap-4 px-4 py-3 border-t border-border">
-              <div className="min-w-0">
-                <div className="display-heading text-lg">{it.distillery || it.spirit}</div>
-                <div className="font-body text-xs text-muted-foreground">
-                  {[it.cask_type, it.wood, it.abv ? `${it.abv}% ABV` : null, it.vintage_year]
-                    .filter(Boolean)
-                    .join(" · ")}
+          {items.map((it) => {
+            const { title, specLine, distilledLine } = formatInvoiceLine(it);
+            const listPrice = Number(it.list_price ?? it.unit_price);
+            const discounted = listPrice > it.unit_price;
+            const listTotal = Math.round(listPrice * it.quantity * 100) / 100;
+            return (
+              <div
+                key={it.id}
+                className="grid grid-cols-[1fr_48px_96px_104px] gap-3 px-4 py-3 border-t border-border items-start"
+              >
+                <div className="min-w-0">
+                  <div className="display-heading text-lg">{title}</div>
+                  {specLine && <div className="font-body text-xs text-muted-foreground">{specLine}</div>}
+                  {distilledLine && (
+                    <div className="font-body text-xs text-muted-foreground">{distilledLine}</div>
+                  )}
                 </div>
-                <div className="font-body text-xs text-muted-foreground mt-1">
-                  {gbp(it.unit_price)} × {it.quantity}
+                <div className="font-body text-sm">{it.quantity}</div>
+                <div className="font-body text-sm">
+                  {discounted && (
+                    <div className="text-xs text-muted-foreground line-through">{gbp(listPrice)}</div>
+                  )}
+                  <div style={discounted ? { color: COPPER } : undefined}>{gbp(it.unit_price)}</div>
+                </div>
+                <div className="font-body text-sm text-right">
+                  {discounted && (
+                    <div className="text-xs text-muted-foreground line-through">{gbp(listTotal)}</div>
+                  )}
+                  <div style={discounted ? { color: COPPER } : undefined}>{gbp(it.line_total)}</div>
                 </div>
               </div>
-              <div className="font-body text-sm whitespace-nowrap">{gbp(it.line_total)}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
 
         <div className="pt-4 space-y-1 text-right">
           <div className="font-body text-sm text-muted-foreground">Subtotal {gbp(invoice.subtotal)}</div>
