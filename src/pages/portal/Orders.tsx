@@ -10,7 +10,9 @@ type InvoiceItem = {
   id: string;
   distillery: string | null;
   spirit: string | null;
+  spirit_name: string | null;
   cask_type: string | null;
+
   wood: string | null;
   abv: number | null;
   vintage_year: number | null;
