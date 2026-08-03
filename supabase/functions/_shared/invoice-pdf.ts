@@ -134,8 +134,8 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     fetchFont(SERIF_REGULAR_URL),
     fetchFont(SERIF_SEMIBOLD_URL),
   ]);
-  const serif = serifBytes ? await pdf.embedFont(serifBytes, { subset: true }) : regular;
-  const serifBold = serifSemiBytes ? await pdf.embedFont(serifSemiBytes, { subset: true }) : bold;
+  const serif = serifBytes ? await pdf.embedFont(serifBytes, { subset: false }) : regular;
+  const serifBold = serifSemiBytes ? await pdf.embedFont(serifSemiBytes, { subset: false }) : bold;
 
 
   // Brand palette (matches the website): deep navy, copper accent, warm cream
