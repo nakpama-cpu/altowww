@@ -306,7 +306,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   }
   page.drawLine({ start: { x: cols.unit - 46, y: y + 8 }, end: { x: W - M, y: y + 8 }, thickness: 0.8, color: line });
   y -= 6;
-  totalRow("Total due", money(inv.total, inv.currency), true);
+  totalRow(inv.status === "paid" ? "Total paid" : "Total due", money(inv.total, inv.currency), true);
 
   // Payment block
   y -= 6;
