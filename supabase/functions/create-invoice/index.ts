@@ -62,13 +62,23 @@ Deno.serve(async (req) => {
     if (listErr || !listings) throw new Error("Could not load listings");
 
     const listingMap = new Map(listings.map((l: any) => [l.id, l]));
+    const caskLabel = (l: any) =>
+      [l?.distilleries?.name, l?.spirit_name && l.spirit_name !== l?.distilleries?.name ? l.spirit_name : null]
+        .filter(Boolean).join(" ") || l?.spirit_name || l?.spirit || "cask";
     for (const i of items) {
       const l: any = listingMap.get(i.listing_id);
       if (!l) throw new Error(`Listing unavailable: ${i.listing_id}`);
-      if (l.status !== "active") throw new Error(`Listing sold out: ${l.spirit}`);
+      if (l.status !== "active") throw new Error(`${caskLabel(l)} is sold out`);
       const available = Math.max(0, (l.stock_qty ?? 0) - (l.reserved_qty ?? 0));
-      if (i.quantity < 1 || i.quantity > available) throw new Error(`Insufficient stock for ${l.spirit}`);
+      if (i.quantity < 1 || i.quantity > available) {
+        throw new Error(
+          available === 0
+            ? `${caskLabel(l)} is no longer available. Please remove it from your cart.`
+            : `Only ${available} ${caskLabel(l)} cask${available === 1 ? "" : "s"} remain — reduce the quantity in your cart.`,
+        );
+      }
     }
+
 
     let codePercent = 0;
     if (discountCodeRaw) {

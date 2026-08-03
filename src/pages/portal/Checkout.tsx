@@ -128,13 +128,25 @@ export default function Checkout() {
     });
     setPlacing(false);
     if (error || !data?.token) {
+      let description = (data as any)?.error || "Please try again";
+      const res = (error as any)?.context;
+      if (res && typeof res.json === "function") {
+        try {
+          const body = await res.json();
+          if (body?.error) description = body.error;
+        } catch { /* fall back to generic message */ }
+      }
+      if (description === "Please try again" && error?.message && !/non-2xx/i.test(error.message)) {
+        description = error.message;
+      }
       toast({
         title: "Could not create invoice",
-        description: (data as any)?.error || error?.message || "Please try again",
+        description,
         variant: "destructive",
       });
       return;
     }
+
     setInvoiceToken(data.token as string);
   };
 
