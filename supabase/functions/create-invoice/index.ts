@@ -1,5 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { PAYMENT_TERMS_DAYS, SITE_URL } from "../_shared/invoice-config.ts";
+import { formatInvoiceLine } from "../_shared/invoice-format.ts";
+
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
