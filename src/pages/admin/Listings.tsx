@@ -152,7 +152,16 @@ export default function AdminListings() {
                   <td className="p-3">£{l.list_price?.toLocaleString() ?? "—"}</td>
                   <td className="p-3">{l.stock_qty}</td>
                   <td className="p-3">{l.reserved_qty}</td>
-                  <td className="p-3 font-medium">{avail}</td>
+                  <td className="p-3 font-medium">
+                    <span className="inline-flex items-center gap-2">
+                      {avail}
+                      {avail === 0 ? (
+                        <span className="text-[10px] uppercase tracking-[0.15em] px-1.5 py-0.5 bg-destructive/10 text-destructive">Out</span>
+                      ) : avail <= LOW_STOCK_THRESHOLD ? (
+                        <span className="text-[10px] uppercase tracking-[0.15em] px-1.5 py-0.5 bg-primary/10 text-primary">Low</span>
+                      ) : null}
+                    </span>
+                  </td>
                   <td className="p-3">{l.status}</td>
                   <td className="p-3 text-right">
                     <button onClick={() => setEditing(l)} className="text-xs underline mr-3">Edit</button>
