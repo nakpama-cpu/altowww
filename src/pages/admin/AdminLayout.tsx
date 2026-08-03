@@ -1,11 +1,15 @@
+import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Users, Wine, FileSpreadsheet, Building2, PhoneCall, ShoppingCart, LogOut, ArrowLeft, Tag, Package, ShieldCheck, FileText } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { LOW_STOCK_THRESHOLD } from "@/lib/stock";
+import { Users, Wine, FileSpreadsheet, Building2, PhoneCall, ShoppingCart, LogOut, ArrowLeft, Tag, Package, ShieldCheck, FileText, AlertTriangle } from "lucide-react";
 
 const items = [
   { to: "/admin", end: true, label: "Clients", icon: Users },
   { to: "/admin/verifications", label: "Verifications", icon: ShieldCheck },
   { to: "/admin/listings", label: "Listings", icon: Package },
+  { to: "/admin/stock-alerts", label: "Stock Alerts", icon: AlertTriangle, badge: "stock" as const },
   { to: "/admin/casks", label: "Casks", icon: Wine },
   { to: "/admin/holdings", label: "Holdings", icon: FileSpreadsheet },
   { to: "/admin/distilleries", label: "Distilleries", icon: Building2 },
