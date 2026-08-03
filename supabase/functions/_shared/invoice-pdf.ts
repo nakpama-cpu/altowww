@@ -286,12 +286,8 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     { x: M, y, size: 8, font: regular, color: grey },
   );
 
-  // Footer
-  page.drawText(
-    `${COMPANY.tradingName} · ${COMPANY.website} · Cask whisky is an unregulated asset; values can fall as well as rise.`,
-    { x: M, y: 36, size: 6.8, font: regular, color: grey },
-  );
-  page.drawRectangle({ x: 0, y: 0, width: W, height: 6, color: copper });
+  // Letterhead footer, fixed to the bottom of the A4 page
+  drawLetterheadFooter(page, regular, { grey, line, copper, W, M });
 
 
   return await pdf.save();
