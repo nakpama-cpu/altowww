@@ -148,7 +148,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   if (logoBytes) {
     try {
       const img = await pdf.embedPng(logoBytes);
-      const logoW = 132;
+      const logoW = 112;
       const logoH = (img.height / img.width) * logoW;
       page.drawImage(img, {
         x: M,
@@ -179,7 +179,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     }
   };
   const rightEdge = W - M;
-  drawTracked("INVOICE", bold, 8, 2.6, rightEdge, y - 46, copper);
+  drawTracked("INVOICE", bold, 11, 3.2, rightEdge, y - 44, copper);
   const numTxt = inv.invoice_number || "";
   drawTracked(numTxt, serif, 23, 0.6, rightEdge, y - 74, cream);
   y -= bandH + 24;
