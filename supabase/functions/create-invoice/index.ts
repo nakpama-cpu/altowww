@@ -186,12 +186,19 @@ Deno.serve(async (req) => {
             subtotal,
             discountAmount,
             total,
-            items: itemRows.map((r) => ({
-              title: r.distillery || r.spirit,
-              detail: [r.cask_type, r.wood, r.abv ? `${r.abv}% ABV` : null, r.vintage_year].filter(Boolean).join(" · "),
-              quantity: r.quantity,
-              lineTotal: r.line_total,
-            })),
+            items: itemRows.map((r) => {
+              const f = formatInvoiceLine(r);
+              return {
+                title: f.title,
+                detail: f.specLine ?? "",
+                distilled: f.distilledLine ?? "",
+                quantity: r.quantity,
+                listPrice: r.list_price,
+                unitPrice: r.unit_price,
+                lineTotal: r.line_total,
+              };
+            }),
+
             invoiceUrl: `${SITE_URL}/invoice/${invoice.confirmation_token}`,
             confirmUrl: `${SITE_URL}/invoice/${invoice.confirmation_token}?confirm=1`,
           },
