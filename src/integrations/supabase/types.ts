@@ -1044,6 +1044,10 @@ export type Database = {
           read_ct: number
         }[]
       }
+      recompute_listing_reserved: {
+        Args: { _listing_id: string }
+        Returns: undefined
+      }
       release_invoice_reservation: {
         Args: { _invoice_id: string }
         Returns: undefined
