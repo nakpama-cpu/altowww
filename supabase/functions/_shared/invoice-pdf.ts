@@ -269,7 +269,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
       y -= 12;
       const saving = Math.round((listTotal - it.line_total) * 100) / 100;
       page.drawText(
-        `Discount applied — you save ${money(saving, inv.currency)}`,
+        `${inv.discount_code || "Pallet discount"} applied — you save ${money(saving, inv.currency)}`,
         { x: cols.desc + 6, y, size: 7.5, font: regular, color: copper },
       );
       y -= 12;
