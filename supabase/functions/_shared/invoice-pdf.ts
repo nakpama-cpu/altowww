@@ -351,6 +351,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
       `Please quote reference ${inv.payment_reference} on your transfer. Casks are reserved until ${dateStr(inv.due_at)}.`,
       { x: M, y, size: 8, font: regular, color: grey },
     );
+    y -= 14;
   }
 
   // Closing line
