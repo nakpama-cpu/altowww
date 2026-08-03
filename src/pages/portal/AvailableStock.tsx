@@ -445,13 +445,27 @@ export default function AvailableStock() {
                       {c.list_price ? `£${Math.round(c.list_price).toLocaleString()}` : "—"}
                     </td>
                     <td className="pl-4 pr-6 py-3 whitespace-nowrap">
-                      <button
-                        onClick={() => openBuy(c)}
-                        className="font-body text-[10px] uppercase tracking-[0.15em] bg-primary text-primary-foreground px-3 py-1 hover:opacity-90 transition-opacity"
-                      >
-                        Buy
-                      </button>
+                      {(() => {
+                        const avail = Math.max(0, c.available_qty ?? 0);
+                        return (
+                          <span className="inline-flex items-center gap-2">
+                            {avail > 0 && avail <= LOW_STOCK_THRESHOLD && (
+                              <span className="font-body text-[10px] uppercase tracking-[0.15em] text-primary">
+                                {avail} left
+                              </span>
+                            )}
+                            <button
+                              onClick={() => openBuy(c)}
+                              disabled={avail === 0}
+                              className="font-body text-[10px] uppercase tracking-[0.15em] bg-primary text-primary-foreground px-3 py-1 hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                              {avail === 0 ? "Reserved" : "Buy"}
+                            </button>
+                          </span>
+                        );
+                      })()}
                     </td>
+
                   </tr>
               ))}
             </tbody>
