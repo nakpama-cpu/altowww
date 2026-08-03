@@ -132,7 +132,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   if (logoBytes) {
     try {
       const img = await pdf.embedPng(logoBytes);
-      const logoW = 150;
+      const logoW = 132;
       const logoH = (img.height / img.width) * logoW;
       page.drawImage(img, {
         x: M,
