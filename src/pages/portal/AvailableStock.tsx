@@ -117,14 +117,20 @@ export default function AvailableStock() {
       toast({ title: "No price set", description: "This listing is not yet priced.", variant: "destructive" });
       return;
     }
+    if (Math.max(0, c.available_qty ?? 0) === 0) {
+      toast({ title: "Fully reserved", description: "All casks in this listing are currently reserved. Speak with an advisor about the next release." });
+      return;
+    }
     setBuyListing(c);
     setBuyQty("1");
   };
 
   const confirmAddToCart = () => {
     if (!buyListing || buyListing.list_price == null) return;
-    const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
     const available = Math.max(0, buyListing.available_qty ?? 0);
+    if (available === 0) return;
+    const qty = Math.min(available, Math.max(1, Math.floor(Number(buyQty) || 1)));
+
     const eligible = palletEligible(available);
     const pallet = palletApplies(qty, available);
     const unit = pallet ? palletUnitPrice(Number(buyListing.list_price)) : Number(buyListing.list_price);
