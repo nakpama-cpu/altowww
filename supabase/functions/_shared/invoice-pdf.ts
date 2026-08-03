@@ -106,9 +106,19 @@ export function drawLetterheadFooter(
 
 export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
+  pdf.registerFontkit(fontkit);
   const page = pdf.addPage([595.28, 841.89]); // A4
   const regular = await pdf.embedFont(StandardFonts.Helvetica);
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+
+  // Display serif (Cormorant Garamond) — matches the portal invoice preview
+  const [serifBytes, serifSemiBytes] = await Promise.all([
+    fetchFont(SERIF_REGULAR_URL),
+    fetchFont(SERIF_SEMIBOLD_URL),
+  ]);
+  const serif = serifBytes ? await pdf.embedFont(serifBytes, { subset: true }) : regular;
+  const serifBold = serifSemiBytes ? await pdf.embedFont(serifSemiBytes, { subset: true }) : bold;
+
 
   // Brand palette (matches the website): deep navy, copper accent, warm cream
   const navy = rgb(0.106, 0.145, 0.208);
