@@ -73,7 +73,7 @@ export default function Orders() {
       const { data } = await supabase
         .from("invoices")
         .select(
-          "id, invoice_number, payment_reference, payment_method, status, currency, total, discount_code, issued_at, paid_at, client_confirmed_at, confirmation_token, invoice_items(id, distillery, spirit, cask_type, wood, abv, vintage_year, quantity, line_total)",
+          "id, invoice_number, payment_reference, payment_method, status, currency, total, discount_code, issued_at, paid_at, client_confirmed_at, confirmation_token, invoice_items(id, distillery, spirit, spirit_name, cask_type, wood, abv, vintage_year, quantity, line_total)",
         )
         .eq("user_id", user.id)
         .in("status", ["client_confirmed", "paid"])
