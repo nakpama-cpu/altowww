@@ -411,7 +411,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
 
   // Closing line
   page.drawText(
-    "Thank you for your purchase; your ownership certificates will follow.",
+    "Thank you for your purchase, your ownership certificates will follow.",
     { x: M, y, size: 8, font: regular, color: grey },
   );
 
