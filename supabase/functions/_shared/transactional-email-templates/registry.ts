@@ -20,4 +20,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'website-launch-announcement': websiteLaunchAnnouncement,
   'invoice-bank-transfer': invoiceBankTransfer,
   'admin-invoice-payment-confirmed': adminInvoicePaymentConfirmed,
+  'admin-low-stock': adminLowStock,
 }
