@@ -181,7 +181,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const meta: [string, string][] = [
     ["Invoice number", inv.invoice_number],
     ["Invoice date", dateStr(inv.issued_at)],
-    ["Payment due", dateStr(inv.due_at)],
+    inv.status === "paid" ? ["Payment status", "PAID"] : ["Payment due", dateStr(inv.due_at)],
     ["Payment reference", inv.payment_reference],
   ];
   for (const [k, v] of meta) {
