@@ -404,11 +404,13 @@ export default function AvailableStock() {
                     </div>
                     <button
                       onClick={() => openBuy(c)}
-                      className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 transition-opacity"
+                      disabled={Math.max(0, c.available_qty ?? 0) === 0}
+                      className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                      Buy
+                      {Math.max(0, c.available_qty ?? 0) === 0 ? "Reserved" : "Buy"}
                     </button>
                   </div>
+
                 </div>
 
               </div>
