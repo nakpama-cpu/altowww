@@ -54,6 +54,55 @@ async function fetchLogo(): Promise<Uint8Array | null> {
   }
 }
 
+type FooterOpts = {
+  grey: ReturnType<typeof rgb>;
+  line: ReturnType<typeof rgb>;
+  copper: ReturnType<typeof rgb>;
+  W: number;
+  M: number;
+};
+
+// Company letterhead footer, anchored to the bottom of the page.
+export function drawLetterheadFooter(
+  page: any,
+  regular: any,
+  { grey, line, copper, W, M }: FooterOpts,
+) {
+  const rows = [
+    `${COMPANY.registeredName} · ${COMPANY.addressLines.join(", ")}`,
+    [
+      COMPANY.website,
+      COMPANY.telephone ? `Tel ${COMPANY.telephone}` : null,
+      COMPANY.email,
+      COMPANY.companyNumber ? `Company no. ${COMPANY.companyNumber}` : null,
+    ].filter(Boolean).join("  ·  "),
+    "Cask whisky is an unregulated asset; values can fall as well as rise.",
+  ];
+
+  const size = 6.8;
+  const lineH = 10;
+  const bottomBar = 6;
+  const blockTop = bottomBar + 12 + rows.length * lineH;
+
+  page.drawLine({
+    start: { x: M, y: blockTop },
+    end: { x: W - M, y: blockTop },
+    thickness: 0.5,
+    color: line,
+  });
+
+  let fy = blockTop - 12;
+  for (const r of rows) {
+    const w = regular.widthOfTextAtSize(r, size);
+    page.drawText(r, { x: (W - w) / 2, y: fy, size, font: regular, color: grey });
+    fy -= lineH;
+  }
+
+  page.drawRectangle({ x: 0, y: 0, width: W, height: bottomBar, color: copper });
+}
+
+
+
 export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
   const page = pdf.addPage([595.28, 841.89]); // A4
@@ -286,12 +335,8 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     { x: M, y, size: 8, font: regular, color: grey },
   );
 
-  // Footer
-  page.drawText(
-    `${COMPANY.tradingName} · ${COMPANY.website} · Cask whisky is an unregulated asset; values can fall as well as rise.`,
-    { x: M, y: 36, size: 6.8, font: regular, color: grey },
-  );
-  page.drawRectangle({ x: 0, y: 0, width: W, height: 6, color: copper });
+  // Letterhead footer, fixed to the bottom of the A4 page
+  drawLetterheadFooter(page, regular, { grey, line, copper, W, M });
 
 
   return await pdf.save();
