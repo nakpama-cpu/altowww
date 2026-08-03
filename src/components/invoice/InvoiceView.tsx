@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Download, CheckCircle2, Landmark, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import altoLogo from "@/assets/alto-logo.png";
+import { formatInvoiceLine } from "@/lib/invoiceFormat";
 
 const FN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invoice-access`;
 
@@ -35,6 +36,7 @@ export type InvoiceItemRow = {
   abv: number | null;
   vintage_year: number | null;
   quantity: number;
+  list_price?: number | null;
   unit_price: number;
   line_total: number;
 };
