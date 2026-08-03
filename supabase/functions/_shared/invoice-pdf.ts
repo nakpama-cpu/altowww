@@ -247,11 +247,6 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     `Please quote reference ${inv.payment_reference} on your transfer. Casks are reserved until ${dateStr(inv.due_at)}.`,
     { x: M, y, size: 8, font: regular, color: grey },
   );
-  y -= 12;
-  page.drawText(
-    "Cask whisky held in bonded warehouse is not subject to VAT while under bond.",
-    { x: M, y, size: 8, font: regular, color: grey },
-  );
 
   // Footer
   page.drawText(
