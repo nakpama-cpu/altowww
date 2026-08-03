@@ -76,7 +76,6 @@ export function drawLetterheadFooter(
       COMPANY.email,
       COMPANY.companyNumber ? `Company no. ${COMPANY.companyNumber}` : null,
     ].filter(Boolean).join("  ·  "),
-    "Cask whisky is an unregulated asset; values can fall as well as rise.",
   ];
 
   const size = 6.8;
