@@ -115,12 +115,15 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
 
   // Display serif (Cormorant Garamond) — matches the portal invoice preview
-  const [serifBytes, serifSemiBytes] = await Promise.all([
-    fetchFont(SERIF_REGULAR_URL),
-    fetchFont(SERIF_SEMIBOLD_URL),
-  ]);
-  const serif = serifBytes ? await pdf.embedFont(serifBytes, { subset: false }) : regular;
-  const serifBold = serifSemiBytes ? await pdf.embedFont(serifSemiBytes, { subset: false }) : bold;
+  let serif = regular;
+  let serifBold = bold;
+  try {
+    serif = await pdf.embedFont(SERIF_REGULAR_BYTES, { subset: false });
+    serifBold = await pdf.embedFont(SERIF_SEMIBOLD_BYTES, { subset: false });
+  } catch (_e) {
+    serif = regular;
+    serifBold = bold;
+  }
 
 
   // Brand palette (matches the website): deep navy, copper accent, warm cream
