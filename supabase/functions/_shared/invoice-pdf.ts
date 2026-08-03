@@ -25,6 +25,8 @@ export type InvoiceData = {
   discount_amount: number;
   total: number;
   discount_code?: string | null;
+  status?: "pending" | "paid" | "client_confirmed" | "cancelled" | "expired";
+  paid_at?: string;
   bill_to: {
     name?: string;
     email?: string;
