@@ -99,6 +99,9 @@ export function drawLetterheadFooter(
   }
 
   page.drawRectangle({ x: 0, y: 0, width: W, height: bottomBar, color: copper });
+}
+
+
 
 export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
