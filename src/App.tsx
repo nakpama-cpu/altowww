@@ -114,6 +114,7 @@ const App = () => (
                 <Route index element={<AdminClients />} />
                 <Route path="verifications" element={<AdminVerifications />} />
                 <Route path="listings" element={<AdminListings />} />
+                <Route path="stock-alerts" element={<AdminStockAlerts />} />
                 <Route path="casks" element={<AdminCasks />} />
                 <Route path="holdings" element={<AdminHoldings />} />
                 <Route path="distilleries" element={<AdminDistilleries />} />
