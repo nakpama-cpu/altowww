@@ -76,9 +76,9 @@ export function drawLetterheadFooter(
       COMPANY.website,
       COMPANY.telephone ? `Tel ${COMPANY.telephone}` : null,
       COMPANY.email,
-      COMPANY.companyNumber ? `Company no. ${COMPANY.companyNumber}` : null,
     ].filter(Boolean).join("  ·  "),
-  ];
+    COMPANY.legalLine,
+  ].filter(Boolean) as string[];
 
   const size = 6.8;
   const lineH = 10;
@@ -152,13 +152,20 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     });
   }
 
-  page.drawText("INVOICE", {
-    x: W - M - bold.widthOfTextAtSize("INVOICE", 20), y: y - 56, size: 20, font: bold, color: copper,
-  });
-  page.drawText("CASK WHISKY PORTFOLIOS", {
-    x: W - M - regular.widthOfTextAtSize("CASK WHISKY PORTFOLIOS", 7),
-    y: y - 70, size: 7, font: regular, color: rgb(0.72, 0.72, 0.72),
-  });
+  // Top-right: copper "INVOICE" label over the white invoice number
+  const trackedWidth = (t: string, f: any, s: number, tr: number) =>
+    f.widthOfTextAtSize(t, s) + tr * Math.max(0, t.length - 1);
+  const drawTracked = (t: string, f: any, s: number, tr: number, rightX: number, ty: number, color: any) => {
+    let x = rightX - trackedWidth(t, f, s, tr);
+    for (const ch of t) {
+      page.drawText(ch, { x, y: ty, size: s, font: f, color });
+      x += f.widthOfTextAtSize(ch, s) + tr;
+    }
+  };
+  const rightEdge = W - M;
+  drawTracked("INVOICE", bold, 8, 2.6, rightEdge, y - 46, copper);
+  const numTxt = inv.invoice_number || "";
+  drawTracked(numTxt, bold, 17, 0.9, rightEdge, y - 70, rgb(1, 1, 1));
   y -= bandH + 24;
 
 
