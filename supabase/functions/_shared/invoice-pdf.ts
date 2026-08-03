@@ -67,12 +67,12 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const grey = rgb(0.42, 0.42, 0.42);
   const line = rgb(0.85, 0.85, 0.85);
 
-  const M = 44;
+  const M = 28;
   const W = 595.28;
   let y = 841.89;
 
   // Header band with logo
-  const bandH = 110;
+  const bandH = 96;
   page.drawRectangle({ x: 0, y: y - bandH, width: W, height: bandH, color: navy });
   // copper hairline under the band
   page.drawRectangle({ x: 0, y: y - bandH - 3, width: W, height: 3, color: copper });
