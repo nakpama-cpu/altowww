@@ -109,7 +109,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     x: W - M - regular.widthOfTextAtSize("CASK WHISKY PORTFOLIOS", 7),
     y: y - 70, size: 7, font: regular, color: rgb(0.72, 0.72, 0.72),
   });
-  y -= bandH + 32;
+  y -= bandH + 24;
 
 
   // Company / invoice meta
@@ -121,8 +121,10 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     page.drawText(l, { x: M, y: ly, size: 8.5, font: regular, color: grey });
     ly -= 11;
   }
-  page.drawText(`Company no. ${COMPANY.companyNumber}`, { x: M, y: ly, size: 8.5, font: regular, color: grey });
-  ly -= 11;
+  if (COMPANY.companyNumber) {
+    page.drawText(`Company no. ${COMPANY.companyNumber}`, { x: M, y: ly, size: 8.5, font: regular, color: grey });
+    ly -= 11;
+  }
   page.drawText(COMPANY.email, { x: M, y: ly, size: 8.5, font: regular, color: grey });
 
   let ry = y;
