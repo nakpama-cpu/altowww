@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { LOW_STOCK_THRESHOLD } from "@/lib/stock";
 
 type Distillery = { id: string; name: string; region: string | null };
 type Listing = {
