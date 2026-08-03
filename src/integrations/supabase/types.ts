@@ -945,6 +945,41 @@ export type Database = {
         }
         Relationships: []
       }
+      stock_alerts: {
+        Row: {
+          available_qty: number
+          created_at: string
+          listing_id: string
+          notified_at: string | null
+          state: string
+          updated_at: string
+        }
+        Insert: {
+          available_qty?: number
+          created_at?: string
+          listing_id: string
+          notified_at?: string | null
+          state: string
+          updated_at?: string
+        }
+        Update: {
+          available_qty?: number
+          created_at?: string
+          listing_id?: string
+          notified_at?: string | null
+          state?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_alerts_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: true
+            referencedRelation: "cask_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       suppressed_emails: {
         Row: {
           created_at: string
