@@ -326,14 +326,14 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   // Totals
   y -= 6;
   const totalRow = (label: string, value: string, strong = false) => {
-    const f = strong ? bold : regular;
-    const s = strong ? 12 : 9.5;
-    page.drawText(label, { x: cols.unit - 40, y, size: s, font: f, color: strong ? navy : grey });
+    const f = strong ? serif : regular;
+    const s = strong ? 16 : 9.5;
+    page.drawText(label, { x: cols.unit - 40, y, size: s, font: f, color: strong ? copper : grey });
     page.drawText(value, {
       x: cols.total - f.widthOfTextAtSize(value, s) - 6,
       y, size: s, font: f, color: strong ? copper : navy,
     });
-    y -= strong ? 22 : 16;
+    y -= strong ? 24 : 16;
   };
   totalRow("Subtotal", money(inv.subtotal, inv.currency));
   if (inv.discount_amount > 0) {
