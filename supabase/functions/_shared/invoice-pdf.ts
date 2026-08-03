@@ -308,31 +308,54 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   y -= 6;
   totalRow("Total due", money(inv.total, inv.currency), true);
 
-  // Bank details block
+  // Payment block
   y -= 6;
   const boxH = 108;
   page.drawRectangle({ x: M, y: y - boxH, width: W - M * 2, height: boxH, color: cream });
   page.drawRectangle({ x: M, y: y - boxH, width: 3, height: boxH, color: copper });
   let by = y - 20;
-  page.drawText("PAYMENT BY BANK TRANSFER", { x: M + 16, y: by, size: 8, font: bold, color: copper });
-  by -= 16;
-  const bankRows: [string, string][] = [
-    ["Account name", BANK.accountName],
-    ["Bank", BANK.bankName],
-    ["Sort code", BANK.sortCode],
-    ["Account number", BANK.accountNumber],
-    ["IBAN / BIC", `${BANK.iban}  /  ${BANK.bic}`],
-    ["Payment reference", inv.payment_reference],
-  ];
-  for (const [k, v] of bankRows) {
-    page.drawText(k, { x: M + 16, y: by, size: 8, font: regular, color: grey });
-    page.drawText(v, { x: M + 130, y: by, size: 8.5, font: bold, color: navy });
-    by -= 13;
+
+  if (inv.status === "paid") {
+    page.drawText("PAID IN FULL", { x: M + 16, y: by, size: 11, font: bold, color: copper });
+    by -= 16;
+    page.drawText(
+      `Paid by bank transfer on ${dateStr(inv.paid_at || inv.issued_at)}. No further payment is due.`,
+      { x: M + 16, y: by, size: 8, font: regular, color: grey },
+    );
+    by -= 14;
+    page.drawText(
+      `Payment reference: ${inv.payment_reference}`,
+      { x: M + 16, y: by, size: 8, font: regular, color: grey },
+    );
+  } else {
+    page.drawText("PAYMENT BY BANK TRANSFER", { x: M + 16, y: by, size: 8, font: bold, color: copper });
+    by -= 16;
+    const bankRows: [string, string][] = [
+      ["Account name", BANK.accountName],
+      ["Bank", BANK.bankName],
+      ["Sort code", BANK.sortCode],
+      ["Account number", BANK.accountNumber],
+      ["IBAN / BIC", `${BANK.iban}  /  ${BANK.bic}`],
+      ["Payment reference", inv.payment_reference],
+    ];
+    for (const [k, v] of bankRows) {
+      page.drawText(k, { x: M + 16, y: by, size: 8, font: regular, color: grey });
+      page.drawText(v, { x: M + 130, y: by, size: 8.5, font: bold, color: navy });
+      by -= 13;
+    }
   }
   y -= boxH + 18;
 
+  if (inv.status !== "paid") {
+    page.drawText(
+      `Please quote reference ${inv.payment_reference} on your transfer. Casks are reserved until ${dateStr(inv.due_at)}.`,
+      { x: M, y, size: 8, font: regular, color: grey },
+    );
+  }
+
+  // Closing line
   page.drawText(
-    `Please quote reference ${inv.payment_reference} on your transfer. Casks are reserved until ${dateStr(inv.due_at)}.`,
+    "Thank you for your purchase. Your ownership certificates will follow.",
     { x: M, y, size: 8, font: regular, color: grey },
   );
 
