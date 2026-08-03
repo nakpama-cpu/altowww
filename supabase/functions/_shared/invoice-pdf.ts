@@ -1,5 +1,8 @@
 import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
+import fontkit from "npm:@pdf-lib/fontkit@1.1.1";
 import { COMPANY, BANK } from "./invoice-config.ts";
+import { SERIF_REGULAR_BYTES, SERIF_SEMIBOLD_BYTES } from "./invoice-fonts.ts";
+
 
 export type InvoiceLine = {
   distillery?: string | null;
@@ -106,9 +109,22 @@ export function drawLetterheadFooter(
 
 export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
+  pdf.registerFontkit(fontkit);
   const page = pdf.addPage([595.28, 841.89]); // A4
   const regular = await pdf.embedFont(StandardFonts.Helvetica);
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+
+  // Display serif (Cormorant Garamond) — matches the portal invoice preview
+  let serif = regular;
+  let serifBold = bold;
+  try {
+    serif = await pdf.embedFont(SERIF_REGULAR_BYTES, { subset: false });
+    serifBold = await pdf.embedFont(SERIF_SEMIBOLD_BYTES, { subset: false });
+  } catch (_e) {
+    serif = regular;
+    serifBold = bold;
+  }
+
 
   // Brand palette (matches the website): deep navy, copper accent, warm cream
   const navy = rgb(0.106, 0.145, 0.208);
@@ -165,7 +181,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const rightEdge = W - M;
   drawTracked("INVOICE", bold, 8, 2.6, rightEdge, y - 46, copper);
   const numTxt = inv.invoice_number || "";
-  drawTracked(numTxt, bold, 17, 0.9, rightEdge, y - 70, rgb(1, 1, 1));
+  drawTracked(numTxt, serif, 23, 0.6, rightEdge, y - 74, cream);
   y -= bandH + 24;
 
 
@@ -241,7 +257,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     const discounted = it.unit_price < it.list_price;
     const listTotal = Math.round(it.list_price * it.quantity * 100) / 100;
 
-    page.drawText(title || it.spirit || "Cask", { x: cols.desc + 6, y, size: 9.5, font: bold, color: navy });
+    page.drawText(title || it.spirit || "Cask", { x: cols.desc + 6, y, size: 12, font: serif, color: navy });
     page.drawText(String(it.quantity), { x: cols.qty, y, size: 9, font: regular, color: navy });
 
     if (discounted) {
@@ -298,14 +314,14 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   // Totals
   y -= 6;
   const totalRow = (label: string, value: string, strong = false) => {
-    const f = strong ? bold : regular;
-    const s = strong ? 12 : 9.5;
-    page.drawText(label, { x: cols.unit - 40, y, size: s, font: f, color: strong ? navy : grey });
+    const f = strong ? serif : regular;
+    const s = strong ? 16 : 9.5;
+    page.drawText(label, { x: cols.unit - 40, y, size: s, font: f, color: strong ? copper : grey });
     page.drawText(value, {
       x: cols.total - f.widthOfTextAtSize(value, s) - 6,
       y, size: s, font: f, color: strong ? copper : navy,
     });
-    y -= strong ? 22 : 16;
+    y -= strong ? 24 : 16;
   };
   totalRow("Subtotal", money(inv.subtotal, inv.currency));
   if (inv.discount_amount > 0) {
