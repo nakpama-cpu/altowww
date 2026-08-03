@@ -363,7 +363,27 @@ export default function AvailableStock() {
                   </div>
                 )}
                   <div className="p-4 sm:p-6 flex-1 flex flex-col">
-                  <h3 className="display-heading text-2xl leading-snug mb-4">{c.distilleries?.name ?? c.spirit}</h3>
+                  <div className="flex items-start justify-between gap-3 mb-4">
+                    <h3 className="display-heading text-2xl leading-snug">{c.distilleries?.name ?? c.spirit}</h3>
+                    {(() => {
+                      const avail = Math.max(0, c.available_qty ?? 0);
+                      if (avail === 0) {
+                        return (
+                          <span className="shrink-0 font-body text-[10px] uppercase tracking-[0.15em] px-2 py-1 border border-border text-muted-foreground">
+                            Fully reserved
+                          </span>
+                        );
+                      }
+                      if (avail <= LOW_STOCK_THRESHOLD) {
+                        return (
+                          <span className="shrink-0 font-body text-[10px] uppercase tracking-[0.15em] px-2 py-1 border border-primary/40 bg-primary/10 text-primary">
+                            Only {avail} left
+                          </span>
+                        );
+                      }
+                      return null;
+                    })()}
+                  </div>
                   {(() => {
                     const a = computeCaskAge(c.fill_date, c.age_years);
                     return (
