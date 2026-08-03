@@ -193,7 +193,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const rightEdge = W - M;
   drawTracked("INVOICE", bold, 8, 2.6, rightEdge, y - 46, copper);
   const numTxt = inv.invoice_number || "";
-  drawTracked(numTxt, bold, 17, 0.9, rightEdge, y - 70, rgb(1, 1, 1));
+  drawTracked(numTxt, serif, 23, 0.6, rightEdge, y - 74, cream);
   y -= bandH + 24;
 
 
