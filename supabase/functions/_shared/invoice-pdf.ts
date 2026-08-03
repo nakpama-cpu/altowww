@@ -1,22 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
 import fontkit from "npm:@pdf-lib/fontkit@1.1.1";
 import { COMPANY, BANK } from "./invoice-config.ts";
-
-// Cormorant Garamond static instances (same display face as the portal preview)
-const SERIF_REGULAR_URL =
-  "https://fonts.gstatic.com/s/cormorantgaramond/v21/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_v86GnM.ttf";
-const SERIF_SEMIBOLD_URL =
-  "https://fonts.gstatic.com/s/cormorantgaramond/v21/co3umX5slCNuHLi8bLeY9MK7whWMhyjypVO7abI26QOD_iE9GnM.ttf";
-
-async function fetchFont(url: string): Promise<Uint8Array | null> {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) return null;
-    return new Uint8Array(await res.arrayBuffer());
-  } catch (_e) {
-    return null;
-  }
-}
+import { SERIF_REGULAR_BYTES, SERIF_SEMIBOLD_BYTES } from "./invoice-fonts.ts";
 
 
 export type InvoiceLine = {
