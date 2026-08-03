@@ -1,11 +1,15 @@
+import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Users, Wine, FileSpreadsheet, Building2, PhoneCall, ShoppingCart, LogOut, ArrowLeft, Tag, Package, ShieldCheck, FileText } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { LOW_STOCK_THRESHOLD } from "@/lib/stock";
+import { Users, Wine, FileSpreadsheet, Building2, PhoneCall, ShoppingCart, LogOut, ArrowLeft, Tag, Package, ShieldCheck, FileText, AlertTriangle } from "lucide-react";
 
 const items = [
   { to: "/admin", end: true, label: "Clients", icon: Users },
   { to: "/admin/verifications", label: "Verifications", icon: ShieldCheck },
   { to: "/admin/listings", label: "Listings", icon: Package },
+  { to: "/admin/stock-alerts", label: "Stock Alerts", icon: AlertTriangle, badge: "stock" as const },
   { to: "/admin/casks", label: "Casks", icon: Wine },
   { to: "/admin/holdings", label: "Holdings", icon: FileSpreadsheet },
   { to: "/admin/distilleries", label: "Distilleries", icon: Building2 },
@@ -17,6 +21,18 @@ const items = [
 
 export default function AdminLayout() {
   const { profile, signOut } = useAuth();
+  const [stockAlertCount, setStockAlertCount] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase.rpc("admin_listing_stock");
+      const count = (data ?? []).filter(
+        (s: any) => Math.max(0, (s.stock_qty ?? 0) - (s.reserved_qty ?? 0)) <= LOW_STOCK_THRESHOLD,
+      ).length;
+      setStockAlertCount(count);
+    })();
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-background">
       <aside className="w-full md:w-72 md:h-screen md:sticky md:top-0 flex md:flex-col bg-secondary text-secondary-foreground border-b md:border-b-0 md:border-r border-secondary-foreground/10">
@@ -26,7 +42,7 @@ export default function AdminLayout() {
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
-          {items.map(({ to, end, label, icon: Icon }) => (
+          {items.map(({ to, end, label, icon: Icon, badge }: any) => (
             <NavLink key={to} to={to} end={end}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 font-body text-xs uppercase tracking-[0.2em] transition-all border-l-2 ${
@@ -38,8 +54,14 @@ export default function AdminLayout() {
             >
               <Icon className="w-4 h-4" />
               {label}
+              {badge === "stock" && stockAlertCount > 0 && (
+                <span className="ml-auto min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] tracking-normal">
+                  {stockAlertCount}
+                </span>
+              )}
             </NavLink>
           ))}
+
 
           <NavLink to="/portal"
             className="flex items-center gap-3 px-4 py-3 mt-6 border-t border-secondary-foreground/10 pt-6 font-body text-xs uppercase tracking-[0.2em] text-secondary-foreground hover:text-primary transition-colors"

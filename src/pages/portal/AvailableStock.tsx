@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Search, RotateCcw, LayoutGrid, Table2, ChevronDown, ExternalLink, Store, PhoneCall } from "lucide-react";
 import { computeCaskAge } from "@/lib/caskAge";
 import { formatCaskSpec, palletApplies, palletEligible, palletUnitPrice, PALLET_DISCOUNT_PCT, PALLET_MIN_QTY } from "@/lib/pallet";
+import { LOW_STOCK_THRESHOLD } from "@/lib/stock";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { displaySpiritName } from "@/lib/utils";
 
@@ -116,14 +117,20 @@ export default function AvailableStock() {
       toast({ title: "No price set", description: "This listing is not yet priced.", variant: "destructive" });
       return;
     }
+    if (Math.max(0, c.available_qty ?? 0) === 0) {
+      toast({ title: "Fully reserved", description: "All casks in this listing are currently reserved. Speak with an advisor about the next release." });
+      return;
+    }
     setBuyListing(c);
     setBuyQty("1");
   };
 
   const confirmAddToCart = () => {
     if (!buyListing || buyListing.list_price == null) return;
-    const qty = Math.max(1, Math.floor(Number(buyQty) || 1));
     const available = Math.max(0, buyListing.available_qty ?? 0);
+    if (available === 0) return;
+    const qty = Math.min(available, Math.max(1, Math.floor(Number(buyQty) || 1)));
+
     const eligible = palletEligible(available);
     const pallet = palletApplies(qty, available);
     const unit = pallet ? palletUnitPrice(Number(buyListing.list_price)) : Number(buyListing.list_price);
@@ -363,7 +370,27 @@ export default function AvailableStock() {
                   </div>
                 )}
                   <div className="p-4 sm:p-6 flex-1 flex flex-col">
-                  <h3 className="display-heading text-2xl leading-snug mb-4">{c.distilleries?.name ?? c.spirit}</h3>
+                  <div className="flex items-start justify-between gap-3 mb-4">
+                    <h3 className="display-heading text-2xl leading-snug">{c.distilleries?.name ?? c.spirit}</h3>
+                    {(() => {
+                      const avail = Math.max(0, c.available_qty ?? 0);
+                      if (avail === 0) {
+                        return (
+                          <span className="shrink-0 font-body text-[10px] uppercase tracking-[0.15em] px-2 py-1 border border-border text-muted-foreground">
+                            Fully reserved
+                          </span>
+                        );
+                      }
+                      if (avail <= LOW_STOCK_THRESHOLD) {
+                        return (
+                          <span className="shrink-0 font-body text-[10px] uppercase tracking-[0.15em] px-2 py-1 border border-primary/40 bg-primary/10 text-primary">
+                            Only {avail} left
+                          </span>
+                        );
+                      }
+                      return null;
+                    })()}
+                  </div>
                   {(() => {
                     const a = computeCaskAge(c.fill_date, c.age_years);
                     return (
@@ -404,11 +431,13 @@ export default function AvailableStock() {
                     </div>
                     <button
                       onClick={() => openBuy(c)}
-                      className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 transition-opacity"
+                      disabled={Math.max(0, c.available_qty ?? 0) === 0}
+                      className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
                     >
-                      Buy
+                      {Math.max(0, c.available_qty ?? 0) === 0 ? "Reserved" : "Buy"}
                     </button>
                   </div>
+
                 </div>
 
               </div>
@@ -445,13 +474,27 @@ export default function AvailableStock() {
                       {c.list_price ? `£${Math.round(c.list_price).toLocaleString()}` : "—"}
                     </td>
                     <td className="pl-4 pr-6 py-3 whitespace-nowrap">
-                      <button
-                        onClick={() => openBuy(c)}
-                        className="font-body text-[10px] uppercase tracking-[0.15em] bg-primary text-primary-foreground px-3 py-1 hover:opacity-90 transition-opacity"
-                      >
-                        Buy
-                      </button>
+                      {(() => {
+                        const avail = Math.max(0, c.available_qty ?? 0);
+                        return (
+                          <span className="inline-flex items-center gap-2">
+                            {avail > 0 && avail <= LOW_STOCK_THRESHOLD && (
+                              <span className="font-body text-[10px] uppercase tracking-[0.15em] text-primary">
+                                {avail} left
+                              </span>
+                            )}
+                            <button
+                              onClick={() => openBuy(c)}
+                              disabled={avail === 0}
+                              className="font-body text-[10px] uppercase tracking-[0.15em] bg-primary text-primary-foreground px-3 py-1 hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                              {avail === 0 ? "Reserved" : "Buy"}
+                            </button>
+                          </span>
+                        );
+                      })()}
                     </td>
+
                   </tr>
               ))}
             </tbody>
@@ -646,23 +689,28 @@ export default function AvailableStock() {
                     <Input
                       type="number"
                       min="1"
+                      max={available || 1}
                       step="1"
                       value={buyQty}
                       onChange={(e) => {
                         const v = e.target.value;
                         if (v === "") setBuyQty("");
-                        else if (!v.startsWith("-") && Number(v) >= 0) setBuyQty(v);
+                        else if (!v.startsWith("-") && Number(v) >= 0) {
+                          setBuyQty(available > 0 ? String(Math.min(Number(v), available)) : v);
+                        }
                       }}
                       onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
                       className="flex-1 h-12 rounded-none border-0 text-center font-body text-base"
                     />
                     <button
                       type="button"
-                      onClick={() => setBuyQty(String(qty + 1))}
-                      className="px-4 bg-muted hover:bg-muted/70 font-body text-lg"
+                      onClick={() => setBuyQty(String(available > 0 ? Math.min(qty + 1, available) : qty + 1))}
+                      disabled={available > 0 && qty >= available}
+                      className="px-4 bg-muted hover:bg-muted/70 font-body text-lg disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       +
                     </button>
+
                   </div>
                 </div>
                 <div className="border-t border-border pt-4 space-y-2">
@@ -683,12 +731,19 @@ export default function AvailableStock() {
                     <span className="display-heading text-3xl text-primary">£{Math.round(total).toLocaleString()}</span>
                   </div>
                 </div>
+                {available > 0 && available <= LOW_STOCK_THRESHOLD && (
+                  <p className="font-body text-[11px] text-primary">
+                    Only {available} {available === 1 ? "cask" : "casks"} remaining at this listing.
+                  </p>
+                )}
                 <button
                   onClick={confirmAddToCart}
-                  className="w-full font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity"
+                  disabled={available === 0}
+                  className="w-full font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  Add to Cart
+                  {available === 0 ? "Fully Reserved" : "Add to Cart"}
                 </button>
+
               </div>
             );
           })()}

@@ -58,6 +58,7 @@ import AdminCallbacks from "./pages/admin/Callbacks";
 import AdminOrders from "./pages/admin/Orders";
 import AdminDiscountCodes from "./pages/admin/DiscountCodes";
 import AdminListings from "./pages/admin/Listings";
+import AdminStockAlerts from "./pages/admin/StockAlerts";
 import AdminVerifications from "./pages/admin/Verifications";
 import CheckoutReturn from "./pages/portal/CheckoutReturn";
 import AdminInvoices from "./pages/admin/Invoices";
@@ -114,6 +115,7 @@ const App = () => (
                 <Route index element={<AdminClients />} />
                 <Route path="verifications" element={<AdminVerifications />} />
                 <Route path="listings" element={<AdminListings />} />
+                <Route path="stock-alerts" element={<AdminStockAlerts />} />
                 <Route path="casks" element={<AdminCasks />} />
                 <Route path="holdings" element={<AdminHoldings />} />
                 <Route path="distilleries" element={<AdminDistilleries />} />
