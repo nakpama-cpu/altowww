@@ -5,7 +5,15 @@ import {
 } from 'npm:@react-email/components@0.0.22'
 import type { TemplateEntry } from './registry.ts'
 
-interface Item { title?: string; detail?: string; quantity?: number; lineTotal?: number }
+interface Item {
+  title?: string
+  detail?: string
+  distilled?: string
+  quantity?: number
+  listPrice?: number
+  unitPrice?: number
+  lineTotal?: number
+}
 
 interface Props {
   firstName?: string
@@ -59,17 +67,30 @@ const Email = ({
         </Section>
 
         <Text style={label}>YOUR PURCHASE</Text>
-        {items.map((it, idx) => (
-          <Row key={idx} style={itemRow}>
-            <Column>
-              <Text style={itemTitle}>{it.title}</Text>
-              <Text style={itemDetail}>{it.detail}{it.quantity && it.quantity > 1 ? ` · ×${it.quantity}` : ''}</Text>
-            </Column>
-            <Column style={{ textAlign: 'right' as const, width: '110px' }}>
-              <Text style={itemAmount}>{money(it.lineTotal)}</Text>
-            </Column>
-          </Row>
-        ))}
+        {items.map((it, idx) => {
+          const qty = it.quantity ?? 1
+          const unit = it.unitPrice ?? (it.lineTotal ?? 0) / (qty || 1)
+          const list = it.listPrice ?? unit
+          const discounted = list > unit
+          return (
+            <Row key={idx} style={itemRow}>
+              <Column>
+                <Text style={itemTitle}>{it.title}</Text>
+                {it.detail ? <Text style={itemDetail}>{it.detail}</Text> : null}
+                {it.distilled ? <Text style={itemDetail}>{it.distilled}</Text> : null}
+                <Text style={itemDetail}>
+                  Qty {qty} · Unit price{' '}
+                  {discounted ? <s style={strike}>{money(list)}</s> : null}{' '}
+                  <span style={discounted ? copperText : undefined}>{money(unit)}</span>
+                </Text>
+              </Column>
+              <Column style={{ textAlign: 'right' as const, width: '110px' }}>
+                {discounted ? <Text style={itemStrikeAmount}>{money(list * qty)}</Text> : null}
+                <Text style={discounted ? itemAmountCopper : itemAmount}>{money(it.lineTotal)}</Text>
+              </Column>
+            </Row>
+          )
+        })}
         <Hr style={hr} />
         <Row>
           <Column><Text style={totalLabel}>Subtotal</Text></Column>
@@ -130,7 +151,15 @@ export const template = {
     discountAmount: 1800,
     total: 22200,
     items: [
-      { title: 'Blair Athol', detail: 'Barrel 200L · Ex-Bourbon · 63.5% ABV · 2022', quantity: 6, lineTotal: 22200 },
+      {
+        title: 'Blair Athol Whisky Cask',
+        detail: '2022  ·  Ex-Bourbon Barrel 200L  ·  ABV 63.5% Approx',
+        distilled: 'Distilled at Blair Athol Distillery',
+        quantity: 6,
+        listPrice: 4000,
+        unitPrice: 3700,
+        lineTotal: 22200,
+      },
     ],
     invoiceUrl: 'https://www.altowhisky.com/invoice/preview',
     confirmUrl: 'https://www.altowhisky.com/invoice/preview?confirm=1',
@@ -160,3 +189,7 @@ const sig = { fontFamily: "'Inter', Arial, sans-serif", fontSize: '15px', color:
 const button = { backgroundColor: 'hsl(24, 72%, 40%)', color: '#ffffff', fontFamily: "'Inter', Arial, sans-serif", fontSize: '12px', fontWeight: 600 as const, letterSpacing: '0.2em', textTransform: 'uppercase' as const, borderRadius: '2px', padding: '14px 28px', textDecoration: 'none', display: 'inline-block' }
 const link = { color: 'hsl(24, 72%, 40%)', textDecoration: 'underline' }
 const footer = { fontFamily: "'Inter', Arial, sans-serif", fontSize: '12px', color: 'hsl(0, 0%, 45%)', lineHeight: '1.5', margin: '24px 0 0', borderTop: '1px solid hsl(0, 0%, 90%)', paddingTop: '18px' }
+const strike = { color: 'hsl(0, 0%, 55%)', textDecoration: 'line-through' }
+const copperText = { color: 'hsl(24, 72%, 40%)' }
+const itemStrikeAmount = { fontSize: '13px', color: 'hsl(0, 0%, 55%)', textDecoration: 'line-through', margin: '0' }
+const itemAmountCopper = { fontSize: '15px', color: 'hsl(24, 72%, 40%)', margin: '0' }
