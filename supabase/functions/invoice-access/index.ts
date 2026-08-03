@@ -44,6 +44,8 @@ Deno.serve(async (req) => {
         discount_amount: Number(invoice.discount_amount),
         total: Number(invoice.total),
         discount_code: invoice.discount_code,
+        status: invoice.status,
+        paid_at: invoice.paid_at ?? undefined,
         bill_to: invoice.bill_to ?? {},
         items: items.map((i: any) => ({
           distillery: i.distillery,
