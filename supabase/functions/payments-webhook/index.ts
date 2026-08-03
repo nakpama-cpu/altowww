@@ -122,7 +122,7 @@ async function fulfilCheckoutSession(session: any, env: StripeEnv) {
 
       const { data: numberData } = await sb.rpc("next_invoice_number");
       const invoiceNumber = (numberData as string) ?? `AW-CARD-${sessionId.slice(-8)}`;
-      const paymentReference = invoiceNumber.replace(/^AW-(\d{2})(\d{2})-(\d+)$/, "AW$2$3");
+      const paymentReference = invoiceNumber;
       const nowIso = new Date().toISOString();
 
       const { data: invoice } = await sb

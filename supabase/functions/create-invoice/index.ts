@@ -126,7 +126,7 @@ Deno.serve(async (req) => {
     const { data: numberData, error: numErr } = await admin.rpc("next_invoice_number");
     if (numErr || !numberData) throw new Error("Could not generate invoice number");
     const invoiceNumber = numberData as string;
-    const paymentReference = invoiceNumber.replace(/^AW-(\d{2})(\d{2})-(\d+)$/, "AW$2$3");
+    const paymentReference = invoiceNumber;
 
     const clientName = [profile.title, profile.first_name, profile.last_name].filter(Boolean).join(" ");
     const dueAt = new Date(Date.now() + PAYMENT_TERMS_DAYS * 86400000).toISOString();

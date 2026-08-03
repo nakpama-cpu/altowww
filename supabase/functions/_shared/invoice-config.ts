@@ -1,28 +1,25 @@
 // Company + bank details shown on invoices.
-// TODO: replace the placeholder values below with the real registered details
-// and bank account information once supplied.
 export const COMPANY = {
   tradingName: "Alto Whisky",
-  registeredName: "Alto Asset Management Ltd",
+  registeredName: "Alto Whisky",
   addressLines: [
-    "[Registered address line 1]",
-    "[Registered address line 2]",
-    "[City]",
-    "[Postcode]",
+    "71-75 Shelton Street",
+    "London",
     "United Kingdom",
+    "WC2H 9JQ",
   ],
-  companyNumber: "[Company number]",
+  companyNumber: "",
   email: "accounts@altowhisky.com",
   website: "www.altowhisky.com",
 };
 
 export const BANK = {
-  accountName: "[Account name]",
-  bankName: "[Bank name]",
-  sortCode: "[00-00-00]",
-  accountNumber: "[00000000]",
-  iban: "[IBAN]",
-  bic: "[BIC/SWIFT]",
+  accountName: "Alto Whisky",
+  bankName: "HSBC Bank Plc",
+  sortCode: "40-03-27",
+  accountNumber: "82380757",
+  iban: "GB89HBUK40032782380757",
+  bic: "HBUKGB4106T",
 };
 
 export const PAYMENT_TERMS_DAYS = 3;
