@@ -1,6 +1,8 @@
 import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
 import fontkit from "npm:@pdf-lib/fontkit@1.1.1";
 import { COMPANY, BANK } from "./invoice-config.ts";
+import { formatInvoiceLine } from "./invoice-format.ts";
+
 import { SERIF_REGULAR_BYTES, SERIF_SEMIBOLD_BYTES } from "./invoice-fonts.ts";
 
 
