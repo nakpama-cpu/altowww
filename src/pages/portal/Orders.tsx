@@ -4,6 +4,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Receipt, Banknote, CreditCard, ChevronDown, Search, RotateCcw, Calendar } from "lucide-react";
 import InvoiceLoader from "@/components/invoice/InvoiceLoader";
 import { Input } from "@/components/ui/input";
+import { formatInvoiceLine } from "@/lib/invoiceFormat";
+
 
 
 type InvoiceItem = {
