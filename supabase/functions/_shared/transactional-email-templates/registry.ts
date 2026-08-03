@@ -4,6 +4,7 @@ import { template as clientApproved } from './client-approved.tsx'
 import { template as websiteLaunchAnnouncement } from './website-launch-announcement.tsx'
 import { template as invoiceBankTransfer } from './invoice-bank-transfer.tsx'
 import { template as adminInvoicePaymentConfirmed } from './admin-invoice-payment-confirmed.tsx'
+import { template as adminLowStock } from './admin-low-stock.tsx'
 
 export interface TemplateEntry {
   component: (props: any) => React.ReactElement
