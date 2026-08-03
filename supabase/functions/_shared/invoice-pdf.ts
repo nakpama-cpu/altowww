@@ -243,6 +243,24 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   page.drawText(tHdr, { x: cols.total - bold.widthOfTextAtSize(tHdr, 7) - 6, y, size: 7, font: bold, color: navy });
   y -= 24;
 
+  const descMaxW = cols.qty - (cols.desc + 6) - 12;
+  const wrapText = (text: string, font: any, size: number, maxW: number): string[] => {
+    const words = text.split(" ");
+    const out: string[] = [];
+    let cur = "";
+    for (const w of words) {
+      const next = cur ? `${cur} ${w}` : w;
+      if (font.widthOfTextAtSize(next, size) <= maxW || !cur) {
+        cur = next;
+      } else {
+        out.push(cur);
+        cur = w;
+      }
+    }
+    if (cur) out.push(cur);
+    return out;
+  };
+
   for (const it of inv.items) {
     const title = [it.distillery, it.spirit_name && it.spirit_name !== it.distillery ? `“${it.spirit_name}”` : null]
       .filter(Boolean)
@@ -257,59 +275,71 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     const discounted = it.unit_price < it.list_price;
     const listTotal = Math.round(it.list_price * it.quantity * 100) / 100;
 
-    page.drawText(title || it.spirit || "Cask", { x: cols.desc + 6, y, size: 12, font: serif, color: navy });
-    page.drawText(String(it.quantity), { x: cols.qty, y, size: 9, font: regular, color: navy });
+    const titleLines = wrapText(title || it.spirit || "Cask", serif, 12, descMaxW);
+    const specLines = specs ? wrapText(specs, regular, 8, descMaxW) : [];
 
+    const titleTop = y;
+    let ty = y;
+    for (const tl of titleLines) {
+      page.drawText(tl, { x: cols.desc + 6, y: ty, size: 12, font: serif, color: navy });
+      ty -= 14;
+    }
+    page.drawText(String(it.quantity), { x: cols.qty, y: titleTop, size: 9, font: regular, color: navy });
+
+    // Price column (right side) starts on the title line
+    let py = titleTop;
     if (discounted) {
-      // Full price, struck through, on the first line
       const listUnitTxt = money(it.list_price, inv.currency);
-      page.drawText(listUnitTxt, { x: cols.unit, y, size: 8.5, font: regular, color: grey });
+      page.drawText(listUnitTxt, { x: cols.unit, y: py, size: 8.5, font: regular, color: grey });
       page.drawLine({
-        start: { x: cols.unit, y: y + 3 },
-        end: { x: cols.unit + regular.widthOfTextAtSize(listUnitTxt, 8.5), y: y + 3 },
+        start: { x: cols.unit, y: py + 3 },
+        end: { x: cols.unit + regular.widthOfTextAtSize(listUnitTxt, 8.5), y: py + 3 },
         thickness: 0.6, color: grey,
       });
       const listAmtTxt = money(listTotal, inv.currency);
       page.drawText(listAmtTxt, {
-        x: cols.total - regular.widthOfTextAtSize(listAmtTxt, 8.5) - 6, y, size: 8.5, font: regular, color: grey,
+        x: cols.total - regular.widthOfTextAtSize(listAmtTxt, 8.5) - 6, y: py, size: 8.5, font: regular, color: grey,
       });
       page.drawLine({
-        start: { x: cols.total - regular.widthOfTextAtSize(listAmtTxt, 8.5) - 6, y: y + 3 },
-        end: { x: cols.total - 6, y: y + 3 },
+        start: { x: cols.total - regular.widthOfTextAtSize(listAmtTxt, 8.5) - 6, y: py + 3 },
+        end: { x: cols.total - 6, y: py + 3 },
         thickness: 0.6, color: grey,
       });
-      y -= 12;
-      // Discounted price underneath
+      py -= 14;
       const unitTxt = money(it.unit_price, inv.currency);
-      page.drawText(unitTxt, { x: cols.unit, y, size: 9.5, font: bold, color: copper });
+      page.drawText(unitTxt, { x: cols.unit, y: py, size: 9.5, font: bold, color: copper });
       const amtTxt = money(it.line_total, inv.currency);
       page.drawText(amtTxt, {
-        x: cols.total - bold.widthOfTextAtSize(amtTxt, 9.5) - 6, y, size: 9.5, font: bold, color: copper,
+        x: cols.total - bold.widthOfTextAtSize(amtTxt, 9.5) - 6, y: py, size: 9.5, font: bold, color: copper,
       });
-      if (specs) {
-        page.drawText(specs, { x: cols.desc + 6, y, size: 8, font: regular, color: grey });
-      }
-      y -= 12;
+      py -= 14;
+    } else {
+      page.drawText(money(it.unit_price, inv.currency), { x: cols.unit, y: py, size: 9, font: regular, color: navy });
+      const amt = money(it.line_total, inv.currency);
+      page.drawText(amt, { x: cols.total - regular.widthOfTextAtSize(amt, 9) - 6, y: py, size: 9, font: regular, color: navy });
+      py -= 14;
+    }
+
+    // Spec lines under the title, in the description column only
+    for (const sl of specLines) {
+      page.drawText(sl, { x: cols.desc + 6, y: ty, size: 8, font: regular, color: grey });
+      ty -= 11;
+    }
+
+    if (discounted) {
       const saving = Math.round((listTotal - it.line_total) * 100) / 100;
       page.drawText(
         `${inv.discount_code || "Pallet discount"} applied — you save ${money(saving, inv.currency)}`,
-        { x: cols.desc + 6, y, size: 7.5, font: regular, color: copper },
+        { x: cols.desc + 6, y: ty, size: 7.5, font: regular, color: copper },
       );
-      y -= 12;
-    } else {
-      page.drawText(money(it.unit_price, inv.currency), { x: cols.unit, y, size: 9, font: regular, color: navy });
-      const amt = money(it.line_total, inv.currency);
-      page.drawText(amt, { x: cols.total - regular.widthOfTextAtSize(amt, 9) - 6, y, size: 9, font: regular, color: navy });
-      y -= 12;
-      if (specs) {
-        page.drawText(specs, { x: cols.desc + 6, y, size: 8, font: regular, color: grey });
-        y -= 12;
-      }
+      ty -= 12;
     }
 
+    y = Math.min(ty, py);
     page.drawLine({ start: { x: M, y: y + 2 }, end: { x: W - M, y: y + 2 }, thickness: 0.5, color: line });
     y -= 12;
   }
+
 
   // Totals
   y -= 6;
