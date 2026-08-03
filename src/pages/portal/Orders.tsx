@@ -4,13 +4,17 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Receipt, Banknote, CreditCard, ChevronDown, Search, RotateCcw, Calendar } from "lucide-react";
 import InvoiceLoader from "@/components/invoice/InvoiceLoader";
 import { Input } from "@/components/ui/input";
+import { formatInvoiceLine } from "@/lib/invoiceFormat";
+
 
 
 type InvoiceItem = {
   id: string;
   distillery: string | null;
   spirit: string | null;
+  spirit_name: string | null;
   cask_type: string | null;
+
   wood: string | null;
   abv: number | null;
   vintage_year: number | null;
@@ -71,7 +75,7 @@ export default function Orders() {
       const { data } = await supabase
         .from("invoices")
         .select(
-          "id, invoice_number, payment_reference, payment_method, status, currency, total, discount_code, issued_at, paid_at, client_confirmed_at, confirmation_token, invoice_items(id, distillery, spirit, cask_type, wood, abv, vintage_year, quantity, line_total)",
+          "id, invoice_number, payment_reference, payment_method, status, currency, total, discount_code, issued_at, paid_at, client_confirmed_at, confirmation_token, invoice_items(id, distillery, spirit, spirit_name, cask_type, wood, abv, vintage_year, quantity, line_total)",
         )
         .eq("user_id", user.id)
         .in("status", ["client_confirmed", "paid"])
@@ -343,20 +347,25 @@ export default function Orders() {
               </button>
 
               <div className="p-4 space-y-2">
-                {o.invoice_items?.map((it) => (
-                  <div key={it.id} className="flex justify-between gap-4 font-body text-sm">
-                    <span>
-                      {it.quantity} × {it.distillery || it.spirit || "Cask"}
-                      <span className="block text-xs text-muted-foreground">
-                        {[it.cask_type, it.wood, it.abv ? `${it.abv}% ABV` : null, it.vintage_year]
-                          .filter(Boolean)
-                          .join(" · ")}
+                {o.invoice_items?.map((it) => {
+                  const { title, specLine, distilledLine } = formatInvoiceLine(it);
+                  return (
+                    <div key={it.id} className="flex justify-between gap-4 font-body text-sm">
+                      <span>
+                        {it.quantity} × {title}
+                        {specLine && (
+                          <span className="block text-xs text-muted-foreground">{specLine}</span>
+                        )}
+                        {distilledLine && (
+                          <span className="block text-xs text-muted-foreground">{distilledLine}</span>
+                        )}
                       </span>
-                    </span>
-                    <span>{money(o.currency, it.line_total)}</span>
-                  </div>
-                ))}
+                      <span>{money(o.currency, it.line_total)}</span>
+                    </div>
+                  );
+                })}
               </div>
+
 
               <div className="flex flex-wrap items-center justify-between gap-3 p-4 border-t border-border">
                 <div className="font-body text-sm">
