@@ -269,7 +269,7 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
     const discounted = it.unit_price < it.list_price;
     const listTotal = Math.round(it.list_price * it.quantity * 100) / 100;
 
-    page.drawText(title || it.spirit || "Cask", { x: cols.desc + 6, y, size: 9.5, font: bold, color: navy });
+    page.drawText(title || it.spirit || "Cask", { x: cols.desc + 6, y, size: 12, font: serif, color: navy });
     page.drawText(String(it.quantity), { x: cols.qty, y, size: 9, font: regular, color: navy });
 
     if (discounted) {
