@@ -121,11 +121,11 @@ export async function buildInvoicePdf(inv: InvoiceData): Promise<Uint8Array> {
   const W = 595.28;
   let y = 841.89;
 
-  // Header band with logo
+  // Header band with logo (overshoot page edges so no white hairline shows)
   const bandH = 96;
-  page.drawRectangle({ x: 0, y: y - bandH, width: W, height: bandH, color: navy });
+  page.drawRectangle({ x: -6, y: y - bandH, width: W + 12, height: bandH + 6, color: navy });
   // copper hairline under the band
-  page.drawRectangle({ x: 0, y: y - bandH - 3, width: W, height: 3, color: copper });
+  page.drawRectangle({ x: -6, y: y - bandH - 3, width: W + 12, height: 3, color: copper });
 
   const logoBytes = await fetchLogo();
   let logoDrawn = false;
