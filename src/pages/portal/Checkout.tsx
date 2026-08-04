@@ -162,9 +162,41 @@ export default function Checkout() {
       return;
     }
     setPlacing(true);
+
+    // Preflight availability so the card form never fails with Stripe's generic error.
+    const { data: avail } = await supabase.rpc("listing_availability");
+    const availMap = new Map<string, number>(
+      ((avail as any[]) ?? []).map((a) => [a.listing_id as string, Number(a.available_qty ?? 0)]),
+    );
+    for (const i of items) {
+      const left = availMap.get(i.listing_id);
+      if (left === undefined) continue;
+      if (left === 0) {
+        setPlacing(false);
+        remove(i.listing_id);
+        toast({
+          title: "No longer available",
+          description: `${i.distillery} is fully reserved and has been removed from your cart.`,
+          variant: "destructive",
+        });
+        return;
+      }
+      if (i.quantity > left) {
+        setPlacing(false);
+        setQuantity(i.listing_id, left);
+        toast({
+          title: "Quantity adjusted",
+          description: `Only ${left} cask${left === 1 ? "" : "s"} of ${i.distillery} remain — your cart has been updated. Please review and continue.`,
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     setCheckoutOpen(true);
     setPlacing(false);
   };
+
 
   if (checkoutOpen) {
     return (
