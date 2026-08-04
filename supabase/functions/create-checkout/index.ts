@@ -96,9 +96,17 @@ Deno.serve(async (req) => {
     for (const i of items) {
       const l: any = listingMap.get(i.listing_id);
       if (!l) throw new Error(`Listing unavailable: ${i.listing_id}`);
-      if (l.status !== "active") throw new Error(`Listing sold out: ${l.spirit}`);
+      const name = l.distilleries?.name ?? l.spirit ?? "this cask";
       const available = Math.max(0, (l.stock_qty ?? 0) - (l.reserved_qty ?? 0));
-      if (i.quantity < 1 || i.quantity > available) throw new Error(`Insufficient stock for ${l.spirit}`);
+      if (l.status !== "active" || available === 0) {
+        throw new Error(`${name} is fully reserved and no longer available.`);
+      }
+      if (i.quantity < 1) throw new Error(`Invalid quantity for ${name}.`);
+      if (i.quantity > available) {
+        throw new Error(
+          `Only ${available} cask${available === 1 ? "" : "s"} of ${name} remain — please reduce the quantity in your cart.`,
+        );
+      }
     }
 
     // Pallet pricing: 7.5% off per line when qty >= 6 AND the listing has 6+ available.
