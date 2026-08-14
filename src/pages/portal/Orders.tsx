@@ -151,14 +151,14 @@ export default function Orders() {
               placeholder="Search invoice number or cask details…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 h-10 rounded-none border-border field-surface font-body text-sm w-full"
+              className="pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full"
             />
           </div>
           <div className="relative">
             <select
               value={filterPaymentMethod}
               onChange={(e) => setFilterPaymentMethod(e.target.value)}
-              className="appearance-none w-full h-10 pl-3 pr-9 border border-border field-surface font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="appearance-none w-full h-10 pl-3 pr-9 border field-surface bg-surface font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               <option value="all">All payment methods</option>
               <option value="card">Card</option>
@@ -170,7 +170,7 @@ export default function Orders() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="appearance-none w-full h-10 pl-3 pr-9 border border-border field-surface font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="appearance-none w-full h-10 pl-3 pr-9 border field-surface bg-surface font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               <option value="all">All statuses</option>
               <option value="paid">Paid</option>
@@ -185,7 +185,7 @@ export default function Orders() {
               placeholder="From"
               value={filterDateFrom}
               onChange={(e) => setFilterDateFrom(e.target.value)}
-              className="pl-9 h-10 rounded-none border-border field-surface font-body text-sm w-full"
+              className="pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full"
             />
           </div>
           <div className="relative">
@@ -195,7 +195,7 @@ export default function Orders() {
               placeholder="To"
               value={filterDateTo}
               onChange={(e) => setFilterDateTo(e.target.value)}
-              className="pl-9 h-10 rounded-none border-border field-surface font-body text-sm w-full"
+              className="pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full"
             />
           </div>
           <div className="relative">
@@ -211,7 +211,7 @@ export default function Orders() {
                 if (v === "" || (!v.startsWith("-") && Number(v) >= 0)) setFilterMinAmount(v);
               }}
               onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
-              className="w-full h-10 rounded-none border-border field-surface font-body text-sm pl-7"
+              className="w-full h-10 rounded-none field-surface bg-surface font-body text-sm pl-7"
             />
           </div>
           <div className="relative">
@@ -227,7 +227,7 @@ export default function Orders() {
                 if (v === "" || (!v.startsWith("-") && Number(v) >= 0)) setFilterMaxAmount(v);
               }}
               onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
-              className="w-full h-10 rounded-none border-border field-surface font-body text-sm pl-7"
+              className="w-full h-10 rounded-none field-surface bg-surface font-body text-sm pl-7"
             />
           </div>
           <div className="relative col-span-2">
@@ -237,14 +237,14 @@ export default function Orders() {
               placeholder="Filter by cask detail (distillery, spirit, type…)"
               value={filterCaskDetail}
               onChange={(e) => setFilterCaskDetail(e.target.value)}
-              className="pl-9 h-10 rounded-none border-border field-surface font-body text-sm w-full"
+              className="pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full"
             />
           </div>
           <div className="relative">
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as "newest" | "oldest")}
-              className="appearance-none w-full h-10 pl-3 pr-9 border border-border field-surface font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="appearance-none w-full h-10 pl-3 pr-9 border field-surface bg-surface font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               <option value="newest">Most recent first</option>
               <option value="oldest">Oldest first</option>
@@ -263,7 +263,7 @@ export default function Orders() {
               setFilterMaxAmount("");
               setSortBy("newest");
             }}
-            className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border field-surface font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
+            className="w-full flex items-center justify-center gap-1.5 h-10 px-3 border field-surface bg-surface font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground"
             title="Clear all filters"
           >
             <RotateCcw className="w-3.5 h-3.5" /> Clear
