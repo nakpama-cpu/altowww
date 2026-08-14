@@ -122,7 +122,7 @@ export default function Orders() {
       const db = effectiveDate(b).getTime();
       return sortBy === "newest" ? db - da : da - db;
     });
-  }, [rows, search, filterCaskDetail, filterPaymentMethod, filterStatus, filterDateFrom, filterDateTo, filterMinAmount, filterMaxAmount, sortBy]);
+  }, [rows, search, filterPaymentMethod, filterStatus, filterDateFrom, filterDateTo, filterMinAmount, filterMaxAmount, sortBy]);
 
   return (
     <div className="max-w-4xl">
@@ -220,16 +220,6 @@ export default function Orders() {
               className="w-full h-10 rounded-none field-surface bg-surface font-body text-sm pl-7"
             />
           </div>
-          <div className="relative col-span-2">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
-            <Input
-              type="text"
-              placeholder="Filter by cask detail (distillery, spirit, type…)"
-              value={filterCaskDetail}
-              onChange={(e) => setFilterCaskDetail(e.target.value)}
-              className="pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full"
-            />
-          </div>
           <div className="relative">
             <select
               value={sortBy}
@@ -244,7 +234,6 @@ export default function Orders() {
           <button
             onClick={() => {
               setSearch("");
-              setFilterCaskDetail("");
               setFilterPaymentMethod("all");
               setFilterStatus("all");
               setFilterDateFrom("");
@@ -280,7 +269,6 @@ export default function Orders() {
             <button
               onClick={() => {
                 setSearch("");
-                setFilterCaskDetail("");
                 setFilterPaymentMethod("all");
                 setFilterStatus("all");
                 setFilterDateFrom("");
