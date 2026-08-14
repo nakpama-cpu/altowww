@@ -209,10 +209,10 @@ export default function AvailableStock() {
             onChange={(e) => { setSearch(e.target.value); setShowSuggestions(true); }}
             onFocus={() => setShowSuggestions(true)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-            className="pl-9 h-10 rounded-none border-border glass-card-sm font-body text-sm w-full"
+            className="pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full"
           />
           {showSuggestions && suggestions.length > 0 && (
-            <ul className="absolute z-20 left-0 right-0 top-full mt-1 glass-card max-h-72 overflow-auto">
+            <ul className="absolute z-20 left-0 right-0 top-full mt-1 field-panel max-h-72 overflow-auto">
               {suggestions.map((s, i) => (
                 <li key={i}>
                   <button
@@ -232,7 +232,7 @@ export default function AvailableStock() {
           <select
             value={filterDistillery}
             onChange={(e) => setFilterDistillery(e.target.value)}
-            className="appearance-none w-full h-10 pl-3 pr-9 border border-border glass-card-sm font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="appearance-none w-full h-10 pl-3 pr-9 field-surface bg-surface font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="All">Distilleries</option>
             {distilleries.map((d) => (
@@ -245,7 +245,7 @@ export default function AvailableStock() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="appearance-none w-full h-10 pl-3 pr-9 border border-border glass-card-sm font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            className="appearance-none w-full h-10 pl-3 pr-9 field-surface bg-surface font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           >
             <option value="">Sort</option>
             <option value="newest">Date Added (Newest)</option>
@@ -280,7 +280,7 @@ export default function AvailableStock() {
               else if (!v.startsWith("-") && Number(v) >= 0) setFilterMinPrice(v);
             }}
             onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
-            className="w-full h-10 rounded-none border-border glass-card-sm font-body text-sm pl-7"
+            className="w-full h-10 rounded-none field-surface bg-surface font-body text-sm pl-7"
           />
         </div>
         <div className="relative md:col-span-2 lg:col-span-2 md:order-4 lg:order-none">
@@ -297,17 +297,17 @@ export default function AvailableStock() {
               else if (!v.startsWith("-") && Number(v) >= 0) setFilterMaxPrice(v);
             }}
             onKeyDown={(e) => { if (e.key === "-") e.preventDefault(); }}
-            className="w-full h-10 rounded-none border-border glass-card-sm font-body text-sm pl-7"
+            className="w-full h-10 rounded-none field-surface bg-surface font-body text-sm pl-7"
           />
         </div>
         <button
           onClick={() => { setSearch(""); setFilterDistillery("All"); setFilterMinPrice(""); setFilterMaxPrice(""); setSortBy(""); }}
-          className="md:col-span-2 lg:col-span-2 w-full flex items-center justify-center gap-1.5 h-10 px-3 border border-border glass-card-sm font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground md:order-6 lg:order-none"
+          className="md:col-span-2 lg:col-span-2 w-full flex items-center justify-center gap-1.5 h-10 px-3 field-surface font-body text-xs uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground md:order-6 lg:order-none"
           title="Clear all filters"
         >
           <RotateCcw className="w-3.5 h-3.5" /> Clear
         </button>
-        <div className="flex glass-card-sm w-full h-10 md:col-span-2 lg:col-span-2 md:order-7 lg:order-none">
+        <div className="flex field-surface overflow-hidden w-full h-10 md:col-span-2 lg:col-span-2 md:order-7 lg:order-none">
           <button
             onClick={() => setViewMode("cards")}
             className={`flex-1 flex items-center justify-center h-full ${viewMode === "cards" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
