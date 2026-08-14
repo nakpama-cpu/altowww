@@ -59,7 +59,6 @@ export default function Orders() {
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
-  const [filterCaskDetail, setFilterCaskDetail] = useState("");
   const [filterPaymentMethod, setFilterPaymentMethod] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterDateFrom, setFilterDateFrom] = useState("");
@@ -89,7 +88,6 @@ export default function Orders() {
 
   const filteredRows = useMemo(() => {
     const q = search.toLowerCase().trim();
-    const caskQ = filterCaskDetail.toLowerCase().trim();
     const minAmount = filterMinAmount ? Number(filterMinAmount) : null;
     const maxAmount = filterMaxAmount ? Number(filterMaxAmount) : null;
     const fromDate = filterDateFrom ? new Date(filterDateFrom) : null;
@@ -109,14 +107,6 @@ export default function Orders() {
             .some((v) => v!.toLowerCase().includes(q))
         );
 
-      const caskMatch =
-        !caskQ ||
-        o.invoice_items.some((it) =>
-          [it.distillery, it.spirit, it.cask_type, it.wood]
-            .filter(Boolean)
-            .some((v) => v!.toLowerCase().includes(caskQ))
-        );
-
       const paymentMatch = filterPaymentMethod === "all" || o.payment_method === filterPaymentMethod;
       const statusMatch = filterStatus === "all" || o.status === filterStatus;
       const minMatch = minAmount === null || o.total >= minAmount;
@@ -124,7 +114,7 @@ export default function Orders() {
       const fromMatch = fromDate === null || orderDateStr >= filterDateFrom;
       const toMatch = toDate === null || orderDateStr <= filterDateTo;
 
-      return searchMatch && caskMatch && paymentMatch && statusMatch && minMatch && maxMatch && fromMatch && toMatch;
+      return searchMatch && paymentMatch && statusMatch && minMatch && maxMatch && fromMatch && toMatch;
     });
 
     return [...result].sort((a, b) => {
