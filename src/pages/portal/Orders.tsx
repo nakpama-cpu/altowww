@@ -176,10 +176,7 @@ export default function Orders() {
               placeholder="From"
               value={filterDateFrom}
               onChange={(e) => setFilterDateFrom(e.target.value)}
-              className={cn(
-                "pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full orders-date-input",
-                !filterDateFrom && "text-muted-foreground"
-              )}
+              className="pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full orders-date-input text-muted-foreground"
             />
           </div>
           <div className="relative min-w-0">
@@ -189,10 +186,7 @@ export default function Orders() {
               placeholder="To"
               value={filterDateTo}
               onChange={(e) => setFilterDateTo(e.target.value)}
-              className={cn(
-                "pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full orders-date-input",
-                !filterDateTo && "text-muted-foreground"
-              )}
+              className="pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full orders-date-input text-muted-foreground"
             />
           </div>
           <div className="relative">
