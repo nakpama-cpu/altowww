@@ -4,6 +4,7 @@ import { Trash2, ShoppingBag, CreditCard, Tag, X, Landmark, FileText, ArrowLeft,
 import InvoiceView, { useInvoice } from "@/components/invoice/InvoiceView";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { useCart } from "@/contexts/CartContext";
+import { usePendingOrders } from "@/contexts/PendingOrdersContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
