@@ -37,7 +37,24 @@ async function fulfilCheckoutSession(session: any, env: StripeEnv) {
     return;
   }
 
-  const cart = (cs.cart as Array<{ listing_id: string; quantity: number }>) || [];
+  const rawCart: any = cs.cart;
+  const invoiceId: string | null = !Array.isArray(rawCart) && rawCart?.invoice_id ? String(rawCart.invoice_id) : null;
+
+  // Paying an existing pending invoice: mark it paid (holdings are materialised
+  // by the invoice trigger) and skip creating a duplicate invoice/order set.
+  if (invoiceId) {
+    const { error: payErr } = await sb.rpc("mark_invoice_paid", { _invoice_id: invoiceId });
+    if (payErr) console.error("mark_invoice_paid failed", payErr);
+    await sb
+      .from("invoices")
+      .update({ payment_method: "card", stripe_session_id: sessionId })
+      .eq("id", invoiceId);
+    await sb.from("checkout_sessions").update({ status: "completed" }).eq("stripe_session_id", sessionId);
+    return;
+  }
+
+  const cart = (rawCart as Array<{ listing_id: string; quantity: number }>) || [];
+
   const perUnitPaid =
     cart.reduce((s, i) => s + i.quantity, 0) > 0
       ? Number(cs.total) / cart.reduce((s, i) => s + i.quantity, 0)
