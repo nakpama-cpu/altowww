@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
+import { PendingOrdersProvider, usePendingOrders } from "@/contexts/PendingOrdersContext";
 import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Newspaper, ShoppingBag, ClipboardList } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect } from "react";
