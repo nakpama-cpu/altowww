@@ -302,6 +302,36 @@ export default function Checkout() {
 
 
 
+  if (pendingCreated) {
+    return (
+      <div className="max-w-2xl">
+        <div className="glass-card p-10 text-center">
+          <CheckCircle2 className="w-10 h-10 mx-auto text-primary mb-4" />
+          <h1 className="display-heading text-3xl mb-2">Pending order created</h1>
+          <p className="font-body text-sm text-muted-foreground mb-6 leading-relaxed">
+            Invoice <span className="text-foreground">{pendingCreated.invoice_number}</span> for{" "}
+            <span className="text-foreground">£{Math.round(pendingCreated.total).toLocaleString()}</span> is now in My Orders.
+            Your casks are reserved — pay by bank transfer or card whenever you're ready.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/portal/orders"
+              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity"
+            >
+              <ClipboardList className="w-4 h-4" /> View in My Orders
+            </Link>
+            <Link
+              to="/portal/available"
+              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-5 py-3 hover:border-primary transition-colors"
+            >
+              Continue browsing
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (items.length === 0) {
     return (
       <div className="max-w-3xl">
