@@ -440,7 +440,22 @@ export default function Checkout() {
             <span className="display-heading text-2xl text-primary">£{Math.round(total).toLocaleString()}</span>
           </div>
 
+          <div className="mt-5 border border-primary/40 bg-primary/5 p-4">
+            <button
+              onClick={createPendingOrder}
+              disabled={placing || !kycOk}
+              className="w-full flex items-center justify-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
+            >
+              <ClipboardList className="w-4 h-4" />
+              {placing ? "Loading…" : "Create Pending Order"}
+            </button>
+            <p className="font-body text-[11px] text-muted-foreground mt-3 leading-relaxed">
+              Save this order for later — it moves to My Orders where you can pay by bank transfer or card whenever you're ready.
+            </p>
+          </div>
+
           <div className="mt-5">
+
             <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-2">
               Payment Method
             </div>
