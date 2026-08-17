@@ -48,6 +48,8 @@ export default function Checkout() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [method, setMethod] = useState<"card" | "bank">("card");
   const [invoiceToken, setInvoiceToken] = useState<string | null>(null);
+  const [pendingCreated, setPendingCreated] = useState<{ invoice_number: string; total: number; currency: string } | null>(null);
+  const { refresh: refreshPending } = usePendingOrders();
 
   const currency = items[0]?.currency ?? "GBP";
 
