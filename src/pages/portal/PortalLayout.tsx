@@ -23,7 +23,7 @@ const navItems = [
   { to: "/portal/account", label: "Account", icon: UserCog },
 ];
 
-function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { isAdmin: boolean; profile: any; signOut: () => void; onNavigate?: () => void; cartCount: number }) {
+function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount, pendingCount }: { isAdmin: boolean; profile: any; signOut: () => void; onNavigate?: () => void; cartCount: number; pendingCount: number }) {
   return (
     <div className="flex flex-col h-full bg-secondary text-secondary-foreground">
       <div className="p-6 md:p-8 border-b border-secondary-foreground/10 flex-shrink-0">
