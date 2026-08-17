@@ -150,6 +150,39 @@ export default function Checkout() {
     setInvoiceToken(data.token as string);
   };
 
+  const createPendingOrder = async () => {
+    if (!user || items.length === 0) return;
+    if (!kycOk) {
+      toast({ title: "Verification required", description: "Complete address and identity verification in your Account first.", variant: "destructive" });
+      return;
+    }
+    setPlacing(true);
+    const { data, error } = await supabase.functions.invoke("create-invoice", {
+      body: {
+        items: items.map((i) => ({ listing_id: i.listing_id, quantity: i.quantity })),
+        discount_code: applied?.code ?? null,
+      },
+    });
+    setPlacing(false);
+    if (error || !data?.token) {
+      let description = (data as any)?.error || "Please try again";
+      const res = (error as any)?.context;
+      if (res && typeof res.json === "function") {
+        try {
+          const body = await res.json();
+          if (body?.error) description = body.error;
+        } catch { /* fall back to generic message */ }
+      }
+      toast({ title: "Could not create pending order", description, variant: "destructive" });
+      return;
+    }
+    clear();
+    setApplied(null);
+    setCodeInput("");
+    await refreshPending();
+    setPendingCreated({ invoice_number: data.invoice_number as string, total: Number(data.total), currency: (data.currency as string) ?? "GBP" });
+  };
+
   const beginPayment = async () => {
 
     if (!user || items.length === 0) return;
