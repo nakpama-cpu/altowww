@@ -50,6 +50,12 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount, pend
                 {cartCount}
               </span>
             )}
+            {to === "/portal/orders" && pendingCount > 0 && (
+              <span className="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 bg-primary text-primary-foreground font-body text-[10px] tracking-normal rounded-full">
+                {pendingCount}
+              </span>
+            )}
+
           </NavLink>
         ))}
 
