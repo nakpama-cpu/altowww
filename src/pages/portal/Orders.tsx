@@ -134,8 +134,8 @@ export default function Orders() {
 
       {/* Filters */}
       {!loading && rows.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
-          <div className="relative col-span-2 md:col-span-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
+          <div className="relative col-span-2 lg:col-span-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
             <Input
               type="text"
