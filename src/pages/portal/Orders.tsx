@@ -362,21 +362,46 @@ export default function Orders() {
                     </span>
                   )}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setOpenId(openId === o.id ? null : o.id)}
-                  className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded-sm font-body text-xs uppercase tracking-wider hover:bg-muted transition-colors"
-                >
-                  <Receipt className="w-3.5 h-3.5" />
-                  {openId === o.id ? "Hide invoice" : "View invoice"}
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  {o.status !== "paid" && (
+                    <button
+                      type="button"
+                      onClick={() => setPayId(payId === o.id ? null : o.id)}
+                      className="inline-flex items-center gap-2 px-3 py-2 rounded-sm bg-primary text-primary-foreground font-body text-xs uppercase tracking-wider hover:opacity-90 transition-opacity"
+                    >
+                      <CreditCard className="w-3.5 h-3.5" />
+                      {payId === o.id ? "Cancel card payment" : "Pay by card"}
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setOpenId(openId === o.id ? null : o.id)}
+                    className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded-sm font-body text-xs uppercase tracking-wider hover:bg-muted transition-colors"
+                  >
+                    <Receipt className="w-3.5 h-3.5" />
+                    {openId === o.id ? "Hide invoice" : o.status === "paid" ? "View invoice" : "Pay by bank transfer"}
+                  </button>
+                </div>
               </div>
+
+              {payId === o.id && (
+                <div className="border-t border-border bg-white p-4">
+                  <EmbeddedCheckoutProvider
+                    key={o.id}
+                    stripe={getStripe()}
+                    options={{ fetchClientSecret: () => fetchInvoiceClientSecret(o.id) }}
+                  >
+                    <EmbeddedCheckout />
+                  </EmbeddedCheckoutProvider>
+                </div>
+              )}
 
               {openId === o.id && (
                 <div className="border-t border-border bg-background p-4">
                   <InvoiceLoader token={o.confirmation_token} />
                 </div>
               )}
+
             </div>
           ))}
         </div>
