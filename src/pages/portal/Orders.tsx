@@ -182,14 +182,17 @@ export default function Orders() {
               )}
             />
           </div>
-          <div className="relative">
+          <div className="relative min-w-0">
             <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10" />
             <Input
               type="date"
               placeholder="To"
               value={filterDateTo}
               onChange={(e) => setFilterDateTo(e.target.value)}
-              className="pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full"
+              className={cn(
+                "pl-9 h-10 rounded-none field-surface bg-surface font-body text-sm w-full orders-date-input",
+                !filterDateTo && "text-muted-foreground"
+              )}
             />
           </div>
           <div className="relative">
