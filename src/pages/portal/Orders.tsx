@@ -46,7 +46,13 @@ const money = (currency: string, n: number) =>
   })}`;
 
 const statusLabel = (s: string) =>
-  s === "paid" ? "Paid" : s === "client_confirmed" ? "Payment confirmed" : s.replace(/_/g, " ");
+  s === "paid"
+    ? "Paid"
+    : s === "client_confirmed"
+      ? "Payment confirmed"
+      : s === "awaiting_payment"
+        ? "Pending"
+        : s.replace(/_/g, " ");
 
 const statusClass = (s: string) =>
   s === "paid"
@@ -78,7 +84,7 @@ export default function Orders() {
           "id, invoice_number, payment_reference, payment_method, status, currency, total, discount_code, issued_at, paid_at, client_confirmed_at, confirmation_token, invoice_items(id, distillery, spirit, spirit_name, cask_type, wood, abv, vintage_year, quantity, line_total)",
         )
         .eq("user_id", user.id)
-        .in("status", ["client_confirmed", "paid"])
+        .in("status", ["awaiting_payment", "client_confirmed", "paid"])
         .order("created_at", { ascending: false });
       setRows((data ?? []) as unknown as Order[]);
       setLoading(false);
@@ -164,6 +170,7 @@ export default function Orders() {
               className="appearance-none w-full h-10 pl-3 pr-9 border field-surface bg-surface font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               <option value="all">All statuses</option>
+              <option value="awaiting_payment">Pending</option>
               <option value="paid">Paid</option>
               <option value="client_confirmed">Payment confirmed</option>
             </select>
