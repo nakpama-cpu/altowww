@@ -5,6 +5,7 @@ import { Receipt, Banknote, CreditCard, ChevronDown, Search, RotateCcw, Calendar
 import InvoiceLoader from "@/components/invoice/InvoiceLoader";
 import { Input } from "@/components/ui/input";
 import { formatInvoiceLine } from "@/lib/invoiceFormat";
+import { cn } from "@/lib/utils";
 
 
 
