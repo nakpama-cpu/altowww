@@ -87,9 +87,10 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount, pend
   );
 }
 
-export default function PortalLayout() {
+function PortalLayoutInner() {
   const { profile, isAdmin, signOut } = useAuth();
   const { count: cartCount } = useCart();
+  const { count: pendingCount } = usePendingOrders();
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
@@ -110,14 +111,14 @@ export default function PortalLayout() {
             <MobileMenuButton open={open} ariaLabel="Open menu" />
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-72 max-w-[85vw] bg-secondary border-secondary-foreground/10">
-            <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} onNavigate={() => setOpen(false)} cartCount={cartCount} />
+            <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} onNavigate={() => setOpen(false)} cartCount={cartCount} pendingCount={pendingCount} />
           </SheetContent>
         </Sheet>
       </header>
 
       {/* Desktop sidebar */}
       <aside className="hidden md:flex md:flex-col md:w-72 md:h-screen md:sticky md:top-0 border-r border-secondary-foreground/10">
-        <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} cartCount={cartCount} />
+        <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} cartCount={cartCount} pendingCount={pendingCount} />
       </aside>
 
       <main className="flex-1 p-4 md:p-6 lg:p-12 overflow-x-hidden bg-background">
@@ -127,3 +128,12 @@ export default function PortalLayout() {
     </div>
   );
 }
+
+export default function PortalLayout() {
+  return (
+    <PendingOrdersProvider>
+      <PortalLayoutInner />
+    </PendingOrdersProvider>
+  );
+}
+
