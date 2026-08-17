@@ -6,6 +6,8 @@ import InvoiceLoader from "@/components/invoice/InvoiceLoader";
 import { Input } from "@/components/ui/input";
 import { formatInvoiceLine } from "@/lib/invoiceFormat";
 import { cn } from "@/lib/utils";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 
 
 
@@ -63,6 +65,21 @@ export default function Orders() {
   const { user } = useAuth();
   const [rows, setRows] = useState<Order[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
+  const [payId, setPayId] = useState<string | null>(null);
+
+  const fetchInvoiceClientSecret = async (invoiceId: string): Promise<string> => {
+    const { data, error } = await supabase.functions.invoke("create-checkout", {
+      body: {
+        invoice_id: invoiceId,
+        environment: getStripeEnvironment(),
+        return_url: `${window.location.origin}/portal/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+      },
+    });
+    if (error || !data?.clientSecret) {
+      throw new Error((data as any)?.error || error?.message || "Failed to start payment");
+    }
+    return data.clientSecret as string;
+  };
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
