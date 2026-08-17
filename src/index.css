@@ -161,6 +161,14 @@
     box-shadow: 0 6px 18px -10px hsl(var(--foreground) / 0.18);
   }
 
+  .orders-date-input::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+
+  .orders-date-input:placeholder-shown {
+    color: hsl(var(--muted-foreground));
+  }
+
   .field-panel {
     background-color: hsl(var(--surface));
     border: 1px solid hsl(var(--border));
