@@ -61,8 +61,9 @@ Deno.serve(async (req) => {
     const discountCodeRaw: string | null = body?.discount_code?.toString().trim().toUpperCase() || null;
     const environment: StripeEnv = body?.environment === "live" ? "live" : "sandbox";
     const returnUrl: string = body?.return_url;
+    const invoiceId: string | null = body?.invoice_id ? String(body.invoice_id) : null;
     if (!returnUrl) throw new Error("Missing return_url");
-    if (!items.length) throw new Error("Cart is empty");
+    if (!invoiceId && !items.length) throw new Error("Cart is empty");
 
     // Service client for trusted reads (bypass RLS on listings + profile)
     const admin = createClient(
@@ -83,6 +84,68 @@ Deno.serve(async (req) => {
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
+
+    // ---- Paying an existing pending invoice (stock already reserved) ----
+    if (invoiceId) {
+      const { data: invoice } = await admin
+        .from("invoices")
+        .select("id, user_id, status, currency, subtotal, discount_amount, total, discount_code, invoice_number, invoice_items(listing_id, distillery, spirit, quantity, unit_price)")
+        .eq("id", invoiceId)
+        .maybeSingle();
+      if (!invoice || invoice.user_id !== user.id) throw new Error("Invoice not found");
+      if (invoice.status !== "awaiting_payment" && invoice.status !== "client_confirmed") {
+        throw new Error("This invoice is no longer awaiting payment");
+      }
+      const invItems = ((invoice as any).invoice_items ?? []) as Array<any>;
+      if (!invItems.length) throw new Error("Invoice has no items");
+
+      const stripeInv = createStripeClient(environment);
+      const customerIdInv = await resolveOrCreateCustomer(stripeInv, { email: profile.email, userId: user.id });
+      const sessionInv = await stripeInv.checkout.sessions.create({
+        mode: "payment",
+        ui_mode: "embedded_page" as any,
+        return_url: returnUrl,
+        customer: customerIdInv,
+        billing_address_collection: "required",
+        line_items: invItems.map((it) => ({
+          price_data: {
+            currency: String(invoice.currency ?? "GBP").toLowerCase(),
+            product_data: {
+              name: it.distillery ?? it.spirit ?? "Whisky cask",
+              description: it.spirit ?? undefined,
+            },
+            unit_amount: Math.round(Number(it.unit_price) * 100),
+          },
+          quantity: it.quantity,
+        })),
+        payment_intent_data: {
+          description: `Alto Whisky — invoice ${invoice.invoice_number}`,
+        },
+        metadata: {
+          userId: user.id,
+          invoice_id: invoice.id,
+        },
+      } as any);
+
+      await admin.from("checkout_sessions").insert({
+        user_id: user.id,
+        stripe_session_id: sessionInv.id,
+        environment,
+        cart: { invoice_id: invoice.id, items: invItems.map((it) => ({ listing_id: it.listing_id, quantity: it.quantity })) },
+        discount_code: invoice.discount_code,
+        subtotal: invoice.subtotal,
+        discount_amount: invoice.discount_amount,
+        total: invoice.total,
+        currency: invoice.currency,
+        status: "pending",
+      });
+
+      return new Response(
+        JSON.stringify({ clientSecret: sessionInv.client_secret, sessionId: sessionInv.id }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
 
     // Trusted listing data
     const listingIds = [...new Set(items.map((i) => i.listing_id))];

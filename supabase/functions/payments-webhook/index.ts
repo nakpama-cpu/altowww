@@ -37,7 +37,63 @@ async function fulfilCheckoutSession(session: any, env: StripeEnv) {
     return;
   }
 
-  const cart = (cs.cart as Array<{ listing_id: string; quantity: number }>) || [];
+  const rawCart: any = cs.cart;
+  const invoiceId: string | null = !Array.isArray(rawCart) && rawCart?.invoice_id ? String(rawCart.invoice_id) : null;
+
+  // Paying an existing pending invoice: settle it directly (the RPC wrapper is
+  // admin-only, so the service role does the same work here) — the invoice
+  // trigger materialises holdings once the status flips to paid.
+  if (invoiceId) {
+    const { data: inv } = await sb
+      .from("invoices")
+      .select("id, user_id, status, currency, discount_code, invoice_items(listing_id, quantity, unit_price)")
+      .eq("id", invoiceId)
+      .maybeSingle();
+    if (!inv) {
+      console.error("invoice not found for session", sessionId);
+      return;
+    }
+    if (inv.status !== "paid") {
+      await sb.rpc("release_invoice_reservation", { _invoice_id: invoiceId });
+
+      const orderRows: any[] = [];
+      for (const it of ((inv as any).invoice_items ?? [])) {
+        for (let n = 0; n < it.quantity; n++) {
+          orderRows.push({
+            buyer_id: inv.user_id,
+            listing_id: it.listing_id,
+            amount: Number(it.unit_price),
+            currency: inv.currency,
+            status: "paid",
+            discount_code: null,
+            stripe_session_id: sessionId,
+            stripe_payment_intent: paymentIntent,
+          });
+        }
+      }
+      if (orderRows.length) {
+        const { error: ordErr } = await sb.from("orders").insert(orderRows);
+        if (ordErr) console.error("invoice order insert failed", ordErr);
+      }
+
+      await sb
+        .from("invoices")
+        .update({
+          status: "paid",
+          paid_at: new Date().toISOString(),
+          payment_method: "card",
+          stripe_session_id: sessionId,
+        })
+        .eq("id", invoiceId);
+    }
+
+    await sb.from("checkout_sessions").update({ status: "completed" }).eq("stripe_session_id", sessionId);
+    return;
+  }
+
+
+  const cart = (rawCart as Array<{ listing_id: string; quantity: number }>) || [];
+
   const perUnitPaid =
     cart.reduce((s, i) => s + i.quantity, 0) > 0
       ? Number(cs.total) / cart.reduce((s, i) => s + i.quantity, 0)

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
+import { PendingOrdersProvider, usePendingOrders } from "@/contexts/PendingOrdersContext";
 import { LayoutDashboard, Wine, Store, PhoneCall, UserCog, Shield, LogOut, Newspaper, ShoppingBag, ClipboardList } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useEffect } from "react";
@@ -23,7 +24,7 @@ const navItems = [
   { to: "/portal/account", label: "Account", icon: UserCog },
 ];
 
-function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { isAdmin: boolean; profile: any; signOut: () => void; onNavigate?: () => void; cartCount: number }) {
+function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount, pendingCount }: { isAdmin: boolean; profile: any; signOut: () => void; onNavigate?: () => void; cartCount: number; pendingCount: number }) {
   return (
     <div className="flex flex-col h-full bg-secondary text-secondary-foreground">
       <div className="p-6 md:p-8 border-b border-secondary-foreground/10 flex-shrink-0">
@@ -50,6 +51,12 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { 
                 {cartCount}
               </span>
             )}
+            {to === "/portal/orders" && pendingCount > 0 && (
+              <span className="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 bg-primary text-primary-foreground font-body text-[10px] tracking-normal rounded-full">
+                {pendingCount}
+              </span>
+            )}
+
           </NavLink>
         ))}
 
@@ -81,9 +88,10 @@ function SidebarContent({ isAdmin, profile, signOut, onNavigate, cartCount }: { 
   );
 }
 
-export default function PortalLayout() {
+function PortalLayoutInner() {
   const { profile, isAdmin, signOut } = useAuth();
   const { count: cartCount } = useCart();
+  const { count: pendingCount } = usePendingOrders();
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
@@ -104,14 +112,14 @@ export default function PortalLayout() {
             <MobileMenuButton open={open} ariaLabel="Open menu" />
           </SheetTrigger>
           <SheetContent side="left" className="p-0 w-72 max-w-[85vw] bg-secondary border-secondary-foreground/10">
-            <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} onNavigate={() => setOpen(false)} cartCount={cartCount} />
+            <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} onNavigate={() => setOpen(false)} cartCount={cartCount} pendingCount={pendingCount} />
           </SheetContent>
         </Sheet>
       </header>
 
       {/* Desktop sidebar */}
       <aside className="hidden md:flex md:flex-col md:w-72 md:h-screen md:sticky md:top-0 border-r border-secondary-foreground/10">
-        <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} cartCount={cartCount} />
+        <SidebarContent isAdmin={isAdmin} profile={profile} signOut={signOut} cartCount={cartCount} pendingCount={pendingCount} />
       </aside>
 
       <main className="flex-1 p-4 md:p-6 lg:p-12 overflow-x-hidden bg-background">
@@ -121,3 +129,12 @@ export default function PortalLayout() {
     </div>
   );
 }
+
+export default function PortalLayout() {
+  return (
+    <PendingOrdersProvider>
+      <PortalLayoutInner />
+    </PendingOrdersProvider>
+  );
+}
+

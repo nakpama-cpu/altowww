@@ -1,9 +1,10 @@
 import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Trash2, ShoppingBag, CreditCard, Tag, X, Landmark, FileText, ArrowLeft, Loader2 } from "lucide-react";
+import { Trash2, ShoppingBag, CreditCard, Tag, X, Landmark, FileText, ArrowLeft, Loader2, ClipboardList, CheckCircle2 } from "lucide-react";
 import InvoiceView, { useInvoice } from "@/components/invoice/InvoiceView";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { useCart } from "@/contexts/CartContext";
+import { usePendingOrders } from "@/contexts/PendingOrdersContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -48,6 +49,8 @@ export default function Checkout() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [method, setMethod] = useState<"card" | "bank">("card");
   const [invoiceToken, setInvoiceToken] = useState<string | null>(null);
+  const [pendingCreated, setPendingCreated] = useState<{ invoice_number: string; total: number; currency: string } | null>(null);
+  const { refresh: refreshPending } = usePendingOrders();
 
   const currency = items[0]?.currency ?? "GBP";
 
@@ -148,6 +151,39 @@ export default function Checkout() {
     }
 
     setInvoiceToken(data.token as string);
+  };
+
+  const createPendingOrder = async () => {
+    if (!user || items.length === 0) return;
+    if (!kycOk) {
+      toast({ title: "Verification required", description: "Complete address and identity verification in your Account first.", variant: "destructive" });
+      return;
+    }
+    setPlacing(true);
+    const { data, error } = await supabase.functions.invoke("create-invoice", {
+      body: {
+        items: items.map((i) => ({ listing_id: i.listing_id, quantity: i.quantity })),
+        discount_code: applied?.code ?? null,
+      },
+    });
+    setPlacing(false);
+    if (error || !data?.token) {
+      let description = (data as any)?.error || "Please try again";
+      const res = (error as any)?.context;
+      if (res && typeof res.json === "function") {
+        try {
+          const body = await res.json();
+          if (body?.error) description = body.error;
+        } catch { /* fall back to generic message */ }
+      }
+      toast({ title: "Could not create pending order", description, variant: "destructive" });
+      return;
+    }
+    clear();
+    setApplied(null);
+    setCodeInput("");
+    await refreshPending();
+    setPendingCreated({ invoice_number: data.invoice_number as string, total: Number(data.total), currency: (data.currency as string) ?? "GBP" });
   };
 
   const beginPayment = async () => {
@@ -265,6 +301,36 @@ export default function Checkout() {
   }
 
 
+
+  if (pendingCreated) {
+    return (
+      <div className="max-w-2xl">
+        <div className="glass-card p-10 text-center">
+          <CheckCircle2 className="w-10 h-10 mx-auto text-primary mb-4" />
+          <h1 className="display-heading text-3xl mb-2">Pending order created</h1>
+          <p className="font-body text-sm text-muted-foreground mb-6 leading-relaxed">
+            Invoice <span className="text-foreground">{pendingCreated.invoice_number}</span> for{" "}
+            <span className="text-foreground">£{Math.round(pendingCreated.total).toLocaleString()}</span> is now in My Orders.
+            Your casks are reserved — pay by bank transfer or card whenever you're ready.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/portal/orders"
+              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity"
+            >
+              <ClipboardList className="w-4 h-4" /> View in My Orders
+            </Link>
+            <Link
+              to="/portal/available"
+              className="inline-flex items-center gap-2 font-body text-xs uppercase tracking-[0.2em] border border-border px-5 py-3 hover:border-primary transition-colors"
+            >
+              Continue browsing
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -440,7 +506,22 @@ export default function Checkout() {
             <span className="display-heading text-2xl text-primary">£{Math.round(total).toLocaleString()}</span>
           </div>
 
+          <div className="mt-5 border border-primary/40 bg-primary/5 p-4">
+            <button
+              onClick={createPendingOrder}
+              disabled={placing || !kycOk}
+              className="w-full flex items-center justify-center gap-2 font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
+            >
+              <ClipboardList className="w-4 h-4" />
+              {placing ? "Loading…" : "Create Pending Order"}
+            </button>
+            <p className="font-body text-[11px] text-muted-foreground mt-3 leading-relaxed">
+              Save this order for later — it moves to My Orders where you can pay by bank transfer or card whenever you're ready.
+            </p>
+          </div>
+
           <div className="mt-5">
+
             <div className="font-body text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-2">
               Payment Method
             </div>

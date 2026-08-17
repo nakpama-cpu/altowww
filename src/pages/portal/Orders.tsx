@@ -6,6 +6,8 @@ import InvoiceLoader from "@/components/invoice/InvoiceLoader";
 import { Input } from "@/components/ui/input";
 import { formatInvoiceLine } from "@/lib/invoiceFormat";
 import { cn } from "@/lib/utils";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 
 
 
@@ -46,7 +48,13 @@ const money = (currency: string, n: number) =>
   })}`;
 
 const statusLabel = (s: string) =>
-  s === "paid" ? "Paid" : s === "client_confirmed" ? "Payment confirmed" : s.replace(/_/g, " ");
+  s === "paid"
+    ? "Paid"
+    : s === "client_confirmed"
+      ? "Payment confirmed"
+      : s === "awaiting_payment"
+        ? "Pending"
+        : s.replace(/_/g, " ");
 
 const statusClass = (s: string) =>
   s === "paid"
@@ -57,6 +65,21 @@ export default function Orders() {
   const { user } = useAuth();
   const [rows, setRows] = useState<Order[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
+  const [payId, setPayId] = useState<string | null>(null);
+
+  const fetchInvoiceClientSecret = async (invoiceId: string): Promise<string> => {
+    const { data, error } = await supabase.functions.invoke("create-checkout", {
+      body: {
+        invoice_id: invoiceId,
+        environment: getStripeEnvironment(),
+        return_url: `${window.location.origin}/portal/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+      },
+    });
+    if (error || !data?.clientSecret) {
+      throw new Error((data as any)?.error || error?.message || "Failed to start payment");
+    }
+    return data.clientSecret as string;
+  };
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
@@ -78,7 +101,7 @@ export default function Orders() {
           "id, invoice_number, payment_reference, payment_method, status, currency, total, discount_code, issued_at, paid_at, client_confirmed_at, confirmation_token, invoice_items(id, distillery, spirit, spirit_name, cask_type, wood, abv, vintage_year, quantity, line_total)",
         )
         .eq("user_id", user.id)
-        .in("status", ["client_confirmed", "paid"])
+        .in("status", ["awaiting_payment", "client_confirmed", "paid"])
         .order("created_at", { ascending: false });
       setRows((data ?? []) as unknown as Order[]);
       setLoading(false);
@@ -164,6 +187,7 @@ export default function Orders() {
               className="appearance-none w-full h-10 pl-3 pr-9 border field-surface bg-surface font-body text-sm text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             >
               <option value="all">All statuses</option>
+              <option value="awaiting_payment">Pending</option>
               <option value="paid">Paid</option>
               <option value="client_confirmed">Payment confirmed</option>
             </select>
@@ -355,21 +379,46 @@ export default function Orders() {
                     </span>
                   )}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setOpenId(openId === o.id ? null : o.id)}
-                  className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded-sm font-body text-xs uppercase tracking-wider hover:bg-muted transition-colors"
-                >
-                  <Receipt className="w-3.5 h-3.5" />
-                  {openId === o.id ? "Hide invoice" : "View invoice"}
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  {o.status !== "paid" && (
+                    <button
+                      type="button"
+                      onClick={() => setPayId(payId === o.id ? null : o.id)}
+                      className="inline-flex items-center gap-2 px-3 py-2 rounded-sm bg-primary text-primary-foreground font-body text-xs uppercase tracking-wider hover:opacity-90 transition-opacity"
+                    >
+                      <CreditCard className="w-3.5 h-3.5" />
+                      {payId === o.id ? "Cancel card payment" : "Pay by card"}
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setOpenId(openId === o.id ? null : o.id)}
+                    className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded-sm font-body text-xs uppercase tracking-wider hover:bg-muted transition-colors"
+                  >
+                    <Receipt className="w-3.5 h-3.5" />
+                    {openId === o.id ? "Hide invoice" : o.status === "paid" ? "View invoice" : "Pay by bank transfer"}
+                  </button>
+                </div>
               </div>
+
+              {payId === o.id && (
+                <div className="border-t border-border bg-white p-4">
+                  <EmbeddedCheckoutProvider
+                    key={o.id}
+                    stripe={getStripe()}
+                    options={{ fetchClientSecret: () => fetchInvoiceClientSecret(o.id) }}
+                  >
+                    <EmbeddedCheckout />
+                  </EmbeddedCheckoutProvider>
+                </div>
+              )}
 
               {openId === o.id && (
                 <div className="border-t border-border bg-background p-4">
                   <InvoiceLoader token={o.confirmation_token} />
                 </div>
               )}
+
             </div>
           ))}
         </div>
