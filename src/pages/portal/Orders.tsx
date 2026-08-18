@@ -79,6 +79,29 @@ export default function Orders() {
   const [rows, setRows] = useState<Order[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [payId, setPayId] = useState<string | null>(null);
+  const [cancelTarget, setCancelTarget] = useState<Order | null>(null);
+  const [cancelling, setCancelling] = useState(false);
+  const { refresh: refreshPending } = usePendingOrders();
+  const { toast } = useToast();
+
+  const confirmCancel = async () => {
+    if (!cancelTarget) return;
+    setCancelling(true);
+    const { error } = await supabase.rpc("cancel_my_invoice", { _invoice_id: cancelTarget.id });
+    setCancelling(false);
+    if (error) {
+      toast({ title: "Could not cancel order", description: error.message, variant: "destructive" });
+      return;
+    }
+    setRows((prev) => prev.filter((r) => r.id !== cancelTarget.id));
+    if (openId === cancelTarget.id) setOpenId(null);
+    if (payId === cancelTarget.id) setPayId(null);
+    setCancelTarget(null);
+    refreshPending();
+    toast({ title: "Pending order cancelled", description: "The reserved casks have been returned to available stock." });
+  };
+
+
 
   const fetchInvoiceClientSecret = async (invoiceId: string): Promise<string> => {
     const { data, error } = await supabase.functions.invoke("create-checkout", {
