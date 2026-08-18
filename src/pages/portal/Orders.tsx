@@ -1,13 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Receipt, Banknote, CreditCard, ChevronDown, Search, RotateCcw, Calendar } from "lucide-react";
+import { Receipt, Banknote, CreditCard, ChevronDown, Search, RotateCcw, Calendar, X } from "lucide-react";
 import InvoiceLoader from "@/components/invoice/InvoiceLoader";
 import { Input } from "@/components/ui/input";
 import { formatInvoiceLine } from "@/lib/invoiceFormat";
 import { cn } from "@/lib/utils";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { usePendingOrders } from "@/contexts/PendingOrdersContext";
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
 
 
 
