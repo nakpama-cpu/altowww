@@ -1,13 +1,26 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { Receipt, Banknote, CreditCard, ChevronDown, Search, RotateCcw, Calendar } from "lucide-react";
+import { Receipt, Banknote, CreditCard, ChevronDown, Search, RotateCcw, Calendar, X } from "lucide-react";
 import InvoiceLoader from "@/components/invoice/InvoiceLoader";
 import { Input } from "@/components/ui/input";
 import { formatInvoiceLine } from "@/lib/invoiceFormat";
 import { cn } from "@/lib/utils";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { usePendingOrders } from "@/contexts/PendingOrdersContext";
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
 
 
 
@@ -66,6 +79,29 @@ export default function Orders() {
   const [rows, setRows] = useState<Order[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [payId, setPayId] = useState<string | null>(null);
+  const [cancelTarget, setCancelTarget] = useState<Order | null>(null);
+  const [cancelling, setCancelling] = useState(false);
+  const { refresh: refreshPending } = usePendingOrders();
+  const { toast } = useToast();
+
+  const confirmCancel = async () => {
+    if (!cancelTarget) return;
+    setCancelling(true);
+    const { error } = await supabase.rpc("cancel_my_invoice", { _invoice_id: cancelTarget.id });
+    setCancelling(false);
+    if (error) {
+      toast({ title: "Could not cancel order", description: error.message, variant: "destructive" });
+      return;
+    }
+    setRows((prev) => prev.filter((r) => r.id !== cancelTarget.id));
+    if (openId === cancelTarget.id) setOpenId(null);
+    if (payId === cancelTarget.id) setPayId(null);
+    setCancelTarget(null);
+    refreshPending();
+    toast({ title: "Pending order cancelled", description: "The reserved casks have been returned to available stock." });
+  };
+
+
 
   const fetchInvoiceClientSecret = async (invoiceId: string): Promise<string> => {
     const { data, error } = await supabase.functions.invoke("create-checkout", {
@@ -398,6 +434,16 @@ export default function Orders() {
                     <Receipt className="w-3.5 h-3.5" />
                     {openId === o.id ? "Hide invoice" : o.status === "paid" ? "View invoice" : "Pay by bank transfer"}
                   </button>
+                  {o.status === "awaiting_payment" && (
+                    <button
+                      type="button"
+                      onClick={() => setCancelTarget(o)}
+                      className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded-sm font-body text-xs uppercase tracking-wider text-muted-foreground hover:border-destructive hover:text-destructive transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5" /> Cancel order
+                    </button>
+                  )}
+
                 </div>
               </div>
 
@@ -423,6 +469,32 @@ export default function Orders() {
           ))}
         </div>
       )}
+
+      <AlertDialog open={!!cancelTarget} onOpenChange={(o) => !o && setCancelTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Cancel pending order?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {cancelTarget
+                ? `Invoice ${cancelTarget.invoice_number} for ${money(cancelTarget.currency, cancelTarget.total)} will be cancelled and the reserved casks returned to available stock. This cannot be undone.`
+                : ""}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={cancelling}>Keep order</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                confirmCancel();
+              }}
+              disabled={cancelling}
+            >
+              {cancelling ? "Cancelling…" : "Cancel order"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
+

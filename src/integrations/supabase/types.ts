@@ -1039,6 +1039,7 @@ export type Database = {
         }[]
       }
       cancel_invoice: { Args: { _invoice_id: string }; Returns: undefined }
+      cancel_my_invoice: { Args: { _invoice_id: string }; Returns: undefined }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
