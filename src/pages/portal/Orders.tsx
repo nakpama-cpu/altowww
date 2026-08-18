@@ -434,6 +434,16 @@ export default function Orders() {
                     <Receipt className="w-3.5 h-3.5" />
                     {openId === o.id ? "Hide invoice" : o.status === "paid" ? "View invoice" : "Pay by bank transfer"}
                   </button>
+                  {o.status === "awaiting_payment" && (
+                    <button
+                      type="button"
+                      onClick={() => setCancelTarget(o)}
+                      className="inline-flex items-center gap-2 px-3 py-2 border border-border rounded-sm font-body text-xs uppercase tracking-wider text-muted-foreground hover:border-destructive hover:text-destructive transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5" /> Cancel order
+                    </button>
+                  )}
+
                 </div>
               </div>
 
