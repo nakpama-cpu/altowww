@@ -469,6 +469,32 @@ export default function Orders() {
           ))}
         </div>
       )}
+
+      <AlertDialog open={!!cancelTarget} onOpenChange={(o) => !o && setCancelTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Cancel pending order?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {cancelTarget
+                ? `Invoice ${cancelTarget.invoice_number} for ${money(cancelTarget.currency, cancelTarget.total)} will be cancelled and the reserved casks returned to available stock. This cannot be undone.`
+                : ""}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={cancelling}>Keep order</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                confirmCancel();
+              }}
+              disabled={cancelling}
+            >
+              {cancelling ? "Cancelling…" : "Cancel order"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
+
