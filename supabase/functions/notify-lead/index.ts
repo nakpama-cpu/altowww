@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { pushToGHL } from "../_shared/gohighlevel.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const ALTO_EMAIL = Deno.env.get("ALTO_NOTIFY_EMAIL") ?? "nick@altowhisky.com";
@@ -65,6 +66,7 @@ function sourceLabel(source: string | null): string {
     case "brochure_request": return "Brochure Request";
     case "advisor_callback": return "Advisor Callback";
     case "contact_form": return "Contact Form";
+    case "ad_landing": return "Meta Ad Landing";
     default: return source ?? "Website";
   }
 }
@@ -233,8 +235,9 @@ serve(async (req) => {
 
     const lead = payload.record;
 
-    // Send both emails in parallel
-    const [prospectResult, internalResult] = await Promise.allSettled([
+    // Send both emails and push the contact to GoHighLevel in parallel.
+    // A GHL failure is logged but never counted as a lead-capture failure.
+    const [prospectResult, internalResult, ghlResult] = await Promise.allSettled([
       sendEmail(
         lead.email,
         `${lead.first_name} ${lead.last_name}`,
@@ -247,11 +250,25 @@ serve(async (req) => {
         `🔔 New Lead: ${lead.first_name} ${lead.last_name} (${sourceLabel(lead.source)})`,
         internalAlertEmail(lead)
       ),
+      pushToGHL({
+        firstName: lead.first_name,
+        lastName: lead.last_name,
+        email: lead.email,
+        phone: lead.phone,
+        message: lead.message,
+        source: lead.source ?? "website",
+        tags: [sourceLabel(lead.source)],
+        submittedAt: lead.created_at,
+      }),
     ]);
 
     const errors: string[] = [];
     if (prospectResult.status === "rejected") errors.push(`prospect: ${prospectResult.reason}`);
     if (internalResult.status === "rejected") errors.push(`internal: ${internalResult.reason}`);
+
+    if (ghlResult.status === "fulfilled" && !ghlResult.value.ok && !ghlResult.value.skipped) {
+      console.warn("GHL push failed for lead:", lead.id, ghlResult.value.error);
+    }
 
     if (errors.length === 2) {
       // Both failed — return 500 so Supabase can retry

@@ -1,6 +1,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
 import { sendAndLogTemplateEmail } from '../_shared/transactional-email-templates/send-and-log.ts'
+import { pushToGHL } from '../_shared/gohighlevel.ts'
 
 // Public endpoint (verify_jwt = false) — called from client signup form right
 // after supabase.auth.signUp succeeds. Loads the newly-created profile and its
@@ -69,6 +70,21 @@ Deno.serve(async (req) => {
       })
     } catch (sendErr) {
       console.error('notify-new-signup send failed', sendErr)
+    }
+
+    // Push the new signup to GoHighLevel as a contact (never blocks the flow).
+    try {
+      await pushToGHL({
+        firstName: profile.first_name ?? '',
+        lastName: profile.last_name ?? '',
+        email: profile.email,
+        phone,
+        source: 'portal_signup',
+        tags: ['Portal Signup'],
+        submittedAt: new Date(profile.created_at).toISOString(),
+      })
+    } catch (ghlErr) {
+      console.error('notify-new-signup GHL push failed', ghlErr)
     }
     return generic()
   } catch (e) {
