@@ -8,10 +8,8 @@ import {
   Container,
   Head,
   Heading,
-  Img,
   Html,
   Preview,
-  Section,
   Text,
 } from 'npm:@react-email/components@0.0.22'
 
@@ -20,23 +18,24 @@ interface MagicLinkEmailProps {
   confirmationUrl: string
 }
 
-export const MagicLinkEmail = ({ confirmationUrl }: MagicLinkEmailProps) => (
+export const MagicLinkEmail = ({
+  siteName,
+  confirmationUrl,
+}: MagicLinkEmailProps) => (
   <Html lang="en" dir="ltr">
-    <Head />
-    <Preview>Your Alto Whisky sign-in link</Preview>
+    <Head>
+      <style>{darkModeCss}</style>
+    </Head>
+    <Preview>Your login link for {siteName}</Preview>
     <Body style={main}>
-      <Section style={header}>
-        <Img src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
-      </Section>
       <Container style={container}>
-        
-        <Heading style={h1}>Sign in to the portal</Heading>
+        <Heading style={h1}>Your login link</Heading>
         <Text style={text}>
-          Click below to sign in to your Alto Whisky portal. This link will
-          expire shortly for your security.
+          Click the button below to log in to {siteName}. This link will expire
+          shortly.
         </Text>
-        <Button style={button} href={confirmationUrl}>
-          Sign In
+        <Button className="dm-btn" style={button} href={confirmationUrl}>
+          Log In
         </Button>
         <Text style={footer}>
           If you didn't request this link, you can safely ignore this email.
@@ -48,53 +47,35 @@ export const MagicLinkEmail = ({ confirmationUrl }: MagicLinkEmailProps) => (
 
 export default MagicLinkEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: "'Inter', Arial, sans-serif" }
-const container = { padding: '32px 28px', maxWidth: '560px' }
-const header = { backgroundColor: 'hsl(220, 26%, 14%)', padding: '24px 24px', textAlign: 'center' as const }
-const logo = { display: 'block', margin: '0 auto', height: 'auto' }
-const brand = {
-  fontFamily: "'Inter', Arial, sans-serif",
-  fontSize: '11px',
-  letterSpacing: '0.3em',
-  color: 'hsl(24, 72%, 40%)',
-  margin: '0 0 32px',
-  fontWeight: 600 as const,
-}
+const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
+const container = { padding: '20px 25px' }
 const h1 = {
-  fontFamily: "'Cormorant Garamond', Georgia, serif",
-  fontSize: '30px',
-  fontWeight: 500 as const,
-  color: 'hsl(220, 26%, 14%)',
-  margin: '0 0 24px',
-  lineHeight: '1.2',
+  fontSize: '22px',
+  fontWeight: 'bold' as const,
+  color: '#000000',
+  margin: '0 0 20px',
 }
 const text = {
-  fontFamily: "'Inter', Arial, sans-serif",
-  fontSize: '15px',
-  color: 'hsl(0, 0%, 25%)',
-  lineHeight: '1.6',
-  margin: '0 0 24px',
+  fontSize: '14px',
+  color: '#55575d',
+  lineHeight: '1.5',
+  margin: '0 0 25px',
 }
 const button = {
-  backgroundColor: 'hsl(24, 72%, 40%)',
+  backgroundColor: '#000000',
   color: '#ffffff',
-  fontFamily: "'Inter', Arial, sans-serif",
-  fontSize: '12px',
-  fontWeight: 600 as const,
-  letterSpacing: '0.2em',
-  textTransform: 'uppercase' as const,
-  borderRadius: '2px',
-  padding: '14px 28px',
+  fontSize: '14px',
+  border: '1px solid #000000',
+  borderRadius: '8px',
+  padding: '12px 20px',
   textDecoration: 'none',
-  display: 'inline-block',
-  margin: '4px 0 28px',
 }
-const footer = {
-  fontFamily: "'Inter', Arial, sans-serif",
-  fontSize: '12px',
-  color: 'hsl(0, 0%, 45%)',
-  lineHeight: '1.5',
-  margin: '32px 0 0',
-  borderTop: '1px solid hsl(0, 0%, 90%)',
-  paddingTop: '20px',
-}
+const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+// Rendered as a text child, which React may HTML-escape: keep this CSS free of >, &, and quotes.
+const darkModeCss = `
+  @media (prefers-color-scheme: dark) {
+    .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+  }
+  [data-ogsc] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+  [data-ogsb] .dm-btn { background-color: #ffffff !important; color: #000000 !important; }
+`
