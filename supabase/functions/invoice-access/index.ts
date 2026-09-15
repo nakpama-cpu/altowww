@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { buildInvoicePdf } from "../_shared/invoice-pdf.ts";
 import { BANK, COMPANY, SITE_URL } from "../_shared/invoice-config.ts";
+import { sendAndLogTemplateEmail } from "../_shared/transactional-email-templates/send-and-log.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
