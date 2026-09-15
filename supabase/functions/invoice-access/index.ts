@@ -121,27 +121,23 @@ Deno.serve(async (req) => {
         const adminEmail = Deno.env.get("ADMIN_NOTIFICATION_EMAIL");
         if (adminEmail) {
           try {
-            await db.functions.invoke("send-transactional-email", {
-              body: {
-                templateName: "admin-invoice-payment-confirmed",
-                recipientEmail: adminEmail,
-                idempotencyKey: `invoice-confirmed-${invoice.id}`,
-                templateData: {
-                  invoiceNumber: invoice.invoice_number,
-                  paymentReference: invoice.payment_reference,
-                  clientName: invoice.bill_to?.name ?? "",
-                  clientEmail: invoice.bill_to?.email ?? "",
-                  currency: invoice.currency,
-                  total: Number(invoice.total),
-                  note: note ?? "",
-                  confirmedAt: new Date().toLocaleString("en-GB"),
-                  items: items.map((i: any) => ({
-                    title: i.distillery || i.spirit,
-                    quantity: i.quantity,
-                    lineTotal: Number(i.line_total),
-                  })),
-                  adminUrl: `${SITE_URL}/admin/invoices`,
-                },
+            await sendAndLogTemplateEmail("admin-invoice-payment-confirmed", adminEmail, {
+              idempotencyKey: `invoice-confirmed-${invoice.id}`,
+              templateData: {
+                invoiceNumber: invoice.invoice_number,
+                paymentReference: invoice.payment_reference,
+                clientName: invoice.bill_to?.name ?? "",
+                clientEmail: invoice.bill_to?.email ?? "",
+                currency: invoice.currency,
+                total: Number(invoice.total),
+                note: note ?? "",
+                confirmedAt: new Date().toLocaleString("en-GB"),
+                items: items.map((i: any) => ({
+                  title: i.distillery || i.spirit,
+                  quantity: i.quantity,
+                  lineTotal: Number(i.line_total),
+                })),
+                adminUrl: `${SITE_URL}/admin/invoices`,
               },
             });
           } catch (e) {
