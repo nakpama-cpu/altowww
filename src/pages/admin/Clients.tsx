@@ -41,17 +41,7 @@ export default function AdminClients() {
     }
     if (decision === "approved") {
       supabase.functions
-        .invoke("send-transactional-email", {
-          body: {
-            templateName: "client-approved",
-            recipientEmail: c.email,
-            idempotencyKey: `client-approved-${c.id}`,
-            templateData: {
-              firstName: c.first_name || "there",
-              loginUrl: `${window.location.origin}/portal/login`,
-            },
-          },
-        })
+        .invoke("notify-client-approved", { body: { profile_id: c.id } })
         .catch((e) => console.error("client-approved send failed", e));
       toast({ title: "Client approved", description: `${c.email} has been notified.` });
     } else {
