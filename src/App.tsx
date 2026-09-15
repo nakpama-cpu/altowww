@@ -15,6 +15,7 @@ import AboutWhisky from "./pages/AboutWhisky.tsx";
 import HowWhiskyIsMade from "./pages/HowWhiskyIsMade.tsx";
 import FAQ from "./pages/FAQ.tsx";
 import Contact from "./pages/Contact.tsx";
+import Invest from "./pages/Invest.tsx";
 import News from "./pages/News.tsx";
 import ArticlePage from "./pages/ArticlePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -84,6 +85,7 @@ const App = () => (
                 <Route path="/how-whisky-is-made" element={<HowWhiskyIsMade />} />
                 <Route path="/faqs" element={<FAQ />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/invest" element={<Invest />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/news/:slug" element={<ArticlePage />} />
               </Route>
