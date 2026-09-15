@@ -1,5 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+import { sendAndLogTemplateEmail } from '../_shared/transactional-email-templates/send-and-log.ts'
 
 // Public HTTP endpoint (verify_jwt = false). Reached by clicking approve/reject
 // buttons in the admin notification email. Validates the single-use token,
@@ -61,18 +62,17 @@ Deno.serve(async (req) => {
 
   if (action === 'approve') {
     const siteUrl = Deno.env.get('PUBLIC_SITE_URL') ?? 'https://www.altowhisky.com'
-    const { error: sendErr } = await supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName: 'client-approved',
-        recipientEmail: profile.email,
+    try {
+      await sendAndLogTemplateEmail('client-approved', profile.email, {
         idempotencyKey: `client-approved-${row.profile_id}`,
         templateData: {
           firstName: profile.first_name || 'there',
           loginUrl: `${siteUrl}/portal/login`,
         },
-      },
-    })
-    if (sendErr) console.error('approve-client send failed', sendErr)
+      })
+    } catch (sendErr) {
+      console.error('approve-client send failed', sendErr)
+    }
     return page('Client approved', `${profile.email} has been approved and notified by email.`, true)
   }
 

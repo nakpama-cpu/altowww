@@ -1,5 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+import { sendAndLogTemplateEmail } from '../_shared/transactional-email-templates/send-and-log.ts'
 
 // Called by the database trigger (service-role bearer) when a listing's
 // available quantity first drops to the low threshold or to zero.
@@ -37,10 +38,8 @@ Deno.serve(async (req) => {
     const adminRecipient = Deno.env.get('ADMIN_NOTIFICATION_EMAIL') ?? 'admin@altowhisky.com'
     const avail = Number(available ?? Math.max(0, (l.stock_qty ?? 0) - (l.reserved_qty ?? 0)))
 
-    const { error: sendErr } = await supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName: 'admin-low-stock',
-        recipientEmail: adminRecipient,
+    try {
+      await sendAndLogTemplateEmail('admin-low-stock', adminRecipient, {
         idempotencyKey: `stock-alert-${listing_id}-${state}-${avail}-${new Date().toISOString().slice(0, 10)}`,
         templateData: {
           state,
@@ -51,9 +50,10 @@ Deno.serve(async (req) => {
           reservedQty: l.reserved_qty ?? 0,
           adminUrl: `${siteUrl}/admin/stock-alerts`,
         },
-      },
-    })
-    if (sendErr) console.error('stock alert email failed', sendErr)
+      })
+    } catch (sendErr) {
+      console.error('stock alert email failed', sendErr)
+    }
 
     return json({ status: 'ok' })
   } catch (e) {

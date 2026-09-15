@@ -1,5 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+import { sendAndLogTemplateEmail } from '../_shared/transactional-email-templates/send-and-log.ts'
 
 // Public endpoint (verify_jwt = false) — called from client signup form right
 // after supabase.auth.signUp succeeds. Loads the newly-created profile and its
@@ -52,10 +53,8 @@ Deno.serve(async (req) => {
 
     const phone = [profile.phone_country_code, profile.phone].filter(Boolean).join(' ').trim()
 
-    const { error: sendErr } = await supabase.functions.invoke('send-transactional-email', {
-      body: {
-        templateName: 'admin-new-signup',
-        recipientEmail: adminRecipient,
+    try {
+      await sendAndLogTemplateEmail('admin-new-signup', adminRecipient, {
         idempotencyKey: `admin-new-signup-${profile.id}`,
         templateData: {
           clientName: `${profile.first_name} ${profile.last_name}`.trim() || profile.email,
@@ -67,10 +66,10 @@ Deno.serve(async (req) => {
           rejectUrl: `${fnBase}?token=${reject}&action=reject`,
           adminUrl: `${siteUrl}/admin/clients`,
         },
-      },
-    })
-
-    if (sendErr) console.error('notify-new-signup send failed', sendErr)
+      })
+    } catch (sendErr) {
+      console.error('notify-new-signup send failed', sendErr)
+    }
     return generic()
   } catch (e) {
     console.error('notify-new-signup error', e)
