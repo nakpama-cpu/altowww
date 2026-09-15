@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { PAYMENT_TERMS_DAYS, SITE_URL } from "../_shared/invoice-config.ts";
 import { formatInvoiceLine } from "../_shared/invoice-format.ts";
+import { sendAndLogTemplateEmail } from "../_shared/transactional-email-templates/send-and-log.ts";
 
 
 const corsHeaders = {
@@ -184,36 +185,32 @@ Deno.serve(async (req) => {
 
     // Send the branded invoice email (non-blocking failure)
     try {
-      await admin.functions.invoke("send-transactional-email", {
-        body: {
-          templateName: "invoice-bank-transfer",
-          recipientEmail: profile.email,
-          idempotencyKey: `invoice-${invoice.id}`,
-          templateData: {
-            firstName: profile.first_name,
-            invoiceNumber,
-            paymentReference,
-            dueDate: new Date(dueAt).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
-            currency,
-            subtotal,
-            discountAmount,
-            total,
-            items: itemRows.map((r) => {
-              const f = formatInvoiceLine(r);
-              return {
-                title: f.title,
-                detail: f.specLine ?? "",
-                distilled: f.distilledLine ?? "",
-                quantity: r.quantity,
-                listPrice: r.list_price,
-                unitPrice: r.unit_price,
-                lineTotal: r.line_total,
-              };
-            }),
+      await sendAndLogTemplateEmail("invoice-bank-transfer", profile.email, {
+        idempotencyKey: `invoice-${invoice.id}`,
+        templateData: {
+          firstName: profile.first_name,
+          invoiceNumber,
+          paymentReference,
+          dueDate: new Date(dueAt).toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
+          currency,
+          subtotal,
+          discountAmount,
+          total,
+          items: itemRows.map((r) => {
+            const f = formatInvoiceLine(r);
+            return {
+              title: f.title,
+              detail: f.specLine ?? "",
+              distilled: f.distilledLine ?? "",
+              quantity: r.quantity,
+              listPrice: r.list_price,
+              unitPrice: r.unit_price,
+              lineTotal: r.line_total,
+            };
+          }),
 
-            invoiceUrl: `${SITE_URL}/invoice/${invoice.confirmation_token}`,
-            confirmUrl: `${SITE_URL}/invoice/${invoice.confirmation_token}?confirm=1`,
-          },
+          invoiceUrl: `${SITE_URL}/invoice/${invoice.confirmation_token}`,
+          confirmUrl: `${SITE_URL}/invoice/${invoice.confirmation_token}?confirm=1`,
         },
       });
     } catch (e) {
