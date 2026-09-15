@@ -1,6 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { PAYMENT_TERMS_DAYS, SITE_URL } from "../_shared/invoice-config.ts";
 import { formatInvoiceLine } from "../_shared/invoice-format.ts";
+import { sendAndLogTemplateEmail } from "../_shared/transactional-email-templates/send-and-log.ts";
 
 
 const corsHeaders = {
