@@ -35,3 +35,13 @@ export const trackRegisteredVisit = async (
     /* never block auth flow on pixel errors */
   }
 };
+
+// Standard Meta "Lead" event for enquiry/landing page form submissions.
+export const trackLead = () => {
+  if (typeof window.fbq !== "function") return;
+  try {
+    window.fbq("track", "Lead");
+  } catch {
+    /* never block form submission on pixel errors */
+  }
+};
