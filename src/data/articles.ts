@@ -29,6 +29,10 @@ import campbeltownRevivalImg from "@/assets/campbeltown-revival.jpg";
 import highlandParkOrkneyImg from "@/assets/highland-park-orkney.jpg";
 import lochLomondSponsorshipImg from "@/assets/loch-lomond-sponsorship.jpg";
 import rareWhisky101IndexImg from "@/assets/rare-whisky-101-index.jpg";
+import usZeroTariffImg from "@/assets/us-zero-tariff-2026.jpg";
+import craftDistilleryBoomImg from "@/assets/craft-distillery-boom-2026.jpg";
+import chivasWarehouseImg from "@/assets/chivas-warehouse-expansion-2026.jpg";
+import visitorExperienceImg from "@/assets/distillery-visitor-experience-2026.jpg";
 
 
 
