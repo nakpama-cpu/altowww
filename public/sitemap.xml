@@ -41,6 +41,26 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.altowhisky.com/news/zero-tariff-scotch-exports-united-states-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/scotland-craft-distillery-boom-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/chivas-brothers-warehouse-expansion-approved-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.altowhisky.com/news/distillery-visitor-demand-uile-bheist-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.altowhisky.com/news/rare-macallan-cask-record-auction-2026</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
