@@ -29,6 +29,10 @@ import campbeltownRevivalImg from "@/assets/campbeltown-revival.jpg";
 import highlandParkOrkneyImg from "@/assets/highland-park-orkney.jpg";
 import lochLomondSponsorshipImg from "@/assets/loch-lomond-sponsorship.jpg";
 import rareWhisky101IndexImg from "@/assets/rare-whisky-101-index.jpg";
+import usZeroTariffImg from "@/assets/us-zero-tariff-2026.jpg";
+import craftDistilleryBoomImg from "@/assets/craft-distillery-boom-2026.jpg";
+import chivasWarehouseImg from "@/assets/chivas-warehouse-expansion-2026.jpg";
+import visitorExperienceImg from "@/assets/distillery-visitor-experience-2026.jpg";
 
 
 
@@ -44,6 +48,74 @@ export interface Article {
 }
 
 export const articles: Article[] = [
+  {
+    slug: "zero-tariff-scotch-exports-united-states-2026",
+    image: usZeroTariffImg,
+    category: "Industry News",
+    date: "July 2026",
+    title: "Zero-Tariff Trade to the United States Restored for Scotch Whisky",
+    excerpt:
+      "US tariffs on Scotch Whisky were removed on 24 July 2026, restoring zero-for-zero trade with Scotch's most valuable export market, worth £933 million in 2025.",
+    content: [
+      "US tariffs on Scotch Whisky were formally removed on 24 July 2026, restoring tariff-free trade with the category's most valuable single export market. The Scotch Whisky Association welcomed the change as an important milestone, following the exemption first announced in April 2026.",
+      "Ian Duddy, International Director at the Scotch Whisky Association, said: \"The return of tariff-free trade for Scotch Whisky in the US is welcome news for businesses on both sides of the Atlantic. As Scotch Whisky's most valuable global market, worth £933 million in 2025, the removal of tariffs provides greater confidence to invest, grow exports, and support jobs and communities across Scotland and the US.\"",
+      "The UK Government marked the day with the first tariff-free shipment departing for the United States, noting that UK whisky exports to America were worth around £1 billion in 2025, close to a fifth of all whisky exported from the UK. The industry supports roughly 41,000 jobs in Scotland and a further 25,000 across the rest of the UK.",
+      "The removal follows the earlier restoration of the zero-for-zero arrangement that has historically underpinned the relationship between Scotch and American whiskey producers, and which the SWA has long argued benefits cooperages, farmers, hauliers, hospitality and retail on both sides of the Atlantic.",
+      "For anyone holding maturing Scotch, the significance is straightforward. Tariffs are a cost that sits between a cask and its ultimate buyer. Removing them from the largest market by value improves the economics for bottlers, brand owners and independent buyers competing for mature stock, and restores confidence to invest across the supply chain.",
+      "At Alto Whisky we watch trade policy closely because it shapes the demand environment our clients' casks will eventually mature into. Speak to a Portfolio Advisor to discuss how the improved US position fits alongside the recent India agreement when selecting casks today.",
+    ],
+  },
+  {
+    slug: "scotland-craft-distillery-boom-2026",
+    image: craftDistilleryBoomImg,
+    category: "Industry News",
+    date: "September 2026",
+    title: "Scotland's Craft Distillery Boom Is Redrawing the Whisky Map",
+    excerpt:
+      "The number of operating Scotch distilleries has grown from around 120 in 2015 to more than 150 by 2025, as a new generation of independent producers opens in glens and towns that have not distilled for generations.",
+    content: [
+      "Scotland's distilling landscape has changed more in the past decade than in the half century before it. The number of operating Scotch whisky distilleries has risen from roughly 120 in 2015 to more than 150 by 2025, driven largely by craft and independent producers responding to global demand, growing whisky tourism and expanding export opportunities.",
+      "The new sites are not concentrated in the traditional heartlands alone. Distilleries have opened in the Borders, the Lowlands, Inverness, the islands and remote Highland glens where legal distillation had not taken place for generations. Several occupy locations tied to the old smuggling and droving routes, and many have been built with community employment and sustainability commitments written into their plans from the outset.",
+      "That growth matters commercially as well as culturally. A broader base of producers means more diversity of spirit character, more experimentation with cask policy and grain provenance, and a steadily widening pool of stock reaching meaningful maturity over the next decade.",
+      "It also changes the shape of the market for buyers. Established names continue to command the strongest secondary demand, but well-run younger distilleries with clear identity, disciplined cask policy and credible distribution have shown they can build reputation faster than their predecessors did.",
+      "The counterweight is selectivity. Not every new distillery will become a sought-after name, and a wider field makes judgement more important rather than less. Production capacity, ownership strength, cask quality and the distillery's route to market all need to be weighed carefully.",
+      "At Alto Whisky we assess new-wave distilleries on exactly those criteria before any cask is offered to clients. Speak to a Portfolio Advisor about where established pedigree and emerging producers each sit within a considered portfolio.",
+    ],
+  },
+  {
+    slug: "chivas-brothers-warehouse-expansion-approved-2026",
+    image: chivasWarehouseImg,
+    category: "Industry News",
+    date: "September 2026",
+    title: "Chivas Brothers Wins Approval for Major New Maturation Warehousing",
+    excerpt:
+      "Planning permission has been granted for 19 new maturation warehouses near Barrmill in Ayrshire, adding 47,500 square metres of internal floorspace for the long-term maturation of Scotch whisky.",
+    content: [
+      "Chivas Brothers has received planning approval for a substantial extension to its Balgray Bond warehousing site near Barrmill in Ayrshire. The development covers around 14 hectares of adjoining farmland and provides for 19 new warehouses, arranged as double and triple blocks, with a combined internal floorspace of 47,500 square metres.",
+      "The buildings will be used for the maturation of Scotch whisky and other spirits. The scheme also includes a sustainable drainage system, with a purpose-built pond in the eastern part of the site connecting to existing field ditches and discharging into the Dusk Water.",
+      "Two public consultation events were held locally before the decision. Concerns raised by residents included traffic, road safety around Gateside Primary School, the appearance of nearby buildings and community benefit. Planners concluded there was no substantial evidence of significant farmland loss and recommended approval with construction conditions attached.",
+      "Investment on this scale is one of the clearest signals available about how the industry views the long term. Maturation warehousing is built for decades, not quarters. Companies commit to it when they expect to hold a large and growing volume of maturing stock well into the future.",
+      "For cask owners, warehousing capacity is more than background infrastructure. Secure, well-managed bonded storage underpins the whole model: casks mature under HMRC-regulated conditions, remain insured, and can be sampled, re-racked or transferred without leaving bond.",
+      "At Alto Whisky, every client cask is held in an HMRC-regulated bonded warehouse with documented ownership. Speak to a Portfolio Advisor if you would like to understand how storage, insurance and cask management work in practice.",
+    ],
+  },
+  {
+    slug: "distillery-visitor-demand-uile-bheist-2026",
+    image: visitorExperienceImg,
+    category: "Industry News",
+    date: "September 2026",
+    title: "Distillery Tour Demand Surges as Inverness Newcomer Doubles Visitor Numbers",
+    excerpt:
+      "Uile-bheist Distillery has completed an eight-month refurbishment of its tasting spaces after tour demand nearly doubled in three years, with visitor numbers expected to pass 20,000.",
+    content: [
+      "Uile-bheist Distillery and Brewery in Inverness has completed an eight-month refurbishment of its taproom and tasting rooms after demand for its tours almost doubled in three years. Visitor numbers are expected to exceed 20,000 in the coming weeks.",
+      "The distillery opened in February 2023 as the first new distillery in Inverness in more than 130 years, and is among the greenest in the UK, drawing on water from the River Ness to help power the site. Its first limited release of Scotch malt whisky is now in planning.",
+      "The redevelopment has reopened former Victorian kitchens and storage areas, stripping them back to original stonework and creating seating for around 100 guests across spaces holding more than 400 malts. A former hotel function room overlooking the River Ness has been converted into a whisky-themed tasting room, allowing tours to run back-to-back for the first time.",
+      "The story reflects a wider pattern. Scotland's distilleries have seen visitor numbers recover strongly since 2022, with the Highland capital in particular proving a magnet for international visitors who arrive curious and leave as long-term buyers of the brands they have tasted.",
+      "Visitor engagement is a useful leading indicator for cask investors. Distilleries that build genuine consumer relationships tend to sustain demand for their mature stock, because the audience for the finished bottle keeps widening.",
+      "At Alto Whisky, we consider consumer-facing brand health alongside production capacity, age profile and cask type when selecting casks for clients. Speak to a Portfolio Advisor to discuss how these factors apply to current availability.",
+    ],
+  },
   {
     slug: "rare-macallan-cask-record-auction-2026",
     image: auctionCaskImg,
