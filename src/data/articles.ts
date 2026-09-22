@@ -634,6 +634,24 @@ export const articles: Article[] = [
 ];
 
 
+const MONTHS: Record<string, number> = {
+  january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+  july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
+};
+
+export const parseArticleDate = (d: string): number => {
+  const parts = d.trim().split(/\s+/);
+  if (parts.length !== 2) return 0;
+  const m = MONTHS[parts[0].toLowerCase()] ?? 0;
+  const y = parseInt(parts[1], 10) || 0;
+  return new Date(y, m, 1).getTime();
+};
+
+/** Articles sorted newest first, regardless of array order. */
+export const articlesByNewest: Article[] = [...articles].sort(
+  (a, b) => parseArticleDate(b.date) - parseArticleDate(a.date)
+);
+
 export const getArticleBySlug = (slug: string): Article | undefined =>
   articles.find((a) => a.slug === slug);
 

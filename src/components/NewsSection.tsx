@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { articles } from "@/data/articles";
+import { articlesByNewest as articles } from "@/data/articles";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const NewsSection = () => {
