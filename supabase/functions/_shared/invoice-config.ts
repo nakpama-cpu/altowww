@@ -12,7 +12,7 @@ export const COMPANY = {
   legalLine:
     "Alto Whisky is a trading name of Alto Asset Management Ltd. Company No. 1430237",
   telephone: "0330 822 4189",
-  email: "accounts@altowhisky.com",
+  email: "admin@altowhisky.com",
   website: "www.altowhisky.com",
 };
 
