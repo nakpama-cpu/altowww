@@ -9,7 +9,7 @@ import { trackLead } from "@/lib/metaPixel";
 
 const stats = [
   {
-    value: "582%",
+    value: "280%",
     label: "Appreciation",
     text: "Rare whisky was the top-performing luxury asset of the past decade, according to the Knight Frank Luxury Investment Index.",
   },
