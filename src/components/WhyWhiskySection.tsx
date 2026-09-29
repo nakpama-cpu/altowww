@@ -4,7 +4,7 @@ import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 const benefits = [
   {
     title: "Capital Appreciation",
-    description: "Whisky increases in value as it matures, with rare whisky appreciating 582% over the past decade. Uncorrelated to stock markets or financial indices, it acts as a powerful hedge in volatile times.",
+    description: "Whisky increases in value as it matures, with rare whisky appreciating 280% over the past decade. Uncorrelated to stock markets or financial indices, it acts as a powerful hedge in volatile times.",
   },
   {
     title: "Tangible Asset",
