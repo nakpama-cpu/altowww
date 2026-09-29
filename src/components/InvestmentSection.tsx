@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 const stats = [
-  { value: "582%", label: "Rare whisky appreciation over 10 years" },
-  { value: "£4.2B", label: "Global whisky market value" },
+  { value: "280%", label: "Rare whisky appreciation over 10 years" },
+  { value: "£5.3B", label: "Global Scotch whisky exports" },
   { value: "#1", label: "Top performing collectible of the decade" },
 ];
 
