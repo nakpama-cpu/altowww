@@ -34,7 +34,7 @@ const benefits = [
   {
     title: "Proven Track Record",
     description:
-      "Rare whisky has appreciated by 582% over the past decade according to the Knight Frank Luxury Investment Index, making it the best performing collectible asset class of the decade.",
+      "Rare whisky has appreciated by 280% over the past decade according to the Knight Frank Luxury Investment Index, making it the best performing collectible asset class of the decade.",
     icon: trackRecordIcon,
   },
   {
@@ -149,7 +149,7 @@ const WhyWhiskyPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
               <div>
                 <p className="font-display text-5xl md:text-6xl text-primary font-light mb-3">
-                  582%
+                  280%
                 </p>
                 <p className="font-body text-sm text-secondary-foreground">
                   Rare whisky appreciation over 10 years
