@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { CalendarDays, X } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import altoLogo from "@/assets/alto-logo.png";
+import warehouseCasks from "@/assets/warehouse-casks.jpg";
 import { GHL_PUBLIC_CALENDAR_URL } from "@/config/booking";
 
 const GHL_EMBED_SCRIPT_SRC = "https://link.msgsndr.com/js/form_embed.js";
@@ -40,7 +41,7 @@ const BookACall = () => {
   }, [calendarOpen]);
 
   return (
-    <div className="min-h-screen bg-secondary text-secondary-foreground">
+    <div className="min-h-screen bg-background text-foreground">
       <Seo
         title="Book a Call | Alto Whisky"
         description="Book a call with Alto Whisky to discuss your investment goals, ask questions and explore current whisky cask opportunities."
@@ -55,64 +56,75 @@ const BookACall = () => {
         </div>
       </header>
 
-      <main className="px-6 pb-20 pt-32 md:px-10 md:pb-28 md:pt-44 lg:px-12">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-start gap-14 lg:grid-cols-12 lg:gap-16">
-          {/* Left: editorial narrative */}
-          <div className="lg:col-span-7">
-            <p className="font-body text-xs uppercase tracking-[0.25em] text-primary">
-              Private consultation · Chapter 07
-            </p>
-            <h1 className="display-heading mt-6 text-5xl font-light leading-[1.05] text-secondary-foreground sm:text-6xl md:text-7xl">
-              Your next step in whisky cask investment
-            </h1>
-            <p className="mt-7 max-w-xl font-body text-sm font-light leading-7 text-secondary-foreground/70 md:text-base md:leading-8">
-              Thank you for exploring our investment guide. Book a call with Alto Whisky to discuss your goals, ask questions and explore the cask opportunities available to you.
-            </p>
+      <main>
+        <section className="relative min-h-[680px] overflow-hidden bg-secondary text-secondary-foreground md:min-h-[720px]">
+          <img
+            src={warehouseCasks}
+            alt="Whisky casks maturing in a bonded warehouse"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            fetchPriority="high"
+          />
+          <div className="absolute inset-0 bg-secondary/80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-secondary via-secondary/90 to-secondary/45" />
 
-            <div className="mt-12 border-t border-secondary-foreground/10 pt-10 md:mt-16">
-              <h2 className="font-body text-[11px] uppercase tracking-[0.22em] text-secondary-foreground/80">
-                What we can discuss
-              </h2>
-              <ul className="mt-8 grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2">
-                {discussionPoints.map((point) => (
-                  <li key={point}>
-                    <div className="mb-4 h-px w-8 bg-primary" aria-hidden="true" />
-                    <p className="display-heading text-xl leading-snug text-secondary-foreground md:text-2xl">
-                      {point}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          <div className="relative z-10 mx-auto flex min-h-[680px] max-w-7xl items-end px-6 pb-14 pt-32 md:min-h-[720px] md:px-10 md:pb-20 md:pt-40 lg:px-12">
+            <div className="grid w-full items-end gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)] lg:gap-20">
+              <div className="max-w-3xl">
+                <p className="font-body text-xs uppercase tracking-[0.25em] text-primary">
+                  Private consultation · Chapter 07
+                </p>
+                <h1 className="display-heading mt-6 max-w-3xl text-5xl leading-[0.98] text-secondary-foreground sm:text-6xl md:text-7xl lg:text-8xl">
+                  Your next step in whisky cask investment
+                </h1>
+                <p className="mt-7 max-w-2xl font-body text-sm leading-7 text-secondary-foreground/80 md:text-base md:leading-8">
+                  Thank you for exploring our investment guide. Book a call with Alto Whisky to discuss your goals, ask questions and explore the cask opportunities available to you.
+                </p>
+              </div>
 
-          {/* Right: booking panel */}
-          <div className="lg:sticky lg:top-28 lg:col-span-5">
-            <div className="rounded-sm bg-gradient-to-b from-primary/30 to-transparent p-1">
-              <div className="flex flex-col items-center border border-secondary-foreground/10 bg-secondary px-8 py-12 text-center md:px-10 md:py-14">
-                <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-primary/40">
-                  <CalendarDays className="h-6 w-6 text-primary" strokeWidth={1.25} aria-hidden="true" />
-                </div>
-                <h2 className="display-heading text-3xl font-light text-secondary-foreground md:text-4xl">
+              <div className="border-l border-primary pl-6 md:pl-8 lg:mb-2">
+                <p className="font-body text-[11px] uppercase tracking-[0.2em] text-secondary-foreground/60">
+                  Begin the conversation
+                </p>
+                <h2 className="display-heading mt-3 text-3xl text-secondary-foreground md:text-4xl">
                   Book your call
                 </h2>
-                <p className="mt-4 max-w-xs font-body text-sm leading-6 text-secondary-foreground/60">
+                <p className="mt-3 font-body text-sm leading-6 text-secondary-foreground/70">
                   Choose a date and time that suits you.
                 </p>
                 <Button
                   type="button"
                   onClick={() => setCalendarOpen(true)}
-                  className="mt-10 h-14 w-full rounded-none bg-primary px-8 font-body text-xs uppercase tracking-[0.2em] text-primary-foreground hover:bg-primary/90"
+                  className="mt-7 h-12 rounded-none px-7 font-body text-xs uppercase tracking-[0.2em]"
                 >
                   View available times
+                  <ArrowRight aria-hidden="true" />
                 </Button>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        <section className="bg-background px-6 py-12 md:px-10 md:py-16 lg:px-12">
+          <div className="mx-auto grid max-w-7xl gap-8 border-y border-border py-10 md:grid-cols-[0.65fr_1.35fr] md:gap-12">
+            <div>
+              <p className="font-body text-[11px] uppercase tracking-[0.22em] text-primary">Discussion guide</p>
+              <h2 className="display-heading mt-3 text-3xl md:text-4xl">What we can discuss</h2>
+            </div>
+            <ul className="grid gap-5 md:grid-cols-3 md:gap-7">
+              {discussionPoints.map((point) => (
+                <li key={point} className="flex items-start gap-3 font-body text-sm leading-6 text-muted-foreground">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border border-primary/60 text-primary" aria-hidden="true">
+                    <Check className="h-3.5 w-3.5" strokeWidth={1.8} />
+                  </span>
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
       </main>
 
-      <footer className="border-t border-secondary-foreground/10 px-6 py-8 text-secondary-foreground md:px-10 lg:px-12">
+      <footer className="bg-secondary px-6 py-8 text-secondary-foreground md:px-10 lg:px-12">
         <div className="mx-auto max-w-7xl">
           <p className="max-w-4xl font-body text-[11px] leading-relaxed text-secondary-foreground/60">
             Alto Whisky is not regulated by the Financial Conduct Authority (FCA). Whisky cask investment is not a regulated investment product. The value of your investment can go down as well as up, and past performance is not a reliable indicator of future results. All investments carry risk. Please seek independent financial advice before investing.
