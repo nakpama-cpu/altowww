@@ -24,6 +24,7 @@ const entries: SitemapEntry[] = [
   { path: "/how-whisky-is-made", changefreq: "monthly", priority: "0.8" },
   { path: "/faqs", changefreq: "monthly", priority: "0.7" },
   { path: "/contact", changefreq: "monthly", priority: "0.7" },
+  { path: "/book-a-call", changefreq: "monthly", priority: "0.7" },
   { path: "/news", changefreq: "weekly", priority: "0.7" },
   ...articleSlugs.map((slug) => ({
     path: `/news/${slug}`,
