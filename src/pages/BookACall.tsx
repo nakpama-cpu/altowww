@@ -4,7 +4,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { CalendarDays, X } from "lucide-react";
 import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
-import altoLogo from "@/assets/alto-logo.png";
+import altoLogoNavy from "@/assets/alto-logo-navy.png";
 import { GHL_PUBLIC_CALENDAR_URL } from "@/config/booking";
 
 const GHL_EMBED_SCRIPT_SRC = "https://link.msgsndr.com/js/form_embed.js";
@@ -50,7 +50,7 @@ const BookACall = () => {
       <header className="absolute inset-x-0 top-0 z-30 border-b border-foreground/10">
         <div className="mx-auto flex h-20 max-w-7xl items-center px-6 md:h-24 md:px-10 lg:px-12">
           <Link to="/" aria-label="Alto Whisky home" className="inline-flex">
-            <img src={altoLogo} alt="Alto Whisky" className="h-11 w-auto md:h-14" />
+            <img src={altoLogoNavy} alt="Alto Whisky" className="h-11 w-auto md:h-14" />
           </Link>
         </div>
       </header>
