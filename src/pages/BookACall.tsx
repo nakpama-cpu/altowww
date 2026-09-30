@@ -88,17 +88,17 @@ const BookACall = () => {
 
           {/* Right: booking panel */}
           <div className="lg:sticky lg:top-28 lg:col-span-5">
-              <div className="rounded-sm bg-gradient-to-b from-primary/25 to-transparent p-1">
-                <div className="flex flex-col items-center border border-border bg-surface px-8 py-12 text-center shadow-sm md:px-10 md:py-14">
-                  <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-primary/40">
-                    <CalendarDays className="h-6 w-6 text-primary" strokeWidth={1.25} aria-hidden="true" />
-                  </div>
-                  <h2 className="display-heading text-3xl font-light text-surface-foreground md:text-4xl">
-                    Book your call
-                  </h2>
-                  <p className="mt-4 max-w-xs font-body text-sm leading-6 text-surface-foreground/60">
-                    Choose a date and time that suits you.
-                  </p>
+            <div className="rounded-sm bg-gradient-to-b from-primary/25 to-transparent p-1">
+              <div className="flex flex-col items-center border border-border bg-surface px-8 py-12 text-center shadow-sm md:px-10 md:py-14">
+                <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-primary/40">
+                  <CalendarDays className="h-6 w-6 text-primary" strokeWidth={1.25} aria-hidden="true" />
+                </div>
+                <h2 className="display-heading text-3xl font-light text-surface-foreground md:text-4xl">
+                  Book your call
+                </h2>
+                <p className="mt-4 max-w-xs font-body text-sm leading-6 text-surface-foreground/60">
+                  Choose a date and time that suits you.
+                </p>
                 <Button
                   type="button"
                   onClick={() => setCalendarOpen(true)}
