@@ -37,6 +37,12 @@ Deno.serve(async (req) => {
 
     if (!profile || profile.status !== 'pending') return generic()
 
+    // Only act on brand-new signups so this public endpoint can't be used to
+    // re-trigger notifications or CRM pushes for existing accounts.
+    const ageMs = Date.now() - new Date(profile.created_at).getTime()
+    if (!(ageMs >= 0 && ageMs < 10 * 60 * 1000)) return generic()
+
+
     const { data: tokens } = await supabase
       .from('approval_tokens')
       .select('action, token')
