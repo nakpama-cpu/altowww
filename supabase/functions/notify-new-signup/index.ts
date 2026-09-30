@@ -37,6 +37,22 @@ Deno.serve(async (req) => {
 
     if (!profile || profile.status !== 'pending') return generic()
 
+    // Only act on brand-new signups so this public endpoint can't be used to
+    // re-trigger notifications or CRM pushes for existing accounts.
+    const ageMs = Date.now() - new Date(profile.created_at).getTime()
+    if (!(ageMs >= 0 && ageMs < 10 * 60 * 1000)) return generic()
+
+    // Skip if the admin notification was already sent for this profile.
+    const { data: already } = await supabase
+      .from('email_send_log')
+      .select('id')
+      .eq('template_name', 'admin-new-signup')
+      .contains('metadata', { profile_id: profile.id })
+      .limit(1)
+      .maybeSingle()
+      .then((r) => r, () => ({ data: null }))
+    if (already) return generic()
+
     const { data: tokens } = await supabase
       .from('approval_tokens')
       .select('action, token')

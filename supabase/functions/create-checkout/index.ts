@@ -38,6 +38,30 @@ async function resolveOrCreateCustomer(
   return created.id;
 }
 
+const RETURN_PATH = "/portal/checkout/return";
+function isAllowedOrigin(origin: string): boolean {
+  try {
+    const u = new URL(origin);
+    if (u.protocol !== "https:" && !(u.protocol === "http:" && u.hostname === "localhost")) return false;
+    const h = u.hostname;
+    return h === "altowhisky.com" || h === "www.altowhisky.com" || h === "localhost" ||
+      h.endsWith(".lovable.app") || h.endsWith(".lovableproject.com");
+  } catch { return false; }
+}
+function safeReturnUrl(raw: unknown, reqOrigin: string | null): string {
+  const fallbackOrigin = Deno.env.get("PUBLIC_SITE_URL") ?? "https://www.altowhisky.com";
+  let origin = fallbackOrigin;
+  if (typeof raw === "string") {
+    try {
+      const o = new URL(raw).origin;
+      if (isAllowedOrigin(o)) origin = o;
+    } catch { /* ignore */ }
+  } else if (reqOrigin && isAllowedOrigin(reqOrigin)) {
+    origin = reqOrigin;
+  }
+  return `${origin}${RETURN_PATH}?session_id={CHECKOUT_SESSION_ID}`;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405, headers: corsHeaders });
@@ -60,9 +84,8 @@ Deno.serve(async (req) => {
     const items: CartLine[] = Array.isArray(body?.items) ? body.items : [];
     const discountCodeRaw: string | null = body?.discount_code?.toString().trim().toUpperCase() || null;
     const environment: StripeEnv = body?.environment === "live" ? "live" : "sandbox";
-    const returnUrl: string = body?.return_url;
     const invoiceId: string | null = body?.invoice_id ? String(body.invoice_id) : null;
-    if (!returnUrl) throw new Error("Missing return_url");
+    const returnUrl = safeReturnUrl(body?.return_url, req.headers.get("origin"));
     if (!invoiceId && !items.length) throw new Error("Cart is empty");
 
     // Service client for trusted reads (bypass RLS on listings + profile)
