@@ -94,12 +94,16 @@ const BookACall = () => {
             </div>
 
             {GHL_PUBLIC_CALENDAR_URL ? (
-              <div>
+              <div className="relative">
+                {/* Sits behind the widget; covered once GoHighLevel paints its calendar. */}
+                <p className="pointer-events-none absolute inset-x-0 top-16 px-6 text-center font-body text-sm text-muted-foreground" aria-hidden="true">
+                  Loading the booking calendar… If it doesn't appear, use the link below.
+                </p>
                 <iframe
                   src={GHL_PUBLIC_CALENDAR_URL}
                   id={GHL_IFRAME_ID}
                   title="Book a call with Alto Whisky"
-                  className="block h-[760px] w-full border-0 md:h-[800px]"
+                  className="relative block h-[760px] w-full border-0 bg-transparent md:h-[800px]"
                   style={{ width: "100%", border: "none", overflow: "hidden" }}
                   scrolling="no"
                   loading="eager"
