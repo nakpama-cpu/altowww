@@ -5,6 +5,9 @@ import Seo from "@/components/Seo";
 import altoLogo from "@/assets/alto-logo.png";
 import { GHL_PUBLIC_CALENDAR_URL } from "@/config/booking";
 
+const GHL_EMBED_SCRIPT_SRC = "https://link.msgsndr.com/js/form_embed.js";
+const GHL_IFRAME_ID = "XszmpWdESN9t1YBKvA1L_1790728633099";
+
 const discussionPoints = [
   "Your investment goals and timeframe",
   "Current cask opportunities and portfolio options",
@@ -14,6 +17,22 @@ const discussionPoints = [
 const BookACall = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    if (!GHL_PUBLIC_CALENDAR_URL) return;
+
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[src="${GHL_EMBED_SCRIPT_SRC}"]`,
+    );
+
+    if (existingScript) return;
+
+    const script = document.createElement("script");
+    script.src = GHL_EMBED_SCRIPT_SRC;
+    script.type = "text/javascript";
+    script.async = true;
+    document.body.appendChild(script);
   }, []);
 
   return (
@@ -78,8 +97,11 @@ const BookACall = () => {
               <div>
                 <iframe
                   src={GHL_PUBLIC_CALENDAR_URL}
+                  id={GHL_IFRAME_ID}
                   title="Book a call with Alto Whisky"
-                  className="block min-h-[720px] w-full border-0 md:min-h-[780px]"
+                  className="block h-[760px] w-full border-0 md:h-[800px]"
+                  style={{ width: "100%", border: "none", overflow: "hidden" }}
+                  scrolling="no"
                   loading="eager"
                   allow="payment"
                 />
