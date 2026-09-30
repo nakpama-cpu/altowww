@@ -1,3 +1,3 @@
 # Project Architecture
 
-- Configure the public GoHighLevel booking iframe through `VITE_GHL_PUBLIC_CALENDAR_URL`; it must contain only a public embeddable calendar URL, never credentials.
+- Use the supplied public GoHighLevel calendar as the booking iframe default while allowing `VITE_GHL_PUBLIC_CALENDAR_URL` to override it; public embed URLs only, never credentials.

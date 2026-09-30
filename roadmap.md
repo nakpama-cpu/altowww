@@ -1,3 +1,3 @@
 # Roadmap
 
-- [x] Create and verify the direct-access `/book-a-call` page with an empty GoHighLevel calendar state.
+- [x] Activate and verify the supplied GoHighLevel calendar on `/book-a-call` across desktop, tablet, and mobile.
