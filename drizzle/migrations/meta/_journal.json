@@ -15,6 +15,13 @@
       "when": 1790766948220,
       "tag": "0001_restrict_distilleries_to_listings_holdings_orders",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790866627775,
+      "tag": "0002_grant_anon_execute_role_helpers",
+      "breakpoints": true
     }
   ]
 }
