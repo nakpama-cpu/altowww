@@ -4,4 +4,4 @@
 - [x] Restyle `/book-a-call` as an Alto-branded guide continuation with the calendar in a modal.
 - [x] Security: review who can read distillery records (kept open to signed-in users by owner decision)
 
-- [ ] Create native draft "My Casks refinement" with implementation brief; report draft/thread ids; leave unaccepted and unpublished
+- [x] Created native draft "My Casks refinement" (drft_01m47c9qbaee4t10ryzcw0nst6, thread thr_xrqyw9zlyaak) — running, left unaccepted and unpublished
