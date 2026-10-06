@@ -1,33 +1,22 @@
-# Alto Whisky Book a Call Page
+# My Casks refinement — draft capability check and plan
 
-## What will be built
-- Add a dedicated public page at `/book-a-call`, designed as a focused continuation of the Alto Whisky investment guide.
-- Use a restrained logo-only header and compact regulatory footer so visitors stay focused on booking; no links or calls-to-action elsewhere on the site will change.
-- On desktop, place the introduction and “What we can discuss” list on the left, with a prominent white booking panel on the right.
-- On mobile, stack the introduction first and the booking panel second with comfortable spacing and no horizontal overflow.
-- Use the supplied UK English wording exactly, including all three discussion points and the booking-panel copy.
+## Capability answer
+- **Can I create a native Lovable Draft from this session? Yes.** This session has a `drafts--create` tool (plus `drafts--list`, `drafts--refresh`, `drafts--accept`). Nothing has been created yet.
+- **Can I switch my own execution into it? No.** A draft gets its own chat thread. Once it exists, only that thread can give it instructions. I can include the full brief as the draft's first instruction when I create it. The draft's agent then makes the code changes there and reports back to this thread. Main stays untouched until someone accepts the draft. I will not accept it.
+- **How to verify which draft it is:** creation returns a draft id (`var_...`) and a thread id. `drafts--list` lists the draft by label (e.g. "My Casks refinement") with that id. You can confirm it in the drafts panel: Main should show no changes, and the draft should show its own preview.
+- **Caveat:** a draft starts from Main's last saved version. The draft's chat history starts empty, so the instruction must state the whole brief.
+- **Database:** drafts may run on an isolated backend. Either way, the brief will forbid any migrations, policy changes or data writes.
 
-## Calendar behaviour
-- No unambiguous GoHighLevel public calendar URL exists in the current project.
-- Add one clearly named public configuration value for the GoHighLevel calendar URL, initially empty.
-- While empty, show the honest message: “Online booking will be available here shortly.”
-- Once the value is configured, show the official calendar in a responsive, accessible iframe with ample height and a direct “Open booking calendar” fallback link.
-- Do not add credentials, invent availability, or fabricate a booking URL, times, confirmations, or claims.
+## Refinement (frontend only, `src/pages/portal/MyCasks.tsx`)
+1. **Compact holdings list:** replace the tall stacked swipe/flip cards with compact rows, grouped by distillery and expandable. Each collapsed row shows cask number, distillery, cask type, age, purchase price and a certificate action.
+2. **Expandable details:** expanding a row reveals the specifications already shown today (spirit, ABV, RLA, fill date, warehouse etc.), using the existing SpecBox style.
+3. **Toolbar:** labelled Search, Distillery, Cask type, Certificate status (Available / Pending) and Sort controls on `.field-surface`. Includes a "Showing X of Y casks" count and a Clear button. Choices are kept in sessionStorage. Existing sort options are retained.
+4. **Formatting:** UK dates via `toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })`. A single GBP formatter (`Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" })`) for every price.
+5. **Remove** the hardcoded 12-year maturation bar (`targetYears = 12`).
+6. **Preserve:** the existing `holdings` query and columns, RLS, `cask-certificates` signed-URL view/download (300s), the table view, the glass-card portal styling and the fonts and colours.
 
-## Metadata and discovery
-- Add the route-specific page title, description, canonical URL, and social metadata for `https://www.altowhisky.com/book-a-call`.
-- Add the public page to the generated sitemap without adding it to global navigation.
+## Out of scope
+No database, policy, edge function, integration or config changes. No other portal pages. No publish, no draft acceptance.
 
-## Technical details
-- Create a focused `BookACall` page and a small booking configuration module.
-- Register the route in the existing React router.
-- Reuse the existing Alto logo, Cormorant Garamond and Inter typography, semantic navy/cream/copper tokens, spacing rhythm, and footer risk wording.
-- Record the public calendar configuration convention in the project’s technical guidance.
-
-## Checks
-- Confirm the page loads directly at `/book-a-call`.
-- Check desktop at 1280px and mobile at 390px for layout, text fit, and the empty calendar state.
-- Confirm route metadata and canonical URL update correctly.
-- Confirm the generated sitemap includes the page.
-- Check the latest preview build and browser console for errors.
-- Do not publish or deploy.
+## On approval
+Create one draft labelled "My Casks refinement" with the brief above as its first instruction. Then report its id/thread id here and leave it unaccepted and unpublished.
