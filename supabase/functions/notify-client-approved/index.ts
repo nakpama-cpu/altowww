@@ -1,3 +1,4 @@
+import { SITE_URL as PORTAL_SITE_URL } from "../_shared/invoice-config.ts";
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
 import { sendAndLogTemplateEmail } from '../_shared/transactional-email-templates/send-and-log.ts'
@@ -45,14 +46,14 @@ Deno.serve(async (req) => {
     return json({ error: 'Profile not found or not approved' }, 404)
   }
 
-  const siteUrl = Deno.env.get('PUBLIC_SITE_URL') ?? 'https://www.altowhisky.com'
+  const siteUrl = PORTAL_SITE_URL
 
   try {
     const result = await sendAndLogTemplateEmail('client-approved', profile.email, {
       idempotencyKey: `client-approved-${profile.id}`,
       templateData: {
         firstName: profile.first_name || 'there',
-        loginUrl: `${siteUrl}/portal/login`,
+        loginUrl: `${siteUrl}/login`,
       },
     })
     return json({ success: true, sent: result.sent })

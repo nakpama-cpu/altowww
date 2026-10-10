@@ -27,4 +27,5 @@ export const BANK = {
 
 export const PAYMENT_TERMS_DAYS = 3;
 
-export const SITE_URL = "https://www.altowhisky.com";
+// Portal origin for all portal-generated links (invoices, admin, login). Deliberately not env-overridable.
+export const SITE_URL = "https://portal.altowhisky.com";

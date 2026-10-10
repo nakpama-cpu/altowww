@@ -31,14 +31,14 @@ const Email = ({
   note = '',
   confirmedAt = '',
   items = [],
-  adminUrl = 'https://www.altowhisky.com/admin/invoices',
+  adminUrl = 'https://portal.altowhisky.com/admin/invoices',
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>Bank transfer confirmed for invoice {invoiceNumber}</Preview>
     <Body style={main}>
       <Section style={header}>
-        <Img src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
+        <Img src="https://portal.altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
       </Section>
       <Container style={container}>
         <Heading style={h1}>Client has confirmed payment</Heading>
@@ -97,7 +97,7 @@ export const template = {
     confirmedAt: '28/07/2026, 14:03',
     note: 'Sent this morning from my Barclays account.',
     items: [{ title: 'Blair Athol', quantity: 6, lineTotal: 22200 }],
-    adminUrl: 'https://www.altowhisky.com/admin/invoices',
+    adminUrl: 'https://portal.altowhisky.com/admin/invoices',
   },
 } satisfies TemplateEntry
 

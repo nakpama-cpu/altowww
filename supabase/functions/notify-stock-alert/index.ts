@@ -1,3 +1,4 @@
+import { SITE_URL as PORTAL_SITE_URL } from "../_shared/invoice-config.ts";
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
 import { sendAndLogTemplateEmail } from '../_shared/transactional-email-templates/send-and-log.ts'
@@ -34,7 +35,7 @@ Deno.serve(async (req) => {
     const year = l.fill_date ? new Date(l.fill_date).getFullYear() : null
     const specLine = [year, caskSpec || null, l.abv ? `ABV ${l.abv}% Approx` : null].filter(Boolean).join('  ·  ')
 
-    const siteUrl = Deno.env.get('PUBLIC_SITE_URL') ?? 'https://www.altowhisky.com'
+    const siteUrl = PORTAL_SITE_URL
     const adminRecipient = Deno.env.get('ADMIN_NOTIFICATION_EMAIL') ?? 'admin@altowhisky.com'
     const avail = Number(available ?? Math.max(0, (l.stock_qty ?? 0) - (l.reserved_qty ?? 0)))
 

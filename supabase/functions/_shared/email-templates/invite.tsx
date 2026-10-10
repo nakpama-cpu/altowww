@@ -28,7 +28,7 @@ export const InviteEmail = ({ siteUrl, confirmationUrl }: InviteEmailProps) => (
     <Preview>You've been invited to the Alto Whisky portal</Preview>
     <Body style={main}>
       <Section style={header}>
-        <Img src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
+        <Img src="https://portal.altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
       </Section>
       <Container style={container}>
         
