@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { CountrySelect, PhoneField } from "@/components/auth/CountryFields";
 import { useDetectedCountry } from "@/hooks/useDetectedCountry";
 import AuthShell from "@/components/auth/AuthShell";
-import Seo from "@/components/Seo";
+import Seo from "@/components/portal/PortalSeo";
 import { TitleSelect } from "@/components/auth/TitleSelect";
 import { formatName, formatEmail } from "@/lib/formatName";
 

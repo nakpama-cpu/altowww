@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
-import Header from "@/components/Header";
-import FooterSection from "@/components/FooterSection";
+import PortalHeader from "@/components/portal/PortalHeader";
+import PortalFooter from "@/components/portal/PortalFooter";
 import heroImg from "@/assets/scotland-landscape.jpg";
 
 interface AuthShellProps {
@@ -19,7 +19,7 @@ interface AuthShellProps {
 const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShellProps) => {
   return (
     <div className="min-h-dvh flex flex-col bg-background">
-      <Header hideBrochure />
+      <PortalHeader />
 
       <main className="relative min-h-dvh flex items-center justify-center overflow-hidden section-dark">
         {/* Cinematic backdrop */}
@@ -62,7 +62,7 @@ const AuthShell = ({ eyebrow, title, subtitle, children, footerSlot }: AuthShell
       <div className="section-dark pt-24 pb-3">
         <div className="h-px bg-secondary-foreground/10" aria-hidden="true" />
       </div>
-      <FooterSection hideBrochure compact />
+      <PortalFooter />
     </div>
   );
 };
