@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import AuthShell from "@/components/auth/AuthShell";
-import Seo from "@/components/Seo";
+import Seo from "@/components/portal/PortalSeo";
 
 export default function PortalLogin() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export default function PortalLogin() {
     <Seo
       title="Client Sign In | Alto Whisky"
       description="Sign in to your Alto Whisky client portal to view your cask portfolio and available stock."
-      path="/portal/login"
+      path="/login"
     />
     <AuthShell
       eyebrow="Client Portal"

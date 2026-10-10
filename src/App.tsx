@@ -1,36 +1,27 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, Outlet, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { BrochureModalProvider } from "@/components/BrochureModal";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
-import { NavigationVisibilityProvider } from "@/contexts/NavigationVisibilityContext";
-import ScrollNavigation from "@/components/ScrollNavigation";
-import Index from "./pages/Index.tsx";
-import HowItWorks from "./pages/HowItWorks.tsx";
-import WhyWhisky from "./pages/WhyWhisky.tsx";
-import AboutWhisky from "./pages/AboutWhisky.tsx";
-import HowWhiskyIsMade from "./pages/HowWhiskyIsMade.tsx";
-import FAQ from "./pages/FAQ.tsx";
-import Contact from "./pages/Contact.tsx";
-import Invest from "./pages/Invest.tsx";
-import BookACall from "./pages/BookACall.tsx";
-import News from "./pages/News.tsx";
-import ArticlePage from "./pages/ArticlePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
-const MarketingLayout = () => {
-  const { pathname } = useLocation();
-  return (
-    <NavigationVisibilityProvider>
-      <Outlet />
-      {pathname === "/" && <ScrollNavigation />}
-    </NavigationVisibilityProvider>
-  );
+const MARKETING_SITE = "https://www.altowhisky.com";
+const MARKETING_PATHS = ["/how-it-works", "/why-whisky", "/about-whisky", "/how-whisky-is-made", "/faqs", "/contact", "/invest", "/book-a-call", "/news", "/news/:slug"];
+
+// Root and portal entry keep query string and hash when redirecting.
+const RedirectKeepingQuery = ({ to }: { to: string }) => {
+  const { search, hash } = useLocation();
+  return <Navigate to={{ pathname: to, search, hash }} replace />;
 };
 
+// Marketing URLs now live on the public site.
+const ToMarketingSite = () => {
+  const { pathname, search, hash } = useLocation();
+  window.location.replace(`${MARKETING_SITE}${pathname}${search}${hash}`);
+  return null;
+};
 
 // Portal
 import PortalLogin from "./pages/portal/Login";
@@ -76,22 +67,10 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
-          <BrochureModalProvider>
             <Routes>
-              <Route element={<MarketingLayout />}>
-                <Route path="/" element={<Index />} />
-                <Route path="/how-it-works" element={<HowItWorks />} />
-                <Route path="/why-whisky" element={<WhyWhisky />} />
-                <Route path="/about-whisky" element={<AboutWhisky />} />
-                <Route path="/how-whisky-is-made" element={<HowWhiskyIsMade />} />
-                <Route path="/faqs" element={<FAQ />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/invest" element={<Invest />} />
-                <Route path="/book-a-call" element={<BookACall />} />
-                <Route path="/news" element={<News />} />
-                <Route path="/news/:slug" element={<ArticlePage />} />
-              </Route>
-
+              <Route path="/" element={<RedirectKeepingQuery to="/login" />} />
+              <Route path="/login" element={<PortalLogin />} />
+              {MARKETING_PATHS.map((p) => <Route key={p} path={p} element={<ToMarketingSite />} />)}
 
               {/* Public auth pages */}
               <Route path="/portal/login" element={<PortalLogin />} />
@@ -131,7 +110,6 @@ const App = () => (
 
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrochureModalProvider>
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>

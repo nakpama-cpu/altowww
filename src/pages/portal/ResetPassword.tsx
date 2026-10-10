@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import AuthShell from "@/components/auth/AuthShell";
-import Seo from "@/components/Seo";
+import Seo from "@/components/portal/PortalSeo";
 
 export default function ResetPassword() {
   const { toast } = useToast();

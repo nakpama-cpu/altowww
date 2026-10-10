@@ -44,7 +44,7 @@ function isAllowedOrigin(origin: string): boolean {
     const u = new URL(origin);
     if (u.protocol !== "https:" && !(u.protocol === "http:" && u.hostname === "localhost")) return false;
     const h = u.hostname;
-    return h === "altowhisky.com" || h === "www.altowhisky.com" || h === "localhost" ||
+    return h === "altowhisky.com" || h === "www.altowhisky.com" || h === "portal.altowhisky.com" || h === "localhost" ||
       h.endsWith(".lovable.app") || h.endsWith(".lovableproject.com");
   } catch { return false; }
 }
