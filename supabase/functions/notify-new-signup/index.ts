@@ -1,3 +1,4 @@
+import { SITE_URL as PORTAL_SITE_URL } from "../_shared/invoice-config.ts";
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
 import { sendAndLogTemplateEmail } from '../_shared/transactional-email-templates/send-and-log.ts'
@@ -55,7 +56,7 @@ Deno.serve(async (req) => {
 
     const projectRef = new URL(Deno.env.get('SUPABASE_URL')!).host.split('.')[0]
     const fnBase = `https://${projectRef}.supabase.co/functions/v1/approve-client`
-    const siteUrl = Deno.env.get('PUBLIC_SITE_URL') ?? 'https://www.altowhisky.com'
+    const siteUrl = PORTAL_SITE_URL
     const adminRecipient = Deno.env.get('ADMIN_NOTIFICATION_EMAIL') ?? 'admin@altowhisky.com'
 
     const phone = [profile.phone_country_code, profile.phone].filter(Boolean).join(' ').trim()

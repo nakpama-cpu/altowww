@@ -44,15 +44,15 @@ const Email = ({
   discountAmount = 0,
   total = 0,
   items = [],
-  invoiceUrl = 'https://www.altowhisky.com',
-  confirmUrl = 'https://www.altowhisky.com',
+  invoiceUrl = 'https://portal.altowhisky.com',
+  confirmUrl = 'https://portal.altowhisky.com',
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>Invoice {invoiceNumber} — payment by bank transfer</Preview>
     <Body style={main}>
       <Section style={header}>
-        <Img src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
+        <Img src="https://portal.altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
       </Section>
       <Container style={container}>
         <Heading style={h1}>Your invoice</Heading>
@@ -161,8 +161,8 @@ export const template = {
         lineTotal: 22200,
       },
     ],
-    invoiceUrl: 'https://www.altowhisky.com/invoice/preview',
-    confirmUrl: 'https://www.altowhisky.com/invoice/preview?confirm=1',
+    invoiceUrl: 'https://portal.altowhisky.com/invoice/preview',
+    confirmUrl: 'https://portal.altowhisky.com/invoice/preview?confirm=1',
   },
 } satisfies TemplateEntry
 

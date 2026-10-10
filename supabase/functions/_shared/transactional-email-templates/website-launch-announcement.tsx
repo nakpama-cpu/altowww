@@ -40,7 +40,7 @@ const Email = ({
   senderMobile = '+44 7446 829841',
   senderAddress = '71–75 Shelton Street, Covent Garden, London, WC2H 9JQ',
   siteUrl = 'https://www.altowhisky.com',
-  portalUrl = 'https://www.altowhisky.com/portal/signup',
+  portalUrl = 'https://portal.altowhisky.com/portal/signup',
   newsUrl = 'https://www.altowhisky.com/news',
   offerCode = 'ALTO15',
   offerExpiry = 'Tuesday 21 July',
@@ -54,7 +54,7 @@ const Email = ({
     <Body style={main}>
       <Section style={header}>
         <Img
-          src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
+          src="https://portal.altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
           alt="Alto Whisky"
           width="94"
           style={logo}
@@ -188,7 +188,7 @@ const Email = ({
                       <tr>
                         <td align="center" valign="middle" width="112" height="94" style={{ padding: 0 }}>
                           <Img
-                            src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
+                            src="https://portal.altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png"
                             alt="Alto Whisky"
                             width="94"
                             style={{ display: 'block', height: 'auto', margin: '0 auto' }}
@@ -224,7 +224,7 @@ export const template = {
     senderMobile: '+44 7446 829841',
     senderAddress: '71–75 Shelton Street, Covent Garden, London, WC2H 9JQ',
     siteUrl: 'https://www.altowhisky.com',
-    portalUrl: 'https://www.altowhisky.com/portal/signup',
+    portalUrl: 'https://portal.altowhisky.com/portal/signup',
     newsUrl: 'https://www.altowhisky.com/news',
     offerCode: 'ALTO15',
     offerExpiry: 'Tuesday 21 July',

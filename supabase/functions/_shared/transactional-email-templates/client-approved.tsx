@@ -10,13 +10,13 @@ interface Props {
   loginUrl?: string
 }
 
-const Email = ({ firstName = 'there', loginUrl = 'https://www.altowhisky.com/portal/login' }: Props) => (
+const Email = ({ firstName = 'there', loginUrl = 'https://portal.altowhisky.com/login' }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>Your Alto Whisky portal is ready</Preview>
     <Body style={main}>
       <Section style={header}>
-        <Img src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
+        <Img src="https://portal.altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
       </Section>
       <Container style={container}>
         <Heading style={h1}>Welcome to Alto Whisky</Heading>
@@ -48,7 +48,7 @@ export const template = {
   component: Email,
   subject: 'Your Alto Whisky portal is ready',
   displayName: 'Client approved',
-  previewData: { firstName: 'Jane', loginUrl: 'https://www.altowhisky.com/portal/login' },
+  previewData: { firstName: 'Jane', loginUrl: 'https://portal.altowhisky.com/login' },
 } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: "'Inter', Arial, sans-serif" }

@@ -49,7 +49,7 @@ const dateStr = (iso: string) =>
   new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 
 const LOGO_URL =
-  "https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png";
+  "https://portal.altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png";
 
 async function fetchLogo(): Promise<Uint8Array | null> {
   try {

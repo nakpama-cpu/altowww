@@ -19,7 +19,7 @@ const SITE_NAME = "Alto Whisky"
 const SENDER_DOMAIN = "notify.altowhisky.com"
 const ROOT_DOMAIN = "altowhisky.com"
 const FROM_DOMAIN = "altowhisky.com"
-const SITE_URL = `https://${ROOT_DOMAIN}`
+const SITE_URL = "https://portal.altowhisky.com"
 
 // Template mapping for preview mode
 const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {

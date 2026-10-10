@@ -24,14 +24,14 @@ const Email = ({
   signedUpAt = '',
   approveUrl = '#',
   rejectUrl = '#',
-  adminUrl = 'https://www.altowhisky.com/admin/clients',
+  adminUrl = 'https://portal.altowhisky.com/admin/clients',
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>New client awaiting approval: {clientName}</Preview>
     <Body style={main}>
       <Section style={header}>
-        <Img src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
+        <Img src="https://portal.altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
       </Section>
       <Container style={container}>
         <Heading style={h1}>New client awaiting approval</Heading>
@@ -75,7 +75,7 @@ export const template = {
     signedUpAt: new Date().toUTCString(),
     approveUrl: 'https://example.com/approve',
     rejectUrl: 'https://example.com/reject',
-    adminUrl: 'https://www.altowhisky.com/admin/clients',
+    adminUrl: 'https://portal.altowhisky.com/admin/clients',
   },
 } satisfies TemplateEntry
 

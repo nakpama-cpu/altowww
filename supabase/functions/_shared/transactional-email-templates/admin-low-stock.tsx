@@ -22,14 +22,14 @@ const Email = ({
   available = 0,
   stockQty = 0,
   reservedQty = 0,
-  adminUrl = 'https://www.altowhisky.com/admin/stock-alerts',
+  adminUrl = 'https://portal.altowhisky.com/admin/stock-alerts',
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>{state === 'out' ? `Out of stock: ${distillery}` : `Low stock: ${distillery} — ${available} left`}</Preview>
     <Body style={main}>
       <Section style={header}>
-        <Img src="https://altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
+        <Img src="https://portal.altowhisky.com/__l5e/assets-v1/0e654173-6548-4cb5-8108-f18c2625b609/alto-logo-email.png" alt="Alto Whisky" width="94" style={logo} />
       </Section>
       <Container style={container}>
         <Heading style={h1}>{state === 'out' ? 'A listing is out of stock' : 'A listing is running low'}</Heading>
@@ -75,7 +75,7 @@ export const template = {
     available: 2,
     stockQty: 14,
     reservedQty: 12,
-    adminUrl: 'https://www.altowhisky.com/admin/stock-alerts',
+    adminUrl: 'https://portal.altowhisky.com/admin/stock-alerts',
   },
 } satisfies TemplateEntry
 
