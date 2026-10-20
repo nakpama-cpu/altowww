@@ -65,6 +65,7 @@ const FooterSection = ({ hideCta = false, lightCta = false, hideBrochure = false
                 <Link to="/about-whisky" className="font-body text-sm text-secondary-foreground hover:text-primary transition-colors">Regions & Distilleries</Link>
                 <Link to="/how-whisky-is-made" className="font-body text-sm text-secondary-foreground hover:text-primary transition-colors">How Whisky is Made</Link>
                 <Link to="/faqs" className="font-body text-sm text-secondary-foreground hover:text-primary transition-colors">FAQs</Link>
+                <Link to="/privacy-policy" className="font-body text-sm text-secondary-foreground hover:text-primary transition-colors">Privacy Policy</Link>
               </div>
             </div>
             {!hideBrochure && (
