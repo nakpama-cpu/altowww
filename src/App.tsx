@@ -20,6 +20,7 @@ import BookACall from "./pages/BookACall.tsx";
 import News from "./pages/News.tsx";
 import ArticlePage from "./pages/ArticlePage.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const MarketingLayout = () => {
   const { pathname } = useLocation();
@@ -88,6 +89,7 @@ const App = () => (
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/invest" element={<Invest />} />
                 <Route path="/book-a-call" element={<BookACall />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/news/:slug" element={<ArticlePage />} />
               </Route>
