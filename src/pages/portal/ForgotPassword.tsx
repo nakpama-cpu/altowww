@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import AuthShell from "@/components/auth/AuthShell";
-import Seo from "@/components/portal/PortalSeo";
+import Seo from "@/components/Seo";
 
 export default function ForgotPassword() {
   const { toast } = useToast();

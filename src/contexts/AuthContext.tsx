@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { clearPortalVisit } from "@/lib/portalSession";
+import { trackRegisteredVisit } from "@/lib/metaPixel";
 
 export type VerificationStatus = "not_submitted" | "pending" | "verified" | "rejected";
 export type ProofOfAddressType = "utility_bill" | "bank_statement" | "driving_licence" | "council_tax" | "other";
@@ -81,6 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(sess?.user ?? null);
       if (sess?.user) {
         setTimeout(() => loadProfileAndRole(sess.user.id), 0);
+        trackRegisteredVisit(sess.user.email, sess.user.id);
       } else {
         setProfile(null);
         setIsAdmin(false);
@@ -91,6 +93,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setSession(data.session);
       setUser(data.session?.user ?? null);
       if (data.session?.user) {
+        trackRegisteredVisit(data.session.user.email, data.session.user.id);
         loadProfileAndRole(data.session.user.id).finally(() => setLoading(false));
       } else {
         setLoading(false);
