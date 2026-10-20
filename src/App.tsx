@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import NotFound from "./pages/NotFound.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const MARKETING_SITE = "https://www.altowhisky.com";
 const MARKETING_PATHS = ["/how-it-works", "/why-whisky", "/about-whisky", "/how-whisky-is-made", "/faqs", "/contact", "/invest", "/book-a-call", "/news", "/news/:slug"];
@@ -70,6 +71,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<RedirectKeepingQuery to="/login" />} />
               <Route path="/login" element={<PortalLogin />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               {MARKETING_PATHS.map((p) => <Route key={p} path={p} element={<ToMarketingSite />} />)}
 
               {/* Public auth pages */}
