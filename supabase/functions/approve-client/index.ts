@@ -1,4 +1,3 @@
-import { SITE_URL as PORTAL_SITE_URL } from "../_shared/invoice-config.ts";
 import { createClient } from 'npm:@supabase/supabase-js@2'
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
 import { sendAndLogTemplateEmail } from '../_shared/transactional-email-templates/send-and-log.ts'
@@ -62,13 +61,13 @@ Deno.serve(async (req) => {
     .is('used_at', null)
 
   if (action === 'approve') {
-    const siteUrl = PORTAL_SITE_URL
+    const siteUrl = Deno.env.get('PUBLIC_SITE_URL') ?? 'https://www.altowhisky.com'
     try {
       await sendAndLogTemplateEmail('client-approved', profile.email, {
         idempotencyKey: `client-approved-${row.profile_id}`,
         templateData: {
           firstName: profile.first_name || 'there',
-          loginUrl: `${siteUrl}/login`,
+          loginUrl: `${siteUrl}/portal/login`,
         },
       })
     } catch (sendErr) {
@@ -97,7 +96,7 @@ function page(title: string, body: string, ok: boolean) {
   <div class="badge">${ok ? 'Alto Whisky' : 'Alto Whisky'}</div>
   <h1>${escapeHtml(title)}</h1>
   <p>${escapeHtml(body)}</p>
-  <a href="https://portal.altowhisky.com/admin/clients">Open admin console</a>
+  <a href="https://www.altowhisky.com/admin/clients">Open admin console</a>
 </div></body></html>`
   return new Response(html, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } })
 }
