@@ -1,0 +1,467 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index 5208934..2af7887 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -2,4 +2,4 @@
+ 
+ - Use the supplied public GoHighLevel calendar as the booking iframe default while allowing `VITE_GHL_PUBLIC_CALENDAR_URL` to override it; public embed URLs only, never credentials.
+ - Keep the GoHighLevel booking iframe inside the `/book-a-call` modal so the public page remains a focused, branded introduction.
+-- GA4 lives only in `src/lib/analytics.ts` + `AnalyticsConsent` mounted in the marketing layout; it loads only after consent on the live public domains and never on portal/admin/invoice paths, so private areas stay untracked.
++- GA4 loading, consent, safe context and event emission stay in `src/lib/analytics.ts`, with `AnalyticsConsent` in the marketing layout; homepage measurement and delegated allowlisted attribution live in `src/lib/homepageAnalytics.ts`, mounted per homepage visit, so private paths and previews stay untracked without layout wrappers or duplicate click handlers.
+diff --git a/roadmap.md b/roadmap.md
+index cafbb8d..16ec0d2 100644
+--- a/roadmap.md
++++ b/roadmap.md
+@@ -1,5 +1,7 @@
+ # Roadmap
+ 
++- [x] Add and verify consent-gated homepage section views and allowlisted CTA attribution; leave unpublished.
++
+ - [x] Activate and verify the supplied GoHighLevel calendar on `/book-a-call` across desktop, tablet, and mobile.
+ - [x] Restyle `/book-a-call` as an Alto-branded guide continuation with the calendar in a modal.
+ - [x] Security: review who can read distillery records (kept open to signed-in users by owner decision)
+diff --git a/src/components/BrochureButton.tsx b/src/components/BrochureButton.tsx
+index 15df232..474461e 100644
+--- a/src/components/BrochureButton.tsx
++++ b/src/components/BrochureButton.tsx
+@@ -9,7 +9,7 @@ const BrochureButton = ({ className, children }: BrochureButtonProps) => {
+   const { open } = useBrochureModal();
+ 
+   return (
+-    <button onClick={() => open("brochure")} className={className}>
++    <button data-analytics-cta="request_brochure" onClick={() => open("brochure")} className={className}>
+       {children ?? "Request Brochure"}
+     </button>
+   );
+@@ -22,7 +22,7 @@ export const ContactButton = ({ className, children }: BrochureButtonProps) => {
+   const { open } = useBrochureModal();
+ 
+   return (
+-    <button onClick={() => open("advisor")} className={className}>
++    <button data-analytics-cta="speak_to_advisor" onClick={() => open("advisor")} className={className}>
+       {children ?? "Speak to an Advisor"}
+     </button>
+   );
+diff --git a/src/components/ChapterMarker.tsx b/src/components/ChapterMarker.tsx
+index e0c483d..fcf9a49 100644
+--- a/src/components/ChapterMarker.tsx
++++ b/src/components/ChapterMarker.tsx
+@@ -51,6 +51,7 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
+         <a
+           key={id}
+           href={`#${id}`}
++          data-analytics-chapter={id}
+           onClick={(e) => {
+             e.preventDefault();
+             if (index === 0) {
+diff --git a/src/components/ScrollNavigation.tsx b/src/components/ScrollNavigation.tsx
+index e5f7914..9d92985 100644
+--- a/src/components/ScrollNavigation.tsx
++++ b/src/components/ScrollNavigation.tsx
+@@ -1,6 +1,7 @@
+ import { useEffect, useRef, useState, useCallback } from "react";
+ import { ChevronUp, ChevronDown } from "lucide-react";
+ import { useNavigationVisibility } from "@/contexts/NavigationVisibilityContext";
++import { HOME_SECTIONS, trackHomepageCta, type HomeSectionId } from "@/lib/analytics";
+ 
+ 
+ 
+@@ -78,6 +79,11 @@ const ScrollNavigation = () => {
+   }, [collectSections, computeCurrent, show]);
+ 
+   const scrollTo = useCallback((direction: "up" | "down") => {
++    const trackTarget = (id: string) => {
++      if (Object.prototype.hasOwnProperty.call(HOME_SECTIONS, id)) {
++        trackHomepageCta(id as HomeSectionId, direction === "up" ? "chapter_previous" : "chapter_next");
++      }
++    };
+     const sections = sectionsRef.current;
+     if (!sections.length) return;
+     const scrollY = window.scrollY;
+@@ -90,12 +96,14 @@ const ScrollNavigation = () => {
+     if (direction === "up") {
+       // If we're already on the first section but not at the very top, snap to 0
+       if (idx === 0 && scrollY > 0) {
++        trackTarget("heritage");
+         window.scrollTo({ top: 0, behavior: "smooth" });
+         show();
+         return;
+       }
+       const target = sections[idx - 1];
+       if (!target) return;
++      trackTarget(target.id);
+       const targetIdx = idx - 1;
+       let targetTop: number;
+       if (targetIdx === 0) {
+@@ -115,6 +123,7 @@ const ScrollNavigation = () => {
+ 
+     const target = sections[idx + 1];
+     if (!target) return;
++    trackTarget(target.id);
+     const headerHeight = getHeaderHeight();
+     const scrollTarget = document.getElementById(`${target.id}-start`) || target;
+     const targetTop =
+diff --git a/src/lib/analytics.ts b/src/lib/analytics.ts
+index 4b932e9..27e033b 100644
+--- a/src/lib/analytics.ts
++++ b/src/lib/analytics.ts
+@@ -3,6 +3,7 @@
+ export const GA_MEASUREMENT_ID = "G-7ZP3WDHB4L";
+ export const CONSENT_KEY = "alto_analytics_consent"; // "granted" | "denied"
+ export const CONSENT_EVENT = "alto:open-cookie-settings";
++export const CONSENT_CHANGE_EVENT = "alto:analytics-consent-changed";
+ 
+ const ALLOWED_HOSTS = ["altowhisky.com", "www.altowhisky.com"];
+ const BLOCKED_PREFIXES = ["/portal", "/admin", "/invoice", "/auth", "/checkout", "/login", "/signup"];
+@@ -77,6 +78,8 @@ const canTrack = () =>
+   isPublicPath(window.location.pathname) &&
+   getConsent() === "granted";
+ 
++export const canTrackHomepage = () => canTrack() && window.location.pathname === "/";
++
+ const setDisabled = (disabled: boolean) => {
+   (window as unknown as Record<string, unknown>)[DISABLE_KEY] = disabled;
+ };
+@@ -97,7 +100,7 @@ const ensureLoaded = () => {
+   window.dataLayer = window.dataLayer || [];
+   window.gtag = function gtag() {
+     // eslint-disable-next-line prefer-rest-params
+-    window.dataLayer!.push(arguments);
++    window.dataLayer?.push(arguments);
+   };
+   window.gtag("js", new Date());
+   window.gtag("config", GA_MEASUREMENT_ID, {
+@@ -149,6 +152,7 @@ export const setConsent = (value: "granted" | "denied") => {
+   } else {
+     syncTracking();
+   }
++  window.dispatchEvent(new Event(CONSENT_CHANGE_EVENT));
+ };
+ 
+ let lastPath = "";
+@@ -167,3 +171,41 @@ export const trackBookCallClick = () => {
+ export const resetPageViewDedupe = () => {
+   lastPath = "";
+ };
++
++export const HOME_SECTIONS = {
++  heritage: "Alto Whisky",
++  opportunity: "The Opportunity",
++  "why-whisky": "Why Whisky",
++  investment: "The Investment",
++  cask: "Your Cask",
++  process: "The Process",
++  distilleries: "Distilleries",
++  news: "News & Insights",
++  footer: "Footer",
++} as const;
++export type HomeSectionId = keyof typeof HOME_SECTIONS;
++export const CTA_SECTIONS = { ...HOME_SECTIONS, header: "Header" } as const;
++export type CtaSectionId = keyof typeof CTA_SECTIONS;
++export const HOME_CTA_NAMES = [
++  "request_brochure", "speak_to_advisor", "chapter_navigation", "chapter_previous", "chapter_next",
++  "home", "news_insights", "why_whisky", "how_it_works", "contact", "explore_regions",
++  "how_whisky_is_made", "faqs", "privacy_policy", "read_article", "invest",
++] as const;
++export type HomeCtaName = typeof HOME_CTA_NAMES[number];
++
++export const trackHomepageSection = (section: HomeSectionId) => {
++  if (window.location.pathname !== "/" || !Object.prototype.hasOwnProperty.call(HOME_SECTIONS, section) || !syncTracking()) return false;
++  window.gtag?.("event", "section_view", {
++    ...safeContext(), section_id: section, section_name: HOME_SECTIONS[section], page_path: "/",
++  });
++  return true;
++};
++
++export const trackHomepageCta = (section: CtaSectionId, cta: HomeCtaName) => {
++  if (window.location.pathname !== "/" || !Object.prototype.hasOwnProperty.call(CTA_SECTIONS, section) ||
++      !HOME_CTA_NAMES.includes(cta) || !syncTracking()) return false;
++  window.gtag?.("event", "cta_click", {
++    ...safeContext(), section_id: section, section_name: CTA_SECTIONS[section], cta_name: cta, page_path: "/",
++  });
++  return true;
++};
+diff --git a/src/lib/homepageAnalytics.ts b/src/lib/homepageAnalytics.ts
+new file mode 100644
+index 0000000..fa29cc1
+--- /dev/null
++++ b/src/lib/homepageAnalytics.ts
+@@ -0,0 +1,141 @@
++import {
++  CONSENT_CHANGE_EVENT, CTA_SECTIONS, HOME_SECTIONS, canTrackHomepage,
++  trackHomepageCta, trackHomepageSection,
++  type CtaSectionId, type HomeCtaName, type HomeSectionId,
++} from "./analytics";
++
++type SectionFrame = { id: HomeSectionId; height: number; visiblePixels: number };
++
++/** One foreground chapter at a time; ties prefer the later, overlaid chapter. */
++export const foregroundSection = (frames: SectionFrame[], viewportHeight: number): HomeSectionId | null => {
++  let best: SectionFrame | null = null;
++  for (const frame of frames) {
++    if (frame.height <= 0 || frame.visiblePixels < Math.min(frame.height, viewportHeight) / 2) continue;
++    if (!best || frame.visiblePixels >= best.visiblePixels) best = frame;
++  }
++  return best?.id ?? null;
++};
++
++/** Per-mount (homepage visit) dwell state, never persisted or replayed. */
++export const createSectionDwell = (send: (id: HomeSectionId) => boolean) => {
++  const seen = new Set<HomeSectionId>();
++  let current: HomeSectionId | null = null;
++  let started = 0;
++  let timer: ReturnType<typeof setTimeout> | undefined;
++  const cancel = () => {
++    if (timer !== undefined) clearTimeout(timer);
++    timer = undefined;
++    current = null;
++  };
++  return {
++    update(id: HomeSectionId | null, allowed: boolean, recheck: () => void) {
++      if (!allowed || !id || seen.has(id)) { cancel(); return; }
++      if (current !== id) {
++        cancel();
++        current = id;
++        started = Date.now();
++        timer = setTimeout(recheck, 2000);
++        return;
++      }
++      if (Date.now() - started >= 2000) {
++        if (send(id)) seen.add(id);
++        cancel();
++      }
++    },
++    cancel,
++  };
++};
++
++const sectionId = (value: string | undefined): CtaSectionId | null =>
++  value && Object.prototype.hasOwnProperty.call(CTA_SECTIONS, value) ? value as CtaSectionId : null;
++
++const LINK_NAMES: Record<string, HomeCtaName> = {
++  "/": "home", "/news": "news_insights", "/why-whisky": "why_whisky",
++  "/how-it-works": "how_it_works", "/contact": "contact", "/about-whisky": "explore_regions",
++  "/how-whisky-is-made": "how_whisky_is_made", "/faqs": "faqs",
++  "/privacy-policy": "privacy_policy", "/invest": "invest",
++};
++
++/** Only explicit CTA markers and known internal destinations, never visible text. */
++export const homepageCtaFor = (target: Element): { section: CtaSectionId; cta: HomeCtaName } | null => {
++  const control = target.closest<HTMLElement>("a, button");
++  if (!control || control.closest('[role="dialog"], [aria-modal="true"]')) return null;
++  const chapter = sectionId(control.dataset.analyticsChapter);
++  if (chapter && chapter !== "header" && chapter !== "footer") return { section: chapter, cta: "chapter_navigation" };
++  const root = control.closest("header, footer, section");
++  const section = root?.tagName === "HEADER" ? "header" : root?.tagName === "FOOTER" ? "footer" : sectionId(root?.id);
++  if (!section) return null;
++  if (control.dataset.analyticsCta === "request_brochure" || control.dataset.analyticsCta === "speak_to_advisor") {
++    return { section, cta: control.dataset.analyticsCta };
++  }
++  if (control.tagName !== "A") return null;
++  const href = control.getAttribute("href");
++  if (!href) return null;
++  // Exact relative routes only: unknown paths, queries, hashes and external URLs are not events.
++  const cta = LINK_NAMES[href] ?? (/^\/news\/[a-z0-9-]+$/.test(href) ? "read_article" : null);
++  return cta ? { section, cta } : null;
++};
++
++export const startHomepageAnalytics = () => {
++  const roots = Object.keys(HOME_SECTIONS).flatMap((id) => {
++    const element = id === "footer" ? document.querySelector("footer") : document.getElementById(id);
++    return element ? [{ id: id as HomeSectionId, element }] : [];
++  });
++  const dwell = createSectionDwell(trackHomepageSection);
++  let disposed = false;
++  const measure = () => {
++    const height = window.innerHeight;
++    const rects = roots.map((root) => ({ ...root, rect: root.element.getBoundingClientRect(), pixels: 0 }));
++    // Hit-test separate vertical intervals, including overlays. A fixed hero underneath
++    // scrolling content gets no pixels where another root or a dialog is on top.
++    const overlayRects = Array.from(document.querySelectorAll('header, [role="dialog"], [aria-modal="true"]'))
++      .map((el) => el.getBoundingClientRect());
++    const edges = [...new Set([0, height, ...[...rects.map((r) => r.rect), ...overlayRects]
++      .flatMap((r) => [Math.max(0, Math.min(height, r.top)), Math.max(0, Math.min(height, r.bottom))])])].sort((a, b) => a - b);
++    for (let i = 1; i < edges.length; i++) {
++      const top = edges[i - 1];
++      const bottom = edges[i];
++      if (bottom <= top) continue;
++      const front = document.elementFromPoint(window.innerWidth / 2, (top + bottom) / 2);
++      if (!front || front.closest('header, [role="dialog"], [aria-modal="true"]')) continue;
++      const root = rects.find((r) => r.element === front || r.element.contains(front));
++      if (root) root.pixels += bottom - top;
++    }
++    return foregroundSection(rects.map((r) => ({ id: r.id, height: r.rect.height, visiblePixels: r.pixels })), height);
++  };
++  const check = () => {
++    if (disposed) return;
++    const allowed = document.visibilityState === "visible" && canTrackHomepage();
++    dwell.update(allowed ? measure() : null, allowed, check);
++  };
++  const click = (event: MouseEvent) => {
++    if (!(event.target instanceof Element)) return;
++    const attribution = homepageCtaFor(event.target);
++    if (attribution) trackHomepageCta(attribution.section, attribution.cta);
++  };
++  window.addEventListener("scroll", check, { passive: true });
++  window.addEventListener("resize", check);
++  window.addEventListener(CONSENT_CHANGE_EVENT, check);
++  document.addEventListener("visibilitychange", check);
++  document.addEventListener("click", click, true);
++  const resize = new ResizeObserver(check);
++  roots.forEach(({ element }) => resize.observe(element));
++  const mutations = new MutationObserver(check);
++  mutations.observe(document.body, { childList: true, subtree: true });
++  // Covers moving overlays / transitions without relying on IntersectionObserver,
++  // which reports the fixed hero as intersecting even while completely covered.
++  const poll = window.setInterval(check, 100);
++  check();
++  return () => {
++    disposed = true;
++    dwell.cancel();
++    window.clearInterval(poll);
++    resize.disconnect();
++    mutations.disconnect();
++    window.removeEventListener("scroll", check);
++    window.removeEventListener("resize", check);
++    window.removeEventListener(CONSENT_CHANGE_EVENT, check);
++    document.removeEventListener("visibilitychange", check);
++    document.removeEventListener("click", click, true);
++  };
++};
+\ No newline at end of file
+diff --git a/src/pages/Index.tsx b/src/pages/Index.tsx
+index 0d61be0..24a5ede 100644
+--- a/src/pages/Index.tsx
++++ b/src/pages/Index.tsx
+@@ -1,4 +1,6 @@
+ import Seo from "@/components/Seo";
++import { useEffect } from "react";
++import { startHomepageAnalytics } from "@/lib/homepageAnalytics";
+ import Header from "@/components/Header";
+ import ChapterMarker from "@/components/ChapterMarker";
+ import HeroSection from "@/components/HeroSection";
+@@ -24,6 +26,7 @@ const chapters = [
+ ];
+ 
+ const Index = () => {
++  useEffect(startHomepageAnalytics, []);
+   return (
+     <div className="relative">
+ 
+diff --git a/src/test/homepageAnalytics.test.ts b/src/test/homepageAnalytics.test.ts
+new file mode 100644
+index 0000000..53844b5
+--- /dev/null
++++ b/src/test/homepageAnalytics.test.ts
+@@ -0,0 +1,110 @@
++import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
++import { createSectionDwell, foregroundSection, homepageCtaFor, startHomepageAnalytics } from "@/lib/homepageAnalytics";
++import { __setHostForTest, CONSENT_CHANGE_EVENT, setConsent, trackHomepageCta } from "@/lib/analytics";
++
++afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); __setHostForTest(null); });
++
++describe("foreground visibility", () => {
++  it("requires half of the smaller section/viewport height", () => {
++    expect(foregroundSection([{ id: "opportunity", height: 1800, visiblePixels: 399 }], 800)).toBeNull();
++    expect(foregroundSection([{ id: "opportunity", height: 1800, visiblePixels: 400 }], 800)).toBe("opportunity");
++    expect(foregroundSection([{ id: "heritage", height: 380, visiblePixels: 189 }], 800)).toBeNull();
++    expect(foregroundSection([{ id: "heritage", height: 380, visiblePixels: 190 }], 800)).toBe("heritage");
++  });
++  it("chooses only the foreground chapter rather than the covered fixed hero", () => {
++    expect(foregroundSection([
++      { id: "heritage", height: 380, visiblePixels: 0 },
++      { id: "opportunity", height: 1800, visiblePixels: 800 },
++    ], 800)).toBe("opportunity");
++  });
++});
++
++describe("continuous dwell per visit", () => {
++  beforeEach(() => vi.useFakeTimers());
++  it("fires at 2 seconds and deduplicates revisits", () => {
++    const send = vi.fn(() => true);
++    const dwell = createSectionDwell(send);
++    const check = () => dwell.update("cask", true, check);
++    check(); vi.advanceTimersByTime(1999); expect(send).not.toHaveBeenCalled();
++    vi.advanceTimersByTime(1); expect(send).toHaveBeenCalledExactlyOnceWith("cask");
++    dwell.update(null, true, check); check(); vi.advanceTimersByTime(3000);
++    expect(send).toHaveBeenCalledTimes(1);
++    dwell.cancel();
++    const nextVisit = createSectionDwell(send);
++    const nextCheck = () => nextVisit.update("cask", true, nextCheck);
++    nextCheck(); vi.advanceTimersByTime(2000); expect(send).toHaveBeenCalledTimes(2);
++    nextVisit.cancel();
++  });
++  it("late consent starts a new dwell and withdrawal cancels it without replay", () => {
++    const send = vi.fn(() => true); const dwell = createSectionDwell(send);
++    let allowed = false;
++    const check = () => dwell.update("news", allowed, check);
++    check(); vi.advanceTimersByTime(4000); expect(send).not.toHaveBeenCalled();
++    allowed = true; check(); vi.advanceTimersByTime(1500);
++    allowed = false; check(); vi.advanceTimersByTime(3000); expect(send).not.toHaveBeenCalled();
++    allowed = true; check(); vi.advanceTimersByTime(1999); expect(send).not.toHaveBeenCalled();
++    vi.advanceTimersByTime(1); expect(send).toHaveBeenCalledExactlyOnceWith("news"); dwell.cancel();
++  });
++  it.each(["offscreen", "document hidden", "unmount"])("cancels interrupted dwell: %s", () => {
++    const send = vi.fn(() => true); const dwell = createSectionDwell(send);
++    const check = () => dwell.update("process", true, check);
++    check(); vi.advanceTimersByTime(1900); dwell.cancel(); vi.advanceTimersByTime(3000);
++    expect(send).not.toHaveBeenCalled(); check(); vi.advanceTimersByTime(2000);
++    expect(send).toHaveBeenCalledTimes(1); dwell.cancel();
++  });
++});
++
++describe("homepage integration and CTA allowlist", () => {
++  beforeEach(() => {
++    window.history.pushState({}, "", "/"); localStorage.clear(); __setHostForTest("www.altowhisky.com");
++  });
++  it("attributes brochure/advisor, header/footer, links and destination chapters without free text", () => {
++    const fixture = document.createElement("div");
++    fixture.innerHTML = '<header><button data-analytics-cta="request_brochure">personal data</button></header><section id="opportunity"><button data-analytics-cta="speak_to_advisor"></button></section><footer><a href="/privacy-policy"></a></footer><nav><a data-analytics-chapter="investment" href="#investment"></a></nav><section id="news"><a href="/news/example-story"></a><a href="/news?email=a@b.com"></a><button>Request brochure</button></section>';
++    const controls = fixture.querySelectorAll("a, button");
++    expect(homepageCtaFor(controls[0])).toEqual({ section: "header", cta: "request_brochure" });
++    expect(homepageCtaFor(controls[1])).toEqual({ section: "opportunity", cta: "speak_to_advisor" });
++    expect(homepageCtaFor(controls[2])).toEqual({ section: "footer", cta: "privacy_policy" });
++    expect(homepageCtaFor(controls[3])).toEqual({ section: "investment", cta: "chapter_navigation" });
++    expect(homepageCtaFor(controls[4])).toEqual({ section: "news", cta: "read_article" });
++    expect(homepageCtaFor(controls[5])).toBeNull(); expect(homepageCtaFor(controls[6])).toBeNull();
++  });
++  it("gates CTA events by consent, live host, and homepage, using only safe params", () => {
++    const spy = vi.fn(); window.gtag = spy;
++    expect(trackHomepageCta("heritage", "request_brochure")).toBe(false);
++    setConsent("granted"); window.gtag = spy; spy.mockClear();
++    window.history.pushState({}, "", "/?email=a@b.com&token=secret#private");
++    expect(trackHomepageCta("footer", "speak_to_advisor")).toBe(true);
++    expect(spy).toHaveBeenCalledWith("event", "cta_click", expect.objectContaining({
++      section_id: "footer", section_name: "Footer", cta_name: "speak_to_advisor", page_path: "/", page_location: window.location.origin + "/",
++    }));
++    setConsent("denied"); expect(trackHomepageCta("footer", "speak_to_advisor")).toBe(false);
++    setConsent("granted"); __setHostForTest("preview.lovable.app"); expect(trackHomepageCta("header", "home")).toBe(false);
++    __setHostForTest("www.altowhisky.com"); window.history.pushState({}, "", "/news"); expect(trackHomepageCta("header", "home")).toBe(false);
++  });
++  it("separates consent changes from opening settings", () => {
++    const changed = vi.fn(); const opened = vi.fn();
++    window.addEventListener(CONSENT_CHANGE_EVENT, changed); window.addEventListener("alto:open-cookie-settings", opened);
++    setConsent("granted"); setConsent("denied"); expect(changed).toHaveBeenCalledTimes(2); expect(opened).not.toHaveBeenCalled();
++    window.removeEventListener(CONSENT_CHANGE_EVENT, changed); window.removeEventListener("alto:open-cookie-settings", opened);
++  });
++  it("hit-tests the overlaid hero, supports late consent and cancels hidden/unmounted timers", () => {
++    vi.useFakeTimers();
++    const fixture = document.createElement("div"); fixture.innerHTML = '<section id="heritage"></section><section id="opportunity"></section>';
++    document.body.append(fixture);
++    const hero = fixture.children[0]; const opportunity = fixture.children[1];
++    vi.spyOn(hero, "getBoundingClientRect").mockReturnValue({ top: 0, bottom: 380, height: 380 } as DOMRect);
++    vi.spyOn(opportunity, "getBoundingClientRect").mockReturnValue({ top: 0, bottom: 2000, height: 2000 } as DOMRect);
++    Object.defineProperty(document, "elementFromPoint", { configurable: true, value: () => opportunity });
++    vi.stubGlobal("ResizeObserver", class { observe() {} disconnect() {} });
++    let visible = "visible"; vi.spyOn(document, "visibilityState", "get").mockImplementation(() => visible as DocumentVisibilityState);
++    const stop = startHomepageAnalytics(); const spy = vi.fn();
++    vi.advanceTimersByTime(3000); setConsent("granted"); window.gtag = spy;
++    vi.advanceTimersByTime(1900); visible = "hidden"; document.dispatchEvent(new Event("visibilitychange"));
++    vi.advanceTimersByTime(2500); expect(spy.mock.calls.filter((c) => c[1] === "section_view")).toHaveLength(0);
++    visible = "visible"; document.dispatchEvent(new Event("visibilitychange")); vi.advanceTimersByTime(2000);
++    expect(spy.mock.calls.filter((c) => c[1] === "section_view").map((c) => c[2].section_id)).toEqual(["opportunity"]);
++    stop(); vi.advanceTimersByTime(3000); expect(spy.mock.calls.filter((c) => c[1] === "section_view")).toHaveLength(1);
++    fixture.remove(); vi.unstubAllGlobals();
++  });
++});
+\ No newline at end of file

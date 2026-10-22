@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterAll } from "vitest";
 import {
-  isAllowedHost, isPublicPath, sanitizeUrl, sanitizeReferrer, setConsent,
+  isAllowedHost, isPublicPath, sanitizeUrl, sanitizeReferrer,
   syncTracking, disableTracking, isDisabled, __setHostForTest,
 } from "@/lib/analytics";
 
@@ -35,7 +35,7 @@ describe("analytics scope", () => {
   });
 });
 
-describe("consent and route gating", () => {
+describe("route gating without consent prompts", () => {
   beforeEach(() => {
     __setHostForTest("www.altowhisky.com");
     window.history.pushState({}, "", "/");
@@ -43,18 +43,19 @@ describe("consent and route gating", () => {
   });
   afterAll(() => __setHostForTest(null));
 
-  it("re-enables after denied then granted", () => {
-    setConsent("granted");
+  it("initialises on a fresh visit with no stored choice", () => {
+    expect(syncTracking()).toBe(true);
     expect(isDisabled()).toBe(false);
-    setConsent("denied");
-    expect(isDisabled()).toBe(true);
-    setConsent("granted");
+  });
+
+  it("initialises despite a legacy denied choice", () => {
+    localStorage.setItem("alto_analytics_consent", "denied");
+    expect(syncTracking()).toBe(true);
     expect(isDisabled()).toBe(false);
   });
 
   it("disables on private route and re-enables on return to public", () => {
-    setConsent("granted");
-    expect(isDisabled()).toBe(false);
+    expect(syncTracking()).toBe(true);
     window.history.pushState({}, "", "/portal/my-casks");
     disableTracking(); // marketing layout unmounts
     expect(isDisabled()).toBe(true);
@@ -67,7 +68,7 @@ describe("consent and route gating", () => {
 
   it("stays off on preview hosts", () => {
     __setHostForTest("id-preview--x.lovable.app");
-    setConsent("granted");
+    expect(syncTracking()).toBe(false);
     expect(isDisabled()).toBe(true);
   });
 });

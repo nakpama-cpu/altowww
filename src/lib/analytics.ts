@@ -1,9 +1,6 @@
-// GA4 for the public marketing site only. Loads nothing until the visitor
-// accepts analytics, and never runs on preview hosts or portal/admin/invoice paths.
+// GA4 for the public marketing site only. Runs automatically on the live
+// domains and never on preview hosts or portal/admin/invoice paths.
 export const GA_MEASUREMENT_ID = "G-7ZP3WDHB4L";
-export const CONSENT_KEY = "alto_analytics_consent"; // "granted" | "denied"
-export const CONSENT_EVENT = "alto:open-cookie-settings";
-export const CONSENT_CHANGE_EVENT = "alto:analytics-consent-changed";
 
 const ALLOWED_HOSTS = ["altowhisky.com", "www.altowhisky.com"];
 const BLOCKED_PREFIXES = ["/portal", "/admin", "/invoice", "/auth", "/checkout", "/login", "/signup"];
@@ -63,22 +60,10 @@ export const sanitizeReferrer = (raw: string): string => {
   }
 };
 
-export const getConsent = (): "granted" | "denied" | null => {
-  try {
-    const v = localStorage.getItem(CONSENT_KEY);
-    return v === "granted" || v === "denied" ? v : null;
-  } catch {
-    return null;
-  }
-};
-
 const canTrack = () =>
   typeof window !== "undefined" &&
   isAllowedHost(currentHost()) &&
-  isPublicPath(window.location.pathname) &&
-  getConsent() === "granted";
-
-export const canTrackHomepage = () => canTrack() && window.location.pathname === "/";
+  isPublicPath(window.location.pathname);
 
 const setDisabled = (disabled: boolean) => {
   (window as unknown as Record<string, unknown>)[DISABLE_KEY] = disabled;
@@ -100,7 +85,7 @@ const ensureLoaded = () => {
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag() {
     // eslint-disable-next-line prefer-rest-params
-    window.dataLayer?.push(arguments);
+    window.dataLayer!.push(arguments);
   };
   window.gtag("js", new Date());
   window.gtag("config", GA_MEASUREMENT_ID, {
@@ -115,7 +100,7 @@ const ensureLoaded = () => {
   document.head.appendChild(s);
 };
 
-/** Enable GA only on allowed host + public path + consent; otherwise disable immediately. */
+/** Enable GA only on allowed host + public path; otherwise disable immediately. */
 export const syncTracking = (): boolean => {
   if (typeof window === "undefined") return false;
   if (!canTrack()) {
@@ -133,28 +118,6 @@ export const disableTracking = () => {
   if (typeof window !== "undefined") setDisabled(true);
 };
 
-export const setConsent = (value: "granted" | "denied") => {
-  try {
-    localStorage.setItem(CONSENT_KEY, value);
-  } catch {
-    /* ignore */
-  }
-  if (value === "denied") {
-    setDisabled(true);
-    document.cookie.split(";").forEach((c) => {
-      const name = c.split("=")[0].trim();
-      if (name.startsWith("_ga")) {
-        for (const d of ["", "; domain=.altowhisky.com"]) {
-          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${d}`;
-        }
-      }
-    });
-  } else {
-    syncTracking();
-  }
-  window.dispatchEvent(new Event(CONSENT_CHANGE_EVENT));
-};
-
 let lastPath = "";
 export const trackPageView = (path: string) => {
   if (!syncTracking() || path === lastPath) return;
@@ -167,45 +130,7 @@ export const trackBookCallClick = () => {
   window.gtag?.("event", "book_call_click", { ...safeContext(), page_path: window.location.pathname });
 };
 
-/** Reset de-dupe so the current page is counted again (after consent or re-entering public pages). */
+/** Reset de-dupe so the current page is counted again (after re-entering public pages). */
 export const resetPageViewDedupe = () => {
   lastPath = "";
-};
-
-export const HOME_SECTIONS = {
-  heritage: "Alto Whisky",
-  opportunity: "The Opportunity",
-  "why-whisky": "Why Whisky",
-  investment: "The Investment",
-  cask: "Your Cask",
-  process: "The Process",
-  distilleries: "Distilleries",
-  news: "News & Insights",
-  footer: "Footer",
-} as const;
-export type HomeSectionId = keyof typeof HOME_SECTIONS;
-export const CTA_SECTIONS = { ...HOME_SECTIONS, header: "Header" } as const;
-export type CtaSectionId = keyof typeof CTA_SECTIONS;
-export const HOME_CTA_NAMES = [
-  "request_brochure", "speak_to_advisor", "chapter_navigation", "chapter_previous", "chapter_next",
-  "home", "news_insights", "why_whisky", "how_it_works", "contact", "explore_regions",
-  "how_whisky_is_made", "faqs", "privacy_policy", "read_article", "invest",
-] as const;
-export type HomeCtaName = typeof HOME_CTA_NAMES[number];
-
-export const trackHomepageSection = (section: HomeSectionId) => {
-  if (window.location.pathname !== "/" || !Object.prototype.hasOwnProperty.call(HOME_SECTIONS, section) || !syncTracking()) return false;
-  window.gtag?.("event", "section_view", {
-    ...safeContext(), section_id: section, section_name: HOME_SECTIONS[section], page_path: "/",
-  });
-  return true;
-};
-
-export const trackHomepageCta = (section: CtaSectionId, cta: HomeCtaName) => {
-  if (window.location.pathname !== "/" || !Object.prototype.hasOwnProperty.call(CTA_SECTIONS, section) ||
-      !HOME_CTA_NAMES.includes(cta) || !syncTracking()) return false;
-  window.gtag?.("event", "cta_click", {
-    ...safeContext(), section_id: section, section_name: CTA_SECTIONS[section], cta_name: cta, page_path: "/",
-  });
-  return true;
 };

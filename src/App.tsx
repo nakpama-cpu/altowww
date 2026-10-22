@@ -8,7 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { NavigationVisibilityProvider } from "@/contexts/NavigationVisibilityContext";
 import ScrollNavigation from "@/components/ScrollNavigation";
-import AnalyticsConsent from "@/components/AnalyticsConsent";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 import Index from "./pages/Index.tsx";
 import HowItWorks from "./pages/HowItWorks.tsx";
 import WhyWhisky from "./pages/WhyWhisky.tsx";
@@ -29,7 +29,7 @@ const MarketingLayout = () => {
     <NavigationVisibilityProvider>
       <Outlet />
       {pathname === "/" && <ScrollNavigation />}
-      <AnalyticsConsent />
+      <AnalyticsTracker />
     </NavigationVisibilityProvider>
   );
 };
