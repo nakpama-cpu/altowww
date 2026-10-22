@@ -100,7 +100,7 @@ const ensureLoaded = () => {
   document.head.appendChild(s);
 };
 
-/** Enable GA only on allowed host + public path + consent; otherwise disable immediately. */
+/** Enable GA only on allowed host + public path; otherwise disable immediately. */
 export const syncTracking = (): boolean => {
   if (typeof window === "undefined") return false;
   if (!canTrack()) {
