@@ -1,8 +1,6 @@
-// GA4 for the public marketing site only. Loads nothing until the visitor
-// accepts analytics, and never runs on preview hosts or portal/admin/invoice paths.
+// GA4 for the public marketing site only. Runs automatically on the live
+// domains and never on preview hosts or portal/admin/invoice paths.
 export const GA_MEASUREMENT_ID = "G-7ZP3WDHB4L";
-export const CONSENT_KEY = "alto_analytics_consent"; // "granted" | "denied"
-export const CONSENT_EVENT = "alto:open-cookie-settings";
 
 const ALLOWED_HOSTS = ["altowhisky.com", "www.altowhisky.com"];
 const BLOCKED_PREFIXES = ["/portal", "/admin", "/invoice", "/auth", "/checkout", "/login", "/signup"];
@@ -62,20 +60,10 @@ export const sanitizeReferrer = (raw: string): string => {
   }
 };
 
-export const getConsent = (): "granted" | "denied" | null => {
-  try {
-    const v = localStorage.getItem(CONSENT_KEY);
-    return v === "granted" || v === "denied" ? v : null;
-  } catch {
-    return null;
-  }
-};
-
 const canTrack = () =>
   typeof window !== "undefined" &&
   isAllowedHost(currentHost()) &&
-  isPublicPath(window.location.pathname) &&
-  getConsent() === "granted";
+  isPublicPath(window.location.pathname);
 
 const setDisabled = (disabled: boolean) => {
   (window as unknown as Record<string, unknown>)[DISABLE_KEY] = disabled;
@@ -130,27 +118,6 @@ export const disableTracking = () => {
   if (typeof window !== "undefined") setDisabled(true);
 };
 
-export const setConsent = (value: "granted" | "denied") => {
-  try {
-    localStorage.setItem(CONSENT_KEY, value);
-  } catch {
-    /* ignore */
-  }
-  if (value === "denied") {
-    setDisabled(true);
-    document.cookie.split(";").forEach((c) => {
-      const name = c.split("=")[0].trim();
-      if (name.startsWith("_ga")) {
-        for (const d of ["", "; domain=.altowhisky.com"]) {
-          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${d}`;
-        }
-      }
-    });
-  } else {
-    syncTracking();
-  }
-};
-
 let lastPath = "";
 export const trackPageView = (path: string) => {
   if (!syncTracking() || path === lastPath) return;
@@ -163,7 +130,7 @@ export const trackBookCallClick = () => {
   window.gtag?.("event", "book_call_click", { ...safeContext(), page_path: window.location.pathname });
 };
 
-/** Reset de-dupe so the current page is counted again (after consent or re-entering public pages). */
+/** Reset de-dupe so the current page is counted again (after re-entering public pages). */
 export const resetPageViewDedupe = () => {
   lastPath = "";
 };
