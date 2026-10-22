@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { openCookieSettings } from "@/components/AnalyticsConsent";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 interface FooterSectionProps {
@@ -66,6 +67,7 @@ const FooterSection = ({ hideCta = false, lightCta = false, hideBrochure = false
                 <Link to="/how-whisky-is-made" className="font-body text-sm text-secondary-foreground hover:text-primary transition-colors">How Whisky is Made</Link>
                 <Link to="/faqs" className="font-body text-sm text-secondary-foreground hover:text-primary transition-colors">FAQs</Link>
                 <Link to="/privacy-policy" className="font-body text-sm text-secondary-foreground hover:text-primary transition-colors">Privacy Policy</Link>
+                <button type="button" onClick={openCookieSettings} className="text-left font-body text-sm text-secondary-foreground hover:text-primary transition-colors">Cookie settings</button>
               </div>
             </div>
             {!hideBrochure && (

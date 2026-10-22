@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import altoLogo from "@/assets/alto-logo.png";
 import warehouseCasks from "@/assets/warehouse-casks.jpg";
 import { GHL_PUBLIC_CALENDAR_URL } from "@/config/booking";
+import { trackBookCallClick } from "@/lib/analytics";
+import { openCookieSettings } from "@/components/AnalyticsConsent";
 
 const GHL_EMBED_SCRIPT_SRC = "https://link.msgsndr.com/js/form_embed.js";
 const GHL_IFRAME_ID = "XszmpWdESN9t1YBKvA1L_1790728633099";
@@ -93,7 +95,10 @@ const BookACall = () => {
                 </p>
                 <Button
                   type="button"
-                  onClick={() => setCalendarOpen(true)}
+                  onClick={() => {
+                    trackBookCallClick();
+                    setCalendarOpen(true);
+                  }}
                   className="mt-7 h-12 rounded-none px-7 font-body text-xs uppercase tracking-[0.2em]"
                 >
                   View available times
@@ -131,6 +136,7 @@ const BookACall = () => {
           </p>
           <p className="mt-5 font-body text-xs text-secondary-foreground/60">
             © 2026 Alto Whisky. All rights reserved.
+            <button type="button" onClick={openCookieSettings} className="ml-4 underline underline-offset-4 hover:text-primary">Cookie settings</button>
           </p>
         </div>
       </footer>
