@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { openCookieSettings } from "@/components/AnalyticsConsent";
 import BrochureButton, { ContactButton } from "@/components/BrochureButton";
 
 interface FooterSectionProps {
