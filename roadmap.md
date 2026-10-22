@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Add and verify consent-gated homepage section views and allowlisted CTA attribution; leave unpublished.
+- [x] Add and verify consent-gated homepage section views and allowlisted CTA attribution; leave unpublished.
 
 - [x] Activate and verify the supplied GoHighLevel calendar on `/book-a-call` across desktop, tablet, and mobile.
 - [x] Restyle `/book-a-call` as an Alto-branded guide continuation with the calendar in a modal.
