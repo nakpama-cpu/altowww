@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   CONSENT_EVENT,
+  disableTracking,
   getConsent,
   isAllowedHost,
   resetPageViewDedupe,
@@ -19,7 +20,11 @@ const AnalyticsConsent = () => {
     if (getConsent() === null && isAllowedHost(window.location.hostname)) setOpen(true);
     const reopen = () => setOpen(true);
     window.addEventListener(CONSENT_EVENT, reopen);
-    return () => window.removeEventListener(CONSENT_EVENT, reopen);
+    return () => {
+      window.removeEventListener(CONSENT_EVENT, reopen);
+      disableTracking();
+      resetPageViewDedupe();
+    };
   }, []);
 
   useEffect(() => {
@@ -48,7 +53,7 @@ const AnalyticsConsent = () => {
     >
       <p id="analytics-consent-title" className="display-heading text-xl">Analytics cookies</p>
       <p className="mt-2 font-body text-sm leading-6 text-secondary-foreground/75">
-        With your permission we use Google Analytics to understand how visitors use our website. No analytics are collected unless you accept.
+        With your permission we use Google Analytics to understand how visitors use our website. Google Analytics only runs if you accept.
         {current && <> Current choice: {current === "granted" ? "accepted" : "rejected"}.</>}
       </p>
       <div className="mt-4 flex flex-wrap gap-3">
