@@ -78,6 +78,8 @@ const canTrack = () =>
   isPublicPath(window.location.pathname) &&
   getConsent() === "granted";
 
+export const canTrackHomepage = () => canTrack() && window.location.pathname === "/";
+
 const setDisabled = (disabled: boolean) => {
   (window as unknown as Record<string, unknown>)[DISABLE_KEY] = disabled;
 };

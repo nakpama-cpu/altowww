@@ -1,5 +1,5 @@
 import {
-  CONSENT_CHANGE_EVENT, CTA_SECTIONS, HOME_SECTIONS, syncTracking,
+  CONSENT_CHANGE_EVENT, CTA_SECTIONS, HOME_SECTIONS, canTrackHomepage,
   trackHomepageCta, trackHomepageSection,
   type CtaSectionId, type HomeCtaName, type HomeSectionId,
 } from "./analytics";
@@ -105,7 +105,7 @@ export const startHomepageAnalytics = () => {
   };
   const check = () => {
     if (disposed) return;
-    const allowed = document.visibilityState === "visible" && syncTracking();
+    const allowed = document.visibilityState === "visible" && canTrackHomepage();
     dwell.update(allowed ? measure() : null, allowed, check);
   };
   const click = (event: MouseEvent) => {
