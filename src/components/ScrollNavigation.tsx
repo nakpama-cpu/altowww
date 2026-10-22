@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { useNavigationVisibility } from "@/contexts/NavigationVisibilityContext";
-import { HOME_SECTIONS, trackHomepageCta, type HomeSectionId } from "@/lib/analytics";
 
 
 
@@ -79,11 +78,6 @@ const ScrollNavigation = () => {
   }, [collectSections, computeCurrent, show]);
 
   const scrollTo = useCallback((direction: "up" | "down") => {
-    const trackTarget = (id: string) => {
-      if (Object.prototype.hasOwnProperty.call(HOME_SECTIONS, id)) {
-        trackHomepageCta(id as HomeSectionId, direction === "up" ? "chapter_previous" : "chapter_next");
-      }
-    };
     const sections = sectionsRef.current;
     if (!sections.length) return;
     const scrollY = window.scrollY;
@@ -96,14 +90,12 @@ const ScrollNavigation = () => {
     if (direction === "up") {
       // If we're already on the first section but not at the very top, snap to 0
       if (idx === 0 && scrollY > 0) {
-        trackTarget("heritage");
         window.scrollTo({ top: 0, behavior: "smooth" });
         show();
         return;
       }
       const target = sections[idx - 1];
       if (!target) return;
-      trackTarget(target.id);
       const targetIdx = idx - 1;
       let targetTop: number;
       if (targetIdx === 0) {
@@ -123,7 +115,6 @@ const ScrollNavigation = () => {
 
     const target = sections[idx + 1];
     if (!target) return;
-    trackTarget(target.id);
     const headerHeight = getHeaderHeight();
     const scrollTarget = document.getElementById(`${target.id}-start`) || target;
     const targetTop =
