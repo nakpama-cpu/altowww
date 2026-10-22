@@ -192,7 +192,7 @@ export const HOME_CTA_NAMES = [
 export type HomeCtaName = typeof HOME_CTA_NAMES[number];
 
 export const trackHomepageSection = (section: HomeSectionId) => {
-  if (window.location.pathname !== "/" || !Object.hasOwn(HOME_SECTIONS, section) || !syncTracking()) return false;
+  if (window.location.pathname !== "/" || !Object.prototype.hasOwnProperty.call(HOME_SECTIONS, section) || !syncTracking()) return false;
   window.gtag?.("event", "section_view", {
     ...safeContext(), section_id: section, section_name: HOME_SECTIONS[section], page_path: "/",
   });
@@ -200,7 +200,7 @@ export const trackHomepageSection = (section: HomeSectionId) => {
 };
 
 export const trackHomepageCta = (section: CtaSectionId, cta: HomeCtaName) => {
-  if (window.location.pathname !== "/" || !Object.hasOwn(CTA_SECTIONS, section) ||
+  if (window.location.pathname !== "/" || !Object.prototype.hasOwnProperty.call(CTA_SECTIONS, section) ||
       !HOME_CTA_NAMES.includes(cta) || !syncTracking()) return false;
   window.gtag?.("event", "cta_click", {
     ...safeContext(), section_id: section, section_name: CTA_SECTIONS[section], cta_name: cta, page_path: "/",
