@@ -1,7 +1,7 @@
 // Fires a Meta Pixel "RegisteredVisit" event for signed-in users, with
 // advanced matching (SHA-256 hashed email) so registered users can be
 // identified/segmented in Meta Events Manager.
-const PIXEL_ID = "1680254689736687";
+const PIXEL_ID = "1942174793173428";
 
 declare global {
   interface Window {
