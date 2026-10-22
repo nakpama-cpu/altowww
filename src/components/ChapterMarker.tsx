@@ -51,6 +51,7 @@ const ChapterMarker = ({ chapters }: ChapterMarkerProps) => {
         <a
           key={id}
           href={`#${id}`}
+          data-analytics-chapter={id}
           onClick={(e) => {
             e.preventDefault();
             if (index === 0) {

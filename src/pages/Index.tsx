@@ -1,4 +1,6 @@
 import Seo from "@/components/Seo";
+import { useEffect } from "react";
+import { startHomepageAnalytics } from "@/lib/homepageAnalytics";
 import Header from "@/components/Header";
 import ChapterMarker from "@/components/ChapterMarker";
 import HeroSection from "@/components/HeroSection";
@@ -24,6 +26,7 @@ const chapters = [
 ];
 
 const Index = () => {
+  useEffect(startHomepageAnalytics, []);
   return (
     <div className="relative">
 
