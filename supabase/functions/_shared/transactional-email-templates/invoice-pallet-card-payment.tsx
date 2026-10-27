@@ -74,40 +74,38 @@ const Email = ({
         </Text>
 
         <Text style={label}>PALLET {palletNumber} · YOUR PURCHASE</Text>
-        <Row style={itemRow}>
-          <Column>
-            <Text style={itemTitle}>{caskTitle}</Text>
-            <Text style={itemDetail}>{caskDetail}</Text>
-            <Text style={itemDetail}>{distilled}</Text>
-            <Text style={itemDetail}>
-              Qty {quantity} · Unit price <s style={strike}>{money(listPrice)}</s>{' '}
-              <span style={copperText}>{money(unitPrice)}</span>
-            </Text>
-          </Column>
-          <Column style={{ textAlign: 'right' as const, width: '110px' }}>
-            <Text style={itemStrikeAmount}>{money(listPrice * quantity)}</Text>
-            <Text style={itemAmountCopper}>{money(unitPrice * quantity)}</Text>
-          </Column>
-        </Row>
-        <Hr style={hr} />
-        <Row>
-          <Column><Text style={totalLabel}>Subtotal</Text></Column>
-          <Column style={{ textAlign: 'right' as const }}><Text style={totalLabel}>{money(subtotal)}</Text></Column>
-        </Row>
-        <Row>
-          <Column><Text style={discount}>Discount</Text></Column>
-          <Column style={{ textAlign: 'right' as const }}><Text style={discount}>−{money(discountAmount)}</Text></Column>
-        </Row>
-        <Row>
-          <Column><Text style={discount}>Deposit received</Text></Column>
-          <Column style={{ textAlign: 'right' as const }}><Text style={discount}>−{money(depositAmount)}</Text></Column>
-        </Row>
-        <Row>
-          <Column><Text style={grandLabel}>Total due</Text></Column>
-          <Column style={{ textAlign: 'right' as const }}><Text style={grandValue}>{money(total)}</Text></Column>
-        </Row>
+        <table role="presentation" cellPadding={0} cellSpacing={0} border={0} style={{ width: '100%', borderCollapse: 'collapse' as const, borderBottom: '1px solid hsl(0, 0%, 92%)' }}>
+          <tbody>
+            <tr>
+              <td style={{ paddingBottom: '6px', verticalAlign: 'top' as const }}>
+                <p style={pTitle}>{caskTitle}</p>
+                <p style={pDetail}>{caskDetail}</p>
+                <p style={pDetail}>{distilled}</p>
+                <p style={{ ...pDetail, margin: '0 0 8px' }}>
+                  Qty {quantity} · Unit price <s style={strike}>{money(listPrice)}</s>{' '}
+                  <span style={copperText}>{money(unitPrice)}</span>
+                </p>
+              </td>
+              <td style={{ textAlign: 'right' as const, width: '110px', verticalAlign: 'top' as const }}>
+                <p style={{ ...itemStrikeAmount, margin: '8px 0 0' }}>{money(listPrice * quantity)}</p>
+                <p style={itemAmountCopper}>{money(unitPrice * quantity)}</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table role="presentation" cellPadding={0} cellSpacing={0} border={0} style={{ width: '100%', borderCollapse: 'collapse' as const, marginTop: '14px', fontSize: '13px' }}>
+          <tbody>
+            <tr><td style={tGrey}>Subtotal</td><td style={{ ...tGrey, textAlign: 'right' as const }}>{money(subtotal)}</td></tr>
+            <tr><td style={tCopper}>Discount</td><td style={{ ...tCopper, textAlign: 'right' as const }}>−{money(discountAmount)}</td></tr>
+            <tr><td style={tGrey}>Deposit received</td><td style={{ ...tGrey, textAlign: 'right' as const }}>−{money(depositAmount)}</td></tr>
+            <tr>
+              <td style={{ fontSize: '15px', color: navy, paddingTop: '10px', fontWeight: 600 as const }}>Total due</td>
+              <td style={{ textAlign: 'right' as const, fontSize: '18px', color: copper, paddingTop: '10px', fontWeight: 600 as const }}>{money(total)}</td>
+            </tr>
+          </tbody>
+        </table>
 
-        <Section style={{ textAlign: 'center' as const, margin: '24px 0 8px' }}>
+        <Section style={{ textAlign: 'center' as const, margin: '24px 0' }}>
           <Button style={button} href={paymentUrl}>Pay {whole(total)} securely</Button>
         </Section>
 
@@ -311,3 +309,7 @@ const sigAddress = {
   marginTop: '8px',
   lineHeight: '1.5',
 }
+const pTitle = { fontSize: '15px', color: navy, margin: '8px 0 2px', fontWeight: 600 as const }
+const pDetail = { fontSize: '12px', color: 'hsl(0, 0%, 45%)', margin: '0 0 4px' }
+const tGrey = { fontSize: '13px', color: 'hsl(0, 0%, 35%)', padding: '2px 0' }
+const tCopper = { fontSize: '13px', color: copper, padding: '2px 0' }
