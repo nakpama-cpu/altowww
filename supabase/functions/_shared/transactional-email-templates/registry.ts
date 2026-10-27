@@ -5,6 +5,7 @@ import { template as websiteLaunchAnnouncement } from './website-launch-announce
 import { template as invoiceBankTransfer } from './invoice-bank-transfer.tsx'
 import { template as adminInvoicePaymentConfirmed } from './admin-invoice-payment-confirmed.tsx'
 import { template as adminLowStock } from './admin-low-stock.tsx'
+import { template as invoicePalletCardPayment } from './invoice-pallet-card-payment.tsx'
 
 export interface TemplateEntry {
   component: (props: any) => React.ReactElement
@@ -21,4 +22,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'invoice-bank-transfer': invoiceBankTransfer,
   'admin-invoice-payment-confirmed': adminInvoicePaymentConfirmed,
   'admin-low-stock': adminLowStock,
+  'invoice-pallet-card-payment': invoicePalletCardPayment,
 }
