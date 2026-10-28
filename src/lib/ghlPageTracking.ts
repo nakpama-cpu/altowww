@@ -35,6 +35,13 @@ const browserSession = (): string => {
   return sessionId;
 };
 
+const currentPageTitle = (path: string): string => {
+  const heading = document.querySelector("h1");
+  const title = heading?.textContent?.trim() || heading?.querySelector("img")?.alt?.trim();
+  return title?.replace(/\s+/g, " ") || (path === "/" ? "Home" : path
+    .split(/[/-]+/).filter(Boolean).map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" "));
+};
+
 /** Thin native page-event sender, with no vendor script, form observer or replay queue. */
 export const trackGhlPageView = (path: string): void => {
   if (typeof window === "undefined" || !isAllowedHost(window.location.hostname) ||
@@ -52,7 +59,7 @@ export const trackGhlPageView = (path: string): void => {
       timestamp: Date.now(),
       url: sanitizeUrl(window.location.href),
       path,
-      title: document.title,
+      title: currentPageTitle(path),
       referrer: sanitizeReferrer(document.referrer),
       userAgent,
       properties: { deviceType: /iPad|tablet/i.test(userAgent) ? "tablet" : /Mobi|Android/i.test(userAgent) ? "mobile" : "desktop" },
