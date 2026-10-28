@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { disableTracking, resetPageViewDedupe, trackPageView } from "@/lib/analytics";
+import { resetGhlPageViewDedupe, trackGhlPageView } from "@/lib/ghlPageTracking";
 
 /** page_view tracking with no UI. Mounted only inside the public marketing layout. */
 const AnalyticsTracker = () => {
@@ -9,11 +10,15 @@ const AnalyticsTracker = () => {
   useEffect(() => () => {
     disableTracking();
     resetPageViewDedupe();
+    resetGhlPageViewDedupe();
   }, []);
 
   useEffect(() => {
     // Wait a tick so the page's <title> is set by Seo.
-    const t = window.setTimeout(() => trackPageView(pathname), 50);
+    const t = window.setTimeout(() => {
+      trackPageView(pathname);
+      trackGhlPageView(pathname);
+    }, 50);
     return () => window.clearTimeout(t);
   }, [pathname]);
 
