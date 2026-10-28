@@ -103,12 +103,24 @@ describe("native GHL page events", () => {
     expect(payload).toMatchObject({
       type: "external_script_page_view", trackingId: "tk_2751e8cae0ce412dac03062b84744fae",
       contactId: ID, path: "/book-a-call", url: "https://www.altowhisky.com/book-a-call?utm_source=ig&utm_id=123456",
-      referrer: "https://altowhisky.com", title: document.title, userAgent: navigator.userAgent,
+      referrer: "https://altowhisky.com", title: "Book A Call", userAgent: navigator.userAgent,
       properties: { deviceType: "desktop" },
     });
     expect(payload.timestamp).toBeGreaterThan(0);
     expect(options.body).not.toContain("person@example.com");
     expect(options.body).not.toContain("private-token");
+  });
+  it.each([
+    [<h1>How It Works</h1>, "How It Works"],
+    [<h1><img alt="How It Works" /></h1>, "How It Works"],
+  ])("uses the current rendered h1 rather than the previous route's document.title", (heading, expected) => {
+    location("/how-it-works");
+    vi.spyOn(document, "title", "get").mockReturnValue("Why Whisky");
+    render(heading);
+    trackGhlPageView("/how-it-works");
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({
+      title: expected, path: "/how-it-works", url: "https://www.altowhisky.com/how-it-works",
+    });
   });
   it("omits expired contact identity rather than backfilling events", () => {
     vi.spyOn(document, "cookie", "get").mockReturnValue(cookie(ID, Date.now() - 1));
