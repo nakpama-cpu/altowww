@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const source = readFileSync('supabase/functions/_shared/transactional-email-templates/invoice-pallet-2-card-payment.tsx', 'utf8');
-const defaultNumber = (name: string) => Number(source.match(new RegExp(`${name} = (\\d+)`))?.[1]);
+const defaultNumber = (name: string) => Number(source.match(new RegExp(`\\b${name} = (\\d+)`))?.[1]);
 
 describe('Mark’s second pallet invoice email', () => {
   it('covers six casks at £3,885 each, totalling £23,310', () => {
