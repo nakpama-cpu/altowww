@@ -1,5 +1,9 @@
 # Roadmap
 
+- [ ] Create Mark’s Pallet 2 paid receipt dated 31 October 2026; payment method not yet supplied.
+- [ ] Create matching A4 Pallet 3 invoice AW-2026-0203 for six Lindores Abbey casks, £14,988.
+- [ ] Save separate branded Pallet 3 app email; payment link pending Nicholas creating it from the invoice.
+
 - [x] Add and verify narrowly scoped GHL public page visits with guide-cookie identity; leave unpublished.
 
 - [x] Activate and verify the supplied GoHighLevel calendar on `/book-a-call` across desktop, tablet, and mobile.
