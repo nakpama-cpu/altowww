@@ -17,8 +17,7 @@ describe('Mark’s third pallet invoice email', () => {
     expect(defaultNumber('subtotal') - defaultNumber('discountAmount')).toBe(14988);
     expect(defaultNumber('depositAmount')).toBe(0);
   });
-  it('does not reuse an earlier pallet payment link while awaiting the new one', () => {
-    expect(source.match(/paymentUrl = '([^']*)'/)?.[1]).toBe('');
-    expect(source).not.toContain('buy.stripe.com/');
+  it('uses Nicholas’s supplied Pallet 3 payment link, not an earlier pallet link', () => {
+    expect(source.match(/paymentUrl = '([^']*)'/)?.[1]).toBe('https://buy.stripe.com/8x2bJ21hG4Oy4it3QJco002');
   });
 });

@@ -43,7 +43,7 @@ const Email = ({
   discountAmount = 1212,
   depositAmount = 0,
   total = 14988,
-  paymentUrl = '',
+  paymentUrl = 'https://buy.stripe.com/8x2bJ21hG4Oy4it3QJco002',
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
