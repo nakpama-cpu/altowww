@@ -117,6 +117,7 @@ const header = { backgroundColor: navy, padding: '24px', textAlign: 'center' as 
 const logo = { display: 'block', margin: '0 auto', height: 'auto' }
 const h1 = { fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '30px', fontWeight: 500 as const, color: navy, margin: '0 0 20px', lineHeight: '1.2' }
 const text = { fontSize: '15px', color: 'hsl(0, 0%, 25%)', lineHeight: '1.6', margin: '0 0 18px' }
+const bold = { fontWeight: 700 as const, color: 'hsl(220, 26%, 14%)' }
 const sigLead = {
   fontFamily: "'Inter', Arial, sans-serif",
   fontSize: '15px',
