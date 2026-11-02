@@ -30,4 +30,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'payment-received-portfolio': paymentReceivedPortfolio,
   'invoice-pallet-2-card-payment': invoicePallet2CardPayment,
   'invoice-pallet-3-card-payment': invoicePallet3CardPayment,
+  'payment-received-pallet-2': paymentReceivedPallet2,
 }
