@@ -9,6 +9,7 @@ import { template as invoicePalletCardPayment } from './invoice-pallet-card-paym
 import { template as paymentReceivedPortfolio } from './payment-received-portfolio.tsx'
 import { template as invoicePallet2CardPayment } from './invoice-pallet-2-card-payment.tsx'
 import { template as invoicePallet3CardPayment } from './invoice-pallet-3-card-payment.tsx'
+import { template as paymentReceivedPallet2 } from './payment-received-pallet-2.tsx'
 
 export interface TemplateEntry {
   component: (props: any) => React.ReactElement
