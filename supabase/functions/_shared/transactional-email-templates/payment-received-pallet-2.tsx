@@ -17,7 +17,7 @@ const Email = ({ firstName = 'Mark' }: Props) => (
         <Heading style={h1}>Payment received</Heading>
         <Text style={text}>Hi {firstName},</Text>
         <Text style={text}>I hope you’re well.</Text>
-        <Text style={text}>I’m pleased to confirm that your payment of £23,310.00 for invoice AW-2026-0202 — your second pallet of six Blair Athol 2022 casks — has been received and processed. Please find your payment receipt attached.</Text>
+        <Text style={text}>I’m pleased to confirm that your payment of £23,310.00 for invoice <span style={bold}>AW-2026-0202</span> — your second pallet of six Blair Athol 2022 casks — has been received and processed. Please find your payment receipt attached.</Text>
         <Text style={text}>You will shortly receive a separate email with the invoice for your third pallet, six Lindores Abbey 2026 casks, along with the payment link.</Text>
         <Text style={text}>Once we’ve received payment for the full portfolio, we’ll arrange for your casks to be moved to ID Spirits in Perth and issue your cask ownership certificates.</Text>
         <Text style={text}>Thank you again, and please feel free to get in touch if you have any questions.</Text>
@@ -117,6 +117,7 @@ const header = { backgroundColor: navy, padding: '24px', textAlign: 'center' as 
 const logo = { display: 'block', margin: '0 auto', height: 'auto' }
 const h1 = { fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '30px', fontWeight: 500 as const, color: navy, margin: '0 0 20px', lineHeight: '1.2' }
 const text = { fontSize: '15px', color: 'hsl(0, 0%, 25%)', lineHeight: '1.6', margin: '0 0 18px' }
+const bold = { fontWeight: 700 as const, color: 'hsl(220, 26%, 14%)' }
 const sigLead = {
   fontFamily: "'Inter', Arial, sans-serif",
   fontSize: '15px',
