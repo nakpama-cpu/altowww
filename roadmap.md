@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Save and verify Mark’s Pallet 5 invoice email and Pallet 4 receipt email using Nicholas’s edited screenshots; do not send.
+
 - [x] Create Mark’s Pallet 3 paid invoice/receipt for £14,988 received by bank transfer on 2 November 2026.
 - [x] Create and visually verify matching A4 Pallet 4 invoice AW-2026-0204; payment link to follow.
 
