@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Save Mark’s Pallet 6 invoice email (Stripe link) and Pallet 5 receipt email; link Pallet 6 invoice PDF button; not sent.
+
 - [x] Save and verify Mark’s Pallet 5 invoice email and Pallet 4 receipt email using Nicholas’s edited screenshots; not sent.
 
 - [x] Create Mark’s Pallet 3 paid invoice/receipt for £14,988 received by bank transfer on 2 November 2026.
