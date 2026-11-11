@@ -22,3 +22,9 @@ describe('Mark’s seventh pallet invoice (Speyburn)', () => {
     expect(source.match(/invoiceNumber = '([^']*)'/)?.[1]).toBe('AW-2026-0207');
   });
 });
+
+describe('Mark’s seventh pallet payment link', () => {
+  it('uses the supplied Pallet 7 Stripe link', () => {
+    expect(source.match(/paymentUrl = '([^']*)'/)?.[1]).toBe('https://buy.stripe.com/9B66oIaSg4Oy9CN9b3co006');
+  });
+});
