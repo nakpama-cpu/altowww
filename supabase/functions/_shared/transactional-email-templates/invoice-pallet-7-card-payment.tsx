@@ -43,7 +43,7 @@ const Email = ({
   discountAmount = 2700,
   depositAmount = 0,
   total = 16500,
-  paymentUrl = '',
+  paymentUrl = 'https://buy.stripe.com/9B66oIaSg4Oy9CN9b3co006',
 }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
@@ -56,7 +56,7 @@ const Email = ({
         <Heading style={h1}>Your invoice is ready</Heading>
         <Text style={text}>Hello {firstName},</Text>
         <Text style={text}>
-          I hope you’re well. Thank you again for your payment for the sixth pallet, and for deciding to add a further pallet to your collection.
+          I hope you’re well. Thank you again for your payment for the sixth pallet.
         </Text>
         <Text style={text}>
           Your next invoice, <strong>{invoiceNumber}</strong>, covers Pallet {palletNumber}: {quantity} Speyburn
