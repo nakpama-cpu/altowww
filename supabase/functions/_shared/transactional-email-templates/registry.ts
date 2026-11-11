@@ -17,6 +17,7 @@ import { template as paymentReceivedPallet4 } from './payment-received-pallet-4.
 import { template as invoicePallet6CardPayment } from './invoice-pallet-6-card-payment.tsx'
 import { template as paymentReceivedPallet5 } from './payment-received-pallet-5.tsx'
 import { template as paymentReceivedPallet6 } from './payment-received-pallet-6.tsx'
+import { template as invoicePallet7CardPayment } from './invoice-pallet-7-card-payment.tsx'
 
 export interface TemplateEntry {
   component: (props: any) => React.ReactElement
@@ -45,4 +46,5 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'invoice-pallet-6-card-payment': invoicePallet6CardPayment,
   'payment-received-pallet-5': paymentReceivedPallet5,
   'payment-received-pallet-6': paymentReceivedPallet6,
+  'invoice-pallet-7-card-payment': invoicePallet7CardPayment,
 }
