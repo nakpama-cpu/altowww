@@ -4,7 +4,12 @@ import { sendAndLogTemplateEmail } from '../_shared/transactional-email-template
 import { pushToGHL } from '../_shared/gohighlevel.ts'
 
 // Public endpoint (verify_jwt = false) — called from client signup form right
-// after supabase.auth.signUp succeeds. Loads the newly-created profile and its
+// after supabase.auth.signUp succeeds (no session exists yet because email
+// confirmation is required). The caller must supply BOTH the email and the
+// new user's id returned by signUp; the id is an unguessable UUID only the
+// person who just signed up holds, so a third party cannot trigger
+// notifications or CRM pushes for someone else by knowing their email.
+// Loads the newly-created profile and its
 // approve/reject tokens (created by DB trigger) and enqueues the admin
 // notification email. Safe to call multiple times; if tokens are missing (e.g.
 // profile trigger not yet run) it returns 202 so signup UX isn't blocked.
@@ -13,9 +18,12 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders })
 
   try {
-    const { email } = await req.json().catch(() => ({}))
-    if (!email || typeof email !== 'string') {
-      return json({ error: 'email required' }, 400)
+    const body = await req.json().catch(() => ({}))
+    const email = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : ''
+    const userId = typeof body?.userId === 'string' ? body.userId.trim() : ''
+    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!email || email.length > 255 || !UUID_RE.test(userId)) {
+      return json({ error: 'invalid request' }, 400)
     }
 
     // Always return the same generic response regardless of lookup outcome,
@@ -32,7 +40,8 @@ Deno.serve(async (req) => {
     const { data: profile } = await supabase
       .from('profiles')
       .select('id, first_name, last_name, email, phone, phone_country_code, country, status, created_at')
-      .eq('email', email.trim().toLowerCase())
+      .eq('id', userId)
+      .eq('email', email)
       .maybeSingle()
 
     if (!profile || profile.status !== 'pending') return generic()

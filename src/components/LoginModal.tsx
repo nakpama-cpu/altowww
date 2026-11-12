@@ -68,7 +68,7 @@ export default function LoginModal({ open, onClose }: Props) {
     e.preventDefault();
     setLoading(true);
     const email = signupForm.email.trim();
-    const { error } = await supabase.auth.signUp({
+    const { data: signUpData, error } = await supabase.auth.signUp({
       email,
       password: signupForm.password,
       options: {
@@ -84,8 +84,10 @@ export default function LoginModal({ open, onClose }: Props) {
       },
     });
     setLoading(false);
-    if (!error) {
-      supabase.functions.invoke("notify-new-signup", { body: { email } }).catch(() => {});
+    if (!error && signUpData?.user?.id) {
+      supabase.functions
+        .invoke("notify-new-signup", { body: { email, userId: signUpData.user.id } })
+        .catch(() => {});
     }
     if (error) {
       toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
