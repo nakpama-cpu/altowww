@@ -31,7 +31,7 @@ export default function PortalSignup() {
     const email = formatEmail(form.email);
     const firstName = formatName(form.firstName);
     const lastName = formatName(form.lastName);
-    const { error } = await supabase.auth.signUp({
+    const { data: signUpData, error } = await supabase.auth.signUp({
       email,
       password: form.password,
       options: {
@@ -52,7 +52,11 @@ export default function PortalSignup() {
       return;
     }
     // Fire-and-forget admin notification (also enqueued when profile trigger fires).
-    supabase.functions.invoke("notify-new-signup", { body: { email } }).catch(() => {});
+    if (signUpData?.user?.id) {
+      supabase.functions
+        .invoke("notify-new-signup", { body: { email, userId: signUpData.user.id } })
+        .catch(() => {});
+    }
     toast({ title: "Account created", description: "Check your email to confirm, then sign in." });
     navigate("/portal/login");
   };
